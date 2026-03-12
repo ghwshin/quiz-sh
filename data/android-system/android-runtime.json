@@ -53,9 +53,8 @@
     "subcategory": "android-runtime",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "ART의 Garbage Collection이 Dalvik의 GC와 비교하여 개선된 점을 설명하시오.",
-    "keywords": ["Concurrent Copying", "pause time", "compaction", "병렬", "중단 시간", "메모리 단편화"],
-    "sampleAnswer": "ART의 GC는 Dalvik에 비해 여러 면에서 개선되었습니다. 첫째, Concurrent Copying GC를 도입하여 GC pause time을 크게 줄였습니다. 둘째, 메모리 compaction을 지원하여 메모리 단편화(fragmentation) 문제를 해결합니다. 셋째, GC 작업의 대부분을 앱 스레드와 동시에(concurrently) 수행하여 앱의 응답성을 향상시켰습니다.",
+    "question": "ART는 ___ GC를 도입하여 GC ___을 크게 줄이고, 메모리 ___을 지원하여 단편화 문제를 해결했다.",
+    "blankAnswers": [["Concurrent Copying", "CC"], ["pause time", "중단 시간"], ["compaction", "압축"]],
     "explanation": "Dalvik의 GC는 앱 실행을 완전히 멈추는(stop-the-world) 시간이 길어 UI 버벅임(jank)의 원인이 되었습니다. ART는 Concurrent Copying GC를 통해 객체를 동시에 복사하면서 compaction을 수행하고, GC pause를 최소화하여 부드러운 사용자 경험을 제공합니다."
   },
   {
@@ -64,9 +63,8 @@
     "subcategory": "android-runtime",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "dex2oat 도구의 역할과 입력/출력 파일 형식을 설명하시오.",
-    "keywords": ["dex2oat", "DEX", "OAT", "컴파일", "네이티브 코드", "AOT"],
-    "sampleAnswer": "dex2oat는 ART에서 AOT 컴파일을 수행하는 핵심 도구입니다. DEX(Dalvik Executable) 파일을 입력으로 받아 네이티브 기계어 코드를 포함하는 OAT 파일을 출력합니다. OAT 파일은 ELF 형식의 바이너리로, 원본 DEX 바이트코드와 컴파일된 네이티브 코드를 함께 포함합니다. 앱 설치 시 또는 기기 유휴 시간에 백그라운드로 실행됩니다.",
+    "question": "___는 ART에서 AOT 컴파일을 수행하는 도구로, ___ 파일을 입력으로 받아 네이티브 코드를 포함하는 ___ 파일을 출력한다.",
+    "blankAnswers": [["dex2oat"], ["DEX"], ["OAT"]],
     "explanation": "dex2oat는 DEX 바이트코드를 타겟 디바이스의 아키텍처(ARM, ARM64, x86 등)에 맞는 네이티브 코드로 컴파일합니다. 컴파일 수준(speed, speed-profile, quicken 등)을 지정할 수 있으며, 프로파일 정보를 활용한 profile-guided compilation도 지원합니다."
   },
   {
@@ -169,9 +167,8 @@
     "subcategory": "android-runtime",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "ART의 Boot Image(boot.art, boot.oat)의 역할과 이것이 앱 성능에 미치는 영향을 설명하시오.",
-    "keywords": ["boot image", "boot.art", "boot.oat", "프레임워크", "클래스", "미리 로드", "Zygote", "공유"],
-    "sampleAnswer": "Boot Image는 Android 프레임워크의 핵심 클래스들을 미리 컴파일하고 초기화한 메모리 스냅샷입니다. boot.oat는 코어 라이브러리의 컴파일된 네이티브 코드를 포함하고, boot.art는 미리 초기화된 힙 객체(클래스 메타데이터, String 인터닝 테이블 등)의 이미지를 포함합니다. Zygote가 이를 로드하고 fork된 모든 앱 프로세스가 공유하므로 앱 시작 시간과 메모리 사용량이 크게 줄어듭니다.",
+    "question": "Boot Image에서 ___는 코어 라이브러리의 컴파일된 네이티브 코드를 포함하고, ___는 미리 초기화된 힙 객체의 이미지를 포함하며, ___가 이를 로드하여 모든 앱 프로세스가 공유한다.",
+    "blankAnswers": [["boot.oat"], ["boot.art"], ["Zygote", "자이고트"]],
     "explanation": "Boot Image는 시스템 부팅 시 한 번 생성되며, java.lang, android.app 등 핵심 프레임워크 클래스의 컴파일 결과와 초기화된 객체를 포함합니다. 이를 통해 각 앱이 이 클래스들을 개별적으로 로드하고 초기화할 필요가 없어집니다."
   },
   {
@@ -180,9 +177,8 @@
     "subcategory": "android-runtime",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "ART의 Method Inlining 최적화가 무엇이며 어떤 조건에서 수행되는지 설명하시오.",
-    "keywords": ["method inlining", "인라이닝", "호출 비용", "작은 메서드", "hot method", "가상 호출"],
-    "sampleAnswer": "Method Inlining은 메서드 호출 시 해당 메서드의 코드를 호출 지점에 직접 삽입하는 최적화 기법입니다. 이를 통해 메서드 호출에 따른 오버헤드(스택 프레임 생성, 점프 등)를 제거합니다. ART에서는 메서드 크기가 충분히 작고, hot path에 위치하며, 가상 메서드의 경우 실제 호출 대상이 단일 구현으로 특정될 수 있을 때 인라이닝이 수행됩니다.",
+    "question": "___은 메서드 호출 시 해당 코드를 호출 지점에 직접 삽입하는 최적화 기법으로, 메서드 크기가 충분히 작고 ___ 경로에 위치하며, 가상 메서드의 경우 호출 대상이 ___으로 특정될 수 있을 때 수행된다.",
+    "blankAnswers": [["Method Inlining", "메서드 인라이닝"], ["hot", "핫"], ["단일 구현"]],
     "explanation": "Method Inlining은 ART의 주요 최적화 기법 중 하나로, 특히 getter/setter 같은 작은 메서드에 효과적입니다. JIT 컴파일 시 프로파일 정보를 활용하여 다형적(polymorphic) 호출도 인라이닝할 수 있으며, 인라이닝 후 추가적인 상수 전파, 죽은 코드 제거 등의 최적화가 가능해집니다."
   },
   {
@@ -191,9 +187,8 @@
     "subcategory": "android-runtime",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "ART의 Class Verification(클래스 검증) 과정과 그 필요성을 설명하시오.",
-    "keywords": ["verification", "검증", "바이트코드", "타입 안전성", "보안", "VerifyError"],
-    "sampleAnswer": "Class Verification은 DEX 바이트코드가 타입 안전성(type safety) 규칙을 준수하는지 정적으로 검사하는 과정입니다. 잘못된 명령어, 타입 불일치, 접근 제어 위반 등을 탐지합니다. 검증이 필요한 이유는 DEX 파일이 외부에서 올 수 있어 악의적이거나 잘못된 바이트코드로부터 시스템을 보호해야 하기 때문입니다. 검증 실패 시 VerifyError가 발생하며 해당 클래스를 사용할 수 없습니다.",
+    "question": "Class Verification은 DEX 바이트코드가 ___규칙을 준수하는지 정적으로 검사하며, 검증 실패 시 ___가 발생하고, 검증 결과는 ___ 파일에 캐싱된다.",
+    "blankAnswers": [["타입 안전성", "type safety"], ["VerifyError"], ["VDEX"]],
     "explanation": "클래스 검증은 앱 설치 시 또는 최초 로드 시 수행됩니다. 검증 결과는 VDEX 파일에 캐싱되어 이후 재검증 비용을 절약합니다. soft-fail 검증의 경우 클래스가 인터프리터 모드로만 실행되며, 검증이 완전히 통과된 클래스만 AOT 또는 JIT 컴파일 대상이 됩니다."
   },
   {
@@ -295,9 +290,8 @@
     "subcategory": "android-runtime",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "ART에서 CDEX(Compact DEX) 파일 형식이 도입된 목적과 기존 DEX 형식과의 차이점을 설명하시오.",
-    "keywords": ["CDEX", "Compact DEX", "저장 공간", "공유", "deduplication", "중복 제거", "debug info"],
-    "sampleAnswer": "CDEX(Compact DEX)는 Android 9.0(Pie)에서 도입된 DEX 파일의 압축 형식입니다. 기존 Standard DEX 대비 약 10-15%의 저장 공간을 절약합니다. 주요 차이점으로는 메서드 간 공유 가능한 데이터(debug info, code item 등)의 중복 제거(deduplication), 더 효율적인 데이터 인코딩, 공통 데이터 섹션의 VDEX 파일 내 공유가 있습니다. CDEX는 VDEX 파일 내부에 포함되어 저장됩니다.",
+    "question": "___는 Android 9.0에서 도입된 DEX의 압축 형식으로, 메서드 간 데이터의 ___를 통해 저장 공간을 절약하며 ___ 파일 내부에 포함되어 저장된다.",
+    "blankAnswers": [["CDEX", "Compact DEX"], ["중복 제거", "deduplication"], ["VDEX"]],
     "explanation": "CDEX는 저장 공간이 제한된 모바일 디바이스에서 DEX 데이터의 크기를 줄이기 위해 설계되었습니다. 특히 시스템 프레임워크처럼 다수의 DEX 파일을 포함하는 경우 공유 데이터 섹션을 통한 중복 제거 효과가 큽니다."
   },
   {
@@ -306,9 +300,8 @@
     "subcategory": "android-runtime",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "ART에서 앱 시작 성능을 최적화하기 위한 Baseline Profile과 Cloud Profile의 차이점과 동작 방식을 설명하시오.",
-    "keywords": ["Baseline Profile", "Cloud Profile", "프로파일", "앱 시작", "Play Store", "설치 시", "AOT"],
-    "sampleAnswer": "Baseline Profile은 개발자가 앱에 직접 포함시키는 ART 프로파일로, 앱의 중요한 사용자 여정(시작, 로그인 등)에서 사용되는 클래스와 메서드 정보를 담고 있습니다. 앱 설치 시 즉시 AOT 컴파일에 활용되어 첫 실행부터 최적화된 성능을 제공합니다. Cloud Profile은 Google Play Store가 다수 사용자의 익명화된 프로파일 데이터를 집계하여 제공하는 것으로, 설치 시 자동으로 적용됩니다. Baseline Profile은 개발자가 제어하고 보장된 최적화를 제공하는 반면, Cloud Profile은 충분한 사용자 데이터가 모이는 데 시간이 필요합니다.",
+    "question": "___은 개발자가 앱에 직접 포함시키는 ART 프로파일로 설치 시 즉시 ___ 컴파일에 활용되고, ___은 ___가 다수 사용자의 데이터를 집계하여 제공하는 프로파일이다.",
+    "blankAnswers": [["Baseline Profile", "베이스라인 프로파일"], ["AOT"], ["Cloud Profile", "클라우드 프로파일"], ["Play Store", "Google Play"]],
     "explanation": "Baseline Profile은 Jetpack Macrobenchmark 라이브러리로 생성할 수 있으며, APK/AAB에 assets 또는 dex metadata로 포함됩니다. 이를 통해 앱 시작 시간을 30-40% 개선할 수 있습니다. Cloud Profile은 Play Store가 자동으로 관리하지만 신규 앱이나 업데이트 직후에는 사용 불가합니다."
   },
   {
@@ -347,9 +340,8 @@
     "subcategory": "android-runtime",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "ART에서 dex2oat 컴파일 시 사용되는 boot class path와 class loader context의 역할과 차이를 설명하시오.",
-    "keywords": ["boot class path", "class loader context", "BCP", "시스템 라이브러리", "클래스 해석", "의존성"],
-    "sampleAnswer": "Boot Class Path(BCP)는 Android 프레임워크의 핵심 라이브러리(core-oj, framework, ext 등)를 포함하는 JAR/DEX 파일들의 경로 목록입니다. ART는 BCP의 클래스를 Boot Image로 미리 컴파일하고 모든 앱이 공유합니다. Class Loader Context(CLC)는 특정 앱의 DEX 파일을 컴파일할 때 해당 앱이 의존하는 라이브러리(shared library, split APK 등)의 로딩 순서와 계층 구조를 기술합니다. dex2oat는 CLC를 통해 클래스 참조를 올바르게 해석하고, 런타임에도 동일한 CLC가 사용되는지 검증하여 컴파일 결과의 유효성을 보장합니다.",
+    "question": "___는 프레임워크 핵심 라이브러리의 경로 목록으로 모든 앱이 공유하며, ___는 특정 앱이 의존하는 라이브러리의 로딩 순서와 계층 구조를 기술하여 dex2oat가 클래스 참조를 올바르게 해석하게 한다.",
+    "blankAnswers": [["Boot Class Path", "BCP"], ["Class Loader Context", "CLC"]],
     "explanation": "BCP는 시스템 전체에서 공유되는 기본 라이브러리를 정의하고, CLC는 앱별 클래스 로딩 의존성을 정의합니다. CLC가 변경되면(라이브러리 업데이트 등) 기존 OAT 파일이 무효화되어 재컴파일이 필요합니다. 이는 앱 간 올바른 클래스 해석과 보안을 위해 중요합니다."
   }
 ]

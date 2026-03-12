@@ -53,9 +53,8 @@
     "subcategory": "memory-management",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "가상 주소를 물리 주소로 변환하는 과정에서 사용되는 하드웨어 캐시로, 최근 사용된 페이지 테이블 항목을 저장하여 주소 변환 속도를 높이는 장치의 이름은 무엇인가?",
-    "keywords": ["TLB", "Translation Lookaside Buffer"],
-    "sampleAnswer": "TLB(Translation Lookaside Buffer)는 가상 주소에서 물리 주소로의 변환 결과를 캐싱하는 하드웨어입니다. TLB hit 시 페이지 테이블을 조회하지 않고 바로 물리 주소를 얻을 수 있어 메모리 접근 성능이 크게 향상됩니다.",
+    "question": "가상 주소를 물리 주소로 변환할 때, 최근 사용된 페이지 테이블 항목을 캐싱하여 변환 속도를 높이는 하드웨어 장치를 ___라고 한다.",
+    "blankAnswers": [["TLB", "Translation Lookaside Buffer"]],
     "explanation": "TLB(Translation Lookaside Buffer)는 MMU 내부에 위치한 고속 연관 캐시로, 가상 주소에서 물리 주소로의 매핑 정보를 저장합니다. TLB miss가 발생하면 페이지 테이블을 워킹하여 변환 정보를 가져오고, 이를 TLB에 캐싱합니다."
   },
   {
@@ -64,9 +63,8 @@
     "subcategory": "memory-management",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "Linux 커널에서 물리 메모리의 연속적인 페이지 블록을 2의 거듭제곱 단위로 할당 및 해제하는 알고리즘의 이름은 무엇인가?",
-    "keywords": ["buddy", "buddy system", "buddy allocator"],
-    "sampleAnswer": "Buddy System(버디 시스템)은 물리 메모리를 2의 거듭제곱 크기의 블록으로 관리하는 할당 알고리즘입니다. 인접한 같은 크기의 블록(buddy)을 병합하거나 분할하여 외부 단편화를 줄입니다.",
+    "question": "Linux 커널에서 물리 메모리의 연속적인 페이지 블록을 2의 거듭제곱 단위로 할당 및 해제하며, 인접한 같은 크기의 블록을 병합하거나 분할하는 알고리즘을 ___이라고 한다.",
+    "blankAnswers": [["Buddy System", "버디 시스템", "buddy allocator"]],
     "explanation": "Buddy System은 Linux 커널의 물리 페이지 할당기입니다. 메모리를 order 0(1 page)부터 order MAX_ORDER-1까지 2의 거듭제곱 크기로 관리하며, 할당 시 적절한 크기의 블록을 분할하고, 해제 시 인접한 buddy와 병합하여 외부 단편화를 최소화합니다."
   },
   {
@@ -106,9 +104,8 @@
     "subcategory": "memory-management",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "시스템의 물리 메모리 사용량, 캐시, 버퍼, swap 등의 정보를 확인할 수 있는 /proc 파일시스템의 파일 경로는 무엇인가?",
-    "keywords": ["/proc/meminfo", "meminfo"],
-    "sampleAnswer": "/proc/meminfo 파일을 통해 시스템의 전체 메모리 정보를 확인할 수 있습니다. MemTotal, MemFree, MemAvailable, Buffers, Cached, SwapTotal, SwapFree 등의 정보가 포함됩니다.",
+    "question": "시스템의 물리 메모리 사용량, 캐시, 버퍼, swap 등의 정보를 확인할 수 있는 /proc 파일시스템의 파일 경로는 ___이다.",
+    "blankAnswers": [["/proc/meminfo"]],
     "explanation": "/proc/meminfo는 커널이 제공하는 가상 파일로, 시스템의 메모리 사용 현황을 실시간으로 보여줍니다. cat /proc/meminfo 명령으로 확인할 수 있으며, free 명령어도 이 파일의 정보를 기반으로 출력합니다."
   },
   {
@@ -165,9 +162,8 @@
     "subcategory": "memory-management",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "프로세스가 할당받은 가상 메모리 페이지에 처음 접근할 때 실제 물리 페이지를 할당하는 기법의 이름은 무엇인가?",
-    "keywords": ["demand paging", "lazy allocation"],
-    "sampleAnswer": "Demand Paging은 가상 메모리 페이지에 실제로 접근이 발생할 때까지 물리 페이지 할당을 지연시키는 기법입니다. 접근 시 page fault가 발생하면 그때 물리 페이지를 할당하고 페이지 테이블을 갱신합니다.",
+    "question": "프로세스가 할당받은 가상 메모리 페이지에 처음 접근할 때 ___가 발생하며, 이때 커널이 실제 물리 페이지를 할당하는 기법을 ___이라고 한다.",
+    "blankAnswers": [["page fault", "페이지 폴트"], ["Demand Paging", "요구 페이징", "lazy allocation"]],
     "explanation": "Demand Paging(요구 페이징)은 메모리 효율성을 위해 프로세스가 실제로 페이지에 접근할 때까지 물리 메모리 할당을 지연합니다. malloc() 호출 시 가상 주소만 예약하고, 실제 접근 시 minor page fault를 통해 물리 페이지를 할당합니다. 이를 통해 실제 사용하지 않는 메모리에 대한 물리 페이지 낭비를 방지합니다."
   },
   {
@@ -176,9 +172,8 @@
     "subcategory": "memory-management",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Linux 커널에서 각 물리 페이지를 표현하는 핵심 자료구조의 이름은 무엇인가?",
-    "keywords": ["struct page", "page"],
-    "sampleAnswer": "struct page는 Linux 커널에서 각 물리 페이지 프레임을 표현하는 구조체입니다. flags, _refcount, _mapcount, mapping, index, lru 등의 필드를 포함하며, 시스템의 모든 물리 페이지에 대해 하나씩 존재합니다.",
+    "question": "Linux 커널에서 각 물리 페이지 프레임을 표현하는 핵심 자료구조는 ___이며, 이 구조체는 ___에 정의되어 있다.",
+    "blankAnswers": [["struct page"], ["linux/mm_types.h", "mm_types.h"]],
     "explanation": "struct page는 <linux/mm_types.h>에 정의된 구조체로, 시스템의 각 물리 페이지 프레임을 관리합니다. 메모리를 절약하기 위해 union을 광범위하게 사용하며, 페이지의 상태(flags), 참조 카운트(_refcount), 매핑 정보 등을 추적합니다. mem_map 배열이나 NUMA 시스템의 노드별 배열로 관리됩니다."
   },
   {
@@ -232,9 +227,8 @@
     "subcategory": "memory-management",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Linux 커널에서 디스크에서 읽어온 파일 데이터를 메모리에 캐싱하여 반복 접근 시 디스크 I/O를 줄이는 메커니즘의 이름은 무엇인가?",
-    "keywords": ["page cache"],
-    "sampleAnswer": "Page Cache는 디스크에서 읽은 파일 데이터를 물리 메모리에 캐싱하는 메커니즘입니다. 이후 같은 데이터에 접근할 때 디스크 I/O 없이 메모리에서 바로 읽을 수 있어 성능이 크게 향상됩니다.",
+    "question": "Linux 커널에서 디스크로부터 읽어온 파일 데이터를 메모리에 캐싱하여 반복 접근 시 디스크 I/O를 줄이는 메커니즘을 ___라고 하며, 메모리가 부족하면 ___ 기반으로 캐시 페이지를 회수한다.",
+    "blankAnswers": [["Page Cache", "페이지 캐시"], ["LRU", "Least Recently Used"]],
     "explanation": "Page Cache는 Linux 커널의 핵심 캐싱 메커니즘으로, 파일 시스템의 데이터를 페이지 단위로 메모리에 캐싱합니다. address_space 구조체와 연동되며, radix tree(xarray)로 인덱싱됩니다. 메모리가 부족하면 LRU 기반으로 캐시 페이지를 회수합니다. /proc/meminfo의 Cached 항목에서 크기를 확인할 수 있습니다."
   },
   {
@@ -291,9 +285,8 @@
     "subcategory": "memory-management",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Linux 커널에서 메모리가 극도로 부족할 때 시스템 안정성을 위해 프로세스를 강제로 종료시키는 메커니즘의 이름과, 해당 프로세스 선택 기준을 설명하시오.",
-    "keywords": ["OOM Killer", "oom_score"],
-    "sampleAnswer": "OOM Killer(Out of Memory Killer)는 시스템의 사용 가능한 메모리와 swap이 모두 고갈되었을 때 동작합니다. 각 프로세스의 oom_score를 계산하여 가장 높은 점수를 가진 프로세스를 선택하고 SIGKILL을 보내 종료시킵니다. 점수는 메모리 사용량이 주요 기준이며, oom_score_adj로 조정 가능합니다.",
+    "question": "Linux 커널에서 메모리가 극도로 부족할 때 프로세스를 강제 종료시키는 메커니즘을 ___라고 하며, 각 프로세스의 ___를 계산하여 가장 높은 점수를 가진 프로세스에 ___를 보내 종료시킨다.",
+    "blankAnswers": [["OOM Killer"], ["oom_score"], ["SIGKILL"]],
     "explanation": "OOM Killer는 out_of_memory() 함수에서 호출되며, select_bad_process()를 통해 종료할 프로세스를 선택합니다. 각 프로세스의 oom_score는 주로 RSS(Resident Set Size) 기반으로 계산되며, oom_score_adj(-1000~1000)로 가중치를 조정할 수 있습니다. init 프로세스(PID 1)와 커널 스레드는 기본적으로 보호됩니다."
   },
   {
@@ -302,9 +295,8 @@
     "subcategory": "memory-management",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Linux 커널의 swapping 메커니즘에서 anonymous page와 file-backed page의 swap-out 과정의 차이점을 설명하시오.",
-    "keywords": ["anonymous", "file-backed", "swap", "writeback"],
-    "sampleAnswer": "Anonymous page(힙, 스택 등)는 swap 파티션이나 swap 파일로 기록된 후 물리 메모리에서 해제됩니다. File-backed page(mmap된 파일 등)는 원본 파일에 dirty 데이터를 writeback한 후 물리 메모리에서 해제하며, clean page는 바로 해제 가능합니다.",
+    "question": "페이지 회수(page reclaim) 시 ___는 swap 영역으로 기록된 후 해제되고, ___의 clean page는 원본 파일에서 다시 읽을 수 있으므로 바로 해제되며 dirty page는 먼저 ___한 후 해제된다.",
+    "blankAnswers": [["anonymous page", "익명 페이지"], ["file-backed page", "파일 기반 페이지"], ["writeback", "기록"]],
     "explanation": "커널의 페이지 회수(page reclaim) 시 anonymous page는 swap 영역으로 내보내야 하므로 swap 공간이 필요합니다. file-backed page 중 clean page는 원본 파일에서 다시 읽을 수 있으므로 바로 해제 가능하고, dirty page는 먼저 파일에 writeback한 후 해제합니다. kswapd 데몬이 백그라운드에서 페이지 회수를 담당하며, LRU 리스트(active/inactive)를 기반으로 회수 대상을 선택합니다."
   },
   {

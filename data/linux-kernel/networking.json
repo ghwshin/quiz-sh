@@ -37,9 +37,8 @@
     "subcategory": "networking",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "리눅스 커널에서 네트워크 인터페이스(NIC)를 추상화하는 구조체의 이름은 무엇인가?",
-    "keywords": ["net_device"],
-    "sampleAnswer": "net_device 구조체는 리눅스 커널에서 네트워크 인터페이스 카드(NIC)를 추상화합니다. 이 구조체는 인터페이스 이름, MAC 주소, MTU, 통계 정보, 드라이버 콜백 함수 등 네트워크 장치에 대한 모든 정보를 담고 있습니다.",
+    "question": "리눅스 커널에서 네트워크 인터페이스(NIC)를 추상화하며, 인터페이스 이름, MAC 주소, MTU 등의 정보를 담는 핵심 구조체는 ___이다.",
+    "blankAnswers": [["net_device", "struct net_device"]],
     "explanation": "net_device는 include/linux/netdevice.h에 정의되어 있으며, 물리적 또는 가상 네트워크 인터페이스를 나타내는 핵심 구조체입니다. alloc_netdev() 또는 alloc_etherdev()를 통해 할당하고 register_netdev()로 등록합니다."
   },
   {
@@ -64,9 +63,8 @@
     "subcategory": "networking",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "NAPI(New API)는 리눅스 커널 네트워크 드라이버에서 어떤 문제를 해결하기 위해 도입되었는가?",
-    "keywords": ["interrupt", "polling", "high traffic", "overhead"],
-    "sampleAnswer": "NAPI는 높은 트래픽 상황에서 인터럽트 폭주(interrupt storm) 문제를 해결하기 위해 도입되었습니다. 인터럽트 기반 처리에서 폴링 기반 처리로 전환하여 CPU 오버헤드를 줄입니다.",
+    "question": "NAPI는 높은 트래픽 상황에서 ___ 문제를 해결하기 위해 도입되었으며, 인터럽트를 비활성화하고 ___ 모드로 전환하여 패킷을 일괄 처리한다.",
+    "blankAnswers": [["인터럽트 폭주", "interrupt storm"], ["폴링", "polling"]],
     "explanation": "NAPI는 패킷이 대량으로 도착할 때 매 패킷마다 인터럽트를 발생시키는 대신, 인터럽트를 비활성화하고 폴링 모드로 전환하여 패킷을 일괄 처리합니다. 이를 통해 높은 트래픽 환경에서 CPU 사용률을 크게 줄일 수 있습니다."
   },
   {
@@ -121,9 +119,8 @@
     "subcategory": "networking",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "리눅스 커널의 TCP/IP 스택에서 수신 패킷이 NIC에서 소켓까지 전달되는 주요 경로를 순서대로 설명하시오.",
-    "keywords": ["driver", "NAPI", "netif_receive_skb", "ip_rcv", "tcp_v4_rcv", "socket"],
-    "sampleAnswer": "NIC 드라이버가 패킷을 수신하면 DMA를 통해 메모리에 복사하고, NAPI 폴링으로 sk_buff를 할당합니다. netif_receive_skb()를 호출하여 프로토콜 핸들러로 전달하고, ip_rcv()에서 IP 헤더를 처리한 후, tcp_v4_rcv()에서 TCP 처리를 수행하여 최종적으로 소켓 수신 큐에 데이터를 넣습니다.",
+    "question": "수신 패킷은 NIC 드라이버에서 ___ 폴링으로 sk_buff를 할당한 뒤, ___를 호출하여 프로토콜 핸들러로 전달하고, L3에서 ___가, L4에서 tcp_v4_rcv()가 처리하여 소켓 수신 큐에 도달한다.",
+    "blankAnswers": [["NAPI"], ["netif_receive_skb", "netif_receive_skb()"], ["ip_rcv", "ip_rcv()"]],
     "explanation": "패킷 수신 경로: NIC 하드웨어 → DMA 전송 → 드라이버 인터럽트 → NAPI poll → napi_gro_receive()/netif_receive_skb() → L3 (ip_rcv → ip_rcv_finish → ip_local_deliver) → L4 (tcp_v4_rcv → tcp_v4_do_rcv) → 소켓 수신 큐. 이 경로는 softirq(NET_RX_SOFTIRQ) 컨텍스트에서 처리됩니다."
   },
   {
@@ -163,9 +160,8 @@
     "subcategory": "networking",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "AF_NETLINK 소켓은 리눅스에서 어떤 용도로 사용되며, 일반적인 네트워크 소켓과 어떻게 다른가?",
-    "keywords": ["kernel", "userspace", "IPC", "routing", "configuration"],
-    "sampleAnswer": "AF_NETLINK 소켓은 커널과 사용자 공간 프로세스 간의 IPC(프로세스 간 통신) 메커니즘입니다. 일반 소켓이 네트워크 통신에 사용되는 반면, netlink 소켓은 라우팅 테이블 관리, 네트워크 인터페이스 설정, 방화벽 규칙 관리 등 커널 네트워크 서브시스템과 통신하는 데 사용됩니다.",
+    "question": "AF_NETLINK 소켓은 ___와 사용자 공간 간의 ___ 메커니즘으로, 라우팅 테이블 관리 등 커널 네트워크 서브시스템과 통신하는 데 사용된다.",
+    "blankAnswers": [["커널", "kernel"], ["IPC", "프로세스 간 통신"]],
     "explanation": "AF_NETLINK은 NETLINK_ROUTE(라우팅), NETLINK_FIREWALL(방화벽), NETLINK_KOBJECT_UEVENT(디바이스 이벤트) 등 다양한 프로토콜 패밀리를 제공합니다. iproute2 도구(ip 명령)가 내부적으로 netlink 소켓을 사용하여 커널과 통신합니다. 양방향 비동기 통신과 멀티캐스트 그룹 구독이 가능합니다."
   },
   {
@@ -190,9 +186,8 @@
     "subcategory": "networking",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "리눅스 커널에서 네트워크 브릿징(bridging)이 동작하는 레이어와 주요 동작 원리를 설명하시오.",
-    "keywords": ["L2", "layer 2", "MAC", "forwarding", "bridge", "switch"],
-    "sampleAnswer": "네트워크 브릿징은 L2(데이터 링크 레이어)에서 동작하며, MAC 주소를 기반으로 프레임을 포워딩합니다. 커널의 bridge 모듈은 소프트웨어 스위치처럼 동작하여 MAC 학습 테이블을 유지하고, 이를 기반으로 적절한 포트로 프레임을 전달합니다.",
+    "question": "네트워크 브릿징은 ___(데이터 링크 레이어)에서 동작하며, ___ 주소를 기반으로 프레임을 포워딩한다. 루프 방지를 위해 ___를 지원한다.",
+    "blankAnswers": [["L2", "Layer 2", "레이어 2"], ["MAC"], ["STP", "Spanning Tree Protocol"]],
     "explanation": "리눅스 bridge는 br_add_bridge()로 생성하고, br_add_if()로 인터페이스를 추가합니다. br_handle_frame()에서 수신 프레임을 처리하며, FDB(Forwarding Database)에서 MAC 주소를 학습합니다. STP(Spanning Tree Protocol)를 지원하여 루프를 방지하고, VLAN 필터링도 가능합니다."
   },
   {
@@ -232,9 +227,8 @@
     "subcategory": "networking",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "리눅스 커널의 라우팅 서브시스템에서 FIB(Forwarding Information Base)와 라우팅 캐시의 관계와 역할을 설명하시오.",
-    "keywords": ["FIB", "routing table", "lookup", "fib_lookup", "nexthop"],
-    "sampleAnswer": "FIB는 라우팅 테이블의 커널 내부 표현으로, 모든 라우팅 규칙을 트라이(trie) 자료구조로 저장합니다. 패킷의 목적지 IP에 대해 fib_lookup()을 호출하여 nexthop 정보를 얻습니다. 과거에는 라우팅 캐시가 최근 조회 결과를 캐싱했지만, 커널 3.6부터 보안 문제로 제거되었습니다.",
+    "question": "___는 라우팅 테이블의 커널 내부 표현으로, 모든 라우팅 규칙을 ___ 자료구조로 저장하며, 패킷의 목적지 IP에 대해 ___를 호출하여 nexthop 정보를 얻는다.",
+    "blankAnswers": [["FIB", "Forwarding Information Base"], ["trie", "LC-trie", "트라이"], ["fib_lookup", "fib_lookup()"]],
     "explanation": "FIB는 ip route 명령으로 설정한 라우팅 규칙을 LC-trie(Level Compressed trie) 구조로 저장하여 빠른 최장 접두사 매칭(LPM)을 수행합니다. fib_lookup()은 목적지 주소에 대한 라우팅 결과(fib_result)를 반환하며, nexthop 게이트웨이와 출력 인터페이스 정보를 포함합니다."
   },
   {
@@ -274,9 +268,8 @@
     "subcategory": "networking",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "리눅스 커널의 프로토콜 핸들러 등록 메커니즘에서 dev_add_pack() 함수의 역할과 packet_type 구조체의 주요 필드를 설명하시오.",
-    "keywords": ["dev_add_pack", "packet_type", "ETH_P_IP", "func", "protocol handler"],
-    "sampleAnswer": "dev_add_pack()은 특정 프로토콜에 대한 패킷 핸들러를 커널에 등록합니다. packet_type 구조체의 type 필드에 프로토콜 번호(예: ETH_P_IP)를, func 필드에 핸들러 함수 포인터를, dev 필드에 특정 디바이스(또는 NULL로 모든 디바이스)를 지정합니다.",
+    "question": "___는 특정 프로토콜에 대한 패킷 핸들러를 커널에 등록하는 함수이다. ___ 구조체의 type 필드에 프로토콜 번호(예: ETH_P_IP)를, ___ 필드에 핸들러 함수 포인터를 지정한다.",
+    "blankAnswers": [["dev_add_pack", "dev_add_pack()"], ["packet_type"], ["func"]],
     "explanation": "네트워크 패킷이 netif_receive_skb()에 도달하면, 커널은 이더넷 프레임의 프로토콜 필드를 확인하고 등록된 packet_type 핸들러를 호출합니다. 예를 들어 IPv4의 경우 ip_rcv()가 ETH_P_IP(0x0800)에 대한 핸들러로 등록되어 있습니다. ptype_base 해시 테이블과 ptype_all 리스트로 관리됩니다."
   },
   {
@@ -316,9 +309,8 @@
     "subcategory": "networking",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "GRO(Generic Receive Offload)와 GSO(Generic Segmentation Offload)의 차이점과 커널에서의 동작 원리를 설명하시오.",
-    "keywords": ["GRO", "GSO", "aggregation", "segmentation", "offload", "coalescing"],
-    "sampleAnswer": "GRO는 수신 측에서 여러 개의 작은 패킷을 하나의 큰 패킷으로 병합(coalescing)하여 상위 스택의 처리 횟수를 줄입니다. GSO는 송신 측에서 큰 패킷을 가능한 늦게 분할(segmentation)하여 스택 처리를 최소화합니다. 하드웨어가 TSO/LRO를 지원하지 않는 경우에도 소프트웨어에서 유사한 성능 이점을 제공합니다.",
+    "question": "___는 수신 측에서 여러 작은 패킷을 하나로 병합(coalescing)하여 처리 횟수를 줄이고, ___는 송신 측에서 큰 패킷을 가능한 늦게 분할(segmentation)하여 스택 처리를 최소화한다.",
+    "blankAnswers": [["GRO", "Generic Receive Offload"], ["GSO", "Generic Segmentation Offload"]],
     "explanation": "GRO는 napi_gro_receive()에서 동일한 플로우의 패킷들을 병합합니다. TCP의 경우 시퀀스 번호가 연속인 세그먼트를 하나의 큰 sk_buff로 합칩니다. GSO는 dev_queue_xmit() 경로에서 하드웨어가 지원하지 않는 경우에만 분할을 수행합니다. 두 기술 모두 소프트웨어 기반이므로 하드웨어 의존성이 없으며, per-packet 오버헤드를 크게 줄여 처리량을 향상시킵니다."
   },
   {

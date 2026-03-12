@@ -10,8 +10,6 @@ export interface Quiz {
   type: QuizType;
   question: string;
   options?: string[];
-  keywords?: string[];
-  sampleAnswer?: string;
   codeTemplate?: string;
   codeLanguage?: string;
   blankAnswers?: string[][];

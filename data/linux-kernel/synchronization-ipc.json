@@ -53,9 +53,8 @@
     "subcategory": "synchronization-ipc",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "semaphore와 mutex의 차이점을 설명하고, counting semaphore의 용도를 서술하시오.",
-    "keywords": ["semaphore", "mutex", "counting", "카운터"],
-    "sampleAnswer": "mutex는 한 번에 하나의 스레드만 임계 영역에 접근할 수 있는 이진 잠금(binary lock)이며, 소유권 개념이 있어 잠금을 획득한 스레드만 해제할 수 있습니다. semaphore는 카운터 기반으로, counting semaphore는 동시에 N개의 스레드가 자원에 접근할 수 있도록 허용합니다. 예를 들어, 제한된 수의 연결 풀이나 버퍼 슬롯을 관리하는 데 사용됩니다.",
+    "question": "mutex는 ___ 개념이 있어 잠금을 획득한 스레드만 해제할 수 있는 반면, ___는 카운터 기반으로 동시에 N개의 스레드가 자원에 접근할 수 있다. semaphore의 카운터 감소 연산을 ___라 한다.",
+    "blankAnswers": [["소유권", "ownership"], ["counting semaphore", "semaphore", "세마포어"], ["down", "down()", "P 연산"]],
     "explanation": "semaphore는 down()(P 연산)으로 카운터를 감소시키고, up()(V 연산)으로 카운터를 증가시킵니다. 카운터가 0이면 down()을 호출한 스레드는 sleep합니다. mutex는 semaphore의 특수한 경우(카운터가 1인 경우)로 볼 수 있지만, Linux 커널에서 mutex는 소유권, 우선순위 역전 방지 등 추가 기능을 제공합니다."
   },
   {
@@ -64,9 +63,8 @@
     "subcategory": "synchronization-ipc",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "Linux의 signal(시그널) 메커니즘이란 무엇이며, SIGKILL과 SIGTERM의 차이를 설명하시오.",
-    "keywords": ["signal", "SIGKILL", "SIGTERM", "비동기"],
-    "sampleAnswer": "시그널은 프로세스에게 비동기적으로 이벤트를 알리는 소프트웨어 인터럽트입니다. SIGTERM(15번)은 프로세스에게 정상 종료를 요청하는 시그널로, 프로세스가 핸들러를 등록하여 정리 작업 후 종료할 수 있습니다. SIGKILL(9번)은 프로세스를 강제로 즉시 종료시키며, 핸들러를 등록하거나 무시할 수 없습니다.",
+    "question": "시그널은 프로세스에게 ___적으로 이벤트를 알리는 소프트웨어 인터럽트이다. ___은 프로세스에 정상 종료를 요청하며 핸들러 등록이 가능하고, ___은 강제 종료시키며 핸들러를 등록하거나 무시할 수 없다.",
+    "blankAnswers": [["비동기", "asynchronous"], ["SIGTERM"], ["SIGKILL"]],
     "explanation": "시그널은 Unix/Linux의 기본적인 IPC 메커니즘 중 하나입니다. kill() 시스템 콜이나 키보드 입력(Ctrl+C는 SIGINT) 등으로 전송됩니다. SIGKILL과 SIGSTOP은 핸들러를 등록하거나 블로킹할 수 없는 특수한 시그널입니다."
   },
   {
@@ -75,9 +73,8 @@
     "subcategory": "synchronization-ipc",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "Linux의 shared memory(공유 메모리) IPC 메커니즘의 개념과 장점을 설명하시오.",
-    "keywords": ["shared memory", "공유 메모리", "mmap", "shmget"],
-    "sampleAnswer": "공유 메모리는 두 개 이상의 프로세스가 동일한 물리 메모리 영역을 자신의 가상 주소 공간에 매핑하여 데이터를 공유하는 IPC 메커니즘입니다. System V의 shmget()/shmat() 또는 POSIX의 shm_open()/mmap()으로 구현할 수 있습니다. 데이터 복사 없이 직접 메모리에 접근하므로 가장 빠른 IPC 방식이지만, 동기화를 위해 별도의 semaphore나 mutex가 필요합니다.",
+    "question": "___는 여러 프로세스가 동일한 물리 메모리 영역을 매핑하여 데이터를 공유하는 IPC 메커니즘으로, System V에서는 ___로, POSIX에서는 shm_open()/___로 구현한다.",
+    "blankAnswers": [["공유 메모리", "shared memory"], ["shmget", "shmget()"], ["mmap", "mmap()"]],
     "explanation": "공유 메모리는 커널을 거치지 않고 프로세스들이 직접 메모리를 읽고 쓸 수 있으므로, pipe나 message queue보다 대용량 데이터 전달에 효율적입니다. 다만, 동시 접근에 대한 동기화는 프로그래머가 직접 관리해야 합니다."
   },
   {
@@ -181,9 +178,8 @@
     "subcategory": "synchronization-ipc",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Linux 커널에서 wait queue(대기 큐)의 역할과 기본 사용 패턴을 설명하시오.",
-    "keywords": ["wait_queue", "wait_event", "wake_up", "sleep"],
-    "sampleAnswer": "wait queue는 특정 조건이 충족될 때까지 프로세스(또는 스레드)를 sleep 상태로 전환하고, 조건이 충족되면 깨우는 메커니즘입니다. wait_event(wq, condition)으로 조건이 참이 될 때까지 대기하고, wake_up(&wq)으로 대기 중인 프로세스를 깨웁니다. 디바이스 드라이버에서 I/O 완료 대기, 버퍼의 데이터 가용성 대기 등에 널리 사용됩니다.",
+    "question": "___는 특정 조건이 충족될 때까지 프로세스를 sleep 상태로 전환하는 메커니즘이다. ___로 조건이 참이 될 때까지 대기하고, ___로 대기 중인 프로세스를 깨운다.",
+    "blankAnswers": [["wait queue", "대기 큐"], ["wait_event", "wait_event()"], ["wake_up", "wake_up()"]],
     "explanation": "wait queue는 DECLARE_WAIT_QUEUE_HEAD()로 선언하며, wait_event(), wait_event_interruptible(), wait_event_timeout() 등 다양한 대기 함수를 제공합니다. wake_up()은 대기 큐의 모든 프로세스를, wake_up_interruptible()은 TASK_INTERRUPTIBLE 상태의 프로세스만 깨웁니다."
   },
   {
@@ -192,9 +188,8 @@
     "subcategory": "synchronization-ipc",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Linux 커널의 futex(Fast Userspace Mutex)란 무엇이며, 기존 동기화 메커니즘 대비 장점을 설명하시오.",
-    "keywords": ["futex", "userspace", "커널 진입", "경합"],
-    "sampleAnswer": "futex는 사용자 공간에서 빠르게 동기화를 수행할 수 있는 메커니즘입니다. 경합이 없는 경우(uncontended case) 사용자 공간에서 atomic 연산만으로 잠금을 획득하므로 커널 진입(system call) 오버헤드가 없습니다. 경합이 발생하는 경우에만 futex() 시스템 콜을 통해 커널에서 대기 큐를 관리합니다. pthread_mutex의 내부 구현에 사용됩니다.",
+    "question": "___는 경합이 없는 경우 사용자 공간에서 ___ 연산만으로 잠금을 획득하여 커널 진입 오버헤드가 없고, 경합 시에만 시스템 콜을 통해 커널에서 대기 큐를 관리하는 동기화 메커니즘이다.",
+    "blankAnswers": [["futex", "Fast Userspace Mutex"], ["atomic", "원자적"]],
     "explanation": "futex는 사용자 공간의 정수 변수와 커널의 대기 큐를 결합한 하이브리드 메커니즘입니다. FUTEX_WAIT 연산으로 특정 값일 때 대기하고, FUTEX_WAKE 연산으로 대기 중인 스레드를 깨웁니다. 대부분의 잠금 획득이 경합 없이 이루어지는 실제 환경에서 높은 성능을 제공합니다."
   },
   {
@@ -203,9 +198,8 @@
     "subcategory": "synchronization-ipc",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Linux 커널에서 spinlock 사용 시 주의사항과, spin_lock_irqsave()를 사용해야 하는 상황을 설명하시오.",
-    "keywords": ["spinlock", "인터럽트", "irqsave", "deadlock"],
-    "sampleAnswer": "spinlock을 보유한 상태에서 sleep해서는 안 되며, 임계 영역을 최대한 짧게 유지해야 합니다. 인터럽트 핸들러와 공유하는 데이터를 보호할 때는 spin_lock_irqsave()를 사용해야 합니다. 이 함수는 spinlock 획득과 동시에 로컬 CPU의 인터럽트를 비활성화하여, 인터럽트 핸들러가 같은 spinlock을 획득하려 시도하여 발생하는 deadlock을 방지합니다.",
+    "question": "인터럽트 핸들러와 공유 데이터를 보호할 때는 ___를 사용하여 spinlock 획득과 동시에 로컬 CPU의 ___를 비활성화해야 ___을 방지할 수 있다.",
+    "blankAnswers": [["spin_lock_irqsave", "spin_lock_irqsave()"], ["인터럽트", "interrupt"], ["deadlock", "데드락"]],
     "explanation": "spin_lock()만 사용하면, spinlock을 보유한 상태에서 인터럽트가 발생하고 인터럽트 핸들러가 같은 spinlock을 요청할 경우 deadlock이 발생합니다. spin_lock_irqsave()는 현재 인터럽트 상태를 flags에 저장하고 인터럽트를 비활성화한 후 spinlock을 획득합니다. spin_unlock_irqrestore()로 원래 인터럽트 상태를 복원합니다."
   },
   {
@@ -307,9 +301,8 @@
     "subcategory": "synchronization-ipc",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Linux 커널에서 RCU의 grace period 개념을 설명하고, synchronize_rcu()와 call_rcu()의 차이점을 서술하시오.",
-    "keywords": ["grace period", "synchronize_rcu", "call_rcu", "reader"],
-    "sampleAnswer": "grace period는 RCU에서 모든 기존 reader가 rcu_read_lock()/rcu_read_unlock() 임계 영역을 벗어나는 것이 보장되는 시간 구간입니다. synchronize_rcu()는 grace period가 완료될 때까지 호출자를 블로킹하여 대기시킵니다. call_rcu()는 비블로킹으로, grace period 완료 후 콜백 함수를 비동기적으로 실행합니다. synchronize_rcu()는 코드가 단순하고 call_rcu()는 성능이 중요한 경우에 사용합니다.",
+    "question": "RCU의 ___는 모든 기존 reader가 임계 영역을 벗어나는 것이 보장되는 시간 구간이다. ___는 이 구간이 완료될 때까지 블로킹하고, ___는 비블로킹으로 완료 후 콜백을 비동기 실행한다.",
+    "blankAnswers": [["grace period"], ["synchronize_rcu", "synchronize_rcu()"], ["call_rcu", "call_rcu()"]],
     "explanation": "grace period 동안 새로운 reader는 이미 업데이트된 데이터를 보고, 이전 데이터를 참조하는 reader는 없어집니다. 이 시점 이후에 이전 데이터를 안전하게 해제할 수 있습니다. call_rcu()는 softirq 컨텍스트에서 콜백을 실행하므로, 콜백 내에서 sleep이 불가능합니다."
   },
   {
@@ -318,9 +311,8 @@
     "subcategory": "synchronization-ipc",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Linux 커널에서 priority inversion(우선순위 역전) 문제와 이를 해결하기 위한 priority inheritance 프로토콜을 설명하시오.",
-    "keywords": ["priority inversion", "priority inheritance", "mutex", "실시간"],
-    "sampleAnswer": "우선순위 역전은 높은 우선순위의 태스크가 낮은 우선순위의 태스크가 보유한 잠금을 기다리는 동안, 중간 우선순위의 태스크가 먼저 실행되어 높은 우선순위 태스크가 무한정 지연되는 현상입니다. priority inheritance 프로토콜은 낮은 우선순위 태스크가 잠금을 보유한 동안 임시로 대기 중인 가장 높은 우선순위 태스크의 우선순위를 상속받아, 중간 우선순위 태스크에 의한 선점을 방지합니다. Linux 커널의 rt_mutex가 이 프로토콜을 구현합니다.",
+    "question": "___는 높은 우선순위 태스크가 낮은 우선순위 태스크의 잠금을 기다리는 동안 중간 우선순위 태스크에 밀리는 현상이다. 이를 해결하기 위해 ___ 프로토콜을 사용하며, Linux 커널의 ___가 이를 구현한다.",
+    "blankAnswers": [["우선순위 역전", "priority inversion"], ["priority inheritance", "우선순위 상속"], ["rt_mutex"]],
     "explanation": "우선순위 역전은 실시간 시스템에서 심각한 문제를 야기할 수 있습니다. Mars Pathfinder 사건이 대표적인 예입니다. Linux의 rt_mutex는 PI(Priority Inheritance) 체인을 통해 중첩된 잠금에서도 우선순위 역전을 해결합니다. CONFIG_RT_MUTEXES 설정으로 활성화됩니다."
   },
   {

@@ -53,9 +53,8 @@
     "subcategory": "binder-ipc",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "Binder IPC에서 Parcel 객체의 역할과 Parcelable 인터페이스의 관계를 설명하시오.",
-    "keywords": ["Parcel", "직렬화", "Parcelable", "데이터 전달", "IPC"],
-    "sampleAnswer": "Parcel은 Binder IPC를 통해 프로세스 간에 전달되는 데이터를 직렬화/역직렬화하기 위한 컨테이너입니다. 기본 타입(int, String 등)뿐 아니라 객체도 담을 수 있습니다. Parcelable 인터페이스는 사용자 정의 객체를 Parcel에 쓰고 읽을 수 있도록 writeToParcel()과 createFromParcel() 메서드를 구현하게 하는 인터페이스입니다.",
+    "question": "___은 Binder IPC에서 데이터를 직렬화/역직렬화하기 위한 컨테이너이며, ___ 인터페이스를 구현하면 사용자 정의 객체를 ___()과 ___() 메서드를 통해 전달할 수 있다.",
+    "blankAnswers": [["Parcel"], ["Parcelable"], ["writeToParcel"], ["createFromParcel"]],
     "explanation": "Parcel은 Binder 트랜잭션의 데이터 단위이며, 커널의 Binder 드라이버가 이 데이터를 대상 프로세스의 주소 공간에 복사합니다. Serializable보다 Parcelable이 Android에서 성능이 우수한데, 이는 리플렉션을 사용하지 않고 직접 바이트 스트림으로 변환하기 때문입니다."
   },
   {
@@ -64,9 +63,8 @@
     "subcategory": "binder-ipc",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "IBinder 인터페이스의 역할과 Binder 객체와의 관계를 설명하시오.",
-    "keywords": ["IBinder", "Binder", "인터페이스", "원격 객체", "transact"],
-    "sampleAnswer": "IBinder는 Binder 원격 객체에 대한 추상 인터페이스로, 프로세스 간 통신의 핵심 계약을 정의합니다. transact() 메서드를 통해 원격 호출을 수행합니다. Binder 클래스는 IBinder를 구현한 기본 클래스이며, 같은 프로세스에서는 직접 참조되고 다른 프로세스에서는 BinderProxy 객체로 대체됩니다.",
+    "question": "___는 Binder 원격 객체에 대한 추상 인터페이스로 ___() 메서드를 통해 원격 호출을 수행하며, 같은 프로세스에서는 Binder 객체가 직접 참조되고 다른 프로세스에서는 ___ 객체로 대체된다.",
+    "blankAnswers": [["IBinder"], ["transact"], ["BinderProxy"]],
     "explanation": "IBinder는 Android IPC의 핵심 인터페이스입니다. 로컬 프로세스에서는 Binder 객체가 직접 반환되지만, 원격 프로세스에서는 Binder 드라이버가 자동으로 BinderProxy 객체를 생성하여 투명한 원격 호출을 가능하게 합니다."
   },
   {
@@ -185,9 +183,8 @@
     "subcategory": "binder-ipc",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Binder의 Proxy와 Stub 패턴에서 각각의 역할과 동작 방식을 설명하시오.",
-    "keywords": ["Proxy", "Stub", "클라이언트", "서버", "직렬화", "역직렬화", "transact", "onTransact"],
-    "sampleAnswer": "Proxy는 클라이언트 측에서 동작하며, 메서드 호출을 Parcel로 직렬화한 후 transact()를 통해 Binder 드라이버에 전달합니다. Stub은 서버 측에서 동작하며, onTransact()에서 Parcel을 역직렬화하여 실제 구현 메서드를 호출하고 결과를 Parcel로 다시 직렬화하여 반환합니다. AIDL이 이 Proxy/Stub 코드를 자동 생성합니다.",
+    "question": "Binder IPC에서 ___는 클라이언트 측에서 메서드 호출을 직렬화한 후 ___()를 호출하고, ___는 서버 측에서 ___()에서 역직렬화하여 실제 구현을 호출한다.",
+    "blankAnswers": [["Proxy", "프록시"], ["transact"], ["Stub", "스텁"], ["onTransact"]],
     "explanation": "Proxy-Stub 패턴은 원격 프로시저 호출(RPC)을 로컬 메서드 호출처럼 보이게 하는 투명성을 제공합니다. 클라이언트는 Proxy의 메서드를 호출하면 내부적으로 Binder 트랜잭션이 수행되어 서버의 Stub에서 실제 로직이 실행됩니다."
   },
   {
@@ -196,9 +193,8 @@
     "subcategory": "binder-ipc",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Binder의 death notification(linkToDeath) 메커니즘의 필요성과 동작 원리를 설명하시오.",
-    "keywords": ["linkToDeath", "DeathRecipient", "binderDied", "프로세스 종료", "정리"],
-    "sampleAnswer": "linkToDeath()는 원격 Binder 서비스가 종료되었을 때 알림을 받기 위한 메커니즘입니다. 클라이언트는 IBinder.linkToDeath()에 DeathRecipient 콜백을 등록하고, 서버 프로세스가 비정상적으로 종료되면 Binder 드라이버가 이를 감지하여 클라이언트의 binderDied() 콜백을 호출합니다. 이를 통해 클라이언트는 리소스 정리나 재연결 로직을 수행할 수 있습니다.",
+    "question": "Binder의 death notification에서 클라이언트는 ___()에 ___ 콜백을 등록하고, 서버 프로세스 종료 시 ___() 콜백이 호출되어 리소스 정리나 재연결을 수행한다.",
+    "blankAnswers": [["linkToDeath"], ["DeathRecipient"], ["binderDied"]],
     "explanation": "death notification은 Binder 기반 서비스의 안정성을 위해 중요합니다. Binder 드라이버는 프로세스 종료 시 해당 프로세스가 소유한 모든 Binder 노드를 정리하고, 등록된 death recipient에게 알림을 보냅니다. unlinkToDeath()로 등록을 해제할 수 있습니다."
   },
   {
@@ -207,9 +203,8 @@
     "subcategory": "binder-ipc",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Android Messenger를 이용한 IPC와 AIDL을 이용한 IPC의 차이점을 설명하시오.",
-    "keywords": ["Messenger", "AIDL", "Handler", "Message", "단방향", "멀티스레드", "직렬화"],
-    "sampleAnswer": "Messenger는 Handler와 Message 기반의 간단한 IPC 방식으로, 내부적으로 AIDL(IMessenger)을 사용하지만 모든 요청이 단일 스레드(Handler의 Looper)에서 순차 처리됩니다. AIDL은 커스텀 인터페이스를 정의하여 멀티스레드로 동시 처리가 가능하며, 복잡한 데이터 타입과 동기/비동기 호출을 지원합니다. Messenger는 간단한 메시지 전달에, AIDL은 복잡한 인터페이스와 동시성이 필요할 때 적합합니다.",
+    "question": "___는 ___와 Message 기반으로 ___ 스레드에서 순차 처리되는 간단한 IPC이고, ___은 커스텀 인터페이스를 정의하여 ___로 동시 처리가 가능한 IPC이다.",
+    "blankAnswers": [["Messenger"], ["Handler", "핸들러"], ["단일", "싱글"], ["AIDL"], ["멀티스레드"]],
     "explanation": "Messenger는 단일 스레드 큐로 동작하므로 스레드 안전성 문제가 없지만, 동시 처리가 불가능합니다. AIDL은 Binder 스레드 풀에서 여러 요청을 동시에 처리할 수 있지만, 서버 측에서 스레드 안전성을 직접 보장해야 합니다."
   },
   {
@@ -297,9 +292,8 @@
     "subcategory": "binder-ipc",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Binder 드라이버의 내부 구조에서 binder_proc, binder_thread, binder_node, binder_ref의 관계를 설명하시오.",
-    "keywords": ["binder_proc", "binder_thread", "binder_node", "binder_ref", "프로세스", "스레드", "서비스 노드", "참조"],
-    "sampleAnswer": "binder_proc는 /dev/binder를 open한 프로세스를 나타내는 구조체로, 해당 프로세스의 모든 Binder 관련 상태를 관리합니다. binder_thread는 binder_proc 내에서 Binder 트랜잭션을 처리하는 스레드를 나타냅니다. binder_node는 서비스(서버)가 제공하는 Binder 객체를 커널에서 표현한 것이며, binder_ref는 클라이언트 프로세스가 binder_node를 참조하는 핸들입니다. 하나의 binder_node에 여러 binder_ref가 존재할 수 있습니다.",
+    "question": "Binder 드라이버에서 ___는 프로세스의 Binder 상태를 관리하고, ___는 트랜잭션을 처리하는 스레드를 나타내며, ___는 서버가 제공하는 Binder 객체이고, ___는 클라이언트가 이를 참조하는 핸들이다.",
+    "blankAnswers": [["binder_proc"], ["binder_thread"], ["binder_node"], ["binder_ref"]],
     "explanation": "이 네 구조체는 Binder 드라이버의 핵심입니다. binder_proc는 red-black 트리로 노드와 참조를 관리하고, binder_thread는 트랜잭션 스택을 유지합니다. 트랜잭션 시 송신자의 binder_ref가 수신자의 binder_node로 변환되어 올바른 서비스 객체에 전달됩니다."
   },
   {
@@ -308,9 +302,8 @@
     "subcategory": "binder-ipc",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "AIDL 콜백 인터페이스를 사용하여 서버에서 클라이언트로 비동기 알림을 보내는 패턴과 RemoteCallbackList의 역할을 설명하시오.",
-    "keywords": ["AIDL", "callback", "RemoteCallbackList", "register", "unregister", "비동기", "양방향"],
-    "sampleAnswer": "AIDL 콜백 패턴에서는 콜백용 AIDL 인터페이스를 별도로 정의하고, 서비스 AIDL에 registerCallback/unregisterCallback 메서드를 추가합니다. 클라이언트가 콜백 인터페이스 구현체를 서비스에 등록하면, 서버가 이를 통해 클라이언트에게 역방향 Binder 호출을 수행합니다. RemoteCallbackList는 등록된 콜백들을 안전하게 관리하며, 클라이언트 프로세스 종료 시 자동으로 콜백을 제거하고 death notification을 처리합니다.",
+    "question": "AIDL 콜백 패턴에서 ___는 등록된 콜백들을 안전하게 관리하며, ___()와 ___() 메서드로 콜백을 관리하고, ___()와 finishBroadcast() 패턴으로 스레드 안전한 콜백 순회를 제공한다.",
+    "blankAnswers": [["RemoteCallbackList"], ["register"], ["unregister"], ["beginBroadcast"]],
     "explanation": "RemoteCallbackList는 IBinder를 키로 사용하여 콜백의 중복 등록을 방지하고, beginBroadcast()/finishBroadcast() 패턴으로 스레드 안전한 콜백 순회를 제공합니다. 콜백 호출 중 발생하는 DeadObjectException도 내부적으로 처리합니다."
   },
   {
@@ -319,9 +312,8 @@
     "subcategory": "binder-ipc",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Android의 다중 Binder 도메인(/dev/binder, /dev/hwbinder, /dev/vndbinder)의 도입 배경과 각각의 용도를 설명하시오.",
-    "keywords": ["binder", "hwbinder", "vndbinder", "HIDL", "Treble", "vendor", "framework"],
-    "sampleAnswer": "Android 8.0(Treble)에서 프레임워크와 벤더 코드의 분리를 위해 다중 Binder 도메인이 도입되었습니다. /dev/binder는 프레임워크 프로세스 간 통신(AIDL)에 사용됩니다. /dev/hwbinder는 프레임워크와 HAL(Hardware Abstraction Layer) 간 통신에 사용되며 HIDL/AIDL HAL 인터페이스를 처리합니다. /dev/vndbinder는 벤더 프로세스 간 통신에 사용됩니다. 각 도메인은 별도의 context manager(ServiceManager, HwServiceManager, VndServiceManager)를 가집니다.",
+    "question": "Android Treble에서 ___는 프레임워크 간 IPC에, ___는 프레임워크와 HAL 간 통신에, ___는 벤더 프로세스 간 통신에 사용되는 다중 Binder 도메인이다.",
+    "blankAnswers": [["/dev/binder"], ["/dev/hwbinder"], ["/dev/vndbinder"]],
     "explanation": "Treble 아키텍처는 프레임워크 업데이트와 벤더 구현을 독립적으로 할 수 있게 분리했습니다. SELinux 정책으로 각 도메인 간 접근이 제한되며, 프레임워크 프로세스는 /dev/hwbinder를 통해서만 HAL에 접근할 수 있습니다."
   },
   {

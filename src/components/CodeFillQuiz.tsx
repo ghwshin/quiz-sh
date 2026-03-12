@@ -4,11 +4,7 @@ import { useState, useMemo } from "react";
 import type { Quiz } from "@/types/quiz";
 import { useQuizProgress } from "@/hooks/useQuizProgress";
 import { DIFFICULTIES } from "@/lib/constants";
-
-function checkBlank(input: string, acceptableAnswers: string[]): boolean {
-  const normalized = input.toLowerCase().trim();
-  return acceptableAnswers.some((ans) => normalized === ans.toLowerCase().trim());
-}
+import { checkBlank } from "@/lib/quiz-utils";
 
 const LANGUAGE_LABELS: Record<string, string> = {
   c: "C",

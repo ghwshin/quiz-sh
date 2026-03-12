@@ -53,9 +53,8 @@
     "subcategory": "scheduling",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "CFS에서 사용하는 vruntime(virtual runtime)의 개념과 역할을 설명하시오.",
-    "keywords": ["vruntime", "virtual runtime", "공정", "red-black tree"],
-    "sampleAnswer": "vruntime은 프로세스가 실제로 CPU에서 실행된 시간을 우선순위(nice 값)에 따른 가중치를 적용하여 정규화한 가상 실행 시간입니다. CFS는 vruntime이 가장 작은 프로세스를 다음에 실행할 프로세스로 선택하여, 모든 프로세스가 공정하게 CPU 시간을 받도록 합니다. 프로세스들은 vruntime 값을 키로 하여 red-black 트리에 정렬됩니다.",
+    "question": "CFS에서 ___는 실제 CPU 실행 시간을 nice 값 가중치로 정규화한 가상 실행 시간이며, CFS는 이 값이 가장 작은 프로세스를 다음에 실행한다. 프로세스들은 이 값을 키로 ___ 트리에 정렬된다.",
+    "blankAnswers": [["vruntime", "virtual runtime"], ["red-black", "레드-블랙"]],
     "explanation": "vruntime은 CFS의 핵심 메커니즘입니다. 우선순위가 높은(nice 값이 낮은) 프로세스는 vruntime이 더 느리게 증가하므로 더 많은 CPU 시간을 할당받게 됩니다. 트리의 가장 왼쪽 노드(가장 작은 vruntime)가 다음 실행 대상이 됩니다."
   },
   {
@@ -64,9 +63,8 @@
     "subcategory": "scheduling",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "컨텍스트 스위칭(context switching)이란 무엇이며, 어떤 정보가 저장되고 복원되는지 설명하시오.",
-    "keywords": ["context switch", "레지스터", "프로그램 카운터", "스택 포인터"],
-    "sampleAnswer": "컨텍스트 스위칭은 CPU가 현재 실행 중인 프로세스(또는 스레드)에서 다른 프로세스로 전환하는 과정입니다. 이때 현재 프로세스의 CPU 레지스터 값, 프로그램 카운터(PC), 스택 포인터(SP), 상태 레지스터 등을 해당 프로세스의 task_struct에 저장하고, 다음 프로세스의 저장된 컨텍스트를 CPU에 복원합니다. 또한 메모리 관리 유닛(MMU)의 페이지 테이블도 전환됩니다.",
+    "question": "컨텍스트 스위칭 시 현재 프로세스의 CPU ___, 프로그램 카운터, ___ 등을 task_struct에 저장하고, 다음 프로세스의 컨텍스트를 복원한다. Linux 커널에서는 ___ 함수가 이 과정을 처리한다.",
+    "blankAnswers": [["레지스터", "register"], ["스택 포인터", "stack pointer", "SP"], ["context_switch", "context_switch()"]],
     "explanation": "컨텍스트 스위칭은 멀티태스킹의 기본 메커니즘이지만 오버헤드가 발생합니다. 레지스터 저장/복원, TLB 플러시, 캐시 미스 증가 등이 성능에 영향을 줄 수 있으며, Linux 커널은 context_switch() 함수에서 이 과정을 처리합니다."
   },
   {
@@ -75,9 +73,8 @@
     "subcategory": "scheduling",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "선점형(preemptive) 스케줄링과 비선점형(non-preemptive) 스케줄링의 차이점을 설명하시오.",
-    "keywords": ["preemptive", "non-preemptive", "선점", "강제"],
-    "sampleAnswer": "선점형 스케줄링은 현재 실행 중인 프로세스를 강제로 중단하고 다른 프로세스에게 CPU를 할당할 수 있는 방식입니다. 비선점형 스케줄링은 현재 실행 중인 프로세스가 자발적으로 CPU를 양보(yield)하거나 블로킹 상태에 진입할 때까지 실행을 보장합니다. Linux 커널은 선점형 스케줄링을 지원하며, 타이머 인터럽트를 통해 프로세스를 선점할 수 있습니다.",
+    "question": "___ 스케줄링은 실행 중인 프로세스를 강제로 중단하고 다른 프로세스에게 CPU를 할당할 수 있고, ___ 스케줄링은 프로세스가 자발적으로 CPU를 양보할 때까지 실행을 보장한다. Linux 커널에서 커널 코드의 선점을 허용하려면 ___ 옵션을 활성화해야 한다.",
+    "blankAnswers": [["선점형", "preemptive"], ["비선점형", "non-preemptive"], ["CONFIG_PREEMPT"]],
     "explanation": "Linux는 사용자 공간 프로세스에 대해 완전한 선점형 스케줄링을 지원합니다. 커널 공간에서도 CONFIG_PREEMPT 옵션을 활성화하면 커널 코드 실행 중에도 선점이 가능합니다. 선점형 스케줄링은 응답성을 향상시키지만, 동기화 문제에 더 주의해야 합니다."
   },
   {
@@ -180,9 +177,8 @@
     "subcategory": "scheduling",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Linux 커널의 runqueue(실행 큐)란 무엇이며, per-CPU runqueue의 장점을 설명하시오.",
-    "keywords": ["runqueue", "per-CPU", "rq", "실행 가능"],
-    "sampleAnswer": "runqueue는 CPU에서 실행 대기 중인 프로세스(TASK_RUNNING 상태)들을 관리하는 자료구조입니다. Linux 커널은 각 CPU 코어마다 독립적인 runqueue(struct rq)를 유지합니다. per-CPU runqueue의 장점은 각 CPU가 자신의 runqueue에 독립적으로 접근하므로 락 경쟁(lock contention)이 줄어들고, 캐시 친화성(cache affinity)이 향상되어 스케줄링 성능이 향상됩니다.",
+    "question": "___는 실행 대기 중인 프로세스들을 관리하는 자료구조이며, Linux 커널은 각 CPU 코어마다 독립적인 ___ runqueue를 유지하여 ___ 경쟁을 줄이고 캐시 친화성을 향상시킨다.",
+    "blankAnswers": [["runqueue", "실행 큐", "struct rq"], ["per-CPU"], ["락", "lock"]],
     "explanation": "struct rq는 <kernel/sched/sched.h>에 정의되어 있으며, CFS runqueue(cfs_rq), 실시간 runqueue(rt_rq), deadline runqueue(dl_rq) 등을 포함합니다. 각 CPU의 runqueue는 독립적으로 동작하며, 필요 시 load balancing을 통해 CPU 간 태스크를 재분배합니다."
   },
   {
@@ -191,9 +187,8 @@
     "subcategory": "scheduling",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "sched_entity 구조체의 역할과 CFS에서의 관계를 설명하시오.",
-    "keywords": ["sched_entity", "vruntime", "task_struct", "CFS"],
-    "sampleAnswer": "sched_entity는 CFS 스케줄러에서 스케줄링의 기본 단위를 나타내는 구조체입니다. task_struct 내부에 포함되어 있으며, vruntime(가상 실행 시간), load weight(부하 가중치), 실행 통계 정보 등을 저장합니다. CFS는 sched_entity를 통해 프로세스의 CPU 사용량을 추적하고, vruntime 값을 기반으로 다음 실행할 프로세스를 결정합니다. 또한 그룹 스케줄링을 지원하여 cgroup 단위로도 공정한 CPU 분배를 가능하게 합니다.",
+    "question": "___는 CFS 스케줄링의 기본 단위를 나타내는 구조체로, ___ 내부에 포함되어 있으며 vruntime과 load weight 등을 저장한다. task_struct의 ___ 멤버가 이에 해당한다.",
+    "blankAnswers": [["sched_entity", "struct sched_entity"], ["task_struct", "struct task_struct"], ["se"]],
     "explanation": "sched_entity는 스케줄링 가능한 엔티티를 추상화한 구조체입니다. 하나의 태스크뿐만 아니라 그룹(task_group)도 sched_entity로 표현될 수 있어, 계층적 스케줄링이 가능합니다. task_struct의 se 멤버가 이에 해당합니다."
   },
   {
@@ -295,9 +290,8 @@
     "subcategory": "scheduling",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "pick_next_task() 함수의 역할과 스케줄링 클래스와의 관계를 설명하시오.",
-    "keywords": ["pick_next_task", "scheduling class", "우선순위", "for_each_class"],
-    "sampleAnswer": "pick_next_task()는 __schedule()에서 호출되어 다음에 실행할 태스크를 선택하는 함수입니다. 이 함수는 스케줄링 클래스의 우선순위 순서(stop > deadline > realtime > fair > idle)로 순회하며, 각 클래스의 pick_next_task() 콜백을 호출합니다. 가장 높은 우선순위의 스케줄링 클래스에서 실행 가능한 태스크를 찾으면 즉시 반환합니다. 최적화로, 모든 실행 가능한 태스크가 CFS에 속하는 경우 바로 CFS의 pick_next_task_fair()를 호출합니다.",
+    "question": "___는 __schedule()에서 호출되어 다음 실행할 태스크를 선택하며, 스케줄링 클래스를 ___ 순서로 순회한다. 각 스케줄링 클래스는 ___ 구조체에 자신의 콜백을 등록한다.",
+    "blankAnswers": [["pick_next_task", "pick_next_task()"], ["우선순위", "priority"], ["sched_class", "struct sched_class"]],
     "explanation": "pick_next_task()는 스케줄러의 핵심 로직으로, 스케줄링 클래스 추상화를 통해 다양한 스케줄링 정책을 통합적으로 관리합니다. 각 스케줄링 클래스는 sched_class 구조체에 자신의 pick_next_task 콜백을 등록합니다."
   },
   {
@@ -306,9 +300,8 @@
     "subcategory": "scheduling",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "CFS의 time slice(시간 할당량)가 고정되지 않고 동적으로 결정되는 방식을 설명하시오.",
-    "keywords": ["time slice", "sched_latency", "sched_min_granularity", "nice", "weight"],
-    "sampleAnswer": "CFS는 전통적인 고정 time slice 대신, sched_latency(목표 스케줄링 주기) 내에서 각 프로세스의 가중치(nice 값에 의해 결정)에 비례하여 CPU 시간을 동적으로 분배합니다. 프로세스의 time slice = sched_latency * (해당 프로세스 가중치 / runqueue 내 전체 가중치 합)으로 계산됩니다. runqueue에 프로세스가 많아지면 sched_min_granularity에 의해 최소 시간이 보장되며, 이 경우 실제 스케줄링 주기가 sched_latency보다 길어질 수 있습니다.",
+    "question": "CFS에서 프로세스의 time slice는 ___(목표 스케줄링 주기)를 각 프로세스의 가중치(___에 의해 결정) 비율로 분배하여 동적으로 계산되며, ___에 의해 최소 시간이 보장된다.",
+    "blankAnswers": [["sched_latency"], ["nice 값", "nice"], ["sched_min_granularity"]],
     "explanation": "이 동적 time slice 방식 덕분에 CFS는 프로세스 수에 관계없이 공정한 CPU 분배를 유지합니다. nice 값이 1 차이 날 때 약 1.25배의 가중치 차이가 발생하도록 설계되어 있으며, 이는 prio_to_weight[] 배열에 정의되어 있습니다."
   },
   {
@@ -317,9 +310,8 @@
     "subcategory": "scheduling",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "SCHED_DEADLINE 스케줄링 정책의 개념과 사용하는 세 가지 파라미터(runtime, deadline, period)의 의미를 설명하시오.",
-    "keywords": ["SCHED_DEADLINE", "runtime", "deadline", "period", "EDF"],
-    "sampleAnswer": "SCHED_DEADLINE은 Linux 3.14에서 도입된 실시간 스케줄링 정책으로, EDF(Earliest Deadline First) 알고리즘을 기반으로 합니다. 세 가지 파라미터: runtime은 각 주기 내에서 태스크가 필요로 하는 최대 CPU 실행 시간, period는 태스크의 활성화 주기, deadline은 각 주기 내에서 runtime만큼의 실행이 완료되어야 하는 마감 시한입니다. runtime <= deadline <= period의 관계를 가지며, 커널은 이 제약을 만족할 수 있는지 admission control로 검증합니다.",
+    "question": "SCHED_DEADLINE은 ___ 알고리즘을 기반으로 하며, ___는 각 주기 내 최대 CPU 실행 시간을, ___는 태스크의 활성화 주기를, deadline은 실행 완료 마감 시한을 나타낸다.",
+    "blankAnswers": [["EDF", "Earliest Deadline First"], ["runtime"], ["period"]],
     "explanation": "SCHED_DEADLINE은 모든 스케줄링 클래스 중 가장 높은 우선순위를 가집니다. CBS(Constant Bandwidth Server) 알고리즘과 결합하여 deadline 태스크가 다른 태스크를 기아 상태로 만들지 않도록 bandwidth를 제한합니다. sched_setattr() 시스템 콜로 설정합니다."
   },
   {

@@ -53,9 +53,8 @@
     "subcategory": "filesystem",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "리눅스에서 inode란 무엇이며, inode에 저장되는 주요 정보에는 어떤 것들이 있는지 설명하시오.",
-    "keywords": ["inode", "metadata", "permission", "owner", "size", "block"],
-    "sampleAnswer": "inode는 파일 시스템에서 파일이나 디렉토리의 metadata를 저장하는 자료구조입니다. inode에는 파일의 permission(접근 권한), owner(소유자) 및 그룹 정보, file size, 데이터가 저장된 disk block의 위치, 타임스탬프(생성/수정/접근 시간), 링크 카운트 등이 저장됩니다. 단, 파일 이름은 inode가 아닌 디렉토리 엔트리(dentry)에 저장됩니다.",
+    "question": "파일 시스템에서 파일의 권한, 소유자, 크기, 디스크 블록 위치 등 메타데이터를 저장하는 자료구조를 ___라 한다. 단, 파일 이름은 inode가 아닌 ___에 저장된다.",
+    "blankAnswers": [["inode"], ["디렉토리 엔트리", "dentry", "directory entry"]],
     "explanation": "inode는 유닉스 계열 파일 시스템의 핵심 자료구조로, 파일의 메타데이터를 관리합니다. 파일 이름은 inode에 포함되지 않으며, 디렉토리 엔트리가 이름과 inode 번호를 매핑합니다. 이로 인해 하나의 inode에 여러 이름(하드 링크)을 부여할 수 있습니다."
   },
   {
@@ -64,9 +63,8 @@
     "subcategory": "filesystem",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "/proc 파일 시스템은 무엇이며 어떤 용도로 사용되는지 설명하시오.",
-    "keywords": ["proc", "virtual", "kernel", "process"],
-    "sampleAnswer": "/proc는 리눅스 커널이 제공하는 virtual filesystem으로, 디스크에 존재하지 않고 메모리에서 동적으로 생성됩니다. kernel 내부 정보와 각 process의 상태 정보를 사용자 공간에서 파일 형태로 조회하거나 설정할 수 있게 해줍니다. 예를 들어 /proc/cpuinfo, /proc/meminfo, /proc/[pid]/status 등이 있습니다.",
+    "question": "/proc는 디스크에 존재하지 않고 메모리에서 동적으로 생성되는 ___으로, ___ 내부 정보와 각 ___의 상태 정보를 파일 형태로 제공한다.",
+    "blankAnswers": [["가상 파일 시스템", "virtual filesystem", "virtual file system"], ["커널", "kernel"], ["프로세스", "process"]],
     "explanation": "/proc 파일 시스템(procfs)은 커널과 프로세스 정보를 파일 인터페이스로 노출하는 가상 파일 시스템입니다. 실제 디스크 I/O 없이 커널 자료구조를 직접 읽거나 수정할 수 있어 시스템 모니터링과 커널 파라미터 튜닝에 활용됩니다."
   },
   {
@@ -171,9 +169,8 @@
     "subcategory": "filesystem",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "리눅스 커널의 struct file과 struct inode의 차이점을 설명하시오.",
-    "keywords": ["struct file", "struct inode", "process", "open"],
-    "sampleAnswer": "struct inode는 파일 시스템에 존재하는 파일 자체의 메타데이터(크기, 권한, 디스크 블록 위치 등)를 나타내는 커널 객체로, 파일당 하나 존재합니다. 반면 struct file은 프로세스가 open() 시스템 콜로 파일을 열 때마다 생성되는 객체로, 현재 파일 오프셋, 접근 모드(읽기/쓰기) 등 열린 파일 인스턴스의 상태를 관리합니다. 동일한 파일을 여러 프로세스가 열면 하나의 inode에 대해 여러 struct file이 존재할 수 있습니다.",
+    "question": "___는 파일 자체의 메타데이터(크기, 권한 등)를 나타내는 커널 객체로 파일당 하나 존재하고, ___는 프로세스가 open()으로 파일을 열 때마다 생성되어 현재 파일 오프셋 등 열린 파일의 동적 상태를 관리한다.",
+    "blankAnswers": [["struct inode", "inode"], ["struct file"]],
     "explanation": "struct inode는 파일의 정적인 속성을 나타내고, struct file은 파일을 연 동적인 상태를 나타냅니다. struct file에는 f_pos(현재 오프셋), f_flags(열기 플래그), f_op(file_operations 포인터) 등이 포함됩니다."
   },
   {
@@ -182,9 +179,8 @@
     "subcategory": "filesystem",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "sysfs(/sys)는 어떤 목적의 파일 시스템이며, /proc과의 차이점은 무엇인지 설명하시오.",
-    "keywords": ["sysfs", "device", "kobject", "kernel"],
-    "sampleAnswer": "sysfs는 커널의 device model과 kobject 계층 구조를 사용자 공간에 노출하는 virtual filesystem입니다. 주로 하드웨어 장치, 드라이버, 버스 등의 정보를 체계적으로 제공합니다. /proc이 주로 process 정보와 다양한 kernel 통계를 혼합하여 제공하는 반면, sysfs는 장치와 드라이버 정보에 특화되어 구조화된 계층적 인터페이스를 제공합니다.",
+    "question": "sysfs는 커널의 ___ 계층 구조를 사용자 공간에 노출하는 가상 파일 시스템으로, /proc이 프로세스 정보를 제공하는 반면 sysfs는 ___와 드라이버 정보에 특화되어 있다.",
+    "blankAnswers": [["kobject", "device model"], ["장치", "device", "디바이스"]],
     "explanation": "sysfs는 리눅스 2.6에서 도입되었으며, 이전에 /proc에 혼재되어 있던 장치 관련 정보를 분리하여 체계적으로 관리합니다. /sys/class, /sys/devices, /sys/bus 등의 디렉토리로 구성되며, 각 파일은 보통 하나의 속성 값만 포함합니다."
   },
   {
@@ -193,9 +189,8 @@
     "subcategory": "filesystem",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "리눅스에서 mount 명령의 역할과 마운트 시 커널 내부에서 일어나는 과정을 설명하시오.",
-    "keywords": ["mount", "superblock", "vfsmount", "filesystem"],
-    "sampleAnswer": "mount 명령은 특정 filesystem을 디렉토리 트리의 한 지점(mount point)에 연결하는 작업입니다. 커널 내부에서는 해당 파일 시스템의 superblock을 읽어 struct super_block을 초기화하고, vfsmount(또는 struct mount) 구조체를 생성하여 마운트 포인트와 파일 시스템을 연결합니다. 이후 해당 마운트 포인트 아래의 경로 탐색은 새로 마운트된 파일 시스템으로 진행됩니다.",
+    "question": "마운트 시 커널은 파일 시스템의 ___를 읽어 struct super_block을 초기화하고, ___ 구조체를 생성하여 마운트 포인트와 파일 시스템을 연결한다.",
+    "blankAnswers": [["superblock", "슈퍼블록"], ["vfsmount", "struct mount"]],
     "explanation": "마운트 과정에서 커널은 파일 시스템 타입에 맞는 super_operations의 fill_super 또는 mount 콜백을 호출하여 superblock을 초기화합니다. 마운트된 파일 시스템은 VFS의 마운트 트리에 추가되어 경로 탐색 시 올바른 파일 시스템으로 라우팅됩니다."
   },
   {
@@ -251,9 +246,8 @@
     "subcategory": "filesystem",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "리눅스 커널에서 page cache의 역할과, 파일 read/write 시 page cache가 관여하는 흐름을 설명하시오. dirty page의 writeback 메커니즘도 함께 서술하시오.",
-    "keywords": ["page cache", "dirty", "writeback", "readahead", "page"],
-    "sampleAnswer": "page cache는 디스크에서 읽은 파일 데이터를 메모리의 page 단위(보통 4KB)로 캐싱하는 메커니즘입니다. read 시 먼저 page cache에서 해당 페이지를 찾고, 없으면 디스크에서 읽어와 캐싱합니다(readahead로 선행 읽기도 수행). write 시에는 page cache의 페이지에 먼저 기록하고 해당 페이지를 dirty로 표시합니다. dirty page는 커널의 writeback 스레드(예: pdflush, kworker)에 의해 주기적으로 또는 메모리 압박 시 디스크에 기록됩니다. fsync() 시스템 콜로 명시적 동기화도 가능합니다.",
+    "question": "___는 파일 데이터를 메모리의 페이지 단위로 캐싱하는 메커니즘이다. write 시 페이지에 먼저 기록하고 해당 페이지를 ___로 표시하며, 이러한 페이지는 커널의 ___ 스레드에 의해 주기적으로 디스크에 기록된다.",
+    "blankAnswers": [["page cache", "페이지 캐시"], ["dirty", "더티"], ["writeback", "kworker"]],
     "explanation": "page cache는 파일 I/O 성능의 핵심입니다. 반복 읽기 시 디스크 접근 없이 메모리에서 데이터를 제공하고, 쓰기 시에도 즉시 디스크에 쓰지 않고 dirty 페이지로 표시한 뒤 배치 writeback으로 I/O 효율을 높입니다. vm.dirty_ratio, vm.dirty_expire_centisecs 등의 커널 파라미터로 writeback 동작을 제어할 수 있습니다."
   },
   {
@@ -310,9 +304,8 @@
     "subcategory": "filesystem",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "ext4 저널링의 세 가지 모드(journal, ordered, writeback)의 차이점과 각각의 장단점을 설명하시오.",
-    "keywords": ["journal", "ordered", "writeback", "metadata", "data"],
-    "sampleAnswer": "journal 모드는 metadata와 data 모두를 저널에 기록하여 가장 안전하지만 성능이 낮습니다. ordered 모드(기본값)는 metadata만 저널에 기록하되, 메타데이터를 커밋하기 전에 관련 data 블록이 먼저 디스크에 기록되도록 순서를 보장합니다. writeback 모드는 metadata만 저널에 기록하고 데이터 쓰기 순서를 보장하지 않아 가장 빠르지만, 충돌 시 파일에 오래된 데이터가 노출될 수 있습니다.",
+    "question": "ext4 저널링에서 ___ 모드는 메타데이터와 데이터 모두 저널에 기록하여 가장 안전하고, ___ 모드(기본값)는 메타데이터만 저널에 기록하되 데이터 쓰기 순서를 보장하며, ___ 모드는 메타데이터만 저널에 기록하고 순서를 보장하지 않아 가장 빠르다.",
+    "blankAnswers": [["journal"], ["ordered"], ["writeback"]],
     "explanation": "ordered 모드가 ext4의 기본 모드인 이유는 성능과 안전성의 균형이 좋기 때문입니다. journal 모드는 모든 데이터를 두 번 쓰므로 성능 부담이 크고, writeback 모드는 충돌 시 stale data exposure 위험이 있습니다."
   },
   {
@@ -321,9 +314,8 @@
     "subcategory": "filesystem",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "VFS의 address_space 객체와 address_space_operations의 역할을 설명하고, page cache와의 관계를 서술하시오.",
-    "keywords": ["address_space", "page cache", "readpage", "writepage", "inode"],
-    "sampleAnswer": "address_space는 inode에 연결된 객체로, 해당 파일의 page cache 페이지들을 관리합니다. 기본적으로 파일의 내용을 페이지 단위로 캐싱하는 컨테이너 역할을 합니다. address_space_operations는 readpage(디스크에서 페이지를 읽어옴), writepage(더티 페이지를 디스크에 기록), write_begin/write_end 등의 콜백을 정의하여 각 파일 시스템이 page cache와 디스크 간의 데이터 전송을 구현합니다.",
+    "question": "___는 inode에 연결되어 해당 파일의 page cache 페이지들을 관리하는 객체이다. address_space_operations의 ___ 콜백은 디스크에서 페이지를 읽어오고, ___ 콜백은 더티 페이지를 디스크에 기록한다.",
+    "blankAnswers": [["address_space"], ["readpage", "readfolio"], ["writepage", "writepages"]],
     "explanation": "address_space는 radix tree(또는 xarray)를 사용하여 파일 오프셋과 페이지 간의 매핑을 효율적으로 관리합니다. VFS는 read/write 시스템 콜 처리 시 address_space_operations의 콜백을 호출하여 파일 시스템별로 적절한 방식으로 디스크 I/O를 수행합니다."
   },
   {

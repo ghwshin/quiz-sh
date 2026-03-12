@@ -33,8 +33,8 @@ const mockQuizzes: Quiz[] = [
     subcategory: "process-management",
     difficulty: "초급",
     type: "short-answer",
-    question: "Third question?",
-    keywords: ["answer"],
+    question: "Third ___?",
+    blankAnswers: [["answer"]],
     explanation: "Explanation 3",
   },
 ];

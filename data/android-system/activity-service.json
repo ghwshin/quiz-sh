@@ -53,9 +53,8 @@
     "subcategory": "activity-service",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "Android의 4대 컴포넌트(Component)를 나열하고, 각각의 역할을 간단히 설명하시오.",
-    "keywords": ["Activity", "Service", "BroadcastReceiver", "ContentProvider"],
-    "sampleAnswer": "Android의 4대 컴포넌트는 Activity, Service, BroadcastReceiver, ContentProvider입니다. Activity는 사용자 인터페이스(UI) 화면을 제공합니다. Service는 백그라운드에서 오래 실행되는 작업을 수행합니다. BroadcastReceiver는 시스템 또는 앱에서 전송하는 브로드캐스트 메시지를 수신하여 처리합니다. ContentProvider는 앱 간에 데이터를 공유하기 위한 인터페이스를 제공합니다.",
+    "question": "Android의 4대 컴포넌트 중 UI 화면을 제공하는 것은 ___이고, 백그라운드 작업을 수행하는 것은 ___이며, 브로드캐스트 메시지를 수신하는 것은 ___, 앱 간 데이터 공유를 위한 것은 ___이다.",
+    "blankAnswers": [["Activity", "액티비티"], ["Service", "서비스"], ["BroadcastReceiver", "브로드캐스트 리시버"], ["ContentProvider", "콘텐트 프로바이더"]],
     "explanation": "이 4대 컴포넌트는 Android 앱의 핵심 구성 요소이며, 모두 AndroidManifest.xml에 선언해야 합니다. 각 컴포넌트는 독립적인 생명주기를 가지며, Intent를 통해 활성화될 수 있습니다(ContentProvider 제외, ContentResolver를 통해 접근)."
   },
   {
@@ -64,9 +63,8 @@
     "subcategory": "activity-service",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "명시적 Intent(Explicit Intent)와 암시적 Intent(Implicit Intent)의 차이점을 설명하시오.",
-    "keywords": ["Explicit Intent", "Implicit Intent", "클래스 이름", "action", "IntentFilter"],
-    "sampleAnswer": "명시적 Intent는 시작할 컴포넌트의 클래스 이름(예: SecondActivity::class.java)을 직접 지정하여 특정 컴포넌트를 호출합니다. 주로 같은 앱 내의 컴포넌트를 시작할 때 사용됩니다. 암시적 Intent는 수행할 작업(action)과 데이터 유형을 선언하여, 해당 작업을 처리할 수 있는 컴포넌트를 시스템이 찾아 실행합니다. 다른 앱의 기능을 호출할 때 주로 사용되며, IntentFilter를 통해 매칭됩니다.",
+    "question": "명시적 Intent는 시작할 컴포넌트의 ___을 직접 지정하여 호출하고, 암시적 Intent는 수행할 ___을 선언하여 시스템이 ___를 통해 매칭되는 컴포넌트를 찾아 실행한다.",
+    "blankAnswers": [["클래스 이름", "class name"], ["action", "액션"], ["IntentFilter", "인텐트 필터"]],
     "explanation": "명시적 Intent는 대상 컴포넌트를 정확히 알고 있을 때, 암시적 Intent는 수행할 작업만 알고 구체적인 대상은 시스템에 맡길 때 사용합니다. 암시적 Intent를 사용하면 사용자에게 앱 선택기(Chooser)가 표시될 수 있습니다."
   },
   {
@@ -186,9 +184,8 @@
     "subcategory": "activity-service",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Started Service와 Bound Service의 차이점을 생명주기 관점에서 설명하시오.",
-    "keywords": ["startService", "bindService", "onStartCommand", "onBind", "stopSelf", "unbindService"],
-    "sampleAnswer": "Started Service는 startService()로 시작되며, onStartCommand()가 호출됩니다. 시작한 컴포넌트와 독립적으로 실행되어 작업이 완료되면 stopSelf() 또는 stopService()로 직접 중지해야 합니다. Bound Service는 bindService()로 바인딩되며, onBind()가 호출되어 IBinder 인터페이스를 반환합니다. 바인딩된 모든 클라이언트가 unbindService()로 바인딩을 해제하면 시스템이 자동으로 Service를 소멸시킵니다.",
+    "question": "Started Service는 ___()로 시작되어 ___() 콜백이 호출되고 ___()로 직접 중지해야 하며, Bound Service는 ___()로 바인딩되어 ___() 콜백에서 IBinder를 반환한다.",
+    "blankAnswers": [["startService"], ["onStartCommand"], ["stopSelf"], ["bindService"], ["onBind"]],
     "explanation": "하나의 Service가 Started와 Bound 두 가지 방식을 동시에 지원할 수도 있습니다. 이 경우 모든 클라이언트가 바인딩을 해제하고 stopSelf()나 stopService()가 호출되어야 Service가 소멸됩니다."
   },
   {
@@ -197,9 +194,8 @@
     "subcategory": "activity-service",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Android에서 Task와 Back Stack의 개념을 설명하고, Activity가 Back Stack에서 관리되는 방식을 서술하시오.",
-    "keywords": ["Task", "Back Stack", "LIFO", "스택", "launchMode"],
-    "sampleAnswer": "Task는 사용자가 특정 작업을 수행할 때 상호작용하는 Activity들의 모음입니다. 이 Activity들은 Back Stack이라는 LIFO(Last In, First Out) 스택에 열린 순서대로 쌓입니다. 새 Activity가 시작되면 스택의 맨 위에 push되고, 사용자가 뒤로 가기를 누르면 현재 Activity가 pop되어 소멸되고 이전 Activity가 resume됩니다. launchMode를 통해 이 기본 동작을 변경할 수 있습니다.",
+    "question": "___는 사용자가 상호작용하는 Activity들의 모음이며, Activity들은 ___라는 ___구조로 관리되어 새 Activity는 push되고 뒤로 가기 시 pop된다.",
+    "blankAnswers": [["Task", "태스크"], ["Back Stack", "백 스택"], ["LIFO"]],
     "explanation": "Back Stack은 사용자의 탐색 경험을 관리하는 핵심 메커니즘입니다. 홈 버튼을 누르면 현재 Task 전체가 백그라운드로 이동하며, 앱을 다시 선택하면 Task가 포그라운드로 복원됩니다."
   },
   {
@@ -208,9 +204,8 @@
     "subcategory": "activity-service",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "ContentProvider의 역할과 ContentResolver를 통한 데이터 접근 방식을 설명하시오.",
-    "keywords": ["ContentProvider", "ContentResolver", "URI", "CRUD", "데이터 공유"],
-    "sampleAnswer": "ContentProvider는 앱의 데이터를 다른 앱과 안전하게 공유하기 위한 표준 인터페이스를 제공합니다. 데이터는 content:// URI를 통해 식별되며, 다른 앱은 ContentResolver를 사용하여 query(), insert(), update(), delete() 등의 CRUD 연산으로 데이터에 접근합니다. ContentProvider는 내부적으로 SQLite, 파일, 네트워크 등 다양한 저장소를 사용할 수 있습니다.",
+    "question": "___는 앱 간 데이터 공유를 위한 표준 인터페이스이며, 데이터는 ___를 통해 식별되고, 다른 앱은 ___를 사용하여 CRUD 연산으로 접근한다.",
+    "blankAnswers": [["ContentProvider", "콘텐트 프로바이더"], ["content:// URI", "URI"], ["ContentResolver", "콘텐트 리졸버"]],
     "explanation": "대표적인 예로 Android 시스템의 연락처(ContactsContract)나 미디어 파일(MediaStore)이 ContentProvider로 제공됩니다. Android 11 이상에서는 앱의 패키지 가시성 제한으로 인해 AndroidManifest.xml에 <queries> 선언이 필요할 수 있습니다."
   },
   {
@@ -298,9 +293,8 @@
     "subcategory": "activity-service",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Android에서 프로세스 우선순위(Process Priority)의 5단계를 높은 순서부터 나열하고, 각 단계에 해당하는 컴포넌트 상태를 설명하시오.",
-    "keywords": ["Foreground", "Visible", "Service", "Cached", "Empty", "프로세스 우선순위"],
-    "sampleAnswer": "Android 프로세스 우선순위는 높은 순서대로: 1) Foreground Process - 사용자와 상호작용 중인 Activity(onResume 상태), 현재 실행 중인 BroadcastReceiver, Foreground Service가 있는 프로세스. 2) Visible Process - 화면에 보이지만 포그라운드가 아닌 Activity(onPause 상태)가 있는 프로세스. 3) Service Process - Started Service가 실행 중인 프로세스. 4) Cached (Background) Process - 현재 보이지 않는 Activity(onStop 상태)가 있는 프로세스. 5) Empty Process - 활성 컴포넌트가 없는 프로세스로, 캐싱 목적으로만 유지됩니다.",
+    "question": "Android 프로세스 우선순위는 높은 순서대로 ___ Process, ___ Process, ___ Process, Cached Process, Empty Process의 5단계로 분류된다.",
+    "blankAnswers": [["Foreground", "포그라운드"], ["Visible", "비저블"], ["Service", "서비스"]],
     "explanation": "시스템은 메모리가 부족할 때 우선순위가 낮은 프로세스부터 종료(kill)합니다. Foreground Service를 사용하면 프로세스의 우선순위를 높여 시스템에 의한 종료를 방지할 수 있습니다. 이 우선순위 체계는 Android의 메모리 관리(LMK - Low Memory Killer)와 직접 연관됩니다."
   },
   {
@@ -309,9 +303,8 @@
     "subcategory": "activity-service",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Fragment의 생명주기가 Activity의 생명주기와 어떻게 연동되는지 설명하고, Fragment 고유의 생명주기 콜백(onAttach, onCreateView, onDestroyView, onDetach)의 호출 시점을 서술하시오.",
-    "keywords": ["onAttach", "onCreateView", "onDestroyView", "onDetach", "Activity 생명주기", "Fragment 생명주기"],
-    "sampleAnswer": "Fragment의 생명주기는 호스트 Activity의 생명주기에 종속됩니다. Fragment 고유 콜백의 호출 시점: onAttach()는 Fragment가 Activity에 연결될 때 가장 먼저 호출되며 Context를 얻을 수 있습니다. onCreateView()는 Fragment의 UI를 inflate하여 반환합니다. onDestroyView()는 Fragment의 View 계층이 제거될 때 호출되며, View 관련 리소스를 정리합니다. onDetach()는 Fragment가 Activity에서 완전히 분리될 때 마지막으로 호출됩니다. 전체 순서: onAttach → onCreate → onCreateView → onViewCreated → onStart → onResume → onPause → onStop → onDestroyView → onDestroy → onDetach.",
+    "question": "Fragment가 Activity에 연결될 때 가장 먼저 호출되는 콜백은 ___()이고, UI를 inflate하여 반환하는 콜백은 ___()이며, View 계층이 제거될 때는 ___(), Activity에서 완전히 분리될 때는 ___()가 호출된다.",
+    "blankAnswers": [["onAttach"], ["onCreateView"], ["onDestroyView"], ["onDetach"]],
     "explanation": "Activity가 소멸되면 포함된 Fragment도 함께 소멸됩니다. ViewPager 등에서 Fragment를 재사용할 때 onDestroyView()와 onCreateView()가 반복 호출될 수 있으므로, View 바인딩 참조를 onDestroyView()에서 null로 설정하여 메모리 누수를 방지해야 합니다."
   },
   {
@@ -320,9 +313,8 @@
     "subcategory": "activity-service",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Android 8.0(Oreo) 이상에서 도입된 백그라운드 실행 제한(Background Execution Limits)이 Service와 BroadcastReceiver에 미치는 영향과 대응 방법을 설명하시오.",
-    "keywords": ["Background Execution Limits", "Foreground Service", "JobScheduler", "WorkManager", "암시적 브로드캐스트"],
-    "sampleAnswer": "Android 8.0 이상에서는 백그라운드에 있는 앱이 startService()로 백그라운드 Service를 시작할 수 없으며, IllegalStateException이 발생합니다. 대신 startForegroundService()로 Foreground Service를 시작하고 5초 이내에 startForeground()를 호출해야 합니다. 또한 대부분의 암시적 브로드캐스트(Implicit Broadcast)를 AndroidManifest.xml에서 정적으로 등록해도 수신할 수 없게 되었습니다. 대응 방법으로는 Foreground Service, JobScheduler, WorkManager 사용, 또는 Context.registerReceiver()를 통한 동적 브로드캐스트 등록이 있습니다.",
+    "question": "Android 8.0의 백그라운드 실행 제한으로 인해 백그라운드 Service 시작 시 ___()를 사용해야 하고 5초 이내에 ___()를 호출해야 하며, 대부분의 ___를 정적 등록으로 수신할 수 없어 ___나 ___를 대안으로 사용한다.",
+    "blankAnswers": [["startForegroundService"], ["startForeground"], ["암시적 브로드캐스트", "implicit broadcast"], ["JobScheduler"], ["WorkManager"]],
     "explanation": "이 제한은 배터리 수명과 시스템 성능을 개선하기 위해 도입되었습니다. WorkManager는 백그라운드 작업을 위한 권장 솔루션으로, 앱 프로세스가 종료되어도 작업을 보장하며 API 레벨에 따라 내부적으로 JobScheduler 또는 AlarmManager를 사용합니다."
   },
   {

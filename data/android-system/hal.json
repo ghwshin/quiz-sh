@@ -53,9 +53,12 @@
     "subcategory": "hal",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "Passthrough HAL과 Binderized HAL의 차이점을 설명하시오.",
-    "keywords": ["Passthrough", "Binderized", "같은 프로세스", "별도 프로세스", "Binder IPC", "dlopen"],
-    "sampleAnswer": "Passthrough HAL은 클라이언트와 같은 프로세스에서 실행되며 dlopen()으로 .so 라이브러리를 직접 로드합니다. Binderized HAL은 별도 프로세스에서 HAL 서비스로 실행되며 HIDL/AIDL 기반의 Binder IPC를 통해 통신합니다. Binderized HAL이 보안과 안정성 면에서 권장되며 Project Treble의 핵심 요소입니다.",
+    "question": "Passthrough HAL은 클라이언트와 ___에서 실행되며 ___으로 라이브러리를 직접 로드하고, Binderized HAL은 ___에서 실행되며 Binder IPC를 통해 통신한다.",
+    "blankAnswers": [
+      ["같은 프로세스", "동일 프로세스"],
+      ["dlopen", "dlopen()"],
+      ["별도 프로세스", "독립 프로세스"]
+    ],
     "explanation": "Passthrough HAL은 legacy HAL을 래핑하여 같은 프로세스에서 직접 호출하는 방식으로, 성능은 좋지만 보안과 격리가 약합니다. Binderized HAL은 독립 프로세스로 실행되어 HAL 서비스 크래시가 프레임워크에 영향을 주지 않으며, 권한 분리와 SELinux 정책 적용이 용이합니다."
   },
   {
@@ -64,9 +67,12 @@
     "subcategory": "hal",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "HIDL(Hardware Interface Definition Language)이란 무엇이며 왜 도입되었는지 설명하시오.",
-    "keywords": ["HIDL", "인터페이스 정의", "HAL", "Treble", "프로세스 간 통신", "버전 관리"],
-    "sampleAnswer": "HIDL은 Android 8.0에서 Project Treble과 함께 도입된 인터페이스 정의 언어로, HAL 인터페이스를 명확하게 정의합니다. HAL 서버와 클라이언트 간의 통신 코드를 자동 생성하며, 인터페이스의 버전 관리를 지원하여 프레임워크와 벤더 구현의 독립적인 업데이트를 가능하게 합니다.",
+    "question": "___은 Android 8.0에서 Project Treble과 함께 도입된 HAL ___를 명확하게 정의하는 언어로, 인터페이스의 ___를 지원하여 프레임워크와 벤더 구현의 독립적인 업데이트를 가능하게 한다.",
+    "blankAnswers": [
+      ["HIDL"],
+      ["인터페이스", "interface"],
+      ["버전 관리", "versioning"]
+    ],
     "explanation": "HIDL은 .hal 파일로 인터페이스를 정의하며, hidl-gen 도구를 통해 C++ 및 Java 바인딩 코드를 자동 생성합니다. 패키지 형태(예: android.hardware.camera@2.0)로 관리되어 버전 관리가 용이하고, 프레임워크와 벤더 간의 안정적인 계약(contract)을 보장합니다."
   },
   {
@@ -122,9 +128,12 @@
     "subcategory": "hal",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "HIDL 인터페이스의 패키지 명명 규칙과 디렉토리 매핑 방식을 예시와 함께 설명하시오.",
-    "keywords": ["android.hardware", "@major.minor", "hardware/interfaces", "패키지", "버전"],
-    "sampleAnswer": "HIDL 패키지는 android.hardware.<name>@<major>.<minor> 형식을 따릅니다. 예를 들어 android.hardware.camera@2.0은 카메라 HAL 버전 2.0을 의미합니다. 이 패키지는 AOSP의 hardware/interfaces/camera/2.0/ 디렉토리에 매핑되며, 해당 디렉토리에 .hal 인터페이스 파일들이 위치합니다.",
+    "question": "HIDL 패키지는 ___형식의 명명 규칙을 따르며, 예를 들어 카메라 HAL 2.0은 ___로 표현되고, AOSP의 ___디렉토리에 매핑된다.",
+    "blankAnswers": [
+      ["android.hardware.<name>@<major>.<minor>"],
+      ["android.hardware.camera@2.0"],
+      ["hardware/interfaces/", "hardware/interfaces"]
+    ],
     "explanation": "HIDL 패키지는 android.hardware.<name>@<major>.<minor> 형식을 따릅니다. 예를 들어 android.hardware.camera@2.0은 카메라 HAL 버전 2.0을 의미합니다. 이 명명 규칙은 hardware/interfaces 디렉토리 구조에 직접 매핑되어, 패키지명만으로 소스 코드 위치를 쉽게 찾을 수 있습니다."
   },
   {
@@ -181,9 +190,12 @@
     "subcategory": "hal",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "HAL의 버전 관리에서 major 버전과 minor 버전 변경의 차이를 설명하시오.",
-    "keywords": ["major", "minor", "하위 호환", "비호환", "인터페이스 추가", "기존 변경"],
-    "sampleAnswer": "minor 버전 변경은 기존 인터페이스에 새로운 메서드를 추가하는 것으로, 하위 호환성이 유지됩니다. 예를 들어 @2.0을 확장한 @2.1은 @2.0의 모든 기능을 포함합니다. major 버전 변경은 기존 인터페이스의 시그니처 변경이나 메서드 제거를 포함할 수 있어 하위 호환성이 깨지며, 완전히 새로운 인터페이스로 취급됩니다.",
+    "question": "HAL 버전 관리에서 ___ 버전 변경은 기존 인터페이스에 새로운 메서드를 추가하는 것으로 ___이 유지되고, ___ 버전 변경은 기존 인터페이스의 시그니처 변경이나 메서드 제거를 포함할 수 있어 호환성이 깨진다.",
+    "blankAnswers": [
+      ["minor"],
+      ["하위 호환성", "backward compatibility", "호환성"],
+      ["major"]
+    ],
     "explanation": "HIDL에서 minor 버전 업데이트(@2.0 → @2.1)는 기존 인터페이스를 extends하여 메서드를 추가할 수 있으며, @2.0 클라이언트가 @2.1 서비스를 그대로 사용할 수 있습니다. major 버전 업데이트(@2.x → @3.0)는 호환성을 보장하지 않으며, 클라이언트와 서버 모두 업데이트가 필요합니다."
   },
   {
@@ -192,9 +204,12 @@
     "subcategory": "hal",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "hardware/interfaces 디렉토리의 구조와 역할을 설명하시오.",
-    "keywords": ["hardware/interfaces", "HIDL", "인터페이스 정의", "디렉토리 구조", "패키지"],
-    "sampleAnswer": "hardware/interfaces는 AOSP에서 모든 HIDL HAL 인터페이스가 정의된 디렉토리입니다. 각 HAL은 hardware/interfaces/<name>/<version>/ 구조로 관리됩니다. 예를 들어 hardware/interfaces/camera/2.0/에는 카메라 HAL 2.0의 .hal 파일들이 위치합니다. 이 디렉토리의 인터페이스들은 android.hardware.<name>@<version> 패키지로 매핑됩니다.",
+    "question": "AOSP의 ___디렉토리는 모든 HIDL HAL 인터페이스가 정의된 곳으로, 각 HAL은 ___구조로 관리되며, 해당 디렉토리의 인터페이스들은 ___패키지로 매핑된다.",
+    "blankAnswers": [
+      ["hardware/interfaces", "hardware/interfaces/"],
+      ["hardware/interfaces/<name>/<version>/", "<name>/<version>/"],
+      ["android.hardware.<name>@<version>"]
+    ],
     "explanation": "hardware/interfaces는 AOSP 프레임워크 측의 HAL 인터페이스 정의 저장소입니다. 각 하위 디렉토리에는 .hal 인터페이스 파일, types.hal(공통 타입 정의), Android.bp(빌드 파일) 등이 포함됩니다. hidl-gen 도구가 이 파일들로부터 C++/Java 바인딩 코드를 생성합니다."
   },
   {
@@ -203,9 +218,12 @@
     "subcategory": "hal",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "VTS(Vendor Test Suite)란 무엇이며 HAL 개발에서 어떤 역할을 하는지 설명하시오.",
-    "keywords": ["VTS", "벤더 테스트", "HAL 구현", "호환성", "자동화 테스트", "인터페이스 준수"],
-    "sampleAnswer": "VTS는 벤더 HAL 구현이 AOSP에서 정의한 HAL 인터페이스 규격을 올바르게 준수하는지 검증하는 자동화 테스트 프레임워크입니다. 각 HIDL/AIDL HAL 인터페이스에 대한 테스트 케이스가 포함되어 있으며, 벤더가 새 디바이스를 출시하기 전에 VTS를 통과해야 Android 호환성을 보장받을 수 있습니다.",
+    "question": "___는 벤더 HAL 구현이 AOSP에서 정의한 HAL ___ 규격을 올바르게 준수하는지 검증하는 자동화 테스트 프레임워크로, 이를 통과해야 Android ___를 보장받을 수 있다.",
+    "blankAnswers": [
+      ["VTS", "Vendor Test Suite"],
+      ["인터페이스", "interface"],
+      ["호환성 인증", "호환성", "GMS 인증"]
+    ],
     "explanation": "VTS는 CTS(Compatibility Test Suite)의 벤더 버전으로 볼 수 있습니다. HAL 인터페이스의 각 메서드에 대한 기능 테스트, 성능 테스트, 보안 테스트를 포함합니다. VTS 통과는 Android 호환성 인증(GMS 인증)의 필수 요건이며, Project Treble의 안정성을 보장하는 핵심 메커니즘입니다."
   },
   {
@@ -294,9 +312,12 @@
     "subcategory": "hal",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "HAL deprecation 과정에서 FCM(Framework Compatibility Matrix) 레벨의 역할과 HAL이 제거되기까지의 과정을 설명하시오.",
-    "keywords": ["FCM 레벨", "deprecated", "optional", "제거", "Target FCM Version", "호환성"],
-    "sampleAnswer": "FCM 레벨은 Android 버전마다 증가하는 숫자로, 각 레벨에서 요구되는 HAL 목록이 정의됩니다. HAL 제거 과정은 먼저 특정 FCM 레벨에서 해당 HAL을 optional로 표시하고, 이후 버전에서 FCM에서 완전히 제거합니다. 디바이스의 Target FCM Version이 해당 HAL이 제거된 레벨 이상이면, 그 HAL은 더 이상 프레임워크에서 지원하지 않습니다.",
+    "question": "HAL deprecation 과정에서 ___은 Android 버전마다 증가하는 숫자로 요구되는 HAL 목록을 정의하며, HAL 제거 시 먼저 해당 HAL을 ___로 표시한 후 이후 버전에서 완전히 제거하고, 디바이스의 ___이 제거된 레벨 이상이면 해당 HAL은 더 이상 지원되지 않는다.",
+    "blankAnswers": [
+      ["FCM 레벨", "FCM level"],
+      ["optional"],
+      ["Target FCM Version"]
+    ],
     "explanation": "FCM 레벨 기반의 HAL deprecation은 점진적 전환을 보장합니다. 예를 들어 FCM 레벨 5에서 HAL A를 optional로 표시하면, 새 디바이스는 HAL A를 제공하지 않아도 됩니다. FCM 레벨 7에서 완전히 제거되면, Target FCM Version 7 이상의 디바이스에서는 HAL A가 프레임워크에서 접근 불가합니다."
   },
   {
@@ -305,9 +326,12 @@
     "subcategory": "hal",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "system/vendor 분리(Treble) 환경에서 SP-HAL(Same-Process HAL)이 허용되는 이유와 조건을 설명하시오.",
-    "keywords": ["SP-HAL", "Same-Process", "성능", "OpenGL", "Vulkan", "VNDK-SP", "링크 제한"],
-    "sampleAnswer": "SP-HAL은 성능이 극도로 중요한 HAL(예: OpenGL ES, Vulkan 드라이버)에 대해 Binderized 대신 같은 프로세스에서 직접 로드를 허용하는 예외적 메커니즘입니다. SP-HAL은 VNDK-SP 라이브러리만 링크할 수 있으며, system 파티션의 일반 라이브러리에 대한 의존성이 금지됩니다. linker namespace를 통해 이 제한이 적용됩니다.",
+    "question": "SP-HAL은 ___와 같이 성능이 극도로 중요한 HAL에 대해 같은 프로세스에서 직접 로드를 허용하는 예외적 메커니즘으로, ___ 라이브러리만 링크할 수 있으며, ___를 통해 접근 가능한 라이브러리가 엄격히 통제된다.",
+    "blankAnswers": [
+      ["OpenGL ES", "Vulkan", "그래픽스 드라이버"],
+      ["VNDK-SP"],
+      ["linker namespace", "링커 네임스페이스"]
+    ],
     "explanation": "그래픽스 HAL은 프레임당 수천 번의 호출이 발생하므로 IPC 오버헤드가 허용되지 않습니다. SP-HAL은 이 성능 요구를 충족하면서도 VNDK-SP(VNDK의 하위집합) 라이브러리만 사용하도록 제한하여 system/vendor 분리 원칙을 최대한 유지합니다. linker namespace 격리를 통해 SP-HAL이 접근할 수 있는 라이브러리를 엄격히 통제합니다."
   },
   {

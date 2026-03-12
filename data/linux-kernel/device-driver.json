@@ -37,9 +37,8 @@
     "subcategory": "device-driver",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "Linux 커널에서 디바이스 드라이버가 사용자 공간에 디바이스 노드를 자동으로 생성하기 위해 협력하는 커널 서브시스템과 user space 데몬의 이름을 각각 무엇이라 하는가?",
-    "keywords": ["sysfs", "udev"],
-    "sampleAnswer": "커널은 sysfs를 통해 디바이스 정보를 노출하고, user space의 udev 데몬이 이 정보를 감지하여 /dev 아래에 디바이스 노드를 자동으로 생성합니다.",
+    "question": "커널은 ___를 통해 디바이스 정보를 노출하고, user space의 ___ 데몬이 이 정보를 감지하여 /dev 아래에 디바이스 노드를 자동으로 생성한다.",
+    "blankAnswers": [["sysfs"], ["udev"]],
     "explanation": "sysfs는 커널 객체(디바이스, 드라이버, 버스 등)의 정보를 /sys 디렉토리에 파일 시스템 형태로 노출합니다. udev는 커널로부터 uevent를 수신하고 sysfs 정보를 참조하여 /dev 디렉토리에 디바이스 파일을 동적으로 생성하거나 제거합니다."
   },
   {
@@ -48,9 +47,8 @@
     "subcategory": "device-driver",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "Linux 커널의 device model에서 bus, device, driver 세 가지 핵심 구성 요소가 어떻게 상호작용하는지 간략히 설명하시오.",
-    "keywords": ["bus", "device", "driver", "match", "probe"],
-    "sampleAnswer": "bus는 device와 driver를 연결하는 매개체입니다. 새로운 device가 등록되면 bus는 등록된 driver 목록에서 매칭되는 driver를 찾아 probe 함수를 호출합니다. 반대로 새로운 driver가 등록되면 bus에 연결된 device 중 매칭되는 것을 찾아 probe를 호출합니다.",
+    "question": "Linux device model에서 ___는 device와 driver를 연결하는 매개체로, ___ 콜백으로 호환성을 판단하고 매칭에 성공하면 driver의 ___ 함수를 호출한다.",
+    "blankAnswers": [["bus", "버스"], ["match", "match()"], ["probe", "probe()"]],
     "explanation": "Linux의 device model은 bus_type, device, device_driver 구조체로 구성됩니다. bus의 match() 콜백이 device와 driver의 호환성을 판단하고, 매칭에 성공하면 driver의 probe() 함수가 호출되어 디바이스 초기화가 수행됩니다."
   },
   {
@@ -106,9 +104,8 @@
     "subcategory": "device-driver",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "Linux 커널에서 device class의 역할과 class_create() 함수의 용도를 설명하시오.",
-    "keywords": ["class", "sysfs", "class_create", "device_create"],
-    "sampleAnswer": "device class는 유사한 기능을 가진 디바이스들을 논리적으로 그룹화합니다. class_create()로 클래스를 생성한 후 device_create()를 호출하면 sysfs에 디바이스 정보가 등록되고, udev가 이를 감지하여 /dev에 디바이스 노드를 자동 생성합니다.",
+    "question": "___로 디바이스 클래스를 생성한 후 ___를 호출하면 sysfs에 디바이스 정보가 등록되고, udev가 /dev에 디바이스 노드를 자동 생성한다.",
+    "blankAnswers": [["class_create", "class_create()"], ["device_create", "device_create()"]],
     "explanation": "class_create()는 /sys/class/ 아래에 새 디바이스 클래스 디렉토리를 생성합니다. 이후 device_create()로 해당 클래스에 디바이스를 등록하면 udev/systemd-udevd가 uevent를 받아 /dev 노드를 자동으로 만들어줍니다. 이를 통해 mknod를 수동으로 실행할 필요가 없어집니다."
   },
   {
@@ -148,9 +145,8 @@
     "subcategory": "device-driver",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "platform driver의 probe() 함수가 호출되는 시점과 이 함수에서 일반적으로 수행하는 작업을 설명하시오.",
-    "keywords": ["probe", "match", "resource", "initialize", "platform_device"],
-    "sampleAnswer": "probe()는 platform bus가 드라이버와 디바이스의 compatible 문자열(또는 id_table)이 일치함을 확인한 후 호출됩니다. probe에서는 메모리 매핑된 I/O 리소스 획득, IRQ 요청, 클럭 활성화, 하드웨어 초기화, character device 등록 등의 작업을 수행합니다.",
+    "question": "platform driver의 ___는 드라이버와 디바이스의 ___ 문자열이 일치할 때 호출되며, 이 함수에서 ___로 메모리/IRQ 리소스를 획득하고 하드웨어를 초기화한다.",
+    "blankAnswers": [["probe", "probe()"], ["compatible"], ["platform_get_resource", "platform_get_resource()"]],
     "explanation": "probe()는 드라이버의 진입점으로, 디바이스가 존재하고 드라이버와 매칭되었을 때 커널에 의해 호출됩니다. platform_get_resource()로 메모리/IRQ 리소스를 얻고, devm_ioremap_resource()로 I/O 매핑을 하며, devm_request_irq()로 인터럽트를 등록하는 것이 일반적인 패턴입니다."
   },
   {
@@ -192,9 +188,8 @@
     "subcategory": "device-driver",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Device Tree의 compatible 속성이 드라이버 매칭에서 어떤 역할을 하는지, 그리고 여러 compatible 값이 나열될 때의 의미를 설명하시오.",
-    "keywords": ["compatible", "of_match_table", "fallback", "specific", "generic"],
-    "sampleAnswer": "compatible 속성은 device tree 노드가 어떤 드라이버와 호환되는지를 나타내는 문자열 목록입니다. 여러 값이 나열될 때 앞쪽이 가장 구체적인 디바이스이고 뒤쪽으로 갈수록 일반적인 호환 디바이스를 나타냅니다. 커널은 가장 구체적인 것부터 매칭을 시도하여 적합한 드라이버를 찾습니다.",
+    "question": "Device Tree의 ___ 속성은 드라이버 매칭에 사용되는 문자열 목록이다. 여러 값이 나열될 때 앞쪽이 가장 ___이고, 매칭 실패 시 뒤쪽의 더 일반적인 드라이버로 ___한다.",
+    "blankAnswers": [["compatible"], ["구체적", "specific"], ["fallback", "폴백"]],
     "explanation": "예를 들어 compatible = \"samsung,exynos4210-uart\", \"samsung,exynos-uart\"에서 첫 번째는 특정 SoC의 UART, 두 번째는 Exynos 계열 공통 UART를 의미합니다. 커널은 가장 구체적인 드라이버부터 검색하고, 없으면 더 일반적인 드라이버로 fallback합니다."
   },
   {
@@ -219,9 +214,8 @@
     "subcategory": "device-driver",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "sysfs에서 디바이스 드라이버가 커스텀 attribute 파일을 생성하여 user space와 데이터를 교환하는 방법을 설명하시오.",
-    "keywords": ["sysfs", "attribute", "show", "store", "DEVICE_ATTR"],
-    "sampleAnswer": "DEVICE_ATTR 또는 DEVICE_ATTR_RW 매크로를 사용하여 attribute를 정의합니다. show 콜백은 user space에서 파일을 읽을 때 호출되어 데이터를 전달하고, store 콜백은 파일에 쓸 때 호출되어 데이터를 수신합니다. device_create_file()로 sysfs에 등록합니다.",
+    "question": "sysfs attribute를 정의할 때 ___ 매크로를 사용하며, user space에서 파일을 읽으면 ___ 콜백이, 파일에 쓰면 ___ 콜백이 호출된다.",
+    "blankAnswers": [["DEVICE_ATTR", "DEVICE_ATTR_RW"], ["show"], ["store"]],
     "explanation": "DEVICE_ATTR_RW(my_attr)는 dev_attr_my_attr 구조체를 생성하며, my_attr_show()와 my_attr_store() 콜백 함수를 필요로 합니다. show 함수는 sysfs_emit() 또는 sprintf()로 버퍼에 값을 쓰고, store 함수는 사용자 입력을 파싱합니다. attribute_group을 사용하면 여러 attribute를 한번에 관리할 수 있습니다."
   },
   {
@@ -277,9 +271,8 @@
     "subcategory": "device-driver",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Linux USB 드라이버에서 URB(USB Request Block)의 개념과 생명주기를 설명하시오.",
-    "keywords": ["URB", "usb_alloc_urb", "usb_submit_urb", "completion", "callback", "endpoint"],
-    "sampleAnswer": "URB는 USB 통신의 기본 데이터 전송 단위입니다. usb_alloc_urb()로 생성하고, 전송할 데이터와 endpoint, 완료 콜백을 설정한 후 usb_submit_urb()로 USB 코어에 제출합니다. USB 호스트 컨트롤러가 전송을 완료하면 완료 콜백(complete)이 호출되며, 콜백에서 전송 결과를 확인하고 필요시 URB를 재제출합니다.",
+    "question": "USB 통신의 기본 전송 단위인 URB는 ___로 생성하고, endpoint와 완료 콜백을 설정한 후 ___로 USB 코어에 제출한다. 전송 완료 시 ___ 콜백이 비동기적으로 호출된다.",
+    "blankAnswers": [["usb_alloc_urb", "usb_alloc_urb()"], ["usb_submit_urb", "usb_submit_urb()"], ["complete", "completion"]],
     "explanation": "URB의 생명주기: 1) usb_alloc_urb()로 할당, 2) usb_fill_bulk_urb() 등으로 초기화 (endpoint, 버퍼, 콜백 설정), 3) usb_submit_urb()로 제출, 4) 비동기적으로 전송 완료 후 complete 콜백 호출, 5) usb_free_urb()로 해제. URB는 interrupt, bulk, control, isochronous 전송 타입을 모두 지원합니다."
   },
   {
@@ -319,9 +312,8 @@
     "subcategory": "device-driver",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Linux 커널의 USB 드라이버에서 usb_driver 구조체의 probe()가 호출되는 과정과 interface descriptor 기반 매칭 메커니즘을 상세히 설명하시오.",
-    "keywords": ["usb_driver", "usb_device_id", "probe", "interface", "idVendor", "idProduct", "bInterfaceClass"],
-    "sampleAnswer": "USB 디바이스가 연결되면 USB 코어가 디바이스의 descriptor를 읽고, 각 interface에 대해 등록된 usb_driver의 usb_device_id 테이블과 비교합니다. idVendor, idProduct, bInterfaceClass 등의 필드가 일치하면 해당 드라이버의 probe()가 usb_interface 구조체를 인자로 호출됩니다.",
+    "question": "USB 디바이스 연결 시 USB 코어는 각 interface에 대해 등록된 usb_driver의 ___ 테이블과 비교하며, ___와 idProduct 등이 일치하면 드라이버의 probe()가 ___ 구조체를 인자로 호출된다.",
+    "blankAnswers": [["usb_device_id"], ["idVendor"], ["usb_interface"]],
     "explanation": "USB 매칭은 interface 레벨에서 수행됩니다. usb_device_id의 match_flags 필드가 어떤 필드로 매칭할지 결정합니다. USB_DEVICE() 매크로는 vendor/product ID로 매칭하고, USB_INTERFACE_INFO()는 class/subclass/protocol로 매칭합니다. 하나의 USB 디바이스가 여러 interface를 가질 수 있어, 각 interface마다 다른 드라이버가 바인딩될 수 있습니다."
   },
   {
