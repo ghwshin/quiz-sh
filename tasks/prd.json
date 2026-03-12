@@ -120,7 +120,7 @@
         "Typecheck 통과"
       ],
       "priority": 7,
-      "passes": false,
+      "passes": true,
       "notes": "selinux-security: sepolicy, te files, contexts, audit2allow 등. init-zygote: init.rc, Zygote, app_process, SystemServer 등. framework-services: ActivityManagerService, PackageManagerService, WindowManagerService 등. hidl-aidl: .hal files, .aidl files, vndk, treble 등."
     },
     {
