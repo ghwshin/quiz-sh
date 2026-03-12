@@ -15,6 +15,7 @@ import bootProcess from "../../data/linux-kernel/boot-process.json";
 import kernelObservabilityDebugging from "../../data/linux-kernel/kernel-observability-debugging.json";
 import containersIsolation from "../../data/linux-kernel/containers-isolation.json";
 import blockStorageIo from "../../data/linux-kernel/block-storage-io.json";
+import arm64Architecture from "../../data/linux-kernel/arm64-architecture.json";
 
 // Android System quiz data
 import systemArchitecture from "../../data/android-system/system-architecture.json";
@@ -30,6 +31,7 @@ import hidlAidl from "../../data/android-system/hidl-aidl.json";
 import bootIntegrityUpdates from "../../data/android-system/boot-integrity-updates.json";
 import platformDebuggingPerformance from "../../data/android-system/platform-debugging-performance.json";
 import platformModularityVirtualization from "../../data/android-system/platform-modularity-virtualization.json";
+import arm64Platform from "../../data/android-system/arm64-platform.json";
 
 const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
   "linux-kernel": {
@@ -46,6 +48,7 @@ const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
     "kernel-observability-debugging": kernelObservabilityDebugging as Quiz[],
     "containers-isolation": containersIsolation as Quiz[],
     "block-storage-io": blockStorageIo as Quiz[],
+    "arm64-architecture": arm64Architecture as Quiz[],
   },
   "android-system": {
     "system-architecture": systemArchitecture as Quiz[],
@@ -61,6 +64,7 @@ const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
     "boot-integrity-updates": bootIntegrityUpdates as Quiz[],
     "platform-debugging-performance": platformDebuggingPerformance as Quiz[],
     "platform-modularity-virtualization": platformModularityVirtualization as Quiz[],
+    "arm64-platform": arm64Platform as Quiz[],
   },
 };
 

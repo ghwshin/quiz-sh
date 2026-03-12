@@ -1,0 +1,357 @@
+[
+  {
+    "id": "ap-001",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "ARM64 AAPCS64 호출 규약에서 함수의 반환값을 전달하는 데 사용되는 범용 레지스터는?",
+    "options": [
+      "X8",
+      "X0",
+      "X30 (LR)",
+      "SP"
+    ],
+    "answer": 1,
+    "explanation": "AAPCS64(Procedure Call Standard for the Arm 64-bit Architecture)에서 함수의 반환값은 X0 레지스터를 통해 전달됩니다. X0~X7은 함수 인자 전달 및 반환값에 사용되며, X8은 indirect result location 레지스터, X30은 Link Register(LR)로 복귀 주소를 저장합니다."
+  },
+  {
+    "id": "ap-002",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ARM64 ELF 바이너리에서 PLT(Procedure Linkage Table)와 GOT(Global Offset Table)의 역할로 올바른 것은?",
+    "options": [
+      "PLT는 데이터 세그먼트의 전역 변수를 관리하고, GOT는 코드 세그먼트의 함수를 관리한다",
+      "PLT와 GOT는 동적 링킹 시 외부 함수 호출을 지연 바인딩(lazy binding)하는 데 사용된다",
+      "PLT는 스택 보호를 위한 canary 값을 저장하고, GOT는 힙 메모리를 관리한다",
+      "PLT와 GOT는 ARM64에서는 사용되지 않으며 직접 분기만 사용된다"
+    ],
+    "answer": 1,
+    "explanation": "PLT와 GOT는 동적 링킹에서 외부 라이브러리 함수 호출을 지원합니다. PLT는 코드 스텁으로 첫 호출 시 동적 링커를 통해 실제 함수 주소를 해결하고, 해당 주소를 GOT에 저장합니다. 이후 호출에서는 GOT에서 직접 주소를 읽어 점프하므로 오버헤드가 줄어듭니다."
+  },
+  {
+    "id": "ap-003",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "ARM big.LITTLE 아키텍처에서 '빅(big)' 코어의 주요 특징은?",
+    "options": [
+      "저전력 소비에 최적화되어 백그라운드 작업에 적합하다",
+      "높은 성능을 제공하며 연산 집약적인 작업에 적합하다",
+      "GPU 연산만을 전담한다",
+      "I/O 작업만을 전담하는 코어이다"
+    ],
+    "answer": 1,
+    "explanation": "big.LITTLE 아키텍처에서 빅 코어(예: Cortex-A78, Cortex-X3)는 높은 IPC(Instructions Per Clock)와 클럭 속도로 성능 집약적인 작업을 처리합니다. 리틀 코어(예: Cortex-A55)는 전력 효율에 최적화되어 가벼운 백그라운드 작업을 담당합니다."
+  },
+  {
+    "id": "ap-004",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Linux 커널의 Energy Aware Scheduling(EAS)이 태스크를 배치할 CPU를 결정할 때 사용하는 핵심 개념은?",
+    "options": [
+      "CPU의 캐시 크기만을 기준으로 결정한다",
+      "Energy Model을 참조하여 에너지 소비가 최소화되는 CPU를 선택한다",
+      "항상 가장 높은 주파수의 CPU를 선택한다",
+      "라운드 로빈 방식으로 순서대로 배정한다"
+    ],
+    "answer": 1,
+    "explanation": "EAS는 커널에 등록된 Energy Model(EM)을 사용하여 각 CPU의 capacity와 전력 소비 관계를 파악합니다. 태스크를 배치할 때 성능 요구사항을 만족하면서 전체 에너지 소비가 최소가 되는 CPU를 선택합니다. 이를 통해 big.LITTLE 시스템에서 효율적인 스케줄링이 가능합니다."
+  },
+  {
+    "id": "ap-005",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Android에서 CPUFreq governor 중 schedutil의 특징으로 올바른 것은?",
+    "options": [
+      "주기적으로 CPU 사용률을 폴링하여 주파수를 결정한다",
+      "스케줄러의 utilization 정보를 직접 활용하여 주파수를 결정한다",
+      "항상 최대 주파수로 고정한다",
+      "사용자가 수동으로 주파수를 설정해야 한다"
+    ],
+    "answer": 1,
+    "explanation": "schedutil governor는 CFS 스케줄러의 PELT(Per-Entity Load Tracking) utilization 신호를 직접 활용하여 CPU 주파수를 결정합니다. 기존의 ondemand/interactive governor와 달리 별도의 폴링 없이 스케줄러 컨텍스트에서 바로 주파수 변경을 요청하므로 반응 속도와 에너지 효율이 더 우수합니다."
+  },
+  {
+    "id": "ap-006",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Android 디바이스에서 GPU 그래픽 성능을 프로파일링하기 위해 Google이 제공하는 도구는?",
+    "options": [
+      "Perfetto",
+      "Android GPU Inspector (AGI)",
+      "Simpleperf",
+      "Systrace"
+    ],
+    "answer": 1,
+    "explanation": "Android GPU Inspector(AGI)는 Google이 제공하는 GPU 프로파일링 도구로, Vulkan API 호출 추적, 프레임별 GPU 카운터 분석, 셰이더 성능 분석 등을 지원합니다. Perfetto와 Simpleperf는 주로 CPU 및 시스템 수준 프로파일링에 사용됩니다."
+  },
+  {
+    "id": "ap-007",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ARM TrustZone에서 Normal World와 Secure World 간 전환을 수행하는 명령어는?",
+    "options": [
+      "SVC (Supervisor Call)",
+      "SMC (Secure Monitor Call)",
+      "HVC (Hypervisor Call)",
+      "BRK (Breakpoint)"
+    ],
+    "answer": 1,
+    "explanation": "SMC(Secure Monitor Call) 명령어는 Normal World에서 Secure World로의 전환을 요청합니다. EL3(Exception Level 3)의 Secure Monitor가 이 명령어를 처리하여 월드 전환을 수행합니다. SVC는 EL1 호출, HVC는 EL2(하이퍼바이저) 호출에 사용됩니다."
+  },
+  {
+    "id": "ap-008",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Android에서 TrustZone 기반 TEE(Trusted Execution Environment)로 사용되는 Google의 Trusty OS에 대한 설명으로 올바른 것은?",
+    "options": [
+      "Linux 커널 위에서 실행되는 일반 Android 서비스이다",
+      "ARM Secure World에서 실행되는 별도의 경량 OS로, 키 관리와 DRM 등 보안 서비스를 제공한다",
+      "x86 아키텍처에서만 동작하는 보안 모듈이다",
+      "사용자 앱이 직접 Trusty OS의 API를 호출할 수 있다"
+    ],
+    "answer": 1,
+    "explanation": "Trusty OS는 ARM TrustZone의 Secure World(EL1S)에서 실행되는 Google의 오픈소스 TEE OS입니다. Keymaster/Keymint, Gatekeeper, DRM(Widevine) 등의 보안 서비스를 Trusted Application(TA) 형태로 실행합니다. Normal World의 Android와는 SMC를 통해 통신하며, 사용자 앱은 직접 접근할 수 없고 Android 프레임워크의 API를 통해 간접적으로 사용합니다."
+  },
+  {
+    "id": "ap-009",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Qualcomm Snapdragon 기반 Android 디바이스의 부팅 순서로 올바른 것은?",
+    "options": [
+      "LK → PBL → XBL → ABL → boot.img",
+      "PBL → XBL → ABL → boot.img(kernel + ramdisk)",
+      "UEFI → GRUB → boot.img → init",
+      "boot.img → PBL → XBL → ABL"
+    ],
+    "answer": 1,
+    "explanation": "Qualcomm 디바이스의 부팅 순서는 PBL(Primary Boot Loader, ROM에 내장) → XBL(eXtensible Boot Loader, UEFI 기반) → ABL(Android Boot Loader, fastboot 모드 포함) → boot.img(Linux 커널 + ramdisk) 순입니다. PBL은 SoC ROM에 고정되어 있으며, XBL/ABL은 플래시 파티션에 저장됩니다."
+  },
+  {
+    "id": "ap-010",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "ARM64 Linux에서 DVFS(Dynamic Voltage and Frequency Scaling)의 CPUFreq 프레임워크가 OPP(Operating Performance Points)를 사용하는 이유는?",
+    "options": [
+      "CPU 코어 수를 동적으로 변경하기 위해",
+      "지원 가능한 주파수-전압 조합을 정의하여 안정적인 동작을 보장하기 위해",
+      "GPU와 CPU의 주파수를 동기화하기 위해",
+      "메모리 대역폭을 자동으로 조절하기 위해"
+    ],
+    "answer": 1,
+    "explanation": "OPP(Operating Performance Points)는 CPU가 안정적으로 동작할 수 있는 주파수-전압 쌍을 정의합니다. 주파수를 높이면 더 높은 전압이 필요하고, 잘못된 조합은 시스템 불안정을 초래할 수 있습니다. CPUFreq 프레임워크는 OPP 테이블을 참조하여 검증된 조합만 사용하므로 안정성과 효율성을 모두 보장합니다."
+  },
+  {
+    "id": "ap-011",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "ARM64 AAPCS64 호출 규약에서 함수 인자를 전달하는 데 사용되는 범용 레지스터는 ___부터 ___까지이다.",
+    "blankAnswers": [
+      ["X0", "x0"],
+      ["X7", "x7"]
+    ],
+    "explanation": "AAPCS64에서 함수 인자는 X0~X7 레지스터를 통해 최대 8개까지 전달됩니다. 9번째 이후의 인자는 스택을 통해 전달됩니다. X0는 첫 번째 인자이자 반환값 레지스터로도 사용됩니다."
+  },
+  {
+    "id": "ap-012",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "ARM DynamIQ 기술에서는 서로 다른 성능의 CPU 코어를 하나의 ___에 혼합 배치할 수 있어 big.LITTLE 대비 코어 간 데이터 공유 지연이 줄어든다.",
+    "blankAnswers": [
+      ["클러스터", "cluster", "Cluster"]
+    ],
+    "explanation": "DynamIQ는 big.LITTLE의 후속 기술로, 하나의 클러스터 내에 빅 코어와 리틀 코어를 혼합 배치할 수 있습니다. 기존 big.LITTLE에서는 빅/리틀이 별도 클러스터로 분리되어 클러스터 간 마이그레이션 비용이 컸으나, DynamIQ는 L3 캐시를 공유하는 단일 클러스터 구성으로 전환 지연을 크게 줄였습니다."
+  },
+  {
+    "id": "ap-013",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Linux 커널의 Energy Aware Scheduling에서 각 CPU의 주파수별 전력 소비를 기술하는 데이터 구조를 ___이라 하며, 이는 Device Tree 또는 드라이버에서 등록된다.",
+    "blankAnswers": [
+      ["Energy Model", "energy model", "EM", "em"]
+    ],
+    "explanation": "Energy Model(EM)은 각 performance domain(주로 CPU 클러스터)의 OPP별 전력 소비량을 기술하는 커널 내부 데이터 구조입니다. EAS는 이 Energy Model을 참조하여 태스크 배치 시 에너지 최적화 결정을 내립니다. em_dev_register_perf_domain() 함수로 등록됩니다."
+  },
+  {
+    "id": "ap-014",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Linux 커널에서 CFS 스케줄러가 태스크의 CPU 사용량을 추적하는 메커니즘을 ___이라 하며, 이 신호를 기반으로 schedutil governor가 CPU 주파수를 결정한다.",
+    "blankAnswers": [
+      ["PELT", "Per-Entity Load Tracking", "per-entity load tracking"]
+    ],
+    "explanation": "PELT(Per-Entity Load Tracking)는 CFS 스케줄러에서 각 스케줄링 엔티티(태스크, cgroup 등)의 utilization과 load를 기하급수적 감쇠 평균으로 추적합니다. schedutil governor는 이 PELT utilization 값을 직접 참조하여 필요한 CPU 주파수를 계산하므로, 별도의 폴링 오버헤드 없이 정확한 주파수 결정이 가능합니다."
+  },
+  {
+    "id": "ap-015",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Android에서 Vulkan은 ___에 가까운 저수준 그래픽 API로, OpenGL ES 대비 CPU 오버헤드가 낮고 멀티스레드 렌더링을 효율적으로 지원한다.",
+    "blankAnswers": [
+      ["하드웨어", "hardware"]
+    ],
+    "explanation": "Vulkan은 하드웨어에 가까운(close-to-metal) 저수준 그래픽 API로, 드라이버의 암시적 상태 관리를 최소화하고 애플리케이션이 GPU 리소스를 명시적으로 제어합니다. 이를 통해 CPU 오버헤드를 줄이고 여러 스레드에서 동시에 커맨드 버퍼를 생성할 수 있어 멀티코어 ARM64 프로세서에서 효율적입니다."
+  },
+  {
+    "id": "ap-016",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "ARM TrustZone에서 Secure World의 EL1에서 실행되는 TEE OS가 Normal World와 통신할 때, EL3의 ___가 월드 전환을 중재한다.",
+    "blankAnswers": [
+      ["Secure Monitor", "secure monitor", "모니터", "Monitor"]
+    ],
+    "explanation": "ARM TrustZone의 EL3(Exception Level 3)에는 Secure Monitor가 위치하여 Normal World(EL1N)와 Secure World(EL1S) 간의 전환을 관리합니다. Normal World에서 SMC 명령어를 실행하면 EL3의 Secure Monitor가 트랩하여 컨텍스트를 저장하고 Secure World로 전환합니다. ATF(ARM Trusted Firmware)가 대표적인 Secure Monitor 구현입니다."
+  },
+  {
+    "id": "ap-017",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Android 디바이스의 부팅 과정에서 사용자가 부트로더 모드로 진입하여 파티션을 플래시할 수 있는 프로토콜을 ___라 한다.",
+    "blankAnswers": [
+      ["fastboot", "Fastboot", "FASTBOOT"]
+    ],
+    "explanation": "fastboot는 Android 부트로더에서 제공하는 프로토콜 및 도구로, USB를 통해 호스트 PC에서 디바이스의 파티션에 이미지를 직접 플래시하거나 부트로더 잠금/해제를 수행할 수 있습니다. ABL(Android Boot Loader) 단계에서 특정 키 조합이나 adb reboot bootloader 명령으로 fastboot 모드에 진입합니다."
+  },
+  {
+    "id": "ap-018",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "ARM64 Linux에서 DVFS를 위한 CPUFreq 프레임워크에서 현재 사용 중인 주파수 스케일링 정책을 확인하려면 sysfs의 ___를 읽으면 된다.",
+    "blankAnswers": [
+      ["scaling_governor", "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor", "cpufreq/scaling_governor"]
+    ],
+    "explanation": "CPUFreq 프레임워크는 /sys/devices/system/cpu/cpu*/cpufreq/ 디렉토리를 통해 sysfs 인터페이스를 제공합니다. scaling_governor 파일을 읽으면 현재 활성 governor(예: schedutil, performance, powersave 등)를 확인할 수 있고, 쓰기를 통해 governor를 변경할 수도 있습니다."
+  },
+  {
+    "id": "ap-019",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "ARM64 어셈블리에서 AAPCS64 규약에 따라 함수 프롤로그를 작성하시오. Frame Pointer(X29)와 Link Register(X30)를 스택에 저장하는 코드를 완성하시오.",
+    "codeTemplate": "___ x29, x30, [sp, #-16]!\nmov x29, sp\n// 함수 본문\nldp x29, x30, [sp], #16\nret",
+    "codeLanguage": "asm",
+    "blankAnswers": [
+      ["stp", "STP"]
+    ],
+    "explanation": "STP(Store Pair) 명령어는 두 개의 레지스터를 메모리에 동시에 저장합니다. 'stp x29, x30, [sp, #-16]!'은 스택 포인터를 16바이트 감소시키면서 Frame Pointer(X29)와 Link Register(X30)를 저장하는 pre-index 방식입니다. 이는 AAPCS64의 표준 함수 프롤로그 패턴입니다."
+  },
+  {
+    "id": "ap-020",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Linux 커널 Device Tree에서 big.LITTLE CPU 클러스터의 상대적 성능을 정의하는 코드를 완성하시오. DMIPS/MHz 기준 성능 속성을 설정하시오.",
+    "codeTemplate": "cpu@0 {\n    compatible = \"arm,cortex-a78\";\n    device_type = \"cpu\";\n    ___ = <1024>;\n};",
+    "codeLanguage": "dts",
+    "blankAnswers": [
+      ["capacity-dmips-mhz"]
+    ],
+    "explanation": "Device Tree에서 capacity-dmips-mhz 속성은 CPU 코어의 상대적 성능을 DMIPS/MHz 단위로 정의합니다. 가장 성능이 높은 빅 코어에 높은 값을 부여하고 리틀 코어에는 상대적으로 낮은 값(예: 485)을 설정합니다. EAS는 이 값을 참조하여 각 CPU의 capacity를 결정하고 태스크 배치를 최적화합니다."
+  },
+  {
+    "id": "ap-021",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Linux 커널 소스에서 Energy Model의 performance domain을 등록하는 함수 호출 코드를 완성하시오.",
+    "codeTemplate": "ret = ___(dev, nr_opp, &em_cb, cpus, milliwatts);",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      ["em_dev_register_perf_domain", "em_register_perf_domain"]
+    ],
+    "explanation": "em_dev_register_perf_domain() 함수는 CPUFreq 드라이버에서 Energy Model의 performance domain을 커널에 등록합니다. 이 함수는 디바이스 포인터, OPP 수, 콜백 함수(각 OPP의 전력 소비량 제공), CPU 마스크, 전력 단위(milliwatts 여부)를 인자로 받습니다. 등록된 EM은 EAS가 에너지 최적화 스케줄링에 활용합니다."
+  },
+  {
+    "id": "ap-022",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Android에서 Mali GPU의 Vulkan 드라이버를 로드하기 위한 시스템 속성을 확인하는 shell 명령을 완성하시오.",
+    "codeTemplate": "___ ro.hardware.vulkan",
+    "codeLanguage": "shell",
+    "blankAnswers": [
+      ["getprop", "adb shell getprop"]
+    ],
+    "explanation": "Android에서 getprop 명령으로 시스템 속성을 조회할 수 있습니다. ro.hardware.vulkan 속성은 Vulkan HAL 구현체의 이름을 지정하며, 시스템은 이 값을 기반으로 vulkan.<value>.so 라이브러리를 로드합니다. 실제 값은 벤더/플랫폼에 따라 다르며 보드 설정 파일에서 정의됩니다."
+  },
+  {
+    "id": "ap-023",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "ARM Trusted Firmware(ATF)에서 Normal World의 SMC 호출을 처리하는 핸들러를 등록하는 매크로 코드를 완성하시오.",
+    "codeTemplate": "DECLARE_RT_SVC(\n    my_svc,\n    OEN_TOS_START,\n    OEN_TOS_END,\n    ___,\n    my_svc_setup,\n    my_svc_smc_handler\n);",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      ["SMC_TYPE_FAST", "SMC_TYPE_YIELD"]
+    ],
+    "explanation": "DECLARE_RT_SVC 매크로는 ATF에서 런타임 서비스를 등록합니다. SMC 타입으로 SMC_TYPE_FAST(빠른 호출, 선점 불가)와 SMC_TYPE_YIELD(양보 호출, 선점 가능)를 지정할 수 있습니다. TEE OS와의 통신에는 주로 SMC_TYPE_FAST가 사용되며, 긴 작업에는 SMC_TYPE_YIELD가 사용됩니다."
+  },
+  {
+    "id": "ap-024",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "Android의 boot.img를 언패킹하여 커널과 ramdisk를 추출하는 명령을 완성하시오.",
+    "codeTemplate": "___ --boot_img boot.img --out out_dir",
+    "codeLanguage": "shell",
+    "blankAnswers": [
+      ["unpack_bootimg", "./unpack_bootimg"]
+    ],
+    "explanation": "unpack_bootimg는 Android 소스 트리(system/tools/mkbootimg)에 포함된 도구로, boot.img를 파싱하여 헤더 정보, 커널(kernel), ramdisk 등을 분리 추출합니다. Android 빌드 환경에서 PATH에 포함되어 직접 실행할 수 있으며, boot image header v3/v4 형식을 지원합니다."
+  },
+  {
+    "id": "ap-025",
+    "category": "android-system",
+    "subcategory": "arm64-platform",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "Android 디바이스에서 CPUFreq 프레임워크가 마지막으로 설정한 CPU 주파수를 확인하는 shell 명령을 완성하시오.",
+    "codeTemplate": "cat /sys/devices/system/cpu/cpu0/cpufreq/___",
+    "codeLanguage": "shell",
+    "blankAnswers": [
+      ["scaling_cur_freq"]
+    ],
+    "explanation": "CPUFreq sysfs 인터페이스에서 scaling_cur_freq는 CPUFreq 프레임워크가 마지막으로 설정한 주파수(kHz 단위)를 표시합니다. cpuinfo_cur_freq는 하드웨어에서 직접 읽은 실제 주파수이지만 root 권한이 필요할 수 있습니다. scaling_cur_freq는 권한 없이도 읽을 수 있어 더 널리 사용됩니다."
+  }
+]

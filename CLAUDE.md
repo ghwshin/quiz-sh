@@ -52,15 +52,15 @@ src/
 └── test/
     └── setup.ts                 # Vitest setup (jest-dom matchers, RTL cleanup)
 data/
-├── linux-kernel/*.json          # 13 subcategory quiz files (25 questions each)
-└── android-system/*.json        # 13 subcategory quiz files (25 questions each)
+├── linux-kernel/*.json          # 14 subcategory quiz files (25 questions each)
+└── android-system/*.json        # 14 subcategory quiz files (25 questions each)
 e2e/
 └── quiz-flow.spec.ts            # Playwright E2E tests
 ```
 
 ## Quiz Data
 
-- 650 questions total: 26 files x 25 questions (10 multiple-choice + 8 fill-in-the-blank + 7 code-fill)
+- 700 questions total: 28 files x 25 questions (10 multiple-choice + 8 fill-in-the-blank + 7 code-fill)
 - See `QUIZ.md` for quiz data format rules
 - Both `short-answer` and `code-fill` use `blankAnswers` field for blank grading (shared `checkBlank()`)
 - Grading: case-insensitive, trim, internal whitespace normalization
