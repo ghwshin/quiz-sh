@@ -1,0 +1,358 @@
+[
+  {
+    "id": "dd-001",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Linux에서 character device와 block device의 차이점으로 올바른 것은?",
+    "options": [
+      "character device는 버퍼 캐시를 사용하고, block device는 사용하지 않는다",
+      "character device는 순차적으로 바이트 단위 접근이 가능하고, block device는 고정 크기 블록 단위로 접근한다",
+      "character device는 네트워크 장치만 해당되고, block device는 저장 장치만 해당된다",
+      "character device와 block device는 동일한 file_operations 구조체를 반드시 공유한다"
+    ],
+    "answer": 1,
+    "explanation": "Character device는 바이트 스트림 형태로 순차적 접근이 가능하며 (예: 시리얼 포트, 키보드), block device는 고정 크기 블록 단위로 랜덤 접근이 가능합니다 (예: 하드디스크, SSD). Block device는 커널의 버퍼 캐시(page cache)를 활용하여 I/O 성능을 최적화합니다."
+  },
+  {
+    "id": "dd-002",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Linux 디바이스 드라이버에서 major number와 minor number의 역할로 올바른 것은?",
+    "options": [
+      "major number는 디바이스의 물리적 주소를, minor number는 IRQ 번호를 나타낸다",
+      "major number는 커널 버전을, minor number는 드라이버 버전을 나타낸다",
+      "major number는 해당 디바이스를 담당하는 드라이버를 식별하고, minor number는 같은 드라이버가 관리하는 개별 디바이스를 구분한다",
+      "major number는 user space에서만, minor number는 kernel space에서만 사용된다"
+    ],
+    "answer": 2,
+    "explanation": "Major number는 디바이스 파일과 연결된 드라이버를 커널이 식별하는 데 사용됩니다. Minor number는 동일한 드라이버가 관리하는 여러 디바이스 중 특정 디바이스를 구분합니다. 예를 들어, /dev/sda와 /dev/sdb는 같은 major number를 가지지만 minor number가 다릅니다."
+  },
+  {
+    "id": "dd-003",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Linux 커널에서 디바이스 드라이버가 사용자 공간에 디바이스 노드를 자동으로 생성하기 위해 협력하는 커널 서브시스템과 user space 데몬의 이름을 각각 무엇이라 하는가?",
+    "keywords": ["sysfs", "udev"],
+    "sampleAnswer": "커널은 sysfs를 통해 디바이스 정보를 노출하고, user space의 udev 데몬이 이 정보를 감지하여 /dev 아래에 디바이스 노드를 자동으로 생성합니다.",
+    "explanation": "sysfs는 커널 객체(디바이스, 드라이버, 버스 등)의 정보를 /sys 디렉토리에 파일 시스템 형태로 노출합니다. udev는 커널로부터 uevent를 수신하고 sysfs 정보를 참조하여 /dev 디렉토리에 디바이스 파일을 동적으로 생성하거나 제거합니다."
+  },
+  {
+    "id": "dd-004",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Linux 커널의 device model에서 bus, device, driver 세 가지 핵심 구성 요소가 어떻게 상호작용하는지 간략히 설명하시오.",
+    "keywords": ["bus", "device", "driver", "match", "probe"],
+    "sampleAnswer": "bus는 device와 driver를 연결하는 매개체입니다. 새로운 device가 등록되면 bus는 등록된 driver 목록에서 매칭되는 driver를 찾아 probe 함수를 호출합니다. 반대로 새로운 driver가 등록되면 bus에 연결된 device 중 매칭되는 것을 찾아 probe를 호출합니다.",
+    "explanation": "Linux의 device model은 bus_type, device, device_driver 구조체로 구성됩니다. bus의 match() 콜백이 device와 driver의 호환성을 판단하고, 매칭에 성공하면 driver의 probe() 함수가 호출되어 디바이스 초기화가 수행됩니다."
+  },
+  {
+    "id": "dd-005",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "file_operations 구조체에서 ioctl 명령을 처리하는 콜백 함수의 이름으로 현재 권장되는 것은?",
+    "options": [
+      "ioctl",
+      "unlocked_ioctl",
+      "locked_ioctl",
+      "device_ioctl"
+    ],
+    "answer": 1,
+    "explanation": "과거에는 BKL(Big Kernel Lock)을 사용하는 .ioctl이 사용되었으나, 커널 2.6.36부터 BKL이 제거되면서 .unlocked_ioctl이 표준이 되었습니다. unlocked_ioctl은 BKL 없이 호출되므로 드라이버가 직접 필요한 동기화를 처리해야 합니다."
+  },
+  {
+    "id": "dd-006",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "다음은 character device를 등록하기 위한 기본 코드입니다. 빈칸을 채우시오.",
+    "codeTemplate": "static struct cdev my_cdev;\nstatic dev_t dev_num;\n\nstatic int __init my_init(void)\n{\n    int ret;\n    /* 동적으로 major/minor 번호 할당 */\n    ret = ___(dev_num, 0, 1, \"mydevice\");\n    if (ret < 0)\n        return ret;\n\n    /* cdev 구조체 초기화 */\n    cdev_init(&my_cdev, &my_fops);\n    my_cdev.owner = THIS_MODULE;\n\n    /* cdev를 커널에 추가 */\n    ret = ___(my_cdev, dev_num, 1);\n    return ret;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      ["alloc_chrdev_region", "alloc_chrdev_region(&dev_num, 0, 1, \"mydevice\")"],
+      ["cdev_add", "cdev_add(&my_cdev, dev_num, 1)"]
+    ],
+    "explanation": "alloc_chrdev_region()은 사용 가능한 major number를 커널에서 동적으로 할당받는 함수입니다. cdev_add()는 초기화된 cdev 구조체를 커널에 등록하여 해당 디바이스 번호에 대한 요청을 처리할 수 있게 합니다. 첫 번째 인자는 dev_t 포인터, cdev 포인터 형태로 전달됩니다."
+  },
+  {
+    "id": "dd-007",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "platform driver에서 device tree 기반 매칭을 위해 사용하는 테이블은?",
+    "options": [
+      "id_table",
+      "of_match_table",
+      "acpi_match_table",
+      "pci_device_table"
+    ],
+    "answer": 1,
+    "explanation": "of_match_table은 Open Firmware (Device Tree) 기반 매칭에 사용되는 of_device_id 배열입니다. 각 항목에는 compatible 문자열이 포함되어 있으며, device tree에서 해당 compatible 속성을 가진 노드와 드라이버를 매칭합니다. 'of'는 Open Firmware의 약자입니다."
+  },
+  {
+    "id": "dd-008",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Linux 커널에서 device class의 역할과 class_create() 함수의 용도를 설명하시오.",
+    "keywords": ["class", "sysfs", "class_create", "device_create"],
+    "sampleAnswer": "device class는 유사한 기능을 가진 디바이스들을 논리적으로 그룹화합니다. class_create()로 클래스를 생성한 후 device_create()를 호출하면 sysfs에 디바이스 정보가 등록되고, udev가 이를 감지하여 /dev에 디바이스 노드를 자동 생성합니다.",
+    "explanation": "class_create()는 /sys/class/ 아래에 새 디바이스 클래스 디렉토리를 생성합니다. 이후 device_create()로 해당 클래스에 디바이스를 등록하면 udev/systemd-udevd가 uevent를 받아 /dev 노드를 자동으로 만들어줍니다. 이를 통해 mknod를 수동으로 실행할 필요가 없어집니다."
+  },
+  {
+    "id": "dd-009",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "다음은 platform driver를 등록하는 코드입니다. Device Tree 매칭을 위한 빈칸을 채우시오.",
+    "codeTemplate": "static const struct of_device_id my_of_match[] = {\n    { .compatible = \"vendor,my-device\" },\n    { /* sentinel */ },\n};\n___;\n\nstatic struct platform_driver my_driver = {\n    .probe  = my_probe,\n    .remove = my_remove,\n    .driver = {\n        .name = \"my-device\",\n        .of_match_table = ___,\n    },\n};\nmodule_platform_driver(my_driver);",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      ["MODULE_DEVICE_TABLE(of, my_of_match)"],
+      ["my_of_match", "of_match_ptr(my_of_match)"]
+    ],
+    "explanation": "MODULE_DEVICE_TABLE(of, my_of_match)는 모듈 로딩 시 자동 매칭을 위한 디바이스 테이블을 등록하는 매크로입니다. of_match_table에는 of_device_id 배열의 이름을 지정합니다. of_match_ptr() 매크로를 사용하면 CONFIG_OF가 비활성화된 경우 NULL을 반환하여 컴파일 경고를 방지합니다."
+  },
+  {
+    "id": "dd-010",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ioctl 명령 번호를 정의할 때 사용하는 매크로 _IOW(type, nr, datatype)에서 'W'의 의미로 올바른 것은?",
+    "options": [
+      "user space에서 kernel space로 데이터를 쓴다 (Write to driver)",
+      "kernel space에서 user space로 데이터를 쓴다 (Write to user)",
+      "디바이스에 물리적으로 데이터를 기록한다",
+      "Write lock을 획득한다"
+    ],
+    "answer": 0,
+    "explanation": "_IOW는 user space에서 kernel space 방향으로 데이터가 전달됨을 의미합니다. 'W'는 사용자 관점에서의 Write입니다. 반대로 _IOR은 kernel에서 user로 데이터를 읽는 것(Read)을 의미합니다. _IOWR은 양방향 데이터 전달을 나타냅니다. 이 방향 정보는 커널이 copy_from_user/copy_to_user를 적절히 사용하도록 돕습니다."
+  },
+  {
+    "id": "dd-011",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "platform driver의 probe() 함수가 호출되는 시점과 이 함수에서 일반적으로 수행하는 작업을 설명하시오.",
+    "keywords": ["probe", "match", "resource", "initialize", "platform_device"],
+    "sampleAnswer": "probe()는 platform bus가 드라이버와 디바이스의 compatible 문자열(또는 id_table)이 일치함을 확인한 후 호출됩니다. probe에서는 메모리 매핑된 I/O 리소스 획득, IRQ 요청, 클럭 활성화, 하드웨어 초기화, character device 등록 등의 작업을 수행합니다.",
+    "explanation": "probe()는 드라이버의 진입점으로, 디바이스가 존재하고 드라이버와 매칭되었을 때 커널에 의해 호출됩니다. platform_get_resource()로 메모리/IRQ 리소스를 얻고, devm_ioremap_resource()로 I/O 매핑을 하며, devm_request_irq()로 인터럽트를 등록하는 것이 일반적인 패턴입니다."
+  },
+  {
+    "id": "dd-012",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "다음은 character device의 file_operations에서 ioctl을 처리하는 코드입니다. 빈칸을 채우시오.",
+    "codeTemplate": "#define MY_IOCTL_SET_VALUE _IOW('M', 1, int)\n#define MY_IOCTL_GET_VALUE _IOR('M', 2, int)\n\nstatic long my_ioctl(struct file *filp, unsigned int cmd,\n                     unsigned long arg)\n{\n    int value;\n    switch (cmd) {\n    case MY_IOCTL_SET_VALUE:\n        if (___(___(&value, (int __user *)arg, sizeof(int))))\n            return -EFAULT;\n        /* value 처리 로직 */\n        break;\n    case MY_IOCTL_GET_VALUE:\n        value = 42;\n        if (___(___(&value, (int __user *)arg, sizeof(int))))\n            return -EFAULT;\n        break;\n    default:\n        return -ENOTTY;\n    }\n    return 0;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      ["copy_from_user"],
+      ["copy_from_user"],
+      ["copy_to_user"],
+      ["copy_to_user"]
+    ],
+    "explanation": "copy_from_user()는 user space에서 kernel space로 데이터를 안전하게 복사합니다 (_IOW에 대응). copy_to_user()는 kernel space에서 user space로 데이터를 복사합니다 (_IOR에 대응). 두 함수 모두 성공 시 0을 반환하고, 복사하지 못한 바이트 수를 반환하므로 반환값이 0이 아니면 -EFAULT를 반환해야 합니다."
+  },
+  {
+    "id": "dd-013",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Linux 커널에서 devm_* 접두사가 붙은 리소스 관리 함수(예: devm_kzalloc, devm_request_irq)의 장점으로 올바른 것은?",
+    "options": [
+      "일반 함수보다 메모리 할당 속도가 빠르다",
+      "디바이스가 언바인딩되거나 probe 실패 시 할당된 리소스가 자동으로 해제된다",
+      "커널 모듈의 코드 크기를 줄여준다",
+      "user space에서 직접 호출할 수 있다"
+    ],
+    "answer": 1,
+    "explanation": "devm_* (device-managed) 함수들은 struct device에 리소스를 연결합니다. 드라이버가 디바이스에서 분리되거나(remove) probe()가 실패할 때 연결된 모든 리소스가 자동으로 역순으로 해제됩니다. 이를 통해 에러 경로에서의 수동 정리(cleanup) 코드를 크게 줄일 수 있고, 리소스 누수를 방지합니다."
+  },
+  {
+    "id": "dd-014",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Device Tree의 compatible 속성이 드라이버 매칭에서 어떤 역할을 하는지, 그리고 여러 compatible 값이 나열될 때의 의미를 설명하시오.",
+    "keywords": ["compatible", "of_match_table", "fallback", "specific", "generic"],
+    "sampleAnswer": "compatible 속성은 device tree 노드가 어떤 드라이버와 호환되는지를 나타내는 문자열 목록입니다. 여러 값이 나열될 때 앞쪽이 가장 구체적인 디바이스이고 뒤쪽으로 갈수록 일반적인 호환 디바이스를 나타냅니다. 커널은 가장 구체적인 것부터 매칭을 시도하여 적합한 드라이버를 찾습니다.",
+    "explanation": "예를 들어 compatible = \"samsung,exynos4210-uart\", \"samsung,exynos-uart\"에서 첫 번째는 특정 SoC의 UART, 두 번째는 Exynos 계열 공통 UART를 의미합니다. 커널은 가장 구체적인 드라이버부터 검색하고, 없으면 더 일반적인 드라이버로 fallback합니다."
+  },
+  {
+    "id": "dd-015",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Linux 커널에서 register_chrdev()와 alloc_chrdev_region() + cdev_add() 조합의 차이점으로 올바른 것은?",
+    "options": [
+      "register_chrdev()가 더 최신 API이며 성능이 우수하다",
+      "register_chrdev()는 major number 전체(256개 minor)를 예약하지만, alloc_chrdev_region()은 필요한 minor 수만 할당한다",
+      "alloc_chrdev_region()은 정적 major number만 지원한다",
+      "두 방식은 완전히 동일하며 호환된다"
+    ],
+    "answer": 1,
+    "explanation": "register_chrdev()는 레거시 API로 지정된 major number의 0~255번 minor number 전체를 예약합니다. 반면 alloc_chrdev_region()은 필요한 수의 minor number만 동적으로 할당하므로 리소스를 효율적으로 사용합니다. 현대 드라이버에서는 alloc_chrdev_region() + cdev_init() + cdev_add() 조합을 권장합니다."
+  },
+  {
+    "id": "dd-016",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "sysfs에서 디바이스 드라이버가 커스텀 attribute 파일을 생성하여 user space와 데이터를 교환하는 방법을 설명하시오.",
+    "keywords": ["sysfs", "attribute", "show", "store", "DEVICE_ATTR"],
+    "sampleAnswer": "DEVICE_ATTR 또는 DEVICE_ATTR_RW 매크로를 사용하여 attribute를 정의합니다. show 콜백은 user space에서 파일을 읽을 때 호출되어 데이터를 전달하고, store 콜백은 파일에 쓸 때 호출되어 데이터를 수신합니다. device_create_file()로 sysfs에 등록합니다.",
+    "explanation": "DEVICE_ATTR_RW(my_attr)는 dev_attr_my_attr 구조체를 생성하며, my_attr_show()와 my_attr_store() 콜백 함수를 필요로 합니다. show 함수는 sysfs_emit() 또는 sprintf()로 버퍼에 값을 쓰고, store 함수는 사용자 입력을 파싱합니다. attribute_group을 사용하면 여러 attribute를 한번에 관리할 수 있습니다."
+  },
+  {
+    "id": "dd-017",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "다음은 디바이스 드라이버에서 인터럽트 핸들러를 등록하는 코드입니다. 빈칸을 채우시오.",
+    "codeTemplate": "static irqreturn_t my_irq_handler(int irq, void *dev_id)\n{\n    struct my_device *dev = dev_id;\n    u32 status = readl(dev->base + STATUS_REG);\n\n    if (!(status & IRQ_PENDING))\n        return ___;\n\n    /* 인터럽트 처리 */\n    writel(status, dev->base + STATUS_REG);\n    return ___;\n}\n\nstatic int my_probe(struct platform_device *pdev)\n{\n    int irq, ret;\n    irq = platform_get_irq(pdev, 0);\n    ret = ___(irq, my_irq_handler,\n              IRQF_SHARED, \"my-device\", my_dev);\n    return ret;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      ["IRQ_NONE"],
+      ["IRQ_HANDLED"],
+      ["devm_request_irq", "request_irq"]
+    ],
+    "explanation": "IRQ_NONE은 해당 인터럽트가 이 디바이스에서 발생한 것이 아님을 나타내며, 공유 인터럽트(IRQF_SHARED)에서 중요합니다. IRQ_HANDLED는 인터럽트를 성공적으로 처리했음을 의미합니다. devm_request_irq()는 device-managed 방식으로 IRQ를 등록하여 자동 해제를 보장합니다."
+  },
+  {
+    "id": "dd-018",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "DMA(Direct Memory Access) 매핑에서 streaming mapping과 coherent mapping의 차이점으로 올바른 것은?",
+    "options": [
+      "streaming mapping은 CPU 캐시 일관성을 하드웨어가 보장하고, coherent mapping은 소프트웨어적으로 관리한다",
+      "coherent mapping은 dma_alloc_coherent()로 할당하며 CPU와 디바이스가 항상 동일한 데이터를 보지만, streaming mapping은 dma_map_single() 등을 사용하며 방향에 따른 캐시 동기화가 필요하다",
+      "streaming mapping은 블록 디바이스에서만 사용 가능하다",
+      "coherent mapping은 64비트 시스템에서만 사용 가능하다"
+    ],
+    "answer": 1,
+    "explanation": "coherent mapping(일관성 매핑)은 dma_alloc_coherent()로 CPU와 디바이스가 캐시 일관성이 보장된 메모리를 공유합니다. streaming mapping은 dma_map_single()/dma_map_sg()로 기존 버퍼를 매핑하며, DMA_TO_DEVICE, DMA_FROM_DEVICE 방향을 지정하고 dma_sync_*() 함수로 명시적 캐시 동기화가 필요합니다. streaming mapping이 더 효율적이지만 관리가 복잡합니다."
+  },
+  {
+    "id": "dd-019",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "다음은 PCI 디바이스 드라이버의 등록 코드입니다. 빈칸을 채우시오.",
+    "codeTemplate": "static const struct pci_device_id my_pci_ids[] = {\n    { PCI_DEVICE(0x1234, 0x5678) },\n    { 0, }\n};\nMODULE_DEVICE_TABLE(pci, my_pci_ids);\n\nstatic int my_pci_probe(struct pci_dev *pdev,\n                        const struct pci_device_id *id)\n{\n    int ret;\n    ret = ___;\n    if (ret)\n        return ret;\n\n    ret = pci_request_regions(pdev, \"my-pci-driver\");\n    if (ret)\n        goto err_disable;\n\n    pdev->base = ___;\n    if (!pdev->base) {\n        ret = -ENOMEM;\n        goto err_regions;\n    }\n    return 0;\n\nerr_regions:\n    pci_release_regions(pdev);\nerr_disable:\n    pci_disable_device(pdev);\n    return ret;\n}\n\nstatic struct pci_driver my_pci_driver = {\n    .name     = \"my-pci-driver\",\n    .id_table = my_pci_ids,\n    .probe    = my_pci_probe,\n    .remove   = my_pci_remove,\n};",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      ["pci_enable_device(pdev)"],
+      ["pci_ioremap_bar(pdev, 0)", "pci_iomap(pdev, 0, 0)", "ioremap(pci_resource_start(pdev, 0), pci_resource_len(pdev, 0))"]
+    ],
+    "explanation": "pci_enable_device()는 PCI 디바이스를 활성화하여 I/O 및 메모리 리소스에 접근할 수 있게 합니다. 이후 pci_request_regions()로 BAR(Base Address Register) 리소스를 예약하고, pci_ioremap_bar() 또는 pci_iomap()으로 PCI BAR 영역을 커널 가상 주소 공간에 매핑합니다."
+  },
+  {
+    "id": "dd-020",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Linux USB 드라이버에서 URB(USB Request Block)의 개념과 생명주기를 설명하시오.",
+    "keywords": ["URB", "usb_alloc_urb", "usb_submit_urb", "completion", "callback", "endpoint"],
+    "sampleAnswer": "URB는 USB 통신의 기본 데이터 전송 단위입니다. usb_alloc_urb()로 생성하고, 전송할 데이터와 endpoint, 완료 콜백을 설정한 후 usb_submit_urb()로 USB 코어에 제출합니다. USB 호스트 컨트롤러가 전송을 완료하면 완료 콜백(complete)이 호출되며, 콜백에서 전송 결과를 확인하고 필요시 URB를 재제출합니다.",
+    "explanation": "URB의 생명주기: 1) usb_alloc_urb()로 할당, 2) usb_fill_bulk_urb() 등으로 초기화 (endpoint, 버퍼, 콜백 설정), 3) usb_submit_urb()로 제출, 4) 비동기적으로 전송 완료 후 complete 콜백 호출, 5) usb_free_urb()로 해제. URB는 interrupt, bulk, control, isochronous 전송 타입을 모두 지원합니다."
+  },
+  {
+    "id": "dd-021",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "디바이스 드라이버에서 threaded IRQ (request_threaded_irq)를 사용하는 주된 이유는?",
+    "options": [
+      "인터럽트 처리 속도를 높이기 위해",
+      "hardirq 컨텍스트에서는 할 수 없는 sleep이 가능한 작업(예: I2C/SPI 통신)을 인터럽트 처리 과정에서 수행하기 위해",
+      "인터럽트를 완전히 비활성화하기 위해",
+      "user space에서 직접 인터럽트를 처리하기 위해"
+    ],
+    "answer": 1,
+    "explanation": "request_threaded_irq()는 hardirq handler와 threaded handler를 분리합니다. hardirq handler(top half)는 최소한의 급한 작업(인터럽트 확인, 비활성화)만 수행하고 IRQ_WAKE_THREAD를 반환합니다. 이후 커널 스레드 컨텍스트에서 thread_fn(bottom half)이 실행되어 mutex, I2C/SPI 전송 등 sleep 가능한 작업을 안전하게 수행할 수 있습니다."
+  },
+  {
+    "id": "dd-022",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "다음은 DMA coherent 메모리를 할당하고 사용하는 코드입니다. 빈칸을 채우시오.",
+    "codeTemplate": "struct my_device {\n    void *dma_buf;\n    dma_addr_t dma_handle;\n    struct device *dev;\n};\n\nstatic int my_dma_init(struct my_device *mydev)\n{\n    /* DMA 일관성 메모리 할당: CPU 가상 주소와 DMA 물리 주소 획득 */\n    mydev->dma_buf = ___(mydev->dev, BUF_SIZE,\n                         &mydev->dma_handle, GFP_KERNEL);\n    if (!mydev->dma_buf)\n        return -ENOMEM;\n\n    /* 디바이스 레지스터에 DMA 주소 설정 */\n    writel(mydev->dma_handle, mydev->base + DMA_ADDR_REG);\n    return 0;\n}\n\nstatic void my_dma_cleanup(struct my_device *mydev)\n{\n    ___(mydev->dev, BUF_SIZE,\n        mydev->dma_buf, mydev->dma_handle);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      ["dma_alloc_coherent"],
+      ["dma_free_coherent"]
+    ],
+    "explanation": "dma_alloc_coherent()는 CPU와 디바이스 간 캐시 일관성이 보장되는 DMA 버퍼를 할당합니다. 반환값은 CPU가 사용하는 가상 주소이고, dma_handle에는 디바이스가 사용하는 DMA(버스) 주소가 저장됩니다. 사용 완료 후 dma_free_coherent()로 해제해야 합니다. 이 매핑은 할당 해제 시까지 유효합니다."
+  },
+  {
+    "id": "dd-023",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Linux 커널의 USB 드라이버에서 usb_driver 구조체의 probe()가 호출되는 과정과 interface descriptor 기반 매칭 메커니즘을 상세히 설명하시오.",
+    "keywords": ["usb_driver", "usb_device_id", "probe", "interface", "idVendor", "idProduct", "bInterfaceClass"],
+    "sampleAnswer": "USB 디바이스가 연결되면 USB 코어가 디바이스의 descriptor를 읽고, 각 interface에 대해 등록된 usb_driver의 usb_device_id 테이블과 비교합니다. idVendor, idProduct, bInterfaceClass 등의 필드가 일치하면 해당 드라이버의 probe()가 usb_interface 구조체를 인자로 호출됩니다.",
+    "explanation": "USB 매칭은 interface 레벨에서 수행됩니다. usb_device_id의 match_flags 필드가 어떤 필드로 매칭할지 결정합니다. USB_DEVICE() 매크로는 vendor/product ID로 매칭하고, USB_INTERFACE_INFO()는 class/subclass/protocol로 매칭합니다. 하나의 USB 디바이스가 여러 interface를 가질 수 있어, 각 interface마다 다른 드라이버가 바인딩될 수 있습니다."
+  },
+  {
+    "id": "dd-024",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Linux 커널에서 DMA streaming mapping 사용 시 dma_map_single() 호출 후 CPU가 해당 버퍼에 접근하려면 어떻게 해야 하는가?",
+    "options": [
+      "별도의 동기화 없이 바로 접근할 수 있다",
+      "dma_unmap_single()을 호출한 후에만 접근할 수 있으며, 다시 DMA를 시작하려면 재매핑해야 한다",
+      "dma_sync_single_for_cpu()를 호출하여 캐시를 동기화한 후 접근하고, DMA 재시작 전에 dma_sync_single_for_device()를 호출해야 한다",
+      "mmap()으로 user space에 매핑한 후에만 접근 가능하다"
+    ],
+    "answer": 2,
+    "explanation": "streaming DMA 매핑에서 CPU와 디바이스 간 버퍼 소유권 개념이 있습니다. DMA 전송 중에는 디바이스가 소유하므로 CPU 접근이 금지됩니다. CPU가 접근하려면 dma_sync_single_for_cpu()로 소유권을 CPU로 이전하고, 다시 DMA를 시작하기 전에 dma_sync_single_for_device()로 디바이스에 소유권을 반환해야 합니다. 이는 CPU 캐시와 DMA 간의 일관성을 보장합니다."
+  },
+  {
+    "id": "dd-025",
+    "category": "linux-kernel",
+    "subcategory": "device-driver",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "다음은 USB character device 드라이버에서 bulk transfer를 수행하는 코드입니다. 빈칸을 채우시오.",
+    "codeTemplate": "static ssize_t my_usb_read(struct file *filp, char __user *buf,\n                           size_t count, loff_t *ppos)\n{\n    struct my_usb_dev *dev = filp->private_data;\n    int retval, actual_length;\n\n    /* bulk endpoint에서 동기식으로 데이터 읽기 */\n    retval = ___(dev->udev,\n                 usb_rcvbulkpipe(dev->udev, dev->bulk_in_ep),\n                 dev->bulk_in_buffer,\n                 min(count, dev->bulk_in_size),\n                 &actual_length,\n                 5000);\n    if (retval)\n        return retval;\n\n    if (___((void __user *)buf, dev->bulk_in_buffer,\n            actual_length))\n        return -EFAULT;\n\n    return actual_length;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      ["usb_bulk_msg"],
+      ["copy_to_user"]
+    ],
+    "explanation": "usb_bulk_msg()는 동기식 USB bulk 전송 함수로, 전송이 완료되거나 타임아웃될 때까지 블로킹됩니다. 마지막 인자(5000)는 밀리초 단위 타임아웃입니다. 전송된 데이터를 user space로 복사하기 위해 copy_to_user()를 사용합니다. 비동기 전송이 필요한 경우 URB를 직접 사용해야 합니다."
+  }
+]
