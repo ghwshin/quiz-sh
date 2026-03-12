@@ -1,0 +1,355 @@
+[
+  {
+    "id": "ha-001",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "HIDL(Hardware Interface Definition Language)이 처음 도입된 Android 버전은?",
+    "options": [
+      "Android 6.0 (Marshmallow)",
+      "Android 7.0 (Nougat)",
+      "Android 8.0 (Oreo)",
+      "Android 10 (Q)"
+    ],
+    "answer": 2,
+    "explanation": "HIDL은 Android 8.0 (Oreo)에서 Project Treble과 함께 도입되었습니다. Treble은 Android OS 프레임워크와 벤더 구현을 분리하기 위한 아키텍처로, HIDL은 이 분리를 위한 인터페이스 정의 언어 역할을 합니다."
+  },
+  {
+    "id": "ha-002",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "HIDL 인터페이스 파일의 확장자는 무엇인가?",
+    "options": [
+      ".hidl",
+      ".hal",
+      ".aidl",
+      ".iface"
+    ],
+    "answer": 1,
+    "explanation": "HIDL 인터페이스 파일은 .hal 확장자를 사용합니다. 예를 들어 IFoo.hal과 같은 형태로 작성되며, hidl-gen 도구를 통해 C++/Java 바인딩 코드가 자동 생성됩니다."
+  },
+  {
+    "id": "ha-003",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Android에서 HIDL HAL 서비스를 등록하고 검색하는 데 사용되는 서비스 매니저는?",
+    "options": [
+      "servicemanager",
+      "hwservicemanager",
+      "vndservicemanager",
+      "halmanager"
+    ],
+    "answer": 1,
+    "explanation": "hwservicemanager는 HIDL HAL 서비스를 위한 전용 서비스 매니저입니다. HIDL HAL 서비스는 hwservicemanager에 등록되고, 클라이언트는 hwservicemanager를 통해 서비스를 검색합니다. 일반 Android Binder 서비스는 servicemanager를 사용합니다."
+  },
+  {
+    "id": "ha-004",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "HIDL과 AIDL의 주요 차이점을 설명하시오.",
+    "keywords": ["HAL", "인터페이스", "Treble", "IPC", "버전 관리", "deprecated"],
+    "sampleAnswer": "HIDL은 Android 8.0에서 HAL 인터페이스 정의를 위해 도입된 언어로 .hal 파일을 사용하며, Project Treble의 핵심입니다. AIDL은 원래 앱 간 IPC용으로 사용되던 언어(.aidl)인데, Android 11부터 Stable AIDL이 도입되어 HAL 인터페이스도 정의할 수 있게 되었습니다. Google은 HIDL을 deprecated하고 AIDL로 통합하는 방향으로 진행하고 있습니다.",
+    "explanation": "HIDL은 HAL 전용으로 설계되어 hwbinder를 사용하고, AIDL은 원래 binder를 사용하는 범용 IPC 인터페이스 언어입니다. Android 11 이후 Stable AIDL이 HAL 인터페이스까지 지원하게 되면서, HIDL은 deprecated 되고 새로운 HAL은 모두 AIDL로 작성하도록 권장됩니다."
+  },
+  {
+    "id": "ha-005",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "VNDK(Vendor Native Development Kit)의 역할과 목적을 설명하시오.",
+    "keywords": ["vendor", "라이브러리", "system", "분리", "Treble", "NDK"],
+    "sampleAnswer": "VNDK는 벤더 프로세스가 사용할 수 있는 시스템 라이브러리의 집합입니다. Project Treble에서 시스템 파티션과 벤더 파티션을 분리할 때, 벤더 코드가 안정적으로 사용할 수 있는 네이티브 라이브러리를 VNDK로 정의하여 시스템 업데이트 시 벤더 바이너리의 호환성을 보장합니다.",
+    "explanation": "VNDK는 /system 파티션에 위치하며 벤더 프로세스에서 접근 가능한 공유 라이브러리 세트입니다. 시스템과 벤더 간의 ABI 안정성을 유지하여, 시스템 이미지만 업데이트해도 벤더 HAL 바이너리가 정상 동작하도록 합니다. VNDK-SP는 Same-Process HAL이 사용할 수 있는 VNDK 라이브러리 하위 집합입니다."
+  },
+  {
+    "id": "ha-006",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "다음은 HIDL 인터페이스를 정의하는 .hal 파일입니다. 빈칸을 채우시오.",
+    "codeTemplate": "package android.hardware.example@1.0;\n\nimport ___;\n\ninterface IExample extends ___ {\n    getStatus() generates (int32_t status);\n};",
+    "codeLanguage": "hidl",
+    "blankAnswers": [
+      ["IBase", "android.hidl.base@1.0::IBase"],
+      ["IBase", "android.hidl.base@1.0::IBase"]
+    ],
+    "explanation": "모든 HIDL 인터페이스는 android.hidl.base@1.0::IBase를 직접 또는 간접적으로 상속합니다. IBase는 ping(), interfaceDescriptor(), notifySyspropsChanged() 등의 기본 메서드를 제공합니다. package 선언에서 @1.0은 메이저.마이너 버전을 의미합니다."
+  },
+  {
+    "id": "ha-007",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "다음은 기본적인 AIDL 인터페이스 파일입니다. 빈칸을 채우시오.",
+    "codeTemplate": "package android.hardware.example;\n\n@VintfStability\n___ IExample {\n    int getStatus();\n    ___ setConfig(in String config);\n}",
+    "codeLanguage": "aidl",
+    "blankAnswers": [
+      ["interface"],
+      ["void"]
+    ],
+    "explanation": "AIDL 인터페이스는 interface 키워드로 정의합니다. @VintfStability 어노테이션은 이 인터페이스가 VINTF(Vendor Interface)의 일부로 안정성이 보장됨을 나타냅니다. 반환 값이 없는 메서드는 void를 사용합니다."
+  },
+  {
+    "id": "ha-008",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "HIDL에서 Passthrough 모드 HAL의 특징으로 올바른 것은?",
+    "options": [
+      "별도 프로세스에서 실행되며 Binder IPC로 통신한다",
+      "클라이언트와 같은 프로세스에서 dlopen()으로 로드되어 실행된다",
+      "Java로만 구현할 수 있다",
+      "hwservicemanager에 반드시 등록해야 한다"
+    ],
+    "answer": 1,
+    "explanation": "Passthrough 모드 HAL은 기존 legacy HAL(.so 파일)을 HIDL로 래핑하여 클라이언트와 같은 프로세스에서 dlopen()으로 로드합니다. IPC 오버헤드가 없어 성능은 좋지만, 프로세스 격리가 되지 않아 보안 및 안정성 면에서 Binderized 모드보다 불리합니다."
+  },
+  {
+    "id": "ha-009",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "HIDL 패키지의 올바른 네이밍 컨벤션은?",
+    "options": [
+      "android.hardware.camera-2.0",
+      "android.hardware.camera@2.0",
+      "android.hardware.camera.v2.0",
+      "android.hardware.camera#2.0"
+    ],
+    "answer": 1,
+    "explanation": "HIDL 패키지는 'android.hardware.<name>@<major>.<minor>' 형식을 사용합니다. @ 기호로 패키지 이름과 버전을 구분하며, 메이저 버전은 호환되지 않는 변경 시, 마이너 버전은 하위 호환 가능한 확장 시 증가합니다."
+  },
+  {
+    "id": "ha-010",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "HIDL에서 Return<T> 타입의 역할로 올바른 것은?",
+    "options": [
+      "비동기 콜백을 위한 Future 패턴을 구현한다",
+      "트랜스포트 오류와 반환 값을 모두 캡슐화하여 전달 오류를 감지할 수 있게 한다",
+      "메서드 호출의 타임아웃을 설정한다",
+      "반환 값을 자동으로 직렬화한다"
+    ],
+    "answer": 1,
+    "explanation": "Return<T>는 HIDL 메서드의 반환 타입으로, 실제 반환 값(T)과 트랜스포트 오류 정보를 모두 포함합니다. isOk() 메서드로 전달 성공 여부를 확인할 수 있으며, 트랜스포트 에러(서비스 죽음, 타임아웃 등) 발생 시 이를 감지하여 적절히 처리할 수 있습니다."
+  },
+  {
+    "id": "ha-011",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "HIDL에서 oneway 키워드의 의미로 올바른 것은?",
+    "options": [
+      "메서드가 한 번만 호출될 수 있다",
+      "클라이언트가 서버의 응답을 기다리지 않고 즉시 반환된다",
+      "메서드가 단방향 데이터만 전송한다",
+      "트랜잭션이 한 번에 하나만 처리된다"
+    ],
+    "answer": 1,
+    "explanation": "oneway 키워드가 붙은 HIDL 메서드는 비동기적으로 호출되어 클라이언트가 서버의 처리 완료를 기다리지 않습니다. 반환 값을 가질 수 없으며(void만 가능), 주로 알림이나 이벤트 전달처럼 응답이 필요 없는 경우에 사용됩니다."
+  },
+  {
+    "id": "ha-012",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "manifest.xml과 compatibility matrix의 역할과 관계를 설명하시오.",
+    "keywords": ["manifest", "compatibility matrix", "VINTF", "제공", "요구", "호환성"],
+    "sampleAnswer": "manifest.xml은 디바이스가 제공하는 HAL 서비스 목록(이름, 버전, transport 등)을 선언합니다. compatibility matrix(호환성 매트릭스)는 프레임워크 또는 벤더가 상대방에게 요구하는 HAL 인터페이스를 정의합니다. 부팅 시 VINTF(Vendor Interface) 객체가 manifest와 compatibility matrix를 매칭하여 호환성을 검증합니다.",
+    "explanation": "device manifest는 벤더가 제공하는 HAL을 나열하고, framework compatibility matrix(FCM)는 프레임워크가 필요로 하는 HAL을 나열합니다. 반대로 framework manifest와 device compatibility matrix도 존재합니다. 이 네 파일이 상호 검증되어 시스템과 벤더 간의 호환성을 보장합니다."
+  },
+  {
+    "id": "ha-013",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "AIDL에서 parcelable의 역할과 사용 방법을 설명하시오.",
+    "keywords": ["parcelable", "직렬화", "데이터", "구조체", "Parcel", "전송"],
+    "sampleAnswer": "AIDL에서 parcelable은 Binder IPC를 통해 전송할 수 있는 사용자 정의 데이터 구조체입니다. parcelable로 선언된 타입은 자동으로 직렬화/역직렬화 코드가 생성되어 프로세스 간 데이터를 전달할 수 있습니다. Stable AIDL에서는 .aidl 파일에 직접 필드를 정의하여 구조화된 parcelable을 사용합니다.",
+    "explanation": "기존 AIDL에서는 parcelable을 Java 코드에서 Parcelable 인터페이스를 구현해야 했지만, Stable AIDL(structured parcelable)에서는 .aidl 파일 내에 필드를 직접 정의합니다. 이를 통해 C++/Java/Rust 등 다양한 언어의 바인딩 코드가 자동 생성되며 ABI 안정성이 보장됩니다."
+  },
+  {
+    "id": "ha-014",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "VTS(Vendor Test Suite)의 목적과 HIDL/AIDL과의 관계를 설명하시오.",
+    "keywords": ["VTS", "벤더", "테스트", "HAL", "호환성", "인터페이스"],
+    "sampleAnswer": "VTS는 벤더 HAL 구현이 HIDL/AIDL 인터페이스 명세를 올바르게 준수하는지 검증하는 테스트 프레임워크입니다. Google이 정의한 HAL 인터페이스에 대한 테스트 케이스를 제공하며, 벤더는 VTS를 통과해야 Android 호환성 인증을 받을 수 있습니다.",
+    "explanation": "VTS는 CTS(Compatibility Test Suite)의 벤더 버전으로, HAL 인터페이스의 올바른 구현을 자동으로 검증합니다. HIDL/AIDL로 정의된 인터페이스의 각 메서드가 명세대로 동작하는지, 에러 처리가 적절한지 등을 테스트합니다. Project Treble의 핵심 구성 요소 중 하나입니다."
+  },
+  {
+    "id": "ha-015",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "다음은 C++에서 HIDL HAL 서비스를 등록하는 코드입니다. 빈칸을 채우시오.",
+    "codeTemplate": "using android::hardware::example::V1_0::IExample;\nusing android::hardware::example::V1_0::implementation::Example;\n\nint main() {\n    android::sp<IExample> service = new Example();\n    android::hardware::configureRpcThreadpool(4, true);\n    auto status = service->___(___);\n    if (status != android::OK) {\n        return 1;\n    }\n    android::hardware::joinRpcThreadpool();\n    return 0;\n}",
+    "codeLanguage": "cpp",
+    "blankAnswers": [
+      ["registerAsService"],
+      ["\"default\"", "default"]
+    ],
+    "explanation": "HIDL HAL 서비스는 registerAsService() 메서드를 호출하여 hwservicemanager에 등록합니다. 인자로 인스턴스 이름(보통 \"default\")을 전달합니다. configureRpcThreadpool()로 스레드 풀을 설정하고, joinRpcThreadpool()로 메인 스레드가 종료되지 않도록 합니다."
+  },
+  {
+    "id": "ha-016",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "다음은 C++에서 HIDL HAL 서비스에 접근하는 클라이언트 코드입니다. 빈칸을 채우시오.",
+    "codeTemplate": "using android::hardware::camera::device::V3_4::ICameraDevice;\n\nandroid::sp<ICameraDevice> cameraDevice =\n    ICameraDevice::___(\"legacy/0\");\n\nif (cameraDevice == ___) {\n    LOG(ERROR) << \"Failed to get camera device\";\n    return;\n}\n\nauto ret = cameraDevice->getCameraCharacteristics(\n    [](auto status, auto chars) {\n        // 콜백으로 결과 처리\n    }\n);",
+    "codeLanguage": "cpp",
+    "blankAnswers": [
+      ["getService"],
+      ["nullptr"]
+    ],
+    "explanation": "HIDL HAL 클라이언트는 IInterface::getService()를 호출하여 hwservicemanager에서 서비스를 검색합니다. 서비스를 찾지 못하면 nullptr을 반환합니다. HIDL에서 복수의 반환 값이 있는 경우 콜백 람다를 사용하여 결과를 받습니다."
+  },
+  {
+    "id": "ha-017",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "다음은 device manifest.xml에서 HIDL HAL 서비스를 선언하는 예시입니다. 빈칸을 채우시오.",
+    "codeTemplate": "<hal format=\"hidl\">\n    <name>android.hardware.camera.provider</name>\n    <transport>___</transport>\n    <version>2.6</version>\n    <interface>\n        <name>___</name>\n        <instance>legacy/0</instance>\n    </interface>\n</hal>",
+    "codeLanguage": "xml",
+    "blankAnswers": [
+      ["hwbinder"],
+      ["ICameraProvider"]
+    ],
+    "explanation": "device manifest.xml에서 각 HAL의 transport(hwbinder 또는 passthrough), 버전, 인터페이스 이름, 인스턴스 이름을 선언합니다. hwbinder는 Binderized 모드를 의미하며, 인터페이스 이름은 HIDL에서 정의한 인터페이스 클래스명(예: ICameraProvider)을 사용합니다."
+  },
+  {
+    "id": "ha-018",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "FCM(Framework Compatibility Matrix)에서 HAL의 optional 속성이 false일 때의 의미는?",
+    "options": [
+      "해당 HAL이 존재하면 사용하지만 없어도 부팅된다",
+      "해당 HAL이 device manifest에 반드시 존재해야 하며, 없으면 부팅이 실패한다",
+      "해당 HAL을 다음 Android 버전에서 제거할 예정이다",
+      "해당 HAL이 테스트 환경에서만 사용된다"
+    ],
+    "answer": 1,
+    "explanation": "FCM에서 optional=\"false\"인 HAL은 필수(required) HAL로, device manifest에 반드시 해당 HAL이 선언되어 있어야 합니다. VINTF 호환성 검증 시 필수 HAL이 manifest에 없으면 부팅 과정에서 실패합니다. optional=\"true\"인 HAL은 존재하지 않아도 부팅이 가능합니다."
+  },
+  {
+    "id": "ha-019",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "HIDL에서 마이너 버전 업그레이드(예: @1.0 → @1.1) 시 올바른 방법은?",
+    "options": [
+      "기존 @1.0 인터페이스 파일을 직접 수정한다",
+      "@1.1 패키지에서 @1.0 인터페이스를 extends하여 새 메서드를 추가한다",
+      "새로운 패키지 이름으로 인터페이스를 다시 작성한다",
+      "기존 메서드의 시그니처를 변경한다"
+    ],
+    "answer": 1,
+    "explanation": "HIDL 마이너 버전 업그레이드 시 기존 인터페이스를 extends하여 새로운 메서드만 추가합니다. 예: interface IFoo extends @1.0::IFoo { newMethod(); }. 기존 메서드를 변경하거나 삭제하면 안 되며, 이는 하위 호환성을 보장하기 위한 규칙입니다."
+  },
+  {
+    "id": "ha-020",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Stable AIDL에서 @VintfStability 어노테이션의 역할로 올바른 것은?",
+    "options": [
+      "인터페이스를 Java에서만 사용하도록 제한한다",
+      "인터페이스가 VINTF의 일부로 릴리스 간 안정성이 보장됨을 선언한다",
+      "인터페이스의 성능을 최적화한다",
+      "인터페이스를 deprecated로 표시한다"
+    ],
+    "answer": 1,
+    "explanation": "@VintfStability 어노테이션은 해당 AIDL 인터페이스가 Vendor Interface의 일부로, Android 릴리스 간에 안정적이어야 함을 나타냅니다. 이 어노테이션이 있는 인터페이스는 필드 추가만 허용되고 기존 필드의 변경이나 삭제가 금지되어, 시스템과 벤더 간의 장기적 호환성을 보장합니다."
+  },
+  {
+    "id": "ha-021",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "hidl-gen 도구의 역할과 생성되는 주요 산출물을 설명하시오.",
+    "keywords": ["hidl-gen", "코드 생성", ".hal", "Bp", "Bn", "스텁", "프록시"],
+    "sampleAnswer": "hidl-gen은 .hal 파일로부터 C++ 및 Java 바인딩 코드를 자동 생성하는 컴파일러 도구입니다. 주요 산출물로는 BpHwFoo(프록시, 클라이언트 측 Binder 프록시), BnHwFoo(스텁, 서버 측 Binder 스텁), types.h(데이터 타입 정의), FooAll.cpp(마샬링/언마샬링 코드) 등이 있습니다.",
+    "explanation": "hidl-gen은 -Lc++-headers, -Lc++-sources, -Ljava 등의 옵션으로 다양한 언어의 코드를 생성합니다. Bp(Binder Proxy)는 클라이언트에서 사용하는 프록시로 IPC 호출을 트랜잭션으로 변환하고, Bn(Binder Native)은 서버에서 트랜잭션을 받아 실제 구현을 호출하는 스텁입니다."
+  },
+  {
+    "id": "ha-022",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "HIDL에서 Binderized HAL의 death notification(서비스 죽음 알림) 메커니즘을 설명하시오.",
+    "keywords": ["death notification", "linkToDeath", "serviceDied", "hidl_death_recipient", "프로세스 종료", "복구"],
+    "sampleAnswer": "HIDL Binderized HAL에서 클라이언트는 linkToDeath()를 호출하여 HAL 서비스 프로세스의 종료를 감지할 수 있습니다. hidl_death_recipient 클래스를 상속하고 serviceDied() 콜백을 구현하면, HAL 서비스가 예기치 않게 종료될 때 알림을 받아 서비스 재연결 등의 복구 처리를 수행할 수 있습니다.",
+    "explanation": "Binderized HAL은 별도 프로세스이므로 크래시 가능성이 있습니다. linkToDeath()는 커널 Binder 드라이버의 death notification 기능을 활용하여, 서비스 프로세스 종료 시 클라이언트에 콜백을 전달합니다. unlinkToDeath()로 등록을 해제할 수 있으며, 이 메커니즘은 시스템 안정성에 필수적입니다."
+  },
+  {
+    "id": "ha-023",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "다음은 AIDL Stable 인터페이스에서 parcelable을 정의하고 사용하는 코드입니다. 빈칸을 채우시오.",
+    "codeTemplate": "// SensorConfig.aidl\npackage android.hardware.sensors;\n\n@VintfStability\n___ SensorConfig {\n    int sensorId;\n    float samplingRate;\n    boolean enabled;\n}\n\n// ISensors.aidl\npackage android.hardware.sensors;\n\n@VintfStability\ninterface ISensors {\n    void setSensorConfig(in ___ config);\n    SensorConfig getSensorConfig(int sensorId);\n}",
+    "codeLanguage": "aidl",
+    "blankAnswers": [
+      ["parcelable"],
+      ["SensorConfig"]
+    ],
+    "explanation": "Stable AIDL에서 structured parcelable은 parcelable 키워드로 정의하며, 필드를 직접 .aidl 파일에 선언합니다. 인터페이스 메서드에서 parcelable 타입을 매개변수로 사용할 때 in, out, inout 방향 지시자를 지정합니다. in은 클라이언트→서버 방향의 입력 전용을 의미합니다."
+  },
+  {
+    "id": "ha-024",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "다음은 HIDL 인터페이스의 마이너 버전 업그레이드 예시입니다. 빈칸을 채우시오.",
+    "codeTemplate": "// hardware/interfaces/example/1.1/IExample.hal\npackage android.hardware.example@1.1;\n\nimport @1.0::IExample;\n\ninterface IExample ___ @1.0::IExample {\n    ___ getExtendedStatus()\n        generates (int32_t status, string detail);\n};",
+    "codeLanguage": "hidl",
+    "blankAnswers": [
+      ["extends"],
+      ["", "getExtendedStatus"]
+    ],
+    "explanation": "HIDL 마이너 버전 업그레이드에서는 extends 키워드로 이전 버전의 인터페이스를 상속합니다. 새로운 메서드만 추가할 수 있으며, 기존 @1.0의 메서드는 변경할 수 없습니다. generates 키워드로 반환 값을 정의하며, 복수의 값을 반환할 수 있는 것이 HIDL의 특징입니다."
+  },
+  {
+    "id": "ha-025",
+    "category": "android-system",
+    "subcategory": "hidl-aidl",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Treble 아키텍처에서 HIDL을 AIDL로 마이그레이션할 때의 주요 고려사항과 절차를 설명하시오.",
+    "keywords": ["마이그레이션", "HIDL", "AIDL", "deprecated", "호환성", "Stable AIDL", "manifest", "sepolicy"],
+    "sampleAnswer": "HIDL에서 AIDL 마이그레이션 시 주요 고려사항은: (1) 새 AIDL 인터페이스를 @VintfStability로 정의, (2) HIDL의 hwbinder 대신 binder를 transport로 사용, (3) device manifest.xml에서 format을 hidl에서 aidl로 변경, (4) SELinux 정책을 hwbinder_service에서 binder_service로 업데이트, (5) 서비스 등록을 hwservicemanager 대신 servicemanager로 변경, (6) 기존 HIDL 클라이언트와의 호환성 기간 관리가 필요합니다.",
+    "explanation": "Google은 Android 11부터 새 HAL을 AIDL로 작성하도록 권장하고, HIDL은 deprecated 상태입니다. 마이그레이션 시 인터페이스 변환뿐 아니라 빌드 시스템(Android.bp), VINTF manifest, SELinux 정책, 테스트(VTS) 등 전반적인 변경이 필요합니다. FCM의 level을 확인하여 어떤 Android 버전부터 AIDL HAL만 지원할지 결정해야 합니다."
+  }
+]

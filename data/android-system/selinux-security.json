@@ -1,0 +1,356 @@
+[
+  {
+    "id": "se-001",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "SELinux는 어떤 유형의 접근 제어 모델을 구현하는가?",
+    "options": [
+      "DAC (Discretionary Access Control)",
+      "MAC (Mandatory Access Control)",
+      "RBAC (Role-Based Access Control) 전용",
+      "ACL (Access Control List) 전용"
+    ],
+    "answer": 1,
+    "explanation": "SELinux는 MAC(Mandatory Access Control, 강제 접근 제어)를 구현합니다. DAC는 파일 소유자가 권한을 설정하는 반면, MAC은 시스템 정책에 의해 접근이 강제적으로 제어됩니다. Android에서는 DAC(Linux 파일 퍼미션) 위에 SELinux MAC이 추가 보안 레이어로 동작합니다."
+  },
+  {
+    "id": "se-002",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Android에서 SELinux가 enforcing 모드일 때의 동작으로 올바른 것은?",
+    "options": [
+      "정책 위반을 로그에 기록만 하고 접근을 허용한다",
+      "정책 위반 시 접근을 차단하고 로그에 기록한다",
+      "SELinux가 완전히 비활성화된다",
+      "루트 사용자의 접근만 허용한다"
+    ],
+    "answer": 1,
+    "explanation": "Enforcing 모드에서는 SELinux 정책에 위반되는 모든 접근이 차단(deny)되며 동시에 audit 로그에 기록됩니다. Permissive 모드에서는 위반을 로그에만 기록하고 실제로는 허용합니다. Android 프로덕션 빌드에서는 항상 enforcing 모드로 동작해야 합니다."
+  },
+  {
+    "id": "se-003",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "SELinux 보안 컨텍스트(security context)의 올바른 형식은?",
+    "options": [
+      "user:group:permission",
+      "user:role:type:level",
+      "domain:type:class",
+      "subject:object:action"
+    ],
+    "answer": 1,
+    "explanation": "SELinux 보안 컨텍스트는 user:role:type:level 형식으로 구성됩니다. Android에서는 주로 u:r:domain_type:s0 (프로세스) 또는 u:object_r:file_type:s0 (파일) 형태로 사용됩니다. 이 중 type 필드가 접근 제어에서 가장 핵심적인 역할을 합니다."
+  },
+  {
+    "id": "se-004",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "DAC(Discretionary Access Control)와 MAC(Mandatory Access Control)의 차이점을 Android 보안 관점에서 설명하시오.",
+    "keywords": ["소유자", "시스템 정책", "강제", "임의", "SELinux", "파일 퍼미션"],
+    "sampleAnswer": "DAC는 파일 소유자가 임의로 권한을 설정할 수 있는 접근 제어 방식으로, Linux의 rwx 파일 퍼미션이 대표적입니다. MAC은 시스템 관리자가 정의한 정책에 의해 강제적으로 접근이 제어되며, 소유자라 하더라도 정책을 우회할 수 없습니다. Android에서는 DAC 위에 SELinux MAC이 추가되어 루트 권한 탈취 시에도 정책에 의해 접근이 제한됩니다.",
+    "explanation": "Android는 DAC와 MAC을 모두 사용합니다. DAC만으로는 루트 권한이 탈취되면 모든 파일에 접근 가능하지만, MAC(SELinux)이 적용되면 루트라 하더라도 정책에서 허용하지 않은 리소스에는 접근할 수 없습니다. 이를 통해 권한 상승 공격의 피해를 최소화합니다."
+  },
+  {
+    "id": "se-005",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Android의 앱 샌드박스(App Sandbox) 메커니즘이 각 앱을 격리하는 방식을 설명하시오.",
+    "keywords": ["UID", "고유", "프로세스", "격리", "파일 시스템", "SELinux"],
+    "sampleAnswer": "Android는 각 앱에 고유한 Linux UID를 할당하고 별도의 프로세스에서 실행합니다. 앱의 데이터 디렉토리는 해당 UID만 접근할 수 있도록 파일 퍼미션이 설정되며, SELinux 정책으로 추가 격리됩니다. 이를 통해 앱 간 데이터 접근이 차단되고, 하나의 앱이 손상되어도 다른 앱이나 시스템에 영향을 최소화합니다.",
+    "explanation": "Android 앱 샌드박스는 Linux의 프로세스 격리(UID 기반)와 파일 시스템 퍼미션(DAC), 그리고 SELinux(MAC)를 조합하여 구현됩니다. Android 10부터는 각 앱이 /sdcard에서도 자신의 파일에만 접근할 수 있는 Scoped Storage가 추가되었습니다."
+  },
+  {
+    "id": "se-006",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "SELinux의 permissive 모드에서의 동작으로 올바른 것은?",
+    "options": [
+      "모든 접근을 무조건 차단한다",
+      "정책 위반을 로그에 기록하지만 접근은 허용한다",
+      "SELinux가 완전히 비활성화되어 아무런 동작을 하지 않는다",
+      "특정 도메인에 대해서만 정책을 적용한다"
+    ],
+    "answer": 1,
+    "explanation": "Permissive 모드에서는 SELinux 정책 위반이 발생해도 접근을 차단하지 않고, 대신 위반 내용을 audit 로그에 기록합니다. 이 모드는 새로운 정책을 개발하거나 디버깅할 때 유용합니다. 프로덕션 환경에서는 반드시 enforcing 모드를 사용해야 합니다."
+  },
+  {
+    "id": "se-007",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "현재 시스템의 SELinux 모드를 확인하고, 프로세스의 보안 컨텍스트를 조회하는 명령어를 완성하시오.",
+    "codeTemplate": "# SELinux 모드 확인\nadb shell ___\n\n# 현재 실행 중인 프로세스의 보안 컨텍스트 확인\nadb shell ps -Z",
+    "codeLanguage": "shell",
+    "blankAnswers": [
+      ["getenforce", "getenforce"]
+    ],
+    "explanation": "getenforce 명령은 현재 SELinux의 모드(Enforcing, Permissive, Disabled)를 출력합니다. ps -Z 명령은 각 프로세스의 SELinux 보안 컨텍스트를 함께 표시합니다. Android에서는 adb shell을 통해 이 명령들을 실행할 수 있습니다."
+  },
+  {
+    "id": "se-008",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "파일의 SELinux 보안 컨텍스트를 확인하기 위해 사용하는 명령어 옵션은?",
+    "options": [
+      "ls -l",
+      "ls -Z",
+      "ls -a",
+      "ls -R"
+    ],
+    "answer": 1,
+    "explanation": "ls -Z 명령은 파일이나 디렉토리의 SELinux 보안 컨텍스트를 표시합니다. 예를 들어 u:object_r:surfaceflinger_exec:s0 같은 형태로 출력되며, 이 컨텍스트는 SELinux 정책에서 해당 파일에 대한 접근 규칙을 결정하는 데 사용됩니다. ls -l은 일반 파일 퍼미션(DAC)을 표시합니다."
+  },
+  {
+    "id": "se-009",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Android SELinux 정책에서 .te 파일의 역할은 무엇인가?",
+    "options": [
+      "파일 시스템의 보안 컨텍스트를 매핑한다",
+      "Type Enforcement 규칙을 정의하여 도메인 간 접근 권한을 명시한다",
+      "시스템 프로퍼티의 보안 레이블을 지정한다",
+      "네트워크 포트에 대한 접근 제어를 설정한다"
+    ],
+    "answer": 1,
+    "explanation": ".te(Type Enforcement) 파일은 SELinux 정책의 핵심 파일로, 특정 도메인(프로세스 타입)이 어떤 타입의 객체에 어떤 동작을 수행할 수 있는지를 allow/neverallow 규칙으로 정의합니다. 예: allow surfaceflinger gpu_device:chr_file { read write };"
+  },
+  {
+    "id": "se-010",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "file_contexts 파일의 역할로 올바른 것은?",
+    "options": [
+      "실행 중인 프로세스의 도메인 전환 규칙을 정의한다",
+      "파일 경로와 SELinux 보안 컨텍스트 간의 매핑을 정의한다",
+      "시스템 프로퍼티에 대한 읽기/쓰기 권한을 지정한다",
+      "네트워크 소켓의 보안 레이블을 설정한다"
+    ],
+    "answer": 1,
+    "explanation": "file_contexts는 파일 시스템의 경로 패턴과 SELinux 보안 컨텍스트를 매핑하는 설정 파일입니다. 예를 들어 '/dev/binder u:object_r:binder_device:s0'와 같이 정의하며, restorecon 명령 실행 시 이 매핑에 따라 파일의 보안 레이블이 설정됩니다."
+  },
+  {
+    "id": "se-011",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "audit2allow 도구의 주요 용도는 무엇인가?",
+    "options": [
+      "SELinux 정책을 컴파일하여 바이너리로 변환한다",
+      "SELinux denial 로그를 분석하여 허용 규칙(allow rule)을 자동 생성한다",
+      "시스템의 모든 파일에 대해 보안 컨텍스트를 재설정한다",
+      "SELinux를 enforcing 모드에서 permissive 모드로 전환한다"
+    ],
+    "answer": 1,
+    "explanation": "audit2allow는 SELinux audit 로그(avc: denied 메시지)를 분석하여 해당 거부를 해결할 수 있는 allow 규칙을 자동으로 생성해주는 도구입니다. 정책 개발 시 유용하지만, 생성된 규칙을 그대로 사용하면 과도한 권한을 부여할 수 있으므로 반드시 검토 후 적용해야 합니다."
+  },
+  {
+    "id": "se-012",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "SELinux에서 type transition이란 무엇이며, Android에서 어떻게 활용되는지 설명하시오.",
+    "keywords": ["타입 전환", "프로세스", "실행", "도메인", "자동", "exec"],
+    "sampleAnswer": "Type transition은 특정 조건에서 프로세스나 객체의 SELinux 타입이 자동으로 전환되는 메커니즘입니다. 대표적으로 domain transition은 프로세스가 특정 실행 파일을 exec할 때 새로운 도메인으로 전환됩니다. 예를 들어 init 프로세스가 surfaceflinger_exec 타입의 파일을 실행하면 surfaceflinger 도메인으로 자동 전환되어, 해당 서비스에 적합한 보안 정책이 적용됩니다.",
+    "explanation": "Domain transition은 Android 보안의 핵심 메커니즘입니다. init 프로세스에서 시작된 각 서비스는 type_transition 규칙에 의해 고유한 도메인으로 전환됩니다. 이를 통해 각 시스템 서비스가 최소 권한 원칙에 따라 필요한 리소스에만 접근할 수 있습니다."
+  },
+  {
+    "id": "se-013",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "neverallow 규칙의 역할과 Android CTS에서의 활용 방법을 설명하시오.",
+    "keywords": ["neverallow", "금지", "컴파일", "CTS", "벤더", "정책 검증"],
+    "sampleAnswer": "neverallow 규칙은 특정 접근 권한이 절대로 허용되어서는 안 된다는 것을 명시하는 SELinux 정책 규칙입니다. 정책 컴파일 시 neverallow에 위배되는 allow 규칙이 있으면 빌드가 실패합니다. Android CTS(Compatibility Test Suite)에서는 neverallow 규칙을 검증하여, 벤더가 핵심 보안 정책을 우회하는 커스텀 정책을 추가하지 못하도록 합니다.",
+    "explanation": "neverallow는 Android 보안 정책의 무결성을 보장하는 핵심 메커니즘입니다. AOSP에서 정의된 neverallow 규칙은 벤더가 수정할 수 없으며, CTS neverallow 테스트를 통해 디바이스 인증 시 검증됩니다. 예: neverallow untrusted_app system_data_file:file write;"
+  },
+  {
+    "id": "se-014",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "property_contexts 파일의 역할과 Android 시스템 프로퍼티 보안에서의 중요성을 설명하시오.",
+    "keywords": ["property_contexts", "시스템 프로퍼티", "보안 컨텍스트", "레이블", "접근 제어"],
+    "sampleAnswer": "property_contexts 파일은 Android 시스템 프로퍼티 이름 패턴과 SELinux 보안 컨텍스트를 매핑합니다. 예를 들어 'ro.build.' 접두사를 가진 프로퍼티에 특정 타입을 할당하여, 어떤 도메인이 해당 프로퍼티를 읽거나 쓸 수 있는지 SELinux 정책으로 제어합니다. 이를 통해 민감한 시스템 프로퍼티가 무단으로 변경되는 것을 방지합니다.",
+    "explanation": "시스템 프로퍼티는 Android의 핵심 설정 메커니즘으로, ro.debuggable, persist.sys.* 등 보안에 민감한 값들이 포함됩니다. property_contexts를 통해 각 프로퍼티에 SELinux 타입을 부여하고, 정책에서 해당 타입에 대한 접근 권한을 세밀하게 제어합니다."
+  },
+  {
+    "id": "se-015",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "SELinux .te 파일에서 surfaceflinger 도메인이 GPU 디바이스 파일을 읽고 쓸 수 있도록 허용하는 규칙을 완성하시오.",
+    "codeTemplate": "___ surfaceflinger gpu_device:chr_file { read write open ioctl };",
+    "codeLanguage": "te",
+    "blankAnswers": [
+      ["allow"]
+    ],
+    "explanation": "allow 규칙은 SELinux에서 특정 소스 도메인이 대상 타입의 객체에 지정된 동작을 수행할 수 있도록 허용하는 기본 규칙입니다. 형식은 'allow source_domain target_type:object_class { permissions };'입니다. surfaceflinger는 GPU 하드웨어에 직접 접근해야 하므로 chr_file(캐릭터 디바이스) 클래스에 대한 read, write 등의 권한이 필요합니다."
+  },
+  {
+    "id": "se-016",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "SELinux 정책에서 init이 myservice_exec 타입의 파일을 실행할 때 myservice 도메인으로 전환되도록 하는 규칙을 완성하시오.",
+    "codeTemplate": "# myservice 도메인 정의\ntype myservice, domain;\ntype myservice_exec, exec_type, file_type;\n\n# init에서 myservice로의 도메인 전환\n___ myservice myservice_exec:file ___;\n\n# 도메인 전환 허용\nallow init myservice:process transition;",
+    "codeLanguage": "te",
+    "blankAnswers": [
+      ["domain_auto_trans(init,", "init_daemon_domain(myservice)"],
+      ["entrypoint", "execute"]
+    ],
+    "explanation": "도메인 전환에는 여러 규칙이 필요합니다. domain_auto_trans 매크로 또는 수동으로 type_transition, allow(execute), allow(entrypoint) 규칙을 조합합니다. entrypoint 권한은 해당 실행 파일이 새 도메인의 진입점임을 명시하며, 이를 통해 init이 myservice_exec 파일을 실행할 때 자동으로 myservice 도메인으로 전환됩니다."
+  },
+  {
+    "id": "se-017",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "file_contexts 파일에서 커스텀 디바이스 파일과 시스템 바이너리의 보안 컨텍스트를 설정하는 항목을 완성하시오.",
+    "codeTemplate": "# 커스텀 센서 디바이스 파일에 보안 컨텍스트 할당\n/dev/custom_sensor  u:object_r:___:s0\n\n# 커스텀 서비스 바이너리에 보안 컨텍스트 할당\n/system/bin/custom_service  u:object_r:___:s0",
+    "codeLanguage": "text",
+    "blankAnswers": [
+      ["custom_sensor_device", "sensor_device"],
+      ["custom_service_exec", "custom_service_exec"]
+    ],
+    "explanation": "file_contexts에서 디바이스 파일은 일반적으로 *_device 타입을, 실행 파일은 *_exec 타입을 부여합니다. 이 타입들은 .te 파일에서 별도로 선언(type custom_sensor_device, dev_type;)되어야 하며, SELinux 정책에서 이 타입들에 대한 접근 규칙을 정의합니다."
+  },
+  {
+    "id": "se-018",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "seinfo 태그란 무엇이며, Android 앱의 SELinux 정책 할당에서 어떤 역할을 하는지 설명하시오.",
+    "keywords": ["seinfo", "mac_permissions.xml", "seapp_contexts", "앱", "도메인", "서명"],
+    "sampleAnswer": "seinfo 태그는 mac_permissions.xml에서 앱의 서명 인증서에 기반하여 부여되는 레이블입니다. 이 태그는 seapp_contexts 파일에서 앱에 할당할 SELinux 도메인과 데이터 파일 타입을 결정하는 데 사용됩니다. 예를 들어 platform 서명이 된 앱에는 'platform' seinfo 태그가 부여되어 platform_app 도메인으로 실행됩니다.",
+    "explanation": "seinfo는 앱의 서명 기반 신뢰 수준을 SELinux 정책과 연결하는 메커니즘입니다. mac_permissions.xml에서 서명별로 seinfo 태그를 정의하고, seapp_contexts에서 해당 태그에 따라 도메인(domain)과 타입(type)을 매핑합니다. 이를 통해 시스템 앱, 플랫폼 앱, 서드파티 앱에 각각 다른 보안 정책을 적용합니다."
+  },
+  {
+    "id": "se-019",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Android에서 untrusted_app 도메인에 대한 neverallow 규칙의 목적으로 올바른 것은?",
+    "options": [
+      "서드파티 앱이 시스템 UI를 커스터마이즈하는 것을 방지한다",
+      "서드파티 앱이 시스템 핵심 데이터에 직접 접근하거나 권한을 상승시키는 것을 차단한다",
+      "서드파티 앱의 네트워크 통신을 모두 차단한다",
+      "서드파티 앱이 다른 앱의 Activity를 실행하는 것을 방지한다"
+    ],
+    "answer": 1,
+    "explanation": "untrusted_app 도메인은 서드파티 앱에 할당되는 SELinux 도메인입니다. neverallow 규칙을 통해 이 도메인이 system_data_file에 직접 쓰거나, exec_type 파일을 실행하거나, 커널 리소스에 접근하는 등의 위험한 동작을 금지합니다. 이를 통해 악성 앱이 시스템을 손상시키는 것을 원천 차단합니다."
+  },
+  {
+    "id": "se-020",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Android Treble 아키텍처에서 vendor sepolicy와 platform sepolicy가 분리된 주된 이유는?",
+    "options": [
+      "SELinux 정책 파일의 크기를 줄이기 위해",
+      "벤더와 플랫폼의 정책을 독립적으로 업데이트 가능하게 하고, 벤더 정책이 플랫폼 보안을 약화시키지 못하게 하기 위해",
+      "SELinux 컴파일 속도를 향상시키기 위해",
+      "서드파티 앱에 대한 정책을 별도로 관리하기 위해"
+    ],
+    "answer": 1,
+    "explanation": "Treble 아키텍처에서 sepolicy는 platform(system)과 vendor 파티션으로 분리됩니다. 이를 통해 OS 업데이트 시 platform 정책만 교체할 수 있고, 벤더 정책은 platform이 공개한 public type에만 접근할 수 있어 플랫폼 핵심 보안 정책의 무결성이 보장됩니다. 벤더는 private type에 접근하는 규칙을 작성할 수 없습니다."
+  },
+  {
+    "id": "se-021",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Android에서 SELinux 정책 개발 시 audit2allow 사용의 한계와 올바른 접근 방법을 설명하시오.",
+    "keywords": ["audit2allow", "과도한 권한", "최소 권한", "검토", "매크로", "도메인 분석"],
+    "sampleAnswer": "audit2allow는 denial 로그로부터 allow 규칙을 자동 생성하지만, 여러 한계가 있습니다. 첫째, 필요 이상의 광범위한 권한을 부여할 수 있습니다. 둘째, 근본적인 설계 문제(잘못된 도메인 할당 등)를 해결하지 않고 증상만 치료합니다. 셋째, neverallow 규칙과 충돌하는 규칙을 생성할 수 있습니다. 올바른 접근법은 denial 원인을 분석하고, 최소 권한 원칙에 따라 필요한 권한만 수동으로 작성하며, AOSP 매크로(예: init_daemon_domain, binder_use)를 활용하는 것입니다.",
+    "explanation": "audit2allow는 정책 개발의 시작점으로 유용하지만, 최종 정책은 반드시 사람이 검토해야 합니다. 예를 들어 audit2allow가 allow app_domain system_file:file *;를 제안하더라도, 실제로는 특정 파일에 대한 read 권한만 필요할 수 있습니다. 항상 최소 권한 원칙을 적용해야 합니다."
+  },
+  {
+    "id": "se-022",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Android CTS의 SELinux 관련 테스트가 검증하는 핵심 항목들과 그 목적을 설명하시오.",
+    "keywords": ["CTS", "neverallow", "enforcing", "도메인", "컨텍스트", "호환성"],
+    "sampleAnswer": "Android CTS의 SELinux 테스트는 다음을 검증합니다: (1) SELinux가 enforcing 모드인지 확인, (2) AOSP에서 정의한 neverallow 규칙이 위반되지 않았는지 검증, (3) 핵심 시스템 프로세스와 파일의 보안 컨텍스트가 올바른지 확인, (4) 앱 도메인(untrusted_app 등)의 격리가 유지되는지 검증. 이를 통해 OEM 커스터마이징이 Android 보안 모델을 훼손하지 않도록 보장합니다.",
+    "explanation": "CTS SELinux 테스트(CtsSelinuxTargetSdkCurrentTestCases 등)는 디바이스 인증의 필수 요소입니다. OEM이 SELinux를 permissive로 전환하거나, 시스템 앱에 과도한 권한을 부여하거나, 앱 샌드박스를 약화시키는 정책을 추가하면 CTS 테스트가 실패하여 GMS 인증을 받을 수 없습니다."
+  },
+  {
+    "id": "se-023",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "SELinux denial 로그를 분석하여 정책을 생성하는 과정을 완성하시오.",
+    "codeTemplate": "# 1. SELinux denial 로그 수집\nadb shell dmesg | grep ___\n\n# 2. denial 로그에서 allow 규칙 자동 생성\nadb shell dmesg | grep avc | ___ -p policy\n\n# 3. 생성된 규칙을 .te 파일에 추가 후 정책 다시 빌드\nmake ___ -j$(nproc)",
+    "codeLanguage": "shell",
+    "blankAnswers": [
+      ["avc", "\"avc: denied\"", "avc:"],
+      ["audit2allow"],
+      ["sepolicy", "selinux_policy"]
+    ],
+    "explanation": "SELinux 정책 개발 워크플로는 다음과 같습니다: (1) dmesg나 logcat에서 'avc: denied' 메시지를 검색하여 거부된 접근을 확인합니다. (2) audit2allow 도구로 해당 로그를 분석하여 필요한 allow 규칙을 생성합니다. (3) 생성된 규칙을 검토/수정한 후 .te 파일에 추가하고 정책을 다시 빌드합니다."
+  },
+  {
+    "id": "se-024",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "새로운 시스템 서비스 'custom_daemon'에 대한 SELinux 정책의 핵심 부분을 완성하시오.",
+    "codeTemplate": "# custom_daemon.te\n\n# 도메인 및 실행 파일 타입 선언\ntype custom_daemon, domain;\ntype custom_daemon_exec, ___, file_type;\n\n# init으로부터 도메인 전환\ninit_daemon_domain(custom_daemon)\n\n# Binder IPC 사용 허용\n___(custom_daemon)\n\n# 자체 데이터 디렉토리 접근 허용\ntype custom_daemon_data_file, file_type, data_file_type;\nallow custom_daemon custom_daemon_data_file:dir create_dir_perms;\nallow custom_daemon custom_daemon_data_file:file ___;",
+    "codeLanguage": "te",
+    "blankAnswers": [
+      ["exec_type"],
+      ["binder_use"],
+      ["create_file_perms", "{ create read write open getattr setattr }"]
+    ],
+    "explanation": "새 시스템 서비스의 SELinux 정책 작성에는 여러 요소가 필요합니다. exec_type 속성은 실행 파일 타입을 나타내며 도메인 전환에 필수입니다. binder_use 매크로는 Binder IPC를 사용하기 위한 표준 권한 세트를 부여합니다. create_file_perms는 파일 생성/읽기/쓰기에 필요한 권한 매크로입니다. 이러한 AOSP 매크로 활용이 일관성 있는 정책 작성에 중요합니다."
+  },
+  {
+    "id": "se-025",
+    "category": "android-system",
+    "subcategory": "selinux-security",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "untrusted_app 도메인이 시스템 핵심 리소스에 접근하는 것을 금지하는 neverallow 규칙을 완성하시오.",
+    "codeTemplate": "# untrusted_app이 system_data_file에 직접 쓰기 금지\n___ untrusted_app system_data_file:file { write append };\n\n# untrusted_app이 exec_type 파일을 실행하는 것을 금지\nneverallow untrusted_app ___:file execute;\n\n# untrusted_app이 커널 모듈을 로드하는 것을 금지\nneverallow untrusted_app self:capability ___;\n\n# untrusted_app이 다른 앱의 데이터에 직접 접근하는 것을 금지\nneverallow untrusted_app { app_data_file -self }:file { read write };",
+    "codeLanguage": "te",
+    "blankAnswers": [
+      ["neverallow"],
+      ["exec_type", "{ exec_type }"],
+      ["sys_module"]
+    ],
+    "explanation": "neverallow 규칙은 Android 보안의 최후 방어선입니다. untrusted_app(서드파티 앱)이 system_data_file에 쓰거나, 실행 파일을 직접 실행하거나, 커널 모듈을 로드하는 것은 심각한 보안 위협이므로 절대 허용되어서는 안 됩니다. sys_module capability는 커널 모듈 로드 권한이며, 이를 neverallow로 금지하여 커널 무결성을 보호합니다."
+  }
+]
