@@ -9,6 +9,8 @@
 - Quiz data imports use relative paths `../../data/` from src/lib/, cast as `Quiz[]`
 - Use `subcategory === "all"` to get all quizzes in a category
 - Client hooks use `"use client"` directive; SSR-safe localStorage via `useSyncExternalStore`
+- Dynamic route pages: server component + generateStaticParams, extract client parts into separate components
+- Next.js App Router params are Promise-based: `params: Promise<{ category: string }>`
 
 ---
 
@@ -123,4 +125,20 @@
   - getCategoryQuizCount() from quiz-loader.ts works at build time for SSG pages
   - Next.js Link component used for client-side navigation to /quiz/[category]
   - CATEGORIES from constants.ts provides id, name, description for each category
+---
+
+## 2026-03-12 - US-011
+- What was implemented: Subcategory selection page at src/app/quiz/[category]/page.tsx
+  - Shows all subcategories for the selected category (10 each for Linux Kernel and Android System)
+  - "전체" (all) option included as first card
+  - Each card shows subcategory name, quiz count, and progress (N/M 완료)
+  - Progress displayed via client component SubcategoryProgress using useQuizProgress hook
+  - generateStaticParams for SSG (linux-kernel, android-system)
+  - Back link to main page
+  - Responsive grid: 1 col mobile, 2 col sm, 3 col lg
+- Files changed: src/app/quiz/[category]/page.tsx (new), src/components/SubcategoryProgress.tsx (new)
+- **Learnings for future iterations:**
+  - Server/client split: page is server component with generateStaticParams, progress display is a separate client component
+  - Next.js App Router dynamic routes use params as Promise in page props
+  - SubcategoryProgress is a reusable client component for showing progress counts
 ---
