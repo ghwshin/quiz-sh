@@ -177,3 +177,20 @@
   - Difficulty badge colors: 초급=green, 중급=yellow, 고급=red (matching constants)
   - Component is "use client" since it uses useState and hooks
 ---
+
+## 2026-03-12 - US-014
+- What was implemented: Short answer quiz component at src/components/ShortAnswerQuiz.tsx
+  - Displays question number, difficulty badge (color-coded), subcategory
+  - Textarea input field for free-form answers
+  - Keyword-based grading: checks if all required keywords are present (case-insensitive, whitespace normalized)
+  - Shows each keyword as green (found) or red (missing) tag after submission
+  - Displays sample answer (sampleAnswer) and explanation after answering
+  - "다음 문제" (next) button after answering
+  - Auto-saves result to LocalStorage via useQuizProgress hook
+  - Supports previously answered questions (shows result without re-answering)
+- Files changed: src/components/ShortAnswerQuiz.tsx (new)
+- **Learnings for future iterations:**
+  - Keyword checking: normalize whitespace and lowercase both input and keyword, use includes() for matching
+  - ShortAnswerQuiz follows same prop pattern as MultipleChoiceQuiz: { quiz, questionNumber, onNext }
+  - Previously answered state handled identically to MultipleChoiceQuiz via getResult()
+---
