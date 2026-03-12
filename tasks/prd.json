@@ -152,7 +152,7 @@
         "Typecheck 통과"
       ],
       "priority": 9,
-      "passes": false,
+      "passes": true,
       "notes": "LocalStorage key: quiz-progress. 값은 { [quizId]: { correct: boolean, answeredAt: string } } 형태."
     },
     {

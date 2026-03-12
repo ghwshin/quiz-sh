@@ -8,6 +8,7 @@
 - Per subcategory: 25 quizzes, 8 초급 / 9 중급 / 8 고급, 10 MC / 8 SA / 7 CF
 - Quiz data imports use relative paths `../../data/` from src/lib/, cast as `Quiz[]`
 - Use `subcategory === "all"` to get all quizzes in a category
+- Client hooks use `"use client"` directive; SSR-safe localStorage via `useSyncExternalStore`
 
 ---
 
@@ -95,4 +96,18 @@
   - JSON imports work with resolveJsonModule in tsconfig, cast to Quiz[] for type safety
   - Use "all" as subcategory value to load all quizzes in a category
   - Fisher-Yates shuffle creates a new array (immutable)
+---
+
+## 2026-03-12 - US-009
+- What was implemented: LocalStorage progress management hook in src/hooks/useQuizProgress.ts
+  - saveResult(): save quiz answer (correct/incorrect) with timestamp
+  - getResult(): get result for a specific quiz ID
+  - getProgress(): calculate answered/correct counts for category/subcategory/difficulty filters
+  - reset(): clear all progress or just a specific category
+  - Uses useSyncExternalStore for SSR-safe localStorage access (no hydration mismatch)
+- Files changed: src/hooks/useQuizProgress.ts (new)
+- **Learnings for future iterations:**
+  - useSyncExternalStore with getServerSnapshot returning {} handles SSR safely without typeof window checks
+  - LocalStorage key is "quiz-progress", stores { [quizId]: { correct: boolean, answeredAt: string } }
+  - Hook uses external store pattern with subscribe/emitChange for cross-component sync
 ---
