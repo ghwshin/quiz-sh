@@ -30,17 +30,26 @@ function subscribe(listener: () => void) {
   };
 }
 
+let cachedSnapshot: ProgressData = {};
+let cachedRaw: string | null = null;
+
 function getSnapshot(): ProgressData {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as ProgressData) : {};
+    if (raw !== cachedRaw) {
+      cachedRaw = raw;
+      cachedSnapshot = raw ? (JSON.parse(raw) as ProgressData) : {};
+    }
+    return cachedSnapshot;
   } catch {
-    return {};
+    return cachedSnapshot;
   }
 }
 
+const SERVER_SNAPSHOT: ProgressData = {};
+
 function getServerSnapshot(): ProgressData {
-  return {};
+  return SERVER_SNAPSHOT;
 }
 
 function setProgress(data: ProgressData) {

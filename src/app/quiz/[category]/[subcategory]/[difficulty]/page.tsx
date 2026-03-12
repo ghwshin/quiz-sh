@@ -1,15 +1,15 @@
-import { CATEGORIES, SUBCATEGORIES, DIFFICULTIES } from "@/lib/constants";
+import { CATEGORIES, SUBCATEGORIES, DIFFICULTIES, slugToDifficulty } from "@/lib/constants";
 import { filterQuizzes } from "@/lib/quiz-loader";
 import { QuizSession } from "@/components/QuizSession";
 import type { Category, Difficulty } from "@/types/quiz";
 
 export function generateStaticParams() {
   const params: { category: string; subcategory: string; difficulty: string }[] = [];
-  const difficultyIds = [...DIFFICULTIES.map((d) => d.id), "random"];
+  const difficultySlugs = [...DIFFICULTIES.map((d) => d.slug), "random"];
   for (const cat of CATEGORIES) {
     const subcategoryIds = ["all", ...SUBCATEGORIES[cat.id].map((s) => s.id)];
     for (const sub of subcategoryIds) {
-      for (const diff of difficultyIds) {
+      for (const diff of difficultySlugs) {
         params.push({ category: cat.id, subcategory: sub, difficulty: diff });
       }
     }
@@ -22,14 +22,17 @@ export default async function QuizPage({
 }: {
   params: Promise<{ category: string; subcategory: string; difficulty: string }>;
 }) {
-  const { category, subcategory, difficulty } = await params;
+  const { category, subcategory, difficulty: diffSlug } = await params;
   const cat = CATEGORIES.find((c) => c.id === category);
   if (!cat) return <div>카테고리를 찾을 수 없습니다.</div>;
+
+  const difficulty = slugToDifficulty(diffSlug);
+  if (!difficulty) return <div>난이도를 찾을 수 없습니다.</div>;
 
   const quizzes = filterQuizzes(
     category as Category,
     subcategory,
-    difficulty as Difficulty | "random"
+    difficulty
   );
 
   const subName =
@@ -41,7 +44,7 @@ export default async function QuizPage({
   const diffName =
     difficulty === "random"
       ? "랜덤"
-      : DIFFICULTIES.find((d) => d.id === difficulty)?.name ?? difficulty;
+      : DIFFICULTIES.find((d) => d.id === difficulty)?.name ?? diffSlug;
 
   return (
     <QuizSession

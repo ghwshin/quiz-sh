@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CATEGORIES, SUBCATEGORIES, DIFFICULTIES } from "@/lib/constants";
+import { CATEGORIES, SUBCATEGORIES, DIFFICULTIES, difficultyToSlug } from "@/lib/constants";
 import { filterQuizzes, getQuizzesBySubcategory } from "@/lib/quiz-loader";
 import { DifficultyProgress, ResetButton } from "@/components/DifficultyProgress";
 import type { Category, Difficulty } from "@/types/quiz";
@@ -47,12 +47,12 @@ export default async function DifficultyPage({
   const allQuizzes = getQuizzesBySubcategory(category as Category, subcategory);
   const totalCount = allQuizzes.length;
 
-  const difficultyCounts: { id: Difficulty | "random"; name: string; color: string; count: number }[] = [
+  const difficultyCounts: { id: Difficulty | "random"; slug: string; name: string; color: string; count: number }[] = [
     ...DIFFICULTIES.map((d) => ({
       ...d,
       count: filterQuizzes(category as Category, subcategory, d.id).length,
     })),
-    { id: "random" as const, name: "랜덤", color: "text-purple-400", count: totalCount },
+    { id: "random" as const, slug: "random", name: "랜덤", color: "text-purple-400", count: totalCount },
   ];
 
   return (
@@ -73,7 +73,7 @@ export default async function DifficultyPage({
         {difficultyCounts.map((d) => (
           <Link
             key={d.id}
-            href={`/quiz/${category}/${subcategory}/${d.id}`}
+            href={`/quiz/${category}/${subcategory}/${d.slug}`}
             className={`rounded-xl border border-gray-700 bg-gray-900 p-5 ${difficultyBorder[d.id]} hover:bg-gray-800 transition-colors`}
           >
             <div className="flex items-center gap-3 mb-3">

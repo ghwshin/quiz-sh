@@ -40,8 +40,22 @@ export const SUBCATEGORIES: Record<Category, { id: string; name: string }[]> = {
   ],
 };
 
-export const DIFFICULTIES: { id: Difficulty; name: string; color: string }[] = [
-  { id: "초급", name: "초급", color: "text-green-400" },
-  { id: "중급", name: "중급", color: "text-yellow-400" },
-  { id: "고급", name: "고급", color: "text-red-400" },
+export const DIFFICULTIES: { id: Difficulty; slug: string; name: string; color: string }[] = [
+  { id: "초급", slug: "beginner", name: "초급", color: "text-green-400" },
+  { id: "중급", slug: "intermediate", name: "중급", color: "text-yellow-400" },
+  { id: "고급", slug: "advanced", name: "고급", color: "text-red-400" },
 ];
+
+/** Map URL slug to Difficulty value */
+export function slugToDifficulty(slug: string): Difficulty | "random" | undefined {
+  if (slug === "random") return "random";
+  const found = DIFFICULTIES.find((d) => d.slug === slug);
+  return found?.id;
+}
+
+/** Map Difficulty value to URL slug */
+export function difficultyToSlug(diff: Difficulty | "random"): string {
+  if (diff === "random") return "random";
+  const found = DIFFICULTIES.find((d) => d.id === diff);
+  return found?.slug ?? diff;
+}
