@@ -54,7 +54,7 @@
     "difficulty": "초급",
     "type": "short-answer",
     "question": "Linux 커널에서 프로세스(또는 스레드)를 나타내며, PID, 상태, 스케줄링 정보, 메모리 관리 정보 등을 포함하는 핵심 자료구조의 이름은 ___이다.",
-    "blankAnswers": [["task_struct"]],
+    "blankAnswers": [["task_struct", "struct task_struct"]],
     "explanation": "task_struct는 <linux/sched.h>에 정의되어 있으며, 커널이 프로세스를 관리하기 위해 필요한 모든 메타데이터를 담고 있는 구조체입니다. 각 프로세스마다 하나의 task_struct 인스턴스가 할당됩니다."
   },
   {
@@ -169,7 +169,7 @@
     "type": "short-answer",
     "question": "부모 프로세스가 먼저 종료되어 발생하는 프로세스를 ___라 하며, Linux 커널은 이 프로세스의 부모를 ___(PID ___)로 재지정(reparenting)하여 처리한다.",
     "blankAnswers": [["고아 프로세스", "orphan process", "orphan"], ["init", "init 프로세스"], ["1"]],
-    "explanation": "부모 프로세스가 먼저 종료되면, 그 자식 프로세스들은 고아 프로세스가 됩니다. 커널의 forget_original_parent() 함수가 호출되어 고아 프로세스의 부모를 init 프로세스(PID 1, 또는 subreaper)로 변경합니다."
+    "explanation": "부모 프로세스가 먼저 종료되면, 그 자식 프로세스들은 고아 프로세스가 됩니다. 커널의 forget_original_parent() 함수가 호출되어 고아 프로세스의 부모를 init 프로세스(PID 1)로 변경합니다. 단, prctl(PR_SET_CHILD_SUBREAPER)로 subreaper를 설정한 프로세스가 있으면 init 대신 해당 subreaper가 새 부모가 됩니다."
   },
   {
     "id": "pm-013",
@@ -189,7 +189,7 @@
     "type": "short-answer",
     "question": "데몬 프로세스 생성 시, ___를 호출하여 자식을 생성한 뒤 부모를 종료하고, ___를 호출하여 새 세션을 생성해 제어 터미널로부터 분리하며, ___로 작업 디렉토리를 루트로 변경한다.",
     "blankAnswers": [["fork", "fork()"], ["setsid", "setsid()"], ["chdir(\"/\")", "chdir"]],
-    "explanation": "데몬 프로세스는 터미널과 분리되어 백그라운드에서 실행되는 프로세스입니다. 두 번의 fork와 setsid를 통해 제어 터미널로부터 완전히 분리되며, 작업 디렉토리를 루트로 변경하여 파일시스템 언마운트를 방해하지 않도록 합니다."
+    "explanation": "데몬 프로세스는 터미널과 분리되어 백그라운드에서 실행되는 프로세스입니다. 세 단계로 생성됩니다: 1) fork()로 자식을 생성한 뒤 부모를 종료하고, 2) setsid()로 새 세션을 만들어 제어 터미널로부터 분리하며, 3) chdir(\"/\")로 작업 디렉토리를 루트로 변경하여 파일시스템 언마운트를 방해하지 않도록 합니다. 실제로는 제어 터미널 재획득 방지를 위해 두 번의 fork를 수행하기도 합니다."
   },
   {
     "id": "pm-015",
@@ -325,7 +325,7 @@
     "codeLanguage": "c",
     "blankAnswers": [
       ["CLONE_VM"],
-      ["CLONE_FILES", "CLONE_FS"]
+      ["CLONE_FILES"]
     ],
     "explanation": "clone()에 CLONE_VM 플래그를 전달하면 부모와 자식이 동일한 가상 메모리 공간을 공유하게 됩니다. CLONE_THREAD는 같은 스레드 그룹에 속하게 하고, CLONE_SIGHAND는 시그널 핸들러를 공유합니다. CLONE_FILES는 파일 디스크립터 테이블을 공유합니다. 이 조합은 POSIX 스레드(pthread)의 내부 구현과 유사합니다."
   },

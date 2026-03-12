@@ -133,7 +133,7 @@
     "subcategory": "boot-integrity-updates",
     "difficulty": "고급",
     "type": "multiple-choice",
-    "question": "AVB 롤백 보호(rollback protection)가 실패하는 시나리오와 그 원인으로 올바른 것은?",
+    "question": "AVB 롤백 보호(rollback protection)의 정상적인 작동 방식(이전 버전 부팅 거부)으로 올바른 것은?",
     "options": [
       "롤백 인덱스가 RPMB에 저장되므로 eMMC 교체 시에도 항상 보호된다",
       "RPMB(Replay Protected Memory Block)에 저장된 롤백 인덱스가 vbmeta의 롤백 인덱스보다 큰 경우, 이전 버전 이미지의 부팅이 거부된다",
@@ -179,13 +179,13 @@
     "subcategory": "boot-integrity-updates",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "A/B 슬롯 메타데이터에서 부트로더가 관리하는 세 가지 핵심 속성은 현재 활성 슬롯을 나타내는 ___, 부팅 성공 여부를 나타내는 ___, 그리고 남은 부팅 재시도 횟수를 나타내는 ___이다.",
+    "question": "A/B 슬롯 메타데이터에서 부트로더가 각 슬롯에 대해 관리하는 세 가지 핵심 속성은 슬롯의 부팅 우선순위를 나타내는 ___, 부팅 성공 여부를 나타내는 ___, 그리고 남은 부팅 재시도 횟수를 나타내는 ___이다.",
     "blankAnswers": [
-      ["active slot", "active_slot", "current-slot", "활성 슬롯"],
-      ["boot_successful", "successful_boot", "boot successful"],
+      ["priority", "우선순위"],
+      ["successful_boot", "boot_successful", "boot successful"],
       ["tries_remaining", "retry count", "tries remaining", "retry_count"]
     ],
-    "explanation": "부트로더는 각 슬롯의 메타데이터를 관리합니다. active slot은 다음 부팅에 사용할 슬롯을 지정하고, boot_successful은 Android가 정상 부팅된 후 설정되며, tries_remaining은 부팅 실패 시 감소하여 0이 되면 슬롯이 unbootable로 표시됩니다."
+    "explanation": "부트로더는 각 슬롯의 메타데이터를 관리합니다. priority는 슬롯의 부팅 우선순위를 나타내며 높은 값이 우선됩니다. successful_boot는 Android가 정상 부팅된 후 설정되며, tries_remaining은 부팅 실패 시 감소하여 0이 되면 슬롯이 unbootable로 표시됩니다. 활성 슬롯은 priority가 가장 높은 슬롯으로 결정됩니다."
   },
   {
     "id": "bu-013",
@@ -225,11 +225,11 @@
     "type": "short-answer",
     "question": "Virtual A/B에서 OTA 적용 후 스냅샷의 상태는 세 단계로 전이된다: 스냅샷이 생성된 ___ 상태, 재부팅 후 스냅샷을 기존 파티션에 반영하는 ___ 상태, 그리고 반영이 완료되어 스냅샷이 삭제된 ___ 상태이다.",
     "blankAnswers": [
-      ["created", "Created", "생성"],
+      ["snapshotted", "Snapshotted", "created", "Created", "생성"],
       ["merging", "Merging", "머징", "병합 중"],
       ["none", "None", "완료", "idle"]
     ],
-    "explanation": "Virtual A/B의 스냅샷 생명주기는 created(OTA 기록 완료) → merging(재부팅 후 COW 데이터를 원본 파티션에 반영 중) → none(머지 완료, 스냅샷 정리)으로 전이됩니다. 머지 중 재부팅이 발생해도 스냅샷 메타데이터가 보존되어 머지를 이어서 진행할 수 있으므로 데이터 손실이 발생하지 않습니다."
+    "explanation": "Virtual A/B의 스냅샷 생명주기는 snapshotted(OTA 기록 완료, 스냅샷 생성됨) → merging(재부팅 후 COW 데이터를 원본 파티션에 반영 중) → none(머지 완료, 스냅샷 정리)으로 전이됩니다. 머지 중 재부팅이 발생해도 스냅샷 메타데이터가 보존되어 머지를 이어서 진행할 수 있으므로 데이터 손실이 발생하지 않습니다."
   },
   {
     "id": "bu-016",
@@ -268,9 +268,9 @@
     "blankAnswers": [
       ["무결성", "integrity"],
       ["기밀성", "confidentiality", "비밀성"],
-      ["보완", "상호보완", "독립", "complementary"]
+      ["보완", "상호보완", "complementary", "상호 보완"]
     ],
-    "explanation": "dm-verity 기반의 Verified Boot는 파티션의 무결성(integrity)을 검증하여 변조를 탐지하지만 데이터를 암호화하지는 않습니다. FBE(File-Based Encryption)는 사용자 데이터의 기밀성(confidentiality)을 보장하여 물리적 접근으로부터 데이터를 보호합니다. 이 둘은 서로 다른 보안 속성을 담당하는 보완적 계층입니다."
+    "explanation": "dm-verity 기반의 Verified Boot는 파티션의 무결성(integrity)을 검증하여 변조를 탐지하지만 데이터를 암호화하지는 않습니다. FBE(File-Based Encryption)는 사용자 데이터의 기밀성(confidentiality)을 보장하여 물리적 접근으로부터 데이터를 보호합니다. 이 둘은 서로 다른 보안 속성을 담당하는 상호 보완적(complementary) 계층으로, 함께 사용되어야 완전한 보안을 제공합니다."
   },
   {
     "id": "bu-019",
@@ -297,9 +297,9 @@
     "codeLanguage": "shell",
     "blankAnswers": [
       ["getvar"],
-      ["set_active", "--set-active="]
+      ["set_active"]
     ],
-    "explanation": "fastboot getvar current-slot 명령은 현재 활성 부팅 슬롯(a 또는 b)을 조회합니다. fastboot set_active b 명령은 다음 부팅 시 사용할 슬롯을 b로 변경하며, 이때 해당 슬롯의 tries_remaining이 초기화되고 active 플래그가 설정됩니다."
+    "explanation": "fastboot getvar current-slot 명령은 현재 활성 부팅 슬롯(a 또는 b)을 조회합니다. fastboot set_active b 명령은 다음 부팅 시 사용할 슬롯을 b로 변경하며, 이때 해당 슬롯의 tries_remaining이 초기화되고 priority가 최대값으로 설정됩니다. 참고: --set-active= 형식은 구버전 문법이며, 현재 표준 명령은 'fastboot set_active <slot>'입니다."
   },
   {
     "id": "bu-021",
@@ -315,7 +315,7 @@
       ["system_a", "system", "vendor_a"],
       ["lpdump"]
     ],
-    "explanation": "Dynamic Partition의 논리 파티션은 /dev/block/by-name/ 또는 /dev/block/mapper/ 경로에서 심볼릭 링크로 확인할 수 있습니다. lpdump 명령은 super 파티션의 LP 메타데이터를 파싱하여 논리 파티션의 이름, 크기, 그룹 정보 등을 출력합니다."
+    "explanation": "Dynamic Partition의 논리 파티션은 device-mapper를 통해 /dev/block/mapper/ 경로에 노드가 생성됩니다(예: /dev/block/mapper/system_a). /dev/block/by-name/은 물리 파티션의 심볼릭 링크가 위치하며, 논리 파티션은 device-mapper가 LP 메타데이터를 기반으로 생성합니다. lpdump 명령은 super 파티션의 LP 메타데이터를 파싱하여 논리 파티션의 이름, 크기, 그룹 정보 등을 출력합니다."
   },
   {
     "id": "bu-022",
@@ -331,7 +331,7 @@
       ["http://path/to/payload.bin", "file:///data/ota/payload.bin", "URL"],
       ["slot_suffix"]
     ],
-    "explanation": "update_engine_client는 Android의 A/B OTA 엔진과 상호작용하는 CLI 도구입니다. --follow 옵션으로 실시간 진행 상태를 추적할 수 있고, --payload 옵션으로 OTA 페이로드의 위치를 지정하여 업데이트를 시작합니다. ro.boot.slot_suffix 속성으로 현재 부팅된 슬롯(_a 또는 _b)을 확인할 수 있습니다."
+    "explanation": "update_engine_client는 Android의 A/B OTA 엔진과 상호작용하는 CLI 도구입니다. --follow 옵션으로 실시간 진행 상태를 추적할 수 있고, --payload 옵션으로 OTA 페이로드의 위치를 지정하여 업데이트를 시작합니다. HTTP URL을 사용할 경우 --headers='FILE_HASH=...\nFILE_SIZE=...\nMETADATA_HASH=...\nMETADATA_SIZE=...' 형식의 헤더 정보가 필요합니다. ro.boot.slot_suffix 속성으로 현재 부팅된 슬롯(_a 또는 _b)을 확인할 수 있습니다."
   },
   {
     "id": "bu-023",
@@ -355,7 +355,7 @@
     "subcategory": "boot-integrity-updates",
     "difficulty": "고급",
     "type": "code-fill",
-    "question": "다음은 lpdump과 lpmake를 사용하여 dynamic partition 메타데이터를 검사하고 논리 파티션을 추가하는 명령어입니다. 빈칸을 채우시오.",
+    "question": "다음은 lpdump과 lpadd를 사용하여 dynamic partition 메타데이터를 검사하고 논리 파티션을 추가하는 명령어입니다. 빈칸을 채우시오.",
     "codeTemplate": "# super 파티션의 슬롯 0 메타데이터 덤프\nlpdump --slot=___ /dev/block/by-name/super\n\n# 새 논리 파티션 추가 (lpadd 사용)\nadb shell lpadd /dev/block/by-name/super ___ ___",
     "codeLanguage": "shell",
     "blankAnswers": [
@@ -363,7 +363,7 @@
       ["my_partition", "partition_name", "new_partition"],
       ["group_name", "default", "main"]
     ],
-    "explanation": "lpdump --slot=0은 super 파티션의 첫 번째 슬롯에 저장된 LP 메타데이터를 읽어 논리 파티션 목록, 크기, 그룹 할당 정보를 출력합니다. lpadd는 런타임에 새 논리 파티션을 super 파티션에 추가하는 명령으로, 파티션 이름과 소속 그룹을 지정해야 합니다. 이러한 도구들은 dynamic partition 디버깅에 필수적입니다."
+    "explanation": "lpdump --slot=0은 super 파티션의 첫 번째 슬롯에 저장된 LP 메타데이터를 읽어 논리 파티션 목록, 크기, 그룹 할당 정보를 출력합니다. lpadd는 런타임에 새 논리 파티션을 super 파티션에 추가하는 명령으로, 파티션 이름과 소속 그룹을 지정해야 합니다. 참고로 lpmake는 빌드 시 super 이미지를 생성하는 호스트 도구이고, lpadd는 디바이스에서 런타임 LP 메타데이터를 수정하는 도구입니다."
   },
   {
     "id": "bu-025",
@@ -378,8 +378,8 @@
       ["ro.boot.verifiedbootstate"],
       ["ro.boot.slot_suffix"],
       ["dmesg"],
-      ["ro.boot.veritymode", "sys.boot_completed"]
+      ["sys.boot_completed", "ro.boot.veritymode"]
     ],
-    "explanation": "부팅 실패 진단 시 ro.boot.verifiedbootstate로 AVB 검증 상태를, ro.boot.slot_suffix로 현재 활성 슬롯을 확인합니다. dmesg로 커널 로그에서 dm-verity 오류를 필터링하고, ro.boot.veritymode나 sys.boot_completed로 verity 모드와 부팅 완료 상태를 종합적으로 판단하여 실패 원인을 좁혀나갈 수 있습니다."
+    "explanation": "부팅 실패 진단 시 ro.boot.verifiedbootstate로 AVB 검증 상태를, ro.boot.slot_suffix로 현재 활성 슬롯을 확인합니다. dmesg로 커널 로그에서 dm-verity 오류를 필터링하고, sys.boot_completed(부팅 성공 시 1) 또는 ro.boot.veritymode(verity 동작 모드)로 부팅 완료 상태를 종합적으로 판단하여 실패 원인을 좁혀나갈 수 있습니다."
   }
 ]

@@ -101,7 +101,7 @@
     "codeTemplate": "# SELinux 모드 확인\nadb shell ___\n\n# 현재 실행 중인 프로세스의 보안 컨텍스트 확인\nadb shell ps -Z",
     "codeLanguage": "shell",
     "blankAnswers": [
-      ["getenforce", "getenforce"]
+      ["getenforce"]
     ],
     "explanation": "getenforce 명령은 현재 SELinux의 모드(Enforcing, Permissive, Disabled)를 출력합니다. ps -Z 명령은 각 프로세스의 SELinux 보안 컨텍스트를 함께 표시합니다. Android에서는 adb shell을 통해 이 명령들을 실행할 수 있습니다."
   },
@@ -232,13 +232,12 @@
     "difficulty": "중급",
     "type": "code-fill",
     "question": "SELinux 정책에서 init이 myservice_exec 타입의 파일을 실행할 때 myservice 도메인으로 전환되도록 하는 규칙을 완성하시오.",
-    "codeTemplate": "# myservice 도메인 정의\ntype myservice, domain;\ntype myservice_exec, exec_type, file_type;\n\n# init에서 myservice로의 도메인 전환\n___ myservice myservice_exec:file ___;\n\n# 도메인 전환 허용\nallow init myservice:process transition;",
+    "codeTemplate": "# myservice 도메인 정의\ntype myservice, domain;\ntype myservice_exec, exec_type, file_type;\n\n# init에서 myservice로의 도메인 전환 (매크로 사용)\n___(myservice)",
     "codeLanguage": "te",
     "blankAnswers": [
-      ["domain_auto_trans(init,", "init_daemon_domain(myservice)"],
-      ["entrypoint", "execute"]
+      ["init_daemon_domain"]
     ],
-    "explanation": "도메인 전환에는 여러 규칙이 필요합니다. domain_auto_trans 매크로 또는 수동으로 type_transition, allow(execute), allow(entrypoint) 규칙을 조합합니다. entrypoint 권한은 해당 실행 파일이 새 도메인의 진입점임을 명시하며, 이를 통해 init이 myservice_exec 파일을 실행할 때 자동으로 myservice 도메인으로 전환됩니다."
+    "explanation": "init_daemon_domain(myservice) 매크로는 init이 myservice_exec 파일을 실행할 때 myservice 도메인으로 자동 전환되도록 하는 모든 규칙(type_transition, allow execute, allow entrypoint, allow transition)을 한 번에 설정합니다. 이 매크로는 Android SELinux 정책에서 init이 관리하는 데몬 서비스의 도메인 전환에 표준적으로 사용됩니다."
   },
   {
     "id": "se-017",
@@ -250,10 +249,10 @@
     "codeTemplate": "# 커스텀 센서 디바이스 파일에 보안 컨텍스트 할당\n/dev/custom_sensor  u:object_r:___:s0\n\n# 커스텀 서비스 바이너리에 보안 컨텍스트 할당\n/system/bin/custom_service  u:object_r:___:s0",
     "codeLanguage": "text",
     "blankAnswers": [
-      ["custom_sensor_device", "sensor_device"],
+      ["custom_sensor_device"],
       ["custom_service_exec", "custom_service_exec"]
     ],
-    "explanation": "file_contexts에서 디바이스 파일은 일반적으로 *_device 타입을, 실행 파일은 *_exec 타입을 부여합니다. 이 타입들은 .te 파일에서 별도로 선언(type custom_sensor_device, dev_type;)되어야 하며, SELinux 정책에서 이 타입들에 대한 접근 규칙을 정의합니다."
+    "explanation": "file_contexts에서 디바이스 파일은 일반적으로 *_device 타입을, 실행 파일은 *_exec 타입을 부여합니다. 이 예시의 custom_sensor_device와 custom_service_exec는 벤더가 정의하는 커스텀 타입으로, .te 파일에서 별도로 선언(예: type custom_sensor_device, dev_type;)되어야 하며, SELinux 정책에서 이 타입들에 대한 접근 규칙을 정의합니다. AOSP에는 sensors_device 등 표준 타입이 있지만, 벤더 고유 디바이스는 별도 타입을 정의하는 것이 일반적입니다."
   },
   {
     "id": "se-018",
@@ -336,14 +335,14 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "SELinux denial 로그를 분석하여 정책을 생성하는 과정을 완성하시오.",
-    "codeTemplate": "# 1. SELinux denial 로그 수집\nadb shell dmesg | grep ___\n\n# 2. denial 로그에서 allow 규칙 자동 생성\nadb shell dmesg | grep avc | ___ -p policy\n\n# 3. 생성된 규칙을 .te 파일에 추가 후 정책 다시 빌드\nmake ___ -j$(nproc)",
+    "codeTemplate": "# 1. SELinux denial 로그 수집\nadb shell dmesg | grep ___\n\n# 2. denial 로그에서 allow 규칙 자동 생성\nadb shell dmesg | grep avc | ___ -p out/target/product/<device>/root/sepolicy\n\n# 3. 생성된 규칙을 .te 파일에 추가 후 정책 다시 빌드\nm ___ -j$(nproc)",
     "codeLanguage": "shell",
     "blankAnswers": [
       ["avc", "\"avc: denied\"", "avc:"],
       ["audit2allow"],
       ["sepolicy", "selinux_policy"]
     ],
-    "explanation": "SELinux 정책 개발 워크플로는 다음과 같습니다: (1) dmesg나 logcat에서 'avc: denied' 메시지를 검색하여 거부된 접근을 확인합니다. (2) audit2allow 도구로 해당 로그를 분석하여 필요한 allow 규칙을 생성합니다. (3) 생성된 규칙을 검토/수정한 후 .te 파일에 추가하고 정책을 다시 빌드합니다."
+    "explanation": "SELinux 정책 개발 워크플로는 다음과 같습니다: (1) dmesg나 logcat에서 'avc: denied' 메시지를 검색하여 거부된 접근을 확인합니다. (2) audit2allow 도구에 -p 옵션으로 현재 정책 파일 경로(예: out/target/product/<device>/root/sepolicy)를 지정하여 필요한 allow 규칙을 생성합니다. (3) 생성된 규칙을 검토/수정한 후 .te 파일에 추가하고 'm selinux_policy' 또는 'm sepolicy'로 정책을 다시 빌드합니다."
   },
   {
     "id": "se-024",
@@ -368,13 +367,13 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "untrusted_app 도메인이 시스템 핵심 리소스에 접근하는 것을 금지하는 neverallow 규칙을 완성하시오.",
-    "codeTemplate": "# untrusted_app이 system_data_file에 직접 쓰기 금지\n___ untrusted_app system_data_file:file { write append };\n\n# untrusted_app이 exec_type 파일을 실행하는 것을 금지\nneverallow untrusted_app ___:file execute;\n\n# untrusted_app이 커널 모듈을 로드하는 것을 금지\nneverallow untrusted_app self:capability ___;\n\n# untrusted_app이 다른 앱의 데이터에 직접 접근하는 것을 금지\nneverallow untrusted_app { app_data_file -self }:file { read write };",
+    "codeTemplate": "# untrusted_app이 system_data_file에 직접 쓰기 금지\n___ untrusted_app system_data_file:file { write append };\n\n# untrusted_app이 exec_type 파일을 실행하는 것을 금지\nneverallow untrusted_app ___:file execute;\n\n# untrusted_app이 커널 모듈을 로드하는 것을 금지\nneverallow untrusted_app self:capability ___;",
     "codeLanguage": "te",
     "blankAnswers": [
       ["neverallow"],
       ["exec_type", "{ exec_type }"],
       ["sys_module"]
     ],
-    "explanation": "neverallow 규칙은 Android 보안의 최후 방어선입니다. untrusted_app(서드파티 앱)이 system_data_file에 쓰거나, 실행 파일을 직접 실행하거나, 커널 모듈을 로드하는 것은 심각한 보안 위협이므로 절대 허용되어서는 안 됩니다. sys_module capability는 커널 모듈 로드 권한이며, 이를 neverallow로 금지하여 커널 무결성을 보호합니다."
+    "explanation": "neverallow 규칙은 Android 보안의 최후 방어선입니다. untrusted_app(서드파티 앱)이 system_data_file에 쓰거나, 실행 파일을 직접 실행하거나, 커널 모듈을 로드하는 것은 심각한 보안 위협이므로 절대 허용되어서는 안 됩니다. sys_module capability는 커널 모듈 로드 권한이며, 이를 neverallow로 금지하여 커널 무결성을 보호합니다. 참고로 앱 간 데이터 접근 제한은 Android의 MLS/MCS(Multi-Level/Category Security) 정책과 levelFrom=user 설정을 통해 각 앱에 고유한 보안 레벨(예: s0:c512,c768)을 부여하여 구현됩니다."
   }
 ]

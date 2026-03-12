@@ -109,7 +109,7 @@
       "simpleperf로 Binder 드라이버의 CPU 사용량을 프로파일링한다"
     ],
     "answer": 1,
-    "explanation": "Binder 스레드 풀이 고갈되면 다른 서비스의 Binder 호출이 대기하게 되어 연쇄적인 지연이 발생합니다. dumpsys activity service를 통해 서비스별 Binder 스레드 사용 현황을 확인하고, Perfetto의 binder 데이터 소스로 트랜잭션의 지연 시간과 호출 관계를 시각적으로 분석할 수 있습니다."
+    "explanation": "Binder 스레드 풀이 고갈되면 다른 서비스의 Binder 호출이 대기하게 되어 연쇄적인 지연이 발생합니다. 'dumpsys <service_name>'으로 개별 서비스의 상태를 확인하고, /dev/binderfs/binder_logs/ 또는 /sys/kernel/debug/binder/에서 프로세스별 Binder 스레드 풀 사용 현황과 트랜잭션 대기열을 확인할 수 있습니다. Perfetto의 binder 데이터 소스로 트랜잭션의 지연 시간과 호출 관계를 시각적으로 분석할 수 있습니다."
   },
   {
     "id": "dp-008",
@@ -157,7 +157,7 @@
       "simpleperf로 커널 부팅 중 CPU 프로파일링을 수행한다"
     ],
     "answer": 1,
-    "explanation": "Perfetto는 부팅 시점부터 트레이스를 수집할 수 있어(ro.trace.enabled, persist.debug.atrace.boottrace), init의 서비스 시작 순서, Zygote의 클래스 프리로딩, system_server의 서비스 초기화, launcher의 첫 프레임 표시까지 전체 부팅 과정을 시각적으로 분석할 수 있습니다. 이를 통해 크리티컬 패스의 병목을 정확히 식별할 수 있습니다."
+    "explanation": "Perfetto는 부팅 시점부터 트레이스를 수집할 수 있습니다. 부트 트레이스 설정은 persist.debug.perfetto.boottrace 속성이나 /data/misc/perfetto-traces/boottrace.pbtxt 설정 파일을 통해 구성합니다(기존의 persist.debug.atrace.boottrace는 deprecated). init의 서비스 시작 순서, Zygote의 클래스 프리로딩, system_server의 서비스 초기화, launcher의 첫 프레임 표시까지 전체 부팅 과정을 시각적으로 분석할 수 있습니다."
   },
   {
     "id": "dp-011",
@@ -195,11 +195,11 @@
     "type": "short-answer",
     "question": "ANR 발생 시 시스템이 자동으로 생성하는 스레드 덤프 파일의 경로는 ___이며, 이 파일에서 메인 스레드의 상태가 ___이면 락을 기다리는 중임을 의미하고, ___이면 네이티브 코드를 실행 중임을 나타낸다.",
     "blankAnswers": [
-      ["/data/anr/traces.txt", "data/anr/traces.txt"],
+      ["/data/anr/traces.txt", "/data/anr/anr_*", "data/anr/traces.txt", "/data/anr/"],
       ["BLOCKED", "blocked"],
       ["NATIVE", "native", "Native"]
     ],
-    "explanation": "traces.txt에는 ANR 발생 시점의 모든 스레드 상태가 기록됩니다. BLOCKED 상태는 synchronized 블록이나 ReentrantLock에서 다른 스레드가 소유한 락을 기다리는 것이고, NATIVE 상태는 JNI를 통해 네이티브 코드를 실행 중인 것입니다. WAITING은 Object.wait()이나 Thread.sleep()에 의한 대기를 의미합니다."
+    "explanation": "ANR 스레드 덤프는 /data/anr/ 디렉터리에 저장됩니다. 최신 Android에서는 /data/anr/anr_* 패턴의 개별 파일로 저장되며(이전에는 traces.txt 단일 파일 사용). 이 파일에는 ANR 발생 시점의 모든 스레드 상태가 기록됩니다. BLOCKED 상태는 synchronized 블록이나 ReentrantLock에서 다른 스레드가 소유한 락을 기다리는 것이고, NATIVE 상태는 JNI를 통해 네이티브 코드를 실행 중인 것입니다. WAITING은 Object.wait()이나 Thread.sleep()에 의한 대기를 의미합니다."
   },
   {
     "id": "dp-014",
@@ -207,13 +207,13 @@
     "subcategory": "platform-debugging-performance",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Binder 성능 문제를 진단할 때, /proc/binder/___에서 각 프로세스의 Binder 노드와 참조 수를 확인하고, /proc/binder/___에서 진행 중인 트랜잭션의 대기열을 확인하며, Binder 스레드 풀의 기본 최대 스레드 수는 ___개이다.",
+    "question": "Binder 성능 문제를 진단할 때, binderfs 또는 debugfs의 ___에서 각 프로세스의 Binder 노드와 참조 수를 확인하고, ___에서 진행 중인 트랜잭션의 대기열을 확인하며, Binder 스레드 풀의 기본 최대 스레드 수는 ___개이다.",
     "blankAnswers": [
       ["stats"],
       ["transactions"],
       ["15", "16"]
     ],
-    "explanation": "/proc/binder/stats는 프로세스별 Binder 노드, 참조, 트랜잭션 통계를 보여주고, /proc/binder/transactions는 현재 진행 중인 트랜잭션의 상세 정보를 표시합니다. Binder 스레드 풀의 기본 최대 크기는 15개(+메인 Binder 스레드 1개)이며, 모든 스레드가 사용 중이면 후속 호출이 블로킹됩니다."
+    "explanation": "최신 Android에서는 Binder 디버그 정보가 /dev/binderfs/binder_logs/ 또는 /sys/kernel/debug/binder/ 경로에 위치합니다(기존 /proc/binder/는 deprecated). stats 파일에서 프로세스별 Binder 노드, 참조, 트랜잭션 통계를 확인하고, transactions 파일에서 현재 진행 중인 트랜잭션의 상세 정보를 확인할 수 있습니다. Binder 스레드 풀의 기본 최대 크기는 15개(+메인 Binder 스레드 1개)이며, 모든 스레드가 사용 중이면 후속 호출이 블로킹됩니다."
   },
   {
     "id": "dp-015",
@@ -221,13 +221,13 @@
     "subcategory": "platform-debugging-performance",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Perfetto 트레이스 설정에서 linux.ftrace의 ___데이터 소스는 CPU 스케줄링 이벤트를 수집하고, ___데이터 소스는 CPU 주파수 변화를 추적하며, ___데이터 소스는 앱과 프레임워크의 atrace 마커를 캡처한다.",
+    "question": "Perfetto 트레이스 설정에서 linux.ftrace의 ___이벤트 그룹은 CPU 스케줄링 이벤트를 수집하고, ___이벤트 그룹은 CPU 주파수 변화를 추적하며, ___카테고리는 앱과 프레임워크의 트레이스 마커를 캡처한다.",
     "blankAnswers": [
       ["sched", "sched/sched_switch"],
       ["power", "power/cpu_frequency", "freq"],
       ["atrace"]
     ],
-    "explanation": "Perfetto는 ftrace 이벤트를 데이터 소스로 사용하여 다양한 커널 수준 정보를 수집합니다. sched 카테고리(sched_switch, sched_wakeup)는 프로세스 스케줄링을, power 카테고리(cpu_frequency, cpu_idle)는 전력 상태 변화를 추적합니다. atrace 카테고리는 Android의 Trace.beginSection()/endSection() 마커를 수집하여 앱과 프레임워크 수준의 성능을 분석합니다."
+    "explanation": "Perfetto의 linux.ftrace 데이터 소스 내에서 ftrace_events로 커널 이벤트 그룹을 지정하고, atrace_categories로 Android 트레이스 카테고리를 지정합니다. sched 이벤트 그룹(sched_switch, sched_wakeup)은 프로세스 스케줄링을, power 이벤트 그룹(cpu_frequency, cpu_idle)은 전력 상태 변화를 추적합니다. atrace 카테고리(am, view, gfx 등)는 Android의 Trace.beginSection()/endSection() 마커를 수집하여 앱과 프레임워크 수준의 성능을 분석합니다."
   },
   {
     "id": "dp-016",
@@ -239,7 +239,7 @@
     "blankAnswers": [
       ["signal", "Signal"],
       ["Abort message", "abort message", "abort_message"],
-      ["memory map", "memory near", "maps"]
+      ["memory map", "maps", "memory maps"]
     ],
     "explanation": "tombstone의 signal 필드는 크래시 원인이 된 시그널(SIGSEGV, SIGABRT, SIGBUS 등)과 폴트 주소를 제공합니다. Abort message는 __android_log_assert나 LOG_ALWAYS_FATAL 등으로 전달된 에러 메시지로, 크래시 원인을 직접적으로 알려줍니다. memory map 섹션은 모든 매핑된 영역의 주소 범위, 권한, 파일 경로를 보여주어 크래시 주소가 어느 라이브러리에 속하는지 파악할 수 있게 합니다."
   },
@@ -308,13 +308,13 @@
     "difficulty": "중급",
     "type": "code-fill",
     "question": "cmd와 dumpsys를 사용하여 현재 실행 중인 프로세스 정보와 포그라운드 액티비티를 확인하는 명령을 완성하시오.",
-    "codeTemplate": "# 현재 실행 중인 앱 프로세스 목록과 oom_score_adj 확인\nadb shell cmd activity ___\n\n# 현재 포그라운드에 있는 액티비티와 태스크 정보\nadb shell dumpsys activity ___",
+    "codeTemplate": "# 현재 실행 중인 앱 프로세스 목록과 oom_score_adj 확인\nadb shell dumpsys activity ___\n\n# 현재 포그라운드에 있는 액티비티와 태스크 정보\nadb shell dumpsys activity ___",
     "codeLanguage": "shell",
     "blankAnswers": [
-      ["processes", "get-processes"],
-      ["top", "activities"]
+      ["processes"],
+      ["top"]
     ],
-    "explanation": "cmd activity processes는 실행 중인 모든 앱 프로세스의 목록과 oom_score_adj 값을 표시하여 LMKD의 종료 우선순위를 파악할 수 있습니다. dumpsys activity top은 현재 포그라운드 액티비티의 상세 정보(View 계층, Fragment 상태 등)를 출력합니다. 이를 통해 현재 시스템에서 어떤 앱이 활성화되어 있는지 파악할 수 있습니다."
+    "explanation": "'dumpsys activity processes'는 실행 중인 모든 앱 프로세스의 목록과 oom_score_adj 값, LRU 리스트 등을 표시하여 LMKD의 종료 우선순위를 파악할 수 있습니다. 'dumpsys activity top'은 현재 포그라운드 액티비티의 상세 정보(View 계층, Fragment 상태 등)를 출력합니다. 참고로 'dumpsys activity activities'는 전체 액티비티 스택과 태스크 목록을 보여주며 용도가 다릅니다."
   },
   {
     "id": "dp-022",
@@ -329,7 +329,7 @@
       ["10"],
       ["ftrace"]
     ],
-    "explanation": "Perfetto는 protobuf 기반의 설정 파일을 사용하여 트레이스를 구성합니다. -t 옵션으로 트레이스 시간을, -o 옵션으로 출력 파일 경로를 지정합니다. linux.ftrace 데이터 소스는 ftrace_events로 커널 이벤트를, atrace_categories로 Android 프레임워크의 트레이스 카테고리를 수집합니다. RING_BUFFER 정책은 버퍼가 가득 차면 오래된 데이터를 덮어씁니다."
+    "explanation": "Perfetto는 protobuf 기반의 설정 파일을 사용하여 트레이스를 구성합니다. -t 옵션으로 트레이스 시간을, -o 옵션으로 출력 파일 경로를 지정합니다. 설정을 텍스트 형식(pbtxt)으로 전달할 때는 -c - 또는 --txt 플래그를 사용할 수 있습니다. linux.ftrace 데이터 소스는 ftrace_events로 커널 이벤트를, atrace_categories로 Android 프레임워크의 트레이스 카테고리를 수집합니다. RING_BUFFER 정책은 버퍼가 가득 차면 오래된 데이터를 덮어씁니다."
   },
   {
     "id": "dp-023",
@@ -353,14 +353,14 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "debuggerd를 사용하여 실행 중인 프로세스의 백트레이스를 수집하고, tombstone 파일에서 크래시 정보를 파싱하는 명령을 완성하시오.",
-    "codeTemplate": "# 실행 중인 프로세스의 백트레이스 수집 (크래시 없이)\nadb shell debuggerd -b ___\n\n# tombstone에서 크래시 시그널과 백트레이스 추출\nadb shell cat /data/tombstones/tombstone_00 | grep -A 5 \"___\"\n\n# addr2line으로 주소를 소스 코드 위치로 변환\naddr2line -C -f -e symbols/system/lib64/libexample.so ___",
+    "codeTemplate": "# 실행 중인 프로세스의 백트레이스 수집 (크래시 없이)\nadb shell debuggerd -b ___\n\n# tombstone에서 크래시 시그널과 백트레이스 추출\nadb shell cat /data/tombstones/tombstone_00 | grep -A 20 \"___\"\n\n# addr2line으로 주소를 소스 코드 위치로 변환\naddr2line -C -f -e symbols/system/lib64/libexample.so ___",
     "codeLanguage": "shell",
     "blankAnswers": [
       ["<pid>", "PID", "$PID", "${PID}"],
       ["signal", "Signal"],
-      ["0x"]
+      ["0x1234", "0x", "0xADDRESS"]
     ],
-    "explanation": "debuggerd -b <pid>는 대상 프로세스를 종료하지 않고 현재 스레드들의 백트레이스를 수집합니다. tombstone 파일에서 signal 섹션은 크래시 원인 시그널과 폴트 주소를 포함합니다. addr2line은 바이너리의 심볼 파일과 크래시 주소를 매칭하여 소스 코드의 파일명과 줄 번호를 알려주어, 크래시 위치를 정확히 특정할 수 있게 합니다."
+    "explanation": "debuggerd -b <pid>는 대상 프로세스를 종료하지 않고 현재 스레드들의 백트레이스를 수집합니다. tombstone 파일에서 'signal' 섹션은 크래시 원인 시그널과 폴트 주소를 포함하며, grep -A 20으로 해당 섹션과 이후 백트레이스를 추출합니다. addr2line에는 실제 크래시 주소(예: 0x1234)를 전달해야 하며, -C 옵션으로 C++ 심볼을 demangling하고 -f 옵션으로 함수명을 출력합니다."
   },
   {
     "id": "dp-025",
@@ -376,6 +376,6 @@
       ["sys_stats"],
       ["true"]
     ],
-    "explanation": "binder/binder_transaction ftrace 이벤트는 Binder 트랜잭션의 시작과 완료를 추적하여 IPC 지연을 분석합니다. linux.sys_stats 데이터 소스는 /proc/meminfo, /proc/vmstat 등 시스템 메모리와 가상 메모리 통계를 주기적으로 수집합니다. linux.process_stats는 프로세스별 CPU, 메모리 사용량을 추적하며, scan_all_processes_on_start를 true로 설정하면 트레이스 시작 시 모든 프로세스 정보를 캡처합니다."
+    "explanation": "binder/binder_transaction ftrace 이벤트는 Binder 트랜잭션의 시작과 완료를 추적하여 IPC 지연을 분석합니다. linux.sys_stats 데이터 소스는 /proc/meminfo, /proc/vmstat 등 시스템 메모리와 가상 메모리 통계를 주기적으로 수집하며, sys_stats_config 블록에서 meminfo_period_ms, vmstat_period_ms, stat_period_ms 등으로 수집 주기를 설정할 수 있습니다. linux.process_stats는 프로세스별 CPU, 메모리 사용량을 추적하며, scan_all_processes_on_start를 true로 설정하면 트레이스 시작 시 모든 프로세스 정보를 캡처합니다."
   }
 ]

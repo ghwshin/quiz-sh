@@ -55,7 +55,7 @@
     "type": "short-answer",
     "question": "Android의 4대 컴포넌트 중 UI 화면을 제공하는 것은 ___이고, 백그라운드 작업을 수행하는 것은 ___이며, 브로드캐스트 메시지를 수신하는 것은 ___, 앱 간 데이터 공유를 위한 것은 ___이다.",
     "blankAnswers": [["Activity", "액티비티"], ["Service", "서비스"], ["BroadcastReceiver", "브로드캐스트 리시버"], ["ContentProvider", "콘텐트 프로바이더"]],
-    "explanation": "이 4대 컴포넌트는 Android 앱의 핵심 구성 요소이며, 모두 AndroidManifest.xml에 선언해야 합니다. 각 컴포넌트는 독립적인 생명주기를 가지며, Intent를 통해 활성화될 수 있습니다(ContentProvider 제외, ContentResolver를 통해 접근)."
+    "explanation": "이 4대 컴포넌트는 Android 앱의 핵심 구성 요소입니다. Activity, Service, ContentProvider는 AndroidManifest.xml에 선언해야 하지만, BroadcastReceiver는 매니페스트에 선언하는 정적 등록 외에도 registerReceiver()를 사용한 동적 등록이 가능합니다. 각 컴포넌트는 독립적인 생명주기를 가지며, Intent를 통해 활성화될 수 있습니다(ContentProvider 제외, ContentResolver를 통해 접근)."
   },
   {
     "id": "as-005",
@@ -128,7 +128,7 @@
       "singleInstance"
     ],
     "answer": 2,
-    "explanation": "singleTask 모드에서는 시스템이 새 태스크를 생성하고 해당 Activity를 루트에 배치합니다. 이미 다른 태스크에 해당 Activity의 인스턴스가 존재하면 새 인스턴스를 생성하지 않고, 해당 태스크를 포그라운드로 가져온 후 onNewIntent()를 호출합니다. 그 위에 있던 다른 Activity들은 제거됩니다."
+    "explanation": "singleTask 모드에서는 해당 Activity의 인스턴스가 시스템 전체에 하나만 존재합니다. 이미 어떤 태스크에 해당 Activity 인스턴스가 존재하면 새 인스턴스를 생성하지 않고, 해당 태스크를 포그라운드로 가져온 후 onNewIntent()를 호출합니다. 그 Activity 위에 있던 다른 Activity들은 제거됩니다. singleTask가 반드시 새 태스크를 생성하는 것은 아니며, taskAffinity가 기존 태스크와 같으면 해당 태스크에 배치될 수 있습니다."
   },
   {
     "id": "as-010",
@@ -185,7 +185,7 @@
     "difficulty": "중급",
     "type": "short-answer",
     "question": "Started Service는 ___()로 시작되어 ___() 콜백이 호출되고 ___()로 직접 중지해야 하며, Bound Service는 ___()로 바인딩되어 ___() 콜백에서 IBinder를 반환한다.",
-    "blankAnswers": [["startService"], ["onStartCommand"], ["stopSelf"], ["bindService"], ["onBind"]],
+    "blankAnswers": [["startService"], ["onStartCommand"], ["stopSelf", "stopService"], ["bindService"], ["onBind"]],
     "explanation": "하나의 Service가 Started와 Bound 두 가지 방식을 동시에 지원할 수도 있습니다. 이 경우 모든 클라이언트가 바인딩을 해제하고 stopSelf()나 stopService()가 호출되어야 Service가 소멸됩니다."
   },
   {
@@ -293,9 +293,9 @@
     "subcategory": "activity-service",
     "difficulty": "고급",
     "type": "short-answer",
-    "question": "Android 프로세스 우선순위는 높은 순서대로 ___ Process, ___ Process, ___ Process, Cached Process, Empty Process의 5단계로 분류된다.",
+    "question": "Android 공식 문서에 따르면 프로세스 우선순위는 높은 순서대로 ___ Process, ___ Process, ___ Process, Cached Process의 4단계로 분류된다.",
     "blankAnswers": [["Foreground", "포그라운드"], ["Visible", "비저블"], ["Service", "서비스"]],
-    "explanation": "시스템은 메모리가 부족할 때 우선순위가 낮은 프로세스부터 종료(kill)합니다. Foreground Service를 사용하면 프로세스의 우선순위를 높여 시스템에 의한 종료를 방지할 수 있습니다. 이 우선순위 체계는 Android의 메모리 관리(LMK - Low Memory Killer)와 직접 연관됩니다."
+    "explanation": "Android 공식 문서에서는 프로세스를 Foreground, Visible, Service, Cached의 4단계로 분류합니다. Cached Process는 현재 활성 컴포넌트가 없는 프로세스로, LRU 리스트로 관리됩니다. 시스템은 메모리가 부족할 때 우선순위가 낮은 프로세스부터 종료(kill)합니다. Foreground Service를 사용하면 프로세스의 우선순위를 높여 시스템에 의한 종료를 방지할 수 있습니다."
   },
   {
     "id": "as-022",
@@ -330,7 +330,7 @@
       ["startForeground"],
       ["START_STICKY", "START_NOT_STICKY", "START_REDELIVER_INTENT"]
     ],
-    "explanation": "startForeground()를 호출하여 Service를 Foreground 상태로 전환하고 알림을 표시합니다. onStartCommand()의 반환값은 Service가 시스템에 의해 종료된 후 재생성 동작을 결정합니다. START_STICKY는 Service를 재생성하고, START_NOT_STICKY는 재생성하지 않으며, START_REDELIVER_INTENT는 마지막 Intent와 함께 재생성합니다."
+    "explanation": "startForeground()를 호출하여 Service를 Foreground 상태로 전환하고 알림을 표시합니다. onStartCommand()의 반환값은 Service가 시스템에 의해 종료된 후 재생성 동작을 결정합니다. START_STICKY는 Service를 재생성하고, START_NOT_STICKY는 재생성하지 않으며, START_REDELIVER_INTENT는 마지막 Intent와 함께 재생성합니다. 세 값 모두 유효한 반환값이므로 어떤 값이든 정답으로 인정됩니다."
   },
   {
     "id": "as-025",

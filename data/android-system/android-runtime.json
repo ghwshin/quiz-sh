@@ -55,7 +55,7 @@
     "type": "short-answer",
     "question": "ART는 ___ GC를 도입하여 GC ___을 크게 줄이고, 메모리 ___을 지원하여 단편화 문제를 해결했다.",
     "blankAnswers": [["Concurrent Copying", "CC"], ["pause time", "중단 시간"], ["compaction", "압축"]],
-    "explanation": "Dalvik의 GC는 앱 실행을 완전히 멈추는(stop-the-world) 시간이 길어 UI 버벅임(jank)의 원인이 되었습니다. ART는 Concurrent Copying GC를 통해 객체를 동시에 복사하면서 compaction을 수행하고, GC pause를 최소화하여 부드러운 사용자 경험을 제공합니다."
+    "explanation": "Dalvik의 GC는 앱 실행을 완전히 멈추는(stop-the-world) 시간이 길어 UI 버벅임(jank)의 원인이 되었습니다. ART는 초기(Android 5.0)에는 Concurrent Mark Sweep(CMS) GC를 사용했으며, Android 8.0(Oreo)에서 Concurrent Copying(CC) GC를 도입하여 객체를 동시에 복사하면서 compaction을 수행하고, GC pause를 최소화하여 부드러운 사용자 경험을 제공합니다."
   },
   {
     "id": "ar-005",
@@ -65,7 +65,7 @@
     "type": "short-answer",
     "question": "___는 ART에서 AOT 컴파일을 수행하는 도구로, ___ 파일을 입력으로 받아 네이티브 코드를 포함하는 ___ 파일을 출력한다.",
     "blankAnswers": [["dex2oat"], ["DEX"], ["OAT"]],
-    "explanation": "dex2oat는 DEX 바이트코드를 타겟 디바이스의 아키텍처(ARM, ARM64, x86 등)에 맞는 네이티브 코드로 컴파일합니다. 컴파일 수준(speed, speed-profile, quicken 등)을 지정할 수 있으며, 프로파일 정보를 활용한 profile-guided compilation도 지원합니다."
+    "explanation": "dex2oat는 DEX 바이트코드를 타겟 디바이스의 아키텍처(ARM, ARM64, x86 등)에 맞는 네이티브 코드로 컴파일합니다. 입력으로는 DEX 파일 외에도 APK나 JAR 파일(내부에 DEX를 포함)을 직접 받을 수 있습니다. 컴파일 수준(speed, speed-profile, verify 등)을 지정할 수 있으며, 프로파일 정보를 활용한 profile-guided compilation도 지원합니다."
   },
   {
     "id": "ar-006",
@@ -77,7 +77,7 @@
     "codeTemplate": "# 앱의 현재 컴파일 상태 확인\nadb shell dumpsys package com.example.app | grep -i ___\n\n# 앱을 speed 프로필로 강제 AOT 컴파일\nadb shell cmd package compile -m ___ -f com.example.app",
     "codeLanguage": "shell",
     "blankAnswers": [
-      ["dexopt", "dex2oat", "compile"],
+      ["dexopt"],
       ["speed"]
     ],
     "explanation": "dumpsys package에서 dexopt 관련 정보를 grep하면 앱의 컴파일 상태(status, reason, compiler-filter 등)를 확인할 수 있습니다. 'cmd package compile' 명령으로 컴파일 모드를 지정하여 강제 컴파일할 수 있으며, -m speed는 전체 메서드를 AOT 컴파일하는 가장 적극적인 모드입니다."
@@ -93,7 +93,7 @@
     "codeLanguage": "java",
     "blankAnswers": [
       ["Zygote"],
-      ["forkAndSpecialize", "fork"]
+      ["forkAndSpecialize"]
     ],
     "explanation": "Zygote는 Android 시스템의 모든 앱 프로세스의 부모 프로세스입니다. Zygote.forkAndSpecialize()를 호출하여 Linux fork() 시스템 콜을 통해 새 프로세스를 생성합니다. fork로 생성된 자식 프로세스는 Zygote가 미리 로드한 클래스와 리소스를 공유(Copy-On-Write)하여 앱 시작 시간을 단축합니다."
   },
@@ -143,7 +143,7 @@
       "XML 기반의 메타데이터 파일이다"
     ],
     "answer": 2,
-    "explanation": "OAT 파일은 ELF(Executable and Linkable Format) 형식의 바이너리 파일입니다. dex2oat에 의해 생성되며, 컴파일된 네이티브 기계어 코드와 원본 DEX 바이트코드를 함께 포함합니다. 원본 DEX를 포함하는 이유는 리플렉션, 디버깅, 해석 실행 등에 필요하기 때문입니다."
+    "explanation": "OAT 파일은 ELF(Executable and Linkable Format) 형식의 바이너리 파일입니다. dex2oat에 의해 생성되며, 컴파일된 네이티브 기계어 코드와 원본 DEX 바이트코드를 함께 포함합니다. 다만 Android 8.0(Oreo)부터는 검증된 DEX 바이트코드가 별도의 VDEX 파일로 분리되어, OAT 파일은 주로 컴파일된 네이티브 코드를 포함하고 VDEX 파일이 DEX 바이트코드와 검증 데이터를 담습니다."
   },
   {
     "id": "ar-011",
@@ -202,7 +202,7 @@
     "codeLanguage": "shell",
     "blankAnswers": [
       ["speed-profile"],
-      ["verify", "quicken"]
+      ["verify"]
     ],
     "explanation": "dex2oat의 compiler-filter 옵션은 컴파일 수준을 제어합니다. speed-profile은 프로파일에 기록된 hot method만 AOT 컴파일하여 저장 공간과 성능의 균형을 맞춥니다. verify는 바이트코드 검증만 수행하고 컴파일은 하지 않아 저장 공간을 절약하지만 실행 시 인터프리터/JIT에 의존합니다. speed는 모든 메서드를 AOT 컴파일합니다."
   },
@@ -282,7 +282,7 @@
       "JIT 컴파일된 코드를 저장하는 실행 가능한 메모리 공간이다"
     ],
     "answer": 1,
-    "explanation": "Bump Pointer Space는 메모리 할당 시 포인터를 단순히 앞으로 이동시키는(bump) 매우 빠른 할당 방식을 사용합니다. Thread-Local Allocation Buffer(TLAB)와 결합하여 각 스레드가 독립적으로 빠르게 메모리를 할당할 수 있습니다. 개별 객체의 해제는 지원하지 않으며, GC(Concurrent Copying) 시 살아있는 객체를 다른 공간으로 복사한 후 전체 공간을 한 번에 비웁니다."
+    "explanation": "Bump Pointer Space는 메모리 할당 시 포인터를 단순히 앞으로 이동시키는(bump) 매우 빠른 할당 방식을 사용합니다. Thread-Local Allocation Buffer(TLAB)와 결합하여 각 스레드가 독립적으로 빠르게 메모리를 할당할 수 있습니다. 개별 객체의 해제는 지원하지 않으며, Concurrent Copying GC에서 from-space와 to-space 사이의 복사 대상 공간(to-space)으로 활용됩니다. GC 시 살아있는 객체를 to-space로 복사한 후 from-space 전체를 한 번에 비우는 방식으로 동작합니다."
   },
   {
     "id": "ar-021",
@@ -311,7 +311,7 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "ART의 JIT 컴파일러 동작을 확인하고 프로파일 정보를 추출하는 명령어를 완성하시오.",
-    "codeTemplate": "# JIT 컴파일러 통계 확인 (디버그 빌드)\nadb shell setprop dalvik.vm.extra-opts \"-verbose:___\"\n\n# 앱 실행 중 수집된 프로파일을 파일로 덤프\nadb shell killall -s ___ com.example.app\n\n# 덤프된 프로파일을 사람이 읽을 수 있는 형식으로 변환\nadb shell profman --dump-info-for=/data/misc/profiles/cur/0/com.example.app/primary.prof \\\n  --apk=/data/app/com.example.app/base.apk",
+    "codeTemplate": "# JIT 컴파일러 통계 확인 (디버그 빌드)\nadb shell setprop dalvik.vm.extra-opts \"-verbose:___\"\n\n# 앱 실행 중 수집된 프로파일을 파일로 덤프\nadb shell killall -s ___ com.example.app\n\n# 덤프된 프로파일을 사람이 읽을 수 있는 형식으로 변환\nadb shell profman --dump-classes-and-methods \\\n  --profile-file=/data/misc/profiles/cur/0/com.example.app/primary.prof \\\n  --apk=/data/app/com.example.app/base.apk",
     "codeLanguage": "shell",
     "blankAnswers": [
       ["jit"],
@@ -329,10 +329,10 @@
     "codeTemplate": "# ART 힙 크기 관련 프로퍼티 설정\n# 앱당 최대 힙 크기 설정 (기본값은 디바이스별 상이)\nadb shell setprop dalvik.vm.___  512m\n\n# GC 관련 설정\n# foreground에서 사용할 GC 종류 설정\nadb shell setprop dalvik.vm.___ CC\n\n# 힙 사용률이 이 비율에 도달하면 GC를 트리거 (기본 0.75)\nadb shell setprop dalvik.vm.heaptargetutilization 0.75",
     "codeLanguage": "shell",
     "blankAnswers": [
-      ["heapsize", "heapgrowthlimit"],
-      ["gctype", "backgroundgctype", "gctype"]
+      ["heapsize"],
+      ["gctype"]
     ],
-    "explanation": "dalvik.vm.heapsize는 앱이 사용할 수 있는 최대 힙 크기를 설정하며, heapgrowthlimit는 largeHeap 속성이 없는 일반 앱의 힙 제한입니다. dalvik.vm.gctype은 foreground GC 알고리즘(CC=Concurrent Copying, CMS=Concurrent Mark Sweep 등)을 지정합니다. 이러한 프로퍼티는 일반적으로 디바이스 빌드 시 설정되며, 런타임 변경은 루트 권한이 필요합니다."
+    "explanation": "dalvik.vm.heapsize는 largeHeap 속성이 있는 앱이 사용할 수 있는 절대 최대 힙 크기를 설정합니다. 일반 앱은 dalvik.vm.heapgrowthlimit까지만 사용 가능합니다. dalvik.vm.gctype은 foreground GC 알고리즘(CC=Concurrent Copying, CMS=Concurrent Mark Sweep 등)을 지정합니다. backgroundgctype은 별도 프로퍼티로 백그라운드 GC를 지정합니다. 이러한 프로퍼티는 일반적으로 디바이스 빌드 시 설정되며, 런타임 변경은 루트 권한이 필요합니다."
   },
   {
     "id": "ar-025",

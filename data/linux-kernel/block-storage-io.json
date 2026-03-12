@@ -176,7 +176,7 @@
     "difficulty": "중급",
     "type": "short-answer",
     "question": "시스템의 블록 디바이스 목록과 파티션 구조를 트리 형태로 확인하려면 ___ 명령을 사용하고, 커널이 인식한 블록 디바이스 정보는 ___ 디렉토리에서 확인할 수 있다.",
-    "blankAnswers": [["lsblk"], ["/sys/block", "sysfs"]],
+    "blankAnswers": [["lsblk"], ["/sys/block"]],
     "explanation": "lsblk 명령은 시스템에 연결된 블록 디바이스를 트리 구조로 보여주며, 디바이스 이름, 크기, 타입, 마운트 포인트 등을 한눈에 확인할 수 있습니다. /sys/block/ 디렉토리에는 커널이 인식한 각 블록 디바이스의 sysfs 항목이 존재하며, 큐 파라미터, 스케줄러, 통계 정보 등을 파일 형태로 제공합니다."
   },
   {
@@ -206,7 +206,7 @@
     "difficulty": "고급",
     "type": "short-answer",
     "question": "파일 쓰기 시 page cache에서 ___로 표시된 페이지는 커널의 ___ 스레드 또는 명시적 sync 호출에 의해 block layer로 전달되어 디스크에 기록된다.",
-    "blankAnswers": [["dirty", "더티"], ["writeback", "pdflush", "flush"]],
+    "blankAnswers": [["dirty", "더티"], ["writeback", "flush"]],
     "explanation": "파일에 쓰기를 하면 해당 page cache 페이지가 dirty로 표시됩니다. 커널의 writeback 스레드(bdi-default 워커)가 dirty_expire_centisecs 등의 파라미터에 따라 주기적으로 dirty 페이지를 block layer에 bio로 제출합니다. sync(), fsync() 같은 명시적 호출도 dirty 페이지의 writeback을 트리거합니다."
   },
   {
@@ -216,7 +216,7 @@
     "difficulty": "고급",
     "type": "short-answer",
     "question": "blk-mq에서 I/O 요청은 먼저 CPU별 ___ queue에 수집된 후, I/O 스케줄러를 거쳐 디바이스의 ___ queue로 디스패치되며, 이 하드웨어 큐의 수는 디바이스가 지원하는 ___ 수에 의해 결정된다.",
-    "blankAnswers": [["software", "소프트웨어", "sw"], ["hardware", "하드웨어", "hw"], ["hardware queue", "하드웨어 큐", "submission queue", "SQ"]],
+    "blankAnswers": [["software", "소프트웨어", "sw"], ["hardware", "하드웨어", "hw"], ["hardware queue", "하드웨어 큐"]],
     "explanation": "blk-mq의 software queue는 per-CPU로 존재하며 I/O 요청을 락 없이 수집합니다. I/O 스케줄러(mq-deadline, bfq 등)가 요청 순서를 조정한 후 hardware dispatch queue로 보냅니다. Hardware queue의 수는 디바이스가 제공하는 실제 큐 수(NVMe의 경우 submission queue 수)에 매핑되어, CPU 코어 수만큼 병렬 처리가 가능합니다."
   },
   {
@@ -273,7 +273,7 @@
     "codeTemplate": "# sda의 I/O 통계 확인 (read/write 완료 횟수, 섹터 수 등)\ncat /sys/block/sda/___\n\n# 현재 I/O 스케줄러 확인 (활성 스케줄러가 [] 안에 표시됨)\ncat /sys/block/sda/queue/___\n\n# I/O 스케줄러를 mq-deadline으로 변경\necho ___ > /sys/block/sda/queue/scheduler",
     "codeLanguage": "shell",
     "blankAnswers": [["stat"], ["scheduler"], ["mq-deadline"]],
-    "explanation": "/sys/block/<dev>/stat 파일은 읽기/쓰기 완료 횟수, 전송 섹터 수, I/O 대기 시간 등 11개 필드의 통계를 제공합니다. /sys/block/<dev>/queue/scheduler에는 사용 가능한 스케줄러 목록이 표시되며 현재 활성 스케줄러가 대괄호로 감싸져 있습니다. echo로 스케줄러 이름을 쓰면 런타임에 변경할 수 있습니다."
+    "explanation": "/sys/block/<dev>/stat 파일은 읽기/쓰기 완료 횟수, 전송 섹터 수, I/O 대기 시간 등의 통계를 제공합니다(커널 4.18+ 기준 17개 필드, 이전 버전은 11개). /sys/block/<dev>/queue/scheduler에는 사용 가능한 스케줄러 목록이 표시되며 현재 활성 스케줄러가 대괄호로 감싸져 있습니다. echo로 스케줄러 이름을 쓰면 런타임에 변경할 수 있습니다."
   },
   {
     "id": "io-022",
@@ -284,7 +284,7 @@
     "question": "device-mapper로 생성된 가상 디바이스의 매핑 정보와 하위 블록 디바이스를 확인하는 명령을 완성하시오.",
     "codeTemplate": "# dm 디바이스 목록과 테이블 매핑 정보 확인\n___ table\n\n# dm-0 디바이스의 실제 하위 디바이스(slave) 확인\nls /sys/block/___/slaves/",
     "codeLanguage": "shell",
-    "blankAnswers": [["dmsetup", "dmsetup table"], ["dm-0"]],
+    "blankAnswers": [["dmsetup"], ["dm-0"]],
     "explanation": "dmsetup table 명령은 모든 device-mapper 디바이스의 target 타입과 매핑 테이블을 출력합니다(예: linear, crypt, verity 등의 target과 시작 섹터, 크기, 하위 디바이스 정보). /sys/block/dm-N/slaves/ 디렉토리에는 해당 DM 디바이스가 사용하는 하위 물리 블록 디바이스에 대한 심볼릭 링크가 존재합니다."
   },
   {
@@ -294,7 +294,7 @@
     "difficulty": "중급",
     "type": "code-fill",
     "question": "O_DIRECT를 사용하여 파일에 직접 I/O를 수행하는 C 코드를 완성하시오. 버퍼는 정렬이 필요합니다.",
-    "codeTemplate": "#include <fcntl.h>\n#include <stdlib.h>\n#include <unistd.h>\n\n#define BUF_SIZE 4096\n\nint main(void)\n{\n    void *buf;\n    int fd;\n\n    /* 4096 바이트 정렬된 버퍼 할당 */\n    ___(BUF_SIZE, BUF_SIZE, &buf);\n\n    /* O_DIRECT 플래그로 파일 열기 */\n    fd = open(\"/dev/sda\", O_RDONLY | ___);\n\n    /* 정렬된 버퍼로 직접 읽기 */\n    read(fd, buf, BUF_SIZE);\n\n    close(fd);\n    ___(buf);\n    return 0;\n}",
+    "codeTemplate": "#include <fcntl.h>\n#include <stdlib.h>\n#include <unistd.h>\n\n#define BUF_SIZE 4096\n\nint main(void)\n{\n    void *buf;\n    int fd;\n\n    /* 4096 바이트 정렬된 버퍼 할당 */\n    ___(&buf, BUF_SIZE, BUF_SIZE);\n\n    /* O_DIRECT 플래그로 파일 열기 */\n    fd = open(\"/dev/sda\", O_RDONLY | ___);\n\n    /* 정렬된 버퍼로 직접 읽기 */\n    read(fd, buf, BUF_SIZE);\n\n    close(fd);\n    ___(buf);\n    return 0;\n}",
     "codeLanguage": "c",
     "blankAnswers": [["posix_memalign"], ["O_DIRECT"], ["free"]],
     "explanation": "posix_memalign()은 지정한 경계에 정렬된 메모리를 할당합니다. O_DIRECT는 page cache를 우회하는 직접 I/O를 활성화하며, 이때 사용자 버퍼의 주소와 I/O 크기가 디바이스의 논리 블록 크기(일반적으로 512 또는 4096 바이트) 경계에 정렬되어야 합니다. 정렬되지 않으면 -EINVAL 에러가 반환됩니다."

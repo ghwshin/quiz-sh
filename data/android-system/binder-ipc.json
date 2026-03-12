@@ -55,7 +55,7 @@
     "type": "short-answer",
     "question": "___은 Binder IPC에서 데이터를 직렬화/역직렬화하기 위한 컨테이너이며, ___ 인터페이스를 구현하면 사용자 정의 객체를 ___()과 ___() 메서드를 통해 전달할 수 있다.",
     "blankAnswers": [["Parcel"], ["Parcelable"], ["writeToParcel"], ["createFromParcel"]],
-    "explanation": "Parcel은 Binder 트랜잭션의 데이터 단위이며, 커널의 Binder 드라이버가 이 데이터를 대상 프로세스의 주소 공간에 복사합니다. Serializable보다 Parcelable이 Android에서 성능이 우수한데, 이는 리플렉션을 사용하지 않고 직접 바이트 스트림으로 변환하기 때문입니다."
+    "explanation": "Parcel은 Binder 트랜잭션의 데이터 단위이며, 커널의 Binder 드라이버가 이 데이터를 대상 프로세스의 주소 공간에 복사합니다. writeToParcel()은 Parcelable 인터페이스의 메서드이고, createFromParcel()은 Parcelable.Creator<T> 인터페이스의 메서드로 static CREATOR 필드에서 구현합니다. Serializable보다 Parcelable이 Android에서 성능이 우수한데, 이는 리플렉션을 사용하지 않고 직접 바이트 스트림으로 변환하기 때문입니다."
   },
   {
     "id": "bi-005",
@@ -81,7 +81,7 @@
       ["readString"],
       ["readInt"]
     ],
-    "explanation": "Parcelable 인터페이스를 구현하려면 writeToParcel()에서 필드를 순서대로 쓰고, 생성자에서 같은 순서로 readString(), readInt() 등을 호출하여 읽어야 합니다. 읽기와 쓰기의 순서가 반드시 일치해야 합니다."
+    "explanation": "Parcelable 인터페이스를 구현하려면 writeToParcel()에서 필드를 순서대로 쓰고, 생성자에서 같은 순서로 readString(), readInt() 등을 호출하여 읽어야 합니다. 읽기와 쓰기의 순서가 반드시 일치해야 합니다. 또한 public static final Parcelable.Creator<User> CREATOR 필드를 반드시 정의해야 하며, 이 CREATOR의 createFromParcel() 메서드가 Parcel로부터 객체를 복원합니다."
   },
   {
     "id": "bi-007",
@@ -230,7 +230,7 @@
     "difficulty": "중급",
     "type": "code-fill",
     "question": "다음은 Binder의 death notification을 등록하는 Kotlin 코드입니다. 빈칸을 채우시오.",
-    "codeTemplate": "private val deathRecipient = IBinder.___ {\n    override fun binderDied() {\n        // 서비스 프로세스가 종료됨\n        serviceBinder = null\n        reconnectService()\n    }\n}\n\nfun onServiceConnected(binder: IBinder) {\n    binder.___(deathRecipient, 0)\n    serviceBinder = IMyService.Stub.asInterface(binder)\n}",
+    "codeTemplate": "private val deathRecipient = object : IBinder.___() {\n    override fun binderDied() {\n        // 서비스 프로세스가 종료됨\n        serviceBinder = null\n        reconnectService()\n    }\n}\n\nfun onServiceConnected(binder: IBinder) {\n    binder.___(deathRecipient, 0)\n    serviceBinder = IMyService.Stub.asInterface(binder)\n}",
     "codeLanguage": "kotlin",
     "blankAnswers": [
       ["DeathRecipient"],
@@ -247,12 +247,12 @@
     "question": "Binder 드라이버에서 BC_TRANSACTION과 BR_TRANSACTION의 차이점으로 올바른 것은?",
     "options": [
       "BC_TRANSACTION은 커널에서 사용자로, BR_TRANSACTION은 사용자에서 커널로 전송된다",
-      "BC_TRANSACTION은 사용자 프로세스가 커널에 보내는 명령이고, BR_TRANSACTION은 커널이 사용자 프로세스에 전달하는 응답이다",
+      "BC_TRANSACTION은 사용자 프로세스가 커널에 보내는 명령이고, BR_TRANSACTION은 커널이 대상 프로세스에 트랜잭션을 전달하는 메시지이다",
       "둘 다 같은 방향으로 동작하며 동기/비동기의 차이만 있다",
       "BC_TRANSACTION은 바인딩 요청이고, BR_TRANSACTION은 언바인딩 요청이다"
     ],
     "answer": 1,
-    "explanation": "Binder 프로토콜에서 BC_(Binder Command) 접두사는 사용자 공간에서 커널(드라이버)로 보내는 명령을 의미하고, BR_(Binder Return) 접두사는 커널에서 사용자 공간으로 반환되는 메시지를 의미합니다. BC_TRANSACTION으로 트랜잭션을 요청하면, 대상 프로세스는 BR_TRANSACTION으로 해당 요청을 수신합니다."
+    "explanation": "Binder 프로토콜에서 BC_(Binder Command) 접두사는 사용자 공간에서 커널(드라이버)로 보내는 명령을 의미하고, BR_(Binder Return) 접두사는 커널에서 사용자 공간으로 전달되는 메시지를 의미합니다. 클라이언트가 BC_TRANSACTION으로 트랜잭션을 요청하면, 커널이 대상(서버) 프로세스에 BR_TRANSACTION으로 해당 트랜잭션을 전달합니다. BR_TRANSACTION은 '응답'이 아니라 서버 측에 트랜잭션을 전달하는 역할입니다."
   },
   {
     "id": "bi-019",
@@ -268,7 +268,7 @@
       "앱 프로세스마다 하나의 context manager가 할당된다"
     ],
     "answer": 1,
-    "explanation": "Binder context manager는 핸들 0번으로 고정된 특수한 Binder 노드입니다. Android에서는 ServiceManager가 BINDER_SET_CONTEXT_MGR ioctl을 통해 이 역할을 등록합니다. 시스템에 단 하나만 존재하며, 모든 서비스의 이름 등록과 조회를 중앙에서 관리합니다."
+    "explanation": "Binder context manager는 핸들 0번으로 고정된 특수한 Binder 노드입니다. Android에서는 ServiceManager가 BINDER_SET_CONTEXT_MGR ioctl을 통해 /dev/binder 도메인의 context manager 역할을 등록합니다. 각 Binder 도메인(/dev/binder, /dev/hwbinder, /dev/vndbinder)마다 별도의 context manager가 존재하며, hwservicemanager는 /dev/hwbinder의, vndservicemanager는 /dev/vndbinder의 context manager 역할을 수행합니다."
   },
   {
     "id": "bi-020",

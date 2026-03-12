@@ -54,7 +54,7 @@
     "difficulty": "초급",
     "type": "short-answer",
     "question": "mutex는 ___ 개념이 있어 잠금을 획득한 스레드만 해제할 수 있는 반면, ___는 카운터 기반으로 동시에 N개의 스레드가 자원에 접근할 수 있다. semaphore의 카운터 감소 연산을 ___라 한다.",
-    "blankAnswers": [["소유권", "ownership"], ["counting semaphore", "semaphore", "세마포어"], ["down", "down()", "P 연산"]],
+    "blankAnswers": [["소유권", "ownership"], ["counting semaphore", "semaphore", "세마포어", "카운팅 세마포어"], ["down", "down()", "P 연산"]],
     "explanation": "semaphore는 down()(P 연산)으로 카운터를 감소시키고, up()(V 연산)으로 카운터를 증가시킵니다. 카운터가 0이면 down()을 호출한 스레드는 sleep합니다. mutex는 semaphore의 특수한 경우(카운터가 1인 경우)로 볼 수 있지만, Linux 커널에서 mutex는 소유권, 우선순위 역전 방지 등 추가 기능을 제공합니다."
   },
   {
@@ -224,13 +224,13 @@
     "difficulty": "중급",
     "type": "code-fill",
     "question": "Linux 커널에서 wait queue를 사용하여 조건이 충족될 때까지 대기하는 코드를 완성하시오.",
-    "codeTemplate": "#include <linux/wait.h>\n#include <linux/sched.h>\n\nstatic DECLARE_WAIT_QUEUE_HEAD(my_wq);\nstatic int condition_flag = 0;\n\n/* 데이터를 기다리는 함수 (읽기 측) */\nvoid wait_for_data(void)\n{\n    ___(my_wq, condition_flag != 0);\n    pr_info(\"조건 충족, 작업 진행\\n\");\n    condition_flag = 0;\n}\n\n/* 데이터를 제공하는 함수 (쓰기 측) */\nvoid provide_data(void)\n{\n    condition_flag = 1;\n    ___(&my_wq);\n}",
+    "codeTemplate": "#include <linux/wait.h>\n#include <linux/sched.h>\n\nstatic DECLARE_WAIT_QUEUE_HEAD(my_wq);\nstatic int condition_flag = 0;\n\n/* 데이터를 기다리는 함수 (읽기 측) */\nint wait_for_data(void)\n{\n    int ret;\n\n    ret = ___(my_wq, condition_flag != 0);\n    if (ret)\n        return ret;\n    pr_info(\"조건 충족, 작업 진행\\n\");\n    condition_flag = 0;\n    return 0;\n}\n\n/* 데이터를 제공하는 함수 (쓰기 측) */\nvoid provide_data(void)\n{\n    condition_flag = 1;\n    ___(&my_wq);\n}",
     "codeLanguage": "c",
     "blankAnswers": [
-      ["wait_event_interruptible", "wait_event"],
-      ["wake_up", "wake_up_interruptible"]
+      ["wait_event_interruptible"],
+      ["wake_up_interruptible", "wake_up"]
     ],
-    "explanation": "wait_event_interruptible()은 조건이 참이 될 때까지 현재 프로세스를 TASK_INTERRUPTIBLE 상태로 sleep시킵니다. wake_up()은 대기 큐에서 sleep 중인 프로세스를 깨웁니다. wait_event_interruptible()은 시그널에 의해 중단될 수 있어 사용자 공간과 상호작용하는 코드에 적합합니다."
+    "explanation": "wait_event_interruptible()은 조건이 참이 될 때까지 현재 프로세스를 TASK_INTERRUPTIBLE 상태로 sleep시킵니다. 시그널 수신 시 -ERESTARTSYS를 반환하므로 반환값을 확인해야 합니다. wake_up_interruptible()은 TASK_INTERRUPTIBLE 상태의 대기자를 깨우며, wait_event_interruptible과 짝을 이루어 사용합니다."
   },
   {
     "id": "si-018",
@@ -302,7 +302,7 @@
     "difficulty": "고급",
     "type": "short-answer",
     "question": "RCU의 ___는 모든 기존 reader가 임계 영역을 벗어나는 것이 보장되는 시간 구간이다. ___는 이 구간이 완료될 때까지 블로킹하고, ___는 비블로킹으로 완료 후 콜백을 비동기 실행한다.",
-    "blankAnswers": [["grace period"], ["synchronize_rcu", "synchronize_rcu()"], ["call_rcu", "call_rcu()"]],
+    "blankAnswers": [["grace period", "유예 기간"], ["synchronize_rcu", "synchronize_rcu()"], ["call_rcu", "call_rcu()"]],
     "explanation": "grace period 동안 새로운 reader는 이미 업데이트된 데이터를 보고, 이전 데이터를 참조하는 reader는 없어집니다. 이 시점 이후에 이전 데이터를 안전하게 해제할 수 있습니다. call_rcu()는 softirq 컨텍스트에서 콜백을 실행하므로, 콜백 내에서 sleep이 불가능합니다."
   },
   {
@@ -322,14 +322,14 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "Linux 커널에서 RCU를 사용하여 연결 리스트의 노드를 안전하게 업데이트하는 코드를 완성하시오.",
-    "codeTemplate": "#include <linux/rcupdate.h>\n#include <linux/slab.h>\n\nstruct my_data {\n    int value;\n    struct rcu_head rcu;\n};\n\nstatic struct my_data __rcu *global_data;\n\n/* Reader 측 */\nvoid read_data(void)\n{\n    struct my_data *p;\n\n    ___;\n    p = rcu_dereference(global_data);\n    if (p)\n        pr_info(\"값: %d\\n\", p->value);\n    ___;\n}\n\n/* Writer 측 */\nvoid update_data(int new_value)\n{\n    struct my_data *old, *new;\n\n    new = kmalloc(sizeof(*new), GFP_KERNEL);\n    new->value = new_value;\n\n    old = rcu_dereference_protected(global_data, lockdep_is_held(&update_lock));\n    rcu_assign_pointer(global_data, new);\n    ___(old);\n}",
+    "codeTemplate": "#include <linux/rcupdate.h>\n#include <linux/slab.h>\n#include <linux/mutex.h>\n\nstruct my_data {\n    int value;\n    struct rcu_head rcu;\n};\n\nstatic DEFINE_MUTEX(update_lock);\nstatic struct my_data __rcu *global_data;\n\n/* Reader 측 */\nvoid read_data(void)\n{\n    struct my_data *p;\n\n    ___;\n    p = rcu_dereference(global_data);\n    if (p)\n        pr_info(\"값: %d\\n\", p->value);\n    ___;\n}\n\n/* Writer 측 */\nvoid update_data(int new_value)\n{\n    struct my_data *old, *new;\n\n    new = kmalloc(sizeof(*new), GFP_KERNEL);\n    new->value = new_value;\n\n    mutex_lock(&update_lock);\n    old = rcu_dereference_protected(global_data, lockdep_is_held(&update_lock));\n    rcu_assign_pointer(global_data, new);\n    mutex_unlock(&update_lock);\n\n    ___;\n    kfree(old);\n}",
     "codeLanguage": "c",
     "blankAnswers": [
       ["rcu_read_lock()"],
       ["rcu_read_unlock()"],
-      ["kfree_rcu", "synchronize_rcu(); kfree"]
+      ["synchronize_rcu()", "synchronize_rcu"]
     ],
-    "explanation": "reader는 rcu_read_lock()/rcu_read_unlock() 사이에서 rcu_dereference()로 포인터를 안전하게 읽습니다. writer는 새 데이터를 할당하고 rcu_assign_pointer()로 포인터를 교체한 후, kfree_rcu()로 grace period 이후 이전 데이터를 비동기적으로 해제합니다. 또는 synchronize_rcu() 후 kfree()를 호출할 수도 있습니다."
+    "explanation": "reader는 rcu_read_lock()/rcu_read_unlock() 사이에서 rcu_dereference()로 포인터를 안전하게 읽습니다. writer는 update_lock mutex로 다른 writer와의 경합을 방지하고, 새 데이터를 할당한 뒤 rcu_assign_pointer()로 포인터를 교체합니다. synchronize_rcu()로 grace period가 완료될 때까지 대기한 후, 모든 기존 reader가 이전 데이터 참조를 마친 것이 보장되면 kfree()로 이전 데이터를 해제합니다."
   },
   {
     "id": "si-025",
@@ -338,11 +338,11 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "Linux 커널에서 atomic 연산과 memory barrier를 사용하여 lock-free 플래그 기반 동기화를 구현하는 코드를 완성하시오.",
-    "codeTemplate": "#include <linux/atomic.h>\n#include <linux/barrier.h>\n\nstatic atomic_t ready_flag = ATOMIC_INIT(0);\nstatic int shared_payload = 0;\n\n/* Producer: 데이터를 준비하고 플래그를 설정 */\nvoid producer(void)\n{\n    shared_payload = 42;\n    ___;\n    ___(1, &ready_flag);\n}\n\n/* Consumer: 플래그를 확인하고 데이터를 읽음 */\nvoid consumer(void)\n{\n    while (atomic_read(&ready_flag) == 0)\n        cpu_relax();\n    ___;\n    pr_info(\"payload: %d\\n\", shared_payload);\n}",
+    "codeTemplate": "#include <linux/atomic.h>\n#include <linux/barrier.h>\n\nstatic atomic_t ready_flag = ATOMIC_INIT(0);\nstatic int shared_payload = 0;\n\n/* Producer: 데이터를 준비하고 플래그를 설정 */\nvoid producer(void)\n{\n    shared_payload = 42;\n    ___;\n    ___(&ready_flag, 1);\n}\n\n/* Consumer: 플래그를 확인하고 데이터를 읽음 */\nvoid consumer(void)\n{\n    while (atomic_read(&ready_flag) == 0)\n        cpu_relax();\n    ___;\n    pr_info(\"payload: %d\\n\", shared_payload);\n}",
     "codeLanguage": "c",
     "blankAnswers": [
       ["smp_wmb()", "wmb()", "smp_mb()"],
-      ["atomic_set", "WRITE_ONCE"],
+      ["atomic_set"],
       ["smp_rmb()", "rmb()", "smp_mb()"]
     ],
     "explanation": "smp_wmb()는 쓰기 메모리 배리어로, shared_payload에 대한 쓰기가 ready_flag 설정보다 먼저 완료되도록 보장합니다. smp_rmb()는 읽기 메모리 배리어로, ready_flag 확인 후 shared_payload를 읽을 때 최신 값을 읽도록 보장합니다. 이 패턴은 lock-free 프로그래밍에서 publish-subscribe 패턴으로 널리 사용됩니다."

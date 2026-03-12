@@ -90,11 +90,11 @@
     "difficulty": "초급",
     "type": "code-fill",
     "question": "strace를 사용하여 특정 프로세스의 시스템 콜을 추적하고, 특정 시스템 콜만 필터링하는 명령어를 완성하시오.",
-    "codeTemplate": "# PID가 1234인 프로세스에 연결하여 시스템 콜 추적\nstrace ___ 1234\n\n# open, read, write 시스템 콜만 필터링하여 추적\nstrace -e ___ open,read,write ./my_program",
+    "codeTemplate": "# PID가 1234인 프로세스에 연결하여 시스템 콜 추적\nstrace ___ 1234\n\n# open, read, write 시스템 콜만 필터링하여 추적\nstrace -e trace=___ ./my_program",
     "codeLanguage": "c",
     "blankAnswers": [
       ["-p"],
-      ["trace"]
+      ["open,read,write"]
     ],
     "explanation": "strace -p PID는 이미 실행 중인 프로세스에 연결(attach)하여 시스템 콜을 추적합니다. -e trace=syscall_name 옵션을 사용하면 특정 시스템 콜만 필터링하여 출력할 수 있어 디버깅 시 유용합니다."
   },
@@ -144,7 +144,7 @@
       "시스템 콜을 비동기적으로 큐에 넣어 나중에 처리하는 역할을 한다"
     ],
     "answer": 1,
-    "explanation": "entry_SYSCALL_64는 x86_64에서 syscall 명령어를 통해 커널에 진입할 때 호출되는 어셈블리 코드입니다. 사용자 모드의 레지스터 상태를 커널 스택(pt_regs)에 저장하고, rax에 저장된 시스템 콜 번호로 sys_call_table에서 적절한 핸들러를 찾아 호출합니다. 시스템 콜 완료 후 사용자 모드로 복귀하는 처리도 담당합니다."
+    "explanation": "entry_SYSCALL_64는 x86_64에서 syscall 명령어를 통해 커널에 진입할 때 호출되는 어셈블리 코드입니다. 사용자 모드의 레지스터 상태를 커널 스택(pt_regs)에 저장한 후, do_syscall_64()를 호출하여 rax에 저장된 시스템 콜 번호로 sys_call_table에서 적절한 핸들러를 찾아 디스패치합니다. 시스템 콜 완료 후 사용자 모드로 복귀하는 처리도 담당합니다."
   },
   {
     "id": "sy-011",
@@ -179,7 +179,7 @@
     "difficulty": "중급",
     "type": "short-answer",
     "question": "시스템 콜 호출 시, 사용자 프로그램은 ___래퍼 함수를 호출하고, 시스템 콜 번호가 ___레지스터에 설정된 후 ___ 명령어로 커널 모드에 진입하며, 커널은 ___에서 핸들러를 찾아 실행한다.",
-    "blankAnswers": [["glibc"], ["rax", "eax"], ["syscall"], ["sys_call_table"]],
+    "blankAnswers": [["glibc", "libc"], ["rax", "eax"], ["syscall"], ["sys_call_table"]],
     "explanation": "시스템 콜 처리는 사용자 모드와 커널 모드 간의 전환을 포함하는 과정입니다. 이 전환에는 레지스터 저장/복원, 권한 레벨 변경 등의 오버헤드가 수반되므로, 빈번한 시스템 콜 호출은 성능에 영향을 줄 수 있습니다."
   },
   {
@@ -189,7 +189,7 @@
     "difficulty": "중급",
     "type": "short-answer",
     "question": "___은 사용자 공간에서 커널 공간으로, ___은 커널 공간에서 사용자 공간으로 데이터를 복사한다. memcpy() 대신 이 함수들을 사용하는 이유는 사용자 공간 포인터의 ___을 검증하기 때문이다.",
-    "blankAnswers": [["copy_from_user"], ["copy_to_user"], ["유효성", "주소 유효성", "validity"]],
+    "blankAnswers": [["copy_from_user"], ["copy_to_user"], ["유효성", "주소 유효성", "validity", "address validity"]],
     "explanation": "이 함수들은 내부적으로 access_ok()를 호출하여 주소가 사용자 공간 범위 내에 있는지 검사하고, 특수한 예외 처리 테이블(exception table)을 등록하여 페이지 폴트 발생 시 안전하게 에러를 반환합니다. 보안상 커널 코드에서 사용자 공간 포인터를 다룰 때 반드시 사용해야 합니다."
   },
   {
@@ -262,7 +262,7 @@
       "동적 링커가 공유 라이브러리를 로드하는 것을 가속화하는 캐시이다"
     ],
     "answer": 1,
-    "explanation": "vDSO는 커널이 사용자 프로세스의 주소 공간에 자동으로 매핑하는 작은 공유 라이브러리입니다. gettimeofday(), clock_gettime(), getcpu() 같은 자주 호출되는 시스템 콜을 커널 모드 전환 없이 사용자 공간에서 직접 실행하여 성능을 향상시킵니다. 커널이 공유 메모리 페이지를 통해 필요한 데이터를 업데이트합니다."
+    "explanation": "vDSO는 커널이 사용자 프로세스의 주소 공간에 자동으로 매핑하는 작은 공유 라이브러리입니다. gettimeofday(), clock_gettime(), getcpu() 같은 자주 호출되는 함수를 커널 모드 전환 없이 사용자 공간에서 직접 실행하여 시스템 콜 호출을 회피(avoid)합니다. 커널이 공유 메모리 페이지를 통해 필요한 데이터를 업데이트하므로, 사용자 공간 코드가 별도의 시스템 콜 없이 해당 데이터를 읽을 수 있습니다."
   },
   {
     "id": "sy-020",
@@ -303,7 +303,7 @@
     "difficulty": "고급",
     "type": "short-answer",
     "question": "___은 프로세스가 호출할 수 있는 시스템 콜을 제한하는 커널 보안 기능이다. STRICT 모드에서는 ___만 허용되며, FILTER 모드에서는 ___프로그램을 사용하여 시스템 콜 정책을 세밀하게 설정할 수 있다.",
-    "blankAnswers": [["seccomp", "Secure Computing Mode"], ["read, write, exit, sigreturn"], ["BPF", "Berkeley Packet Filter"]],
+    "blankAnswers": [["seccomp", "Secure Computing Mode"], ["read, write, exit, sigreturn", "read, write, _exit, sigreturn"], ["BPF", "Berkeley Packet Filter"]],
     "explanation": "seccomp-BPF는 시스템 콜 진입 시점에서 BPF 필터를 실행하여 해당 시스템 콜의 허용 여부를 결정합니다. prctl(PR_SET_SECCOMP) 또는 seccomp() 시스템 콜로 설정하며, 한 번 설정하면 해제할 수 없어(fork된 자식에게도 상속됨) 강력한 샌드박싱이 가능합니다."
   },
   {
@@ -314,7 +314,7 @@
     "type": "short-answer",
     "question": "시스템 콜이 대기 중 시그널에 의해 중단되면 ___에러가 반환된다. sigaction()에서 ___플래그를 설정하면 시그널 처리 후 중단된 시스템 콜이 자동으로 재시작되며, 커널은 ___메커니즘을 통해 이를 처리한다.",
     "blankAnswers": [["-EINTR", "EINTR"], ["SA_RESTART"], ["restart_syscall"]],
-    "explanation": "모든 시스템 콜이 SA_RESTART에 의해 자동 재시작되는 것은 아닙니다. read, write 등은 재시작 가능하지만, select, poll, nanosleep 등은 SA_RESTART와 관계없이 -EINTR을 반환할 수 있어 애플리케이션에서 직접 처리해야 합니다."
+    "explanation": "모든 시스템 콜이 SA_RESTART에 의해 자동 재시작되는 것은 아닙니다. read, write 등은 재시작 가능하지만, select, poll, nanosleep 등은 SA_RESTART와 관계없이 -EINTR을 반환할 수 있어 애플리케이션에서 직접 처리해야 합니다. 커널 내부적으로는 -ERESTARTSYS, -ERESTARTNOHAND 등의 에러 코드로 재시작 가능 여부를 구분하며, restart_syscall은 시그널 처리 후 커널이 시스템 콜을 재시작할 때 사용하는 메커니즘입니다."
   },
   {
     "id": "sy-024",

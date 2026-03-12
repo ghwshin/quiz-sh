@@ -59,7 +59,7 @@
       ["인터페이스", "interface"],
       ["벤더", "vendor", "제조사"]
     ],
-    "explanation": "HAL은 Android 아키텍처에서 하드웨어 종속적인 코드를 캡슐화하여, 상위 계층이 하드웨어 세부사항을 알 필요 없이 표준화된 방식으로 하드웨어 기능을 활용할 수 있게 합니다. 카메라, 센서, 블루투스 등 다양한 하드웨어에 대한 HAL이 존재합니다."
+    "explanation": "HAL은 Android 아키텍처에서 하드웨어 종속적인 코드를 캡슐화하여, 상위 계층이 하드웨어 세부사항을 알 필요 없이 표준화된 방식으로 하드웨어 기능을 활용할 수 있게 합니다. HAL은 유저 스페이스에서 동작하므로 Linux 커널의 GPL 라이선스 적용을 받지 않아, 벤더가 독점 드라이버 코드를 GPL로부터 분리하여 보호할 수 있습니다. 카메라, 센서, 블루투스 등 다양한 하드웨어에 대한 HAL이 존재합니다."
   },
   {
     "id": "sa-005",
@@ -97,7 +97,7 @@
     "difficulty": "초급",
     "type": "code-fill",
     "question": "JNI(Java Native Interface)를 통해 네이티브 메서드를 선언하고 호출하는 Java 코드를 완성하시오.",
-    "codeTemplate": "public class NativeBridge {\n    // 네이티브 라이브러리 로드\n    static {\n        System.___('mylib');\n    }\n\n    // 네이티브 메서드 선언\n    public ___ String getDeviceInfo();\n\n    public void printInfo() {\n        String info = getDeviceInfo();\n        System.out.println(info);\n    }\n}",
+    "codeTemplate": "public class NativeBridge {\n    // 네이티브 라이브러리 로드\n    static {\n        System.___(\"mylib\");\n    }\n\n    // 네이티브 메서드 선언\n    public ___ String getDeviceInfo();\n\n    public void printInfo() {\n        String info = getDeviceInfo();\n        System.out.println(info);\n    }\n}",
     "codeLanguage": "java",
     "blankAnswers": [
       ["loadLibrary"],
@@ -247,14 +247,14 @@
     "subcategory": "system-architecture",
     "difficulty": "중급",
     "type": "code-fill",
-    "question": "JNI 네이티브 메서드를 C++로 구현하는 코드를 완성하시오.",
+    "question": "패키지 com.example.app에 속한 NativeBridge 클래스의 JNI 네이티브 메서드를 C++로 구현하는 코드를 완성하시오.",
     "codeTemplate": "#include <jni.h>\n#include <string>\n\nextern \"C\" JNIEXPORT jstring JNICALL\n___NativeBridge_getDeviceInfo(\n    ___* env, jobject thiz) {\n\n    std::string info = \"Android Device\";\n    return env->NewStringUTF(info.c_str());\n}",
     "codeLanguage": "cpp",
     "blankAnswers": [
-      ["Java_com_example_app_", "Java_com_example_myapp_"],
+      ["Java_com_example_app_"],
       ["JNIEnv"]
     ],
-    "explanation": "JNI 네이티브 함수의 이름은 'Java_패키지명_클래스명_메서드명' 형식을 따릅니다. 첫 번째 매개변수는 JNIEnv 포인터로, JNI 함수들(NewStringUTF, FindClass 등)에 접근할 수 있게 해줍니다. JNI는 Java/Kotlin 코드와 C/C++ 네이티브 코드 사이의 브릿지 역할을 하며, Android Framework의 많은 기능이 이를 통해 네이티브 라이브러리와 연결됩니다."
+    "explanation": "JNI 네이티브 함수의 이름은 'Java_패키지명_클래스명_메서드명' 형식을 따릅니다. com.example.app 패키지의 NativeBridge 클래스이므로 접두사는 Java_com_example_app_이 됩니다. 첫 번째 매개변수는 JNIEnv 포인터로, JNI 함수들(NewStringUTF, FindClass 등)에 접근할 수 있게 해줍니다. JNI는 Java/Kotlin 코드와 C/C++ 네이티브 코드 사이의 브릿지 역할을 하며, Android Framework의 많은 기능이 이를 통해 네이티브 라이브러리와 연결됩니다."
   },
   {
     "id": "sa-018",
@@ -369,9 +369,9 @@
     "subcategory": "system-architecture",
     "difficulty": "고급",
     "type": "code-fill",
-    "question": "SELinux 정책 파일에서 시스템 서비스의 도메인 전환(domain transition)과 파일 접근 권한을 정의하는 코드를 완성하시오.",
-    "codeTemplate": "# myservice.te - SELinux 타입 정의\ntype myservice, domain;\ntype myservice_exec, exec_type, file_type, vendor_file_type;\n\n# init이 myservice를 시작할 때 도메인 전환\ninit_daemon_domain(myservice)\n\n# myservice가 자신의 데이터 디렉터리에 읽기/쓰기 허용\ntype myservice_data_file, file_type, data_file_type;\n___(myservice, myservice_data_file, dir, { open read write search create add_name });\n___(myservice, myservice_data_file, file, { open read write create getattr });",
-    "codeLanguage": "cpp",
+    "question": "SELinux 정책 파일(.te)에서 시스템 서비스의 도메인 전환(domain transition)과 파일 접근 권한을 정의하는 코드를 완성하시오.",
+    "codeTemplate": "# myservice.te - SELinux 타입 정의\ntype myservice, domain;\ntype myservice_exec, exec_type, file_type, vendor_file_type;\n\n# init이 myservice를 시작할 때 도메인 전환\ninit_daemon_domain(myservice)\n\n# myservice 도메인이 myservice_data_file 타입의 디렉터리와 파일에 접근 허용\ntype myservice_data_file, file_type, data_file_type;\n___(myservice myservice_data_file:dir { open read write search create add_name });\n___(myservice myservice_data_file:file { open read write create getattr });",
+    "codeLanguage": "text",
     "blankAnswers": [
       ["allow"],
       ["allow"]

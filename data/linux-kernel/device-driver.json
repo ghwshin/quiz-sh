@@ -74,11 +74,11 @@
     "difficulty": "초급",
     "type": "code-fill",
     "question": "다음은 character device를 등록하기 위한 기본 코드입니다. 빈칸을 채우시오.",
-    "codeTemplate": "static struct cdev my_cdev;\nstatic dev_t dev_num;\n\nstatic int __init my_init(void)\n{\n    int ret;\n    /* 동적으로 major/minor 번호 할당 */\n    ret = ___(dev_num, 0, 1, \"mydevice\");\n    if (ret < 0)\n        return ret;\n\n    /* cdev 구조체 초기화 */\n    cdev_init(&my_cdev, &my_fops);\n    my_cdev.owner = THIS_MODULE;\n\n    /* cdev를 커널에 추가 */\n    ret = ___(my_cdev, dev_num, 1);\n    return ret;\n}",
+    "codeTemplate": "static struct cdev my_cdev;\nstatic dev_t dev_num;\n\nstatic int __init my_init(void)\n{\n    int ret;\n    /* 동적으로 major/minor 번호 할당 */\n    ret = ___(&dev_num, 0, 1, \"mydevice\");\n    if (ret < 0)\n        return ret;\n\n    /* cdev 구조체 초기화 */\n    cdev_init(&my_cdev, &my_fops);\n    my_cdev.owner = THIS_MODULE;\n\n    /* cdev를 커널에 추가 */\n    ret = ___(&my_cdev, dev_num, 1);\n    return ret;\n}",
     "codeLanguage": "c",
     "blankAnswers": [
-      ["alloc_chrdev_region", "alloc_chrdev_region(&dev_num, 0, 1, \"mydevice\")"],
-      ["cdev_add", "cdev_add(&my_cdev, dev_num, 1)"]
+      ["alloc_chrdev_region"],
+      ["cdev_add"]
     ],
     "explanation": "alloc_chrdev_region()은 사용 가능한 major number를 커널에서 동적으로 할당받는 함수입니다. cdev_add()는 초기화된 cdev 구조체를 커널에 등록하여 해당 디바이스 번호에 대한 요청을 처리할 수 있게 합니다. 첫 번째 인자는 dev_t 포인터, cdev 포인터 형태로 전달됩니다."
   },
@@ -156,12 +156,10 @@
     "difficulty": "중급",
     "type": "code-fill",
     "question": "다음은 character device의 file_operations에서 ioctl을 처리하는 코드입니다. 빈칸을 채우시오.",
-    "codeTemplate": "#define MY_IOCTL_SET_VALUE _IOW('M', 1, int)\n#define MY_IOCTL_GET_VALUE _IOR('M', 2, int)\n\nstatic long my_ioctl(struct file *filp, unsigned int cmd,\n                     unsigned long arg)\n{\n    int value;\n    switch (cmd) {\n    case MY_IOCTL_SET_VALUE:\n        if (___(___(&value, (int __user *)arg, sizeof(int))))\n            return -EFAULT;\n        /* value 처리 로직 */\n        break;\n    case MY_IOCTL_GET_VALUE:\n        value = 42;\n        if (___(___(&value, (int __user *)arg, sizeof(int))))\n            return -EFAULT;\n        break;\n    default:\n        return -ENOTTY;\n    }\n    return 0;\n}",
+    "codeTemplate": "#define MY_IOCTL_SET_VALUE _IOW('M', 1, int)\n#define MY_IOCTL_GET_VALUE _IOR('M', 2, int)\n\nstatic long my_ioctl(struct file *filp, unsigned int cmd,\n                     unsigned long arg)\n{\n    int value;\n    switch (cmd) {\n    case MY_IOCTL_SET_VALUE:\n        if (___(&value, (int __user *)arg, sizeof(int)))\n            return -EFAULT;\n        /* value 처리 로직 */\n        break;\n    case MY_IOCTL_GET_VALUE:\n        value = 42;\n        if (___(&value, (int __user *)arg, sizeof(int)))\n            return -EFAULT;\n        break;\n    default:\n        return -ENOTTY;\n    }\n    return 0;\n}",
     "codeLanguage": "c",
     "blankAnswers": [
       ["copy_from_user"],
-      ["copy_from_user"],
-      ["copy_to_user"],
       ["copy_to_user"]
     ],
     "explanation": "copy_from_user()는 user space에서 kernel space로 데이터를 안전하게 복사합니다 (_IOW에 대응). copy_to_user()는 kernel space에서 user space로 데이터를 복사합니다 (_IOR에 대응). 두 함수 모두 성공 시 0을 반환하고, 복사하지 못한 바이트 수를 반환하므로 반환값이 0이 아니면 -EFAULT를 반환해야 합니다."
@@ -230,7 +228,7 @@
     "blankAnswers": [
       ["IRQ_NONE"],
       ["IRQ_HANDLED"],
-      ["devm_request_irq", "request_irq"]
+      ["request_irq"]
     ],
     "explanation": "IRQ_NONE은 해당 인터럽트가 이 디바이스에서 발생한 것이 아님을 나타내며, 공유 인터럽트(IRQF_SHARED)에서 중요합니다. IRQ_HANDLED는 인터럽트를 성공적으로 처리했음을 의미합니다. devm_request_irq()는 device-managed 방식으로 IRQ를 등록하여 자동 해제를 보장합니다."
   },
@@ -257,7 +255,7 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "다음은 PCI 디바이스 드라이버의 등록 코드입니다. 빈칸을 채우시오.",
-    "codeTemplate": "static const struct pci_device_id my_pci_ids[] = {\n    { PCI_DEVICE(0x1234, 0x5678) },\n    { 0, }\n};\nMODULE_DEVICE_TABLE(pci, my_pci_ids);\n\nstatic int my_pci_probe(struct pci_dev *pdev,\n                        const struct pci_device_id *id)\n{\n    int ret;\n    ret = ___;\n    if (ret)\n        return ret;\n\n    ret = pci_request_regions(pdev, \"my-pci-driver\");\n    if (ret)\n        goto err_disable;\n\n    pdev->base = ___;\n    if (!pdev->base) {\n        ret = -ENOMEM;\n        goto err_regions;\n    }\n    return 0;\n\nerr_regions:\n    pci_release_regions(pdev);\nerr_disable:\n    pci_disable_device(pdev);\n    return ret;\n}\n\nstatic struct pci_driver my_pci_driver = {\n    .name     = \"my-pci-driver\",\n    .id_table = my_pci_ids,\n    .probe    = my_pci_probe,\n    .remove   = my_pci_remove,\n};",
+    "codeTemplate": "static const struct pci_device_id my_pci_ids[] = {\n    { PCI_DEVICE(0x1234, 0x5678) },\n    { 0, }\n};\nMODULE_DEVICE_TABLE(pci, my_pci_ids);\n\nstatic int my_pci_probe(struct pci_dev *pdev,\n                        const struct pci_device_id *id)\n{\n    int ret;\n    void __iomem *base;\n\n    ret = ___;\n    if (ret)\n        return ret;\n\n    ret = pci_request_regions(pdev, \"my-pci-driver\");\n    if (ret)\n        goto err_disable;\n\n    base = ___;\n    if (!base) {\n        ret = -ENOMEM;\n        goto err_regions;\n    }\n    return 0;\n\nerr_regions:\n    pci_release_regions(pdev);\nerr_disable:\n    pci_disable_device(pdev);\n    return ret;\n}\n\nstatic struct pci_driver my_pci_driver = {\n    .name     = \"my-pci-driver\",\n    .id_table = my_pci_ids,\n    .probe    = my_pci_probe,\n    .remove   = my_pci_remove,\n};",
     "codeLanguage": "c",
     "blankAnswers": [
       ["pci_enable_device(pdev)"],
@@ -272,7 +270,7 @@
     "difficulty": "고급",
     "type": "short-answer",
     "question": "USB 통신의 기본 전송 단위인 URB는 ___로 생성하고, endpoint와 완료 콜백을 설정한 후 ___로 USB 코어에 제출한다. 전송 완료 시 ___ 콜백이 비동기적으로 호출된다.",
-    "blankAnswers": [["usb_alloc_urb", "usb_alloc_urb()"], ["usb_submit_urb", "usb_submit_urb()"], ["complete", "completion"]],
+    "blankAnswers": [["usb_alloc_urb", "usb_alloc_urb()"], ["usb_submit_urb", "usb_submit_urb()"], ["complete"]],
     "explanation": "URB의 생명주기: 1) usb_alloc_urb()로 할당, 2) usb_fill_bulk_urb() 등으로 초기화 (endpoint, 버퍼, 콜백 설정), 3) usb_submit_urb()로 제출, 4) 비동기적으로 전송 완료 후 complete 콜백 호출, 5) usb_free_urb()로 해제. URB는 interrupt, bulk, control, isochronous 전송 타입을 모두 지원합니다."
   },
   {
@@ -298,7 +296,7 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "다음은 DMA coherent 메모리를 할당하고 사용하는 코드입니다. 빈칸을 채우시오.",
-    "codeTemplate": "struct my_device {\n    void *dma_buf;\n    dma_addr_t dma_handle;\n    struct device *dev;\n};\n\nstatic int my_dma_init(struct my_device *mydev)\n{\n    /* DMA 일관성 메모리 할당: CPU 가상 주소와 DMA 물리 주소 획득 */\n    mydev->dma_buf = ___(mydev->dev, BUF_SIZE,\n                         &mydev->dma_handle, GFP_KERNEL);\n    if (!mydev->dma_buf)\n        return -ENOMEM;\n\n    /* 디바이스 레지스터에 DMA 주소 설정 */\n    writel(mydev->dma_handle, mydev->base + DMA_ADDR_REG);\n    return 0;\n}\n\nstatic void my_dma_cleanup(struct my_device *mydev)\n{\n    ___(mydev->dev, BUF_SIZE,\n        mydev->dma_buf, mydev->dma_handle);\n}",
+    "codeTemplate": "struct my_device {\n    void *dma_buf;\n    dma_addr_t dma_handle;\n    void __iomem *base;\n    struct device *dev;\n};\n\nstatic int my_dma_init(struct my_device *mydev)\n{\n    /* DMA 일관성 메모리 할당: CPU 가상 주소와 DMA 물리 주소 획득 */\n    mydev->dma_buf = ___(mydev->dev, BUF_SIZE,\n                         &mydev->dma_handle, GFP_KERNEL);\n    if (!mydev->dma_buf)\n        return -ENOMEM;\n\n    /* 디바이스 레지스터에 DMA 주소 설정 */\n    writel(mydev->dma_handle, mydev->base + DMA_ADDR_REG);\n    return 0;\n}\n\nstatic void my_dma_cleanup(struct my_device *mydev)\n{\n    ___(mydev->dev, BUF_SIZE,\n        mydev->dma_buf, mydev->dma_handle);\n}",
     "codeLanguage": "c",
     "blankAnswers": [
       ["dma_alloc_coherent"],
@@ -322,7 +320,7 @@
     "subcategory": "device-driver",
     "difficulty": "고급",
     "type": "multiple-choice",
-    "question": "Linux 커널에서 DMA streaming mapping 사용 시 dma_map_single() 호출 후 CPU가 해당 버퍼에 접근하려면 어떻게 해야 하는가?",
+    "question": "Linux 커널에서 DMA streaming mapping 사용 시 dma_map_single()로 매핑된 버퍼의 DMA 전송이 완료된 후, 매핑을 해제하지 않고 CPU가 해당 버퍼에 다시 접근하려면 어떻게 해야 하는가?",
     "options": [
       "별도의 동기화 없이 바로 접근할 수 있다",
       "dma_unmap_single()을 호출한 후에만 접근할 수 있으며, 다시 DMA를 시작하려면 재매핑해야 한다",

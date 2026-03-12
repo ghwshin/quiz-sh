@@ -64,7 +64,7 @@
     "difficulty": "초급",
     "type": "short-answer",
     "question": "컨텍스트 스위칭 시 현재 프로세스의 CPU ___, 프로그램 카운터, ___ 등을 task_struct에 저장하고, 다음 프로세스의 컨텍스트를 복원한다. Linux 커널에서는 ___ 함수가 이 과정을 처리한다.",
-    "blankAnswers": [["레지스터", "register"], ["스택 포인터", "stack pointer", "SP"], ["context_switch", "context_switch()"]],
+    "blankAnswers": [["레지스터", "register"], ["스택 포인터", "stack pointer", "SP"], ["context_switch", "context_switch()", "switch_to", "__switch_to"]],
     "explanation": "컨텍스트 스위칭은 멀티태스킹의 기본 메커니즘이지만 오버헤드가 발생합니다. 레지스터 저장/복원, TLB 플러시, 캐시 미스 증가 등이 성능에 영향을 줄 수 있으며, Linux 커널은 context_switch() 함수에서 이 과정을 처리합니다."
   },
   {
@@ -302,7 +302,7 @@
     "type": "short-answer",
     "question": "CFS에서 프로세스의 time slice는 ___(목표 스케줄링 주기)를 각 프로세스의 가중치(___에 의해 결정) 비율로 분배하여 동적으로 계산되며, ___에 의해 최소 시간이 보장된다.",
     "blankAnswers": [["sched_latency"], ["nice 값", "nice"], ["sched_min_granularity"]],
-    "explanation": "이 동적 time slice 방식 덕분에 CFS는 프로세스 수에 관계없이 공정한 CPU 분배를 유지합니다. nice 값이 1 차이 날 때 약 1.25배의 가중치 차이가 발생하도록 설계되어 있으며, 이는 prio_to_weight[] 배열에 정의되어 있습니다."
+    "explanation": "이 동적 time slice 방식 덕분에 CFS는 프로세스 수에 관계없이 공정한 CPU 분배를 유지합니다. nice 값이 1 차이 날 때 약 1.25배의 가중치 차이가 발생하도록 설계되어 있으며, 이는 prio_to_weight[] 배열에 정의되어 있습니다. sched_min_granularity는 각 프로세스에 보장되는 최소 실행 시간으로, sched_latency와 상호작용합니다. 프로세스 수가 많아져 sched_latency를 가중치로 나눈 값이 sched_min_granularity보다 작아지면, sched_min_granularity가 적용되어 실제 스케줄링 주기가 sched_latency보다 길어질 수 있습니다."
   },
   {
     "id": "sc-023",
@@ -335,7 +335,7 @@
     "subcategory": "scheduling",
     "difficulty": "고급",
     "type": "code-fill",
-    "question": "커널 모듈에서 runqueue를 순회하며 실행 가능한 태스크 수를 확인하는 코드를 완성하시오.",
+    "question": "커널 모듈에서 프로세스 리스트를 순회하며 실행 가능한 태스크 수를 확인하는 코드를 완성하시오.",
     "codeTemplate": "#include <linux/module.h>\n#include <linux/kernel.h>\n#include <linux/sched.h>\n#include <linux/sched/signal.h>\n\nstatic int __init rq_info_init(void)\n{\n    struct task_struct *task;\n    int running_count = 0;\n    int total_count = 0;\n\n    // 모든 프로세스를 순회\n    ___(task) {\n        total_count++;\n        if (task->__state == ___)\n            running_count++;\n    }\n\n    pr_info(\"전체 태스크 수: %d\\n\", total_count);\n    pr_info(\"실행 가능(TASK_RUNNING) 태스크 수: %d\\n\",\n            running_count);\n\n    return 0;\n}\n\nstatic void __exit rq_info_exit(void)\n{\n    pr_info(\"rq_info 모듈 언로드\\n\");\n}\n\nmodule_init(rq_info_init);\nmodule_exit(rq_info_exit);\nMODULE_LICENSE(\"GPL\");",
     "codeLanguage": "c",
     "blankAnswers": [

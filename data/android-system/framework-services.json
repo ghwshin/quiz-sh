@@ -194,7 +194,7 @@
     "difficulty": "중급",
     "type": "short-answer",
     "question": "___은 ___가 제공하는 메커니즘으로, CPU나 화면을 깨어있는 상태로 유지하며, 적절히 ___하지 않으면 배터리가 빠르게 소모된다.",
-    "blankAnswers": [["WakeLock", "웨이크락"], ["PowerManagerService", "PMS"], ["release", "해제"]],
+    "blankAnswers": [["WakeLock", "웨이크락"], ["PowerManagerService", "PMS", "PowerManager"], ["release", "해제"]],
     "explanation": "WakeLock은 반드시 try-finally 패턴이나 타임아웃과 함께 사용하여 확실히 해제되도록 해야 합니다. Android에서는 WakeLock 남용을 방지하기 위해 JobScheduler, WorkManager 등의 대안을 권장합니다."
   },
   {
@@ -258,12 +258,12 @@
     "subcategory": "framework-services",
     "difficulty": "고급",
     "type": "multiple-choice",
-    "question": "AMS가 앱 프로세스의 ANR(Application Not Responding)을 감지하는 기준 시간으로 올바른 것은?",
+    "question": "AMS가 앱 프로세스의 ANR(Application Not Responding)을 감지하는 기준 시간으로, foreground Activity 입력 이벤트와 foreground BroadcastReceiver의 조합이 올바른 것은?",
     "options": [
-      "Activity: 3초, BroadcastReceiver: 5초",
-      "Activity: 5초, BroadcastReceiver: 10초",
-      "Activity: 10초, BroadcastReceiver: 15초",
-      "Activity: 5초, BroadcastReceiver: 60초"
+      "Activity: 3초, foreground BroadcastReceiver: 5초",
+      "Activity: 5초, foreground BroadcastReceiver: 10초",
+      "Activity: 10초, foreground BroadcastReceiver: 15초",
+      "Activity: 5초, foreground BroadcastReceiver: 60초"
     ],
     "answer": 1,
     "explanation": "AMS는 foreground Activity의 입력 이벤트가 5초 내에 처리되지 않으면 ANR을 발생시킵니다. BroadcastReceiver의 경우 foreground broadcast는 10초, background broadcast는 60초가 기준입니다. Service는 foreground의 경우 20초입니다."
@@ -291,8 +291,8 @@
     "difficulty": "고급",
     "type": "short-answer",
     "question": "___는 메모리 부족 시 프로세스를 종료하는 메커니즘으로, AMS가 프로세스 상태에 따라 ___ 값을 계산하고, ___ 데몬이 이 값이 높은 프로세스부터 종료한다.",
-    "blankAnswers": [["LMK", "Low Memory Killer"], ["OOM Adj", "oom_score_adj"], ["lmkd"]],
-    "explanation": "Android에서 OOM Adj 범위는 -1000(절대 kill 안 됨)부터 1000(가장 먼저 kill됨)까지입니다. native process는 -1000, system_server는 -900, foreground app은 0, cached app은 900~999 정도의 값을 가집니다. 최신 Android에서는 커널 레벨 LMK 대신 사용자 공간의 lmkd 데몬이 PSI(Pressure Stall Information)를 활용합니다."
+    "blankAnswers": [["LMK", "Low Memory Killer"], ["oom_score_adj", "oom_adj"], ["lmkd"]],
+    "explanation": "Android에서 oom_score_adj 범위는 -1000(절대 kill 안 됨)부터 1000(가장 먼저 kill됨)까지입니다. native process는 -1000, system_server는 -900, foreground app은 0, cached app은 900~999 정도의 값을 가집니다. 최신 Android에서는 커널 레벨 LMK 대신 사용자 공간의 lmkd 데몬이 PSI(Pressure Stall Information)를 활용합니다. 참고로 구버전에서는 oom_adj를 사용했으나 현재는 oom_score_adj가 표준 용어입니다."
   },
   {
     "id": "fw-022",
@@ -311,8 +311,8 @@
     "difficulty": "고급",
     "type": "short-answer",
     "question": "PMS의 APK 설치 과정은 ___을 검증하고, ___을 파싱하여 정보를 추출한 후, ___를 통해 AOT 컴파일을 수행하고, ___디렉토리를 생성하여 UID/GID를 할당한다.",
-    "blankAnswers": [["서명", "signature"], ["AndroidManifest.xml", "매니페스트"], ["dex2oat"], ["/data/data/"]],
-    "explanation": "PMS는 설치 시 기존 앱과의 서명 일치 여부(업데이트 시), 퍼미션 충돌, 저장 공간 등도 확인합니다. 설치 완료 후 PACKAGE_ADDED 브로드캐스트를 전송하여 다른 앱과 시스템에 알립니다."
+    "blankAnswers": [["서명", "signature"], ["AndroidManifest.xml", "매니페스트"], ["dex2oat"], ["/data/data/", "/data/user/"]],
+    "explanation": "PMS는 설치 시 기존 앱과의 서명 일치 여부(업데이트 시), 퍼미션 충돌, 저장 공간 등도 확인합니다. dex2oat를 통한 AOT 컴파일은 항상 수행되는 것은 아니며, Android 7.0 이후에는 프로파일 기반의 선택적 컴파일이 적용되어 설치 시에는 verify 또는 speed-profile 수준만 수행될 수 있습니다. 앱 데이터 디렉토리는 /data/data/<패키지명> 또는 /data/user/<userId>/<패키지명> 경로에 생성됩니다. 설치 완료 후 PACKAGE_ADDED 브로드캐스트를 전송합니다."
   },
   {
     "id": "fw-024",

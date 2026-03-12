@@ -104,7 +104,7 @@
     "subcategory": "boot-process",
     "difficulty": "초급",
     "type": "short-answer",
-    "question": "GPT는 MBR에 비해 ___이상의 대용량 디스크를 지원하고, 최대 ___개의 주 파티션을 생성할 수 있으며, 파티션 테이블의 ___을 디스크 끝에 저장하여 복구가 용이하다.",
+    "question": "GPT는 MBR에 비해 ___이상의 대용량 디스크를 지원하고, 기본적으로 ___개의 주 파티션을 생성할 수 있으며, 파티션 테이블의 ___을 디스크 끝에 저장하여 복구가 용이하다.",
     "blankAnswers": [["2TB"], ["128"], ["백업 복사본", "backup"]],
     "explanation": "GPT는 UEFI 표준의 일부로, 기존 MBR의 한계를 극복하기 위해 설계되었습니다. MBR은 32비트 LBA 주소 지정으로 최대 2TB까지만 지원하지만, GPT는 64비트 LBA를 사용하여 이론적으로 9.4ZB까지 지원합니다."
   },
@@ -183,8 +183,8 @@
     "difficulty": "중급",
     "type": "short-answer",
     "question": "___는 블록 장치 기반의 고정 크기 RAM 디스크 방식이고, ___는 cpio 아카이브를 ___에 풀어놓는 방식으로 필요한 만큼만 메모리를 사용하며, 현대 Linux에서 표준이다.",
-    "blankAnswers": [["initrd", "initial ramdisk"], ["initramfs"], ["tmpfs"]],
-    "explanation": "initramfs는 Linux 2.6에서 도입되었으며, initrd의 단점을 개선한 방식입니다. initrd는 별도의 파일시스템 드라이버와 고정 크기의 RAM 디스크가 필요하지만, initramfs는 cpio 아카이브를 커널의 tmpfs에 직접 풀어 사용하므로 더 효율적입니다."
+    "blankAnswers": [["initrd", "initial ramdisk"], ["initramfs"], ["rootfs", "tmpfs"]],
+    "explanation": "initramfs는 Linux 2.6에서 도입되었으며, initrd의 단점을 개선한 방식입니다. initrd는 별도의 파일시스템 드라이버와 고정 크기의 RAM 디스크가 필요하지만, initramfs는 cpio 아카이브를 커널의 rootfs(tmpfs 기반의 특수 인스턴스)에 직접 풀어 사용하므로 더 효율적입니다."
   },
   {
     "id": "bp-015",
@@ -242,7 +242,7 @@
     "codeLanguage": "asm",
     "blankAnswers": [
       ["cr0"],
-      ["in_pm32", "protected_mode", "pm_entry"]
+      ["in_pm32"]
     ],
     "explanation": "x86에서 보호 모드로 전환하려면 먼저 GDT를 설정한 후, CR0 레지스터의 PE(bit 0) 비트를 1로 설정합니다. 그 후 far jump를 수행하여 CPU의 명령어 파이프라인을 플러시하고 보호 모드 코드 세그먼트로 진입합니다. 이 과정은 arch/x86/boot/pmjump.S에 구현되어 있습니다."
   },
@@ -296,7 +296,7 @@
     "type": "short-answer",
     "question": "kernel_init() 함수는 먼저 커널 커맨드라인의 ___파라미터로 지정된 프로그램을 시도하고, 없으면 ___, /etc/init, /bin/init 순서로 실행을 시도하며, 모든 경로가 실패하면 ___이 발생한다.",
     "blankAnswers": [["init="], ["/sbin/init"], ["kernel panic", "커널 패닉"]],
-    "explanation": "이 탐색 순서는 init/main.c의 kernel_init() 함수에 하드코딩되어 있습니다. 현대 시스템에서는 대부분 /sbin/init이 systemd에 대한 심볼릭 링크이므로 첫 번째 시도에서 성공합니다."
+    "explanation": "이 탐색 순서는 init/main.c의 kernel_init() 함수에 하드코딩되어 있습니다. 전체 탐색 순서는 /sbin/init → /etc/init → /bin/init → /bin/sh이며, /bin/sh는 최후의 폴백(fallback)으로 포함됩니다. 현대 시스템에서는 대부분 /sbin/init이 systemd에 대한 심볼릭 링크이므로 첫 번째 시도에서 성공합니다."
   },
   {
     "id": "bp-023",
@@ -335,7 +335,7 @@
     "subcategory": "boot-process",
     "difficulty": "고급",
     "type": "multiple-choice",
-    "question": "x86 아키텍처에서 BIOS 레거시 부팅 시, 리얼 모드에서 보호 모드로 전환한 후 최종적으로 커널이 동작하는 모드는?",
+    "question": "x86_64 아키텍처에서 BIOS 레거시 부팅 시, 리얼 모드에서 보호 모드로 전환한 후 최종적으로 커널이 동작하는 모드는?",
     "options": [
       "보호 모드(Protected Mode, 32비트)에서 계속 실행",
       "리얼 모드(Real Mode)로 복귀하여 실행",

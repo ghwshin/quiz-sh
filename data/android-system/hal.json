@@ -37,7 +37,7 @@
     "subcategory": "hal",
     "difficulty": "초급",
     "type": "multiple-choice",
-    "question": "legacy HAL(libhardware 기반)에서 HAL 모듈을 로드하는 데 사용되는 시스템 호출은?",
+    "question": "legacy HAL(libhardware 기반)에서 HAL 모듈을 로드하는 데 사용되는 라이브러리 함수는?",
     "options": [
       "exec()",
       "dlopen()",
@@ -222,9 +222,9 @@
     "blankAnswers": [
       ["VTS", "Vendor Test Suite"],
       ["인터페이스", "interface"],
-      ["호환성 인증", "호환성", "GMS 인증"]
+      ["호환성", "compatibility"]
     ],
-    "explanation": "VTS는 CTS(Compatibility Test Suite)의 벤더 버전으로 볼 수 있습니다. HAL 인터페이스의 각 메서드에 대한 기능 테스트, 성능 테스트, 보안 테스트를 포함합니다. VTS 통과는 Android 호환성 인증(GMS 인증)의 필수 요건이며, Project Treble의 안정성을 보장하는 핵심 메커니즘입니다."
+    "explanation": "VTS는 벤더 HAL 구현의 호환성을 검증하는 테스트 프레임워크입니다. HAL 인터페이스의 각 메서드에 대한 기능 테스트, 성능 테스트, 보안 테스트를 포함합니다. VTS는 Treble 호환성 검증을 위한 것이며, GMS 인증(Google Mobile Services 인증)은 CTS(Compatibility Test Suite) 통과가 주요 요건입니다. VTS 통과는 Android 호환성을 보장하는 핵심 메커니즘입니다."
   },
   {
     "id": "hl-016",
@@ -316,7 +316,7 @@
     "blankAnswers": [
       ["FCM 레벨", "FCM level"],
       ["optional"],
-      ["Target FCM Version"]
+      ["Target FCM Version", "target-level"]
     ],
     "explanation": "FCM 레벨 기반의 HAL deprecation은 점진적 전환을 보장합니다. 예를 들어 FCM 레벨 5에서 HAL A를 optional로 표시하면, 새 디바이스는 HAL A를 제공하지 않아도 됩니다. FCM 레벨 7에서 완전히 제거되면, Target FCM Version 7 이상의 디바이스에서는 HAL A가 프레임워크에서 접근 불가합니다."
   },
@@ -342,13 +342,13 @@
     "type": "code-fill",
     "question": "다음은 AIDL HAL 인터페이스를 정의하고 빌드하기 위한 Android.bp 파일입니다. 빈칸을 채우시오.",
     "codeTemplate": "___ {\n    name: \"android.hardware.example\",\n    vendor_available: true,\n    srcs: [\"android/hardware/example/*.aidl\"],\n    stability: \"___\",\n    backend: {\n        cpp: {\n            enabled: true,\n        },\n        java: {\n            sdk_version: \"___\",\n        },\n    },\n}",
-    "codeLanguage": "json",
+    "codeLanguage": "text",
     "blankAnswers": [
       ["aidl_interface"],
       ["vintf"],
       ["module_current", "system_current"]
     ],
-    "explanation": "AIDL HAL은 Android.bp에서 aidl_interface 모듈로 정의합니다. stability를 \"vintf\"로 설정하면 안정적인 AIDL 인터페이스임을 선언하며, VINTF 호환성 검증 대상이 됩니다. Java 백엔드의 sdk_version은 모듈의 API 레벨을 지정합니다. 이 설정으로 빌드 시스템이 자동으로 C++/Java 바인딩과 버전 스냅샷을 관리합니다."
+    "explanation": "AIDL HAL은 Android.bp(Blueprint 형식)에서 aidl_interface 모듈로 정의합니다. stability를 \"vintf\"로 설정하면 안정적인 AIDL 인터페이스임을 선언하며, VINTF 호환성 검증 대상이 됩니다. Java 백엔드의 sdk_version은 모듈의 API 레벨을 지정합니다. 이 설정으로 빌드 시스템이 자동으로 C++/Java 바인딩과 버전 스냅샷을 관리합니다."
   },
   {
     "id": "hl-024",
@@ -357,14 +357,14 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "다음은 HIDL HAL 클라이언트가 서비스를 가져오고 콜백을 등록하는 C++ 코드입니다. 빈칸을 채우시오.",
-    "codeTemplate": "#include <android/hardware/sensors/1.0/ISensors.h>\n#include <android/hardware/sensors/1.0/ISensorsCallback.h>\n\nusing android::hardware::sensors::V1_0::ISensors;\nusing android::hardware::sensors::V1_0::ISensorsCallback;\n\nclass SensorsCallback : public ISensorsCallback {\npublic:\n    Return<void> onSensorEvent(const Event& event) override {\n        // 센서 이벤트 처리\n        return ___();\n    }\n};\n\nvoid initSensors() {\n    android::sp<ISensors> sensors = ISensors::___(\"default\");\n    if (sensors == nullptr) {\n        // 서비스를 찾을 수 없음\n        return;\n    }\n    android::sp<ISensorsCallback> callback = new SensorsCallback();\n    sensors->___(callback);\n}",
+    "codeTemplate": "#include <android/hardware/sensors/2.0/ISensors.h>\n#include <android/hardware/sensors/2.0/ISensorsCallback.h>\n#include <fmq/MessageQueue.h>\n\nusing android::hardware::sensors::V2_0::ISensors;\nusing android::hardware::sensors::V2_0::ISensorsCallback;\n\nclass SensorsCallback : public ISensorsCallback {\npublic:\n    Return<void> onDynamicSensorsConnected(\n            const hidl_vec<SensorInfo>& info) override {\n        return ___();\n    }\n};\n\nvoid initSensors() {\n    android::sp<ISensors> sensors = ISensors::___(\"default\");\n    if (sensors == nullptr) {\n        return;\n    }\n    android::sp<ISensorsCallback> callback = new SensorsCallback();\n    sensors->___(callback);\n}",
     "codeLanguage": "cpp",
     "blankAnswers": [
       ["Void"],
       ["getService"],
-      ["registerCallback", "setCallback"]
+      ["initialize"]
     ],
-    "explanation": "HIDL HAL 클라이언트는 ISensors::getService()를 호출하여 hwservicemanager에서 서비스를 조회합니다. Return<void>의 경우 Void()를 반환합니다. 콜백 패턴은 HAL에서 비동기 이벤트(센서 데이터 등)를 클라이언트에 전달하는 표준 방식으로, ISensorsCallback 인터페이스를 구현한 객체를 registerCallback()으로 등록합니다."
+    "explanation": "HIDL HAL 클라이언트는 ISensors::getService()를 호출하여 hwservicemanager에서 서비스를 조회합니다. Return<void>의 경우 Void()를 반환합니다. Sensors HAL 2.0에서는 initialize() 메서드를 호출하여 FMQ(Fast Message Queue)와 콜백을 설정합니다. FMQ를 통해 센서 이벤트를 Binder IPC 없이 효율적으로 전달할 수 있습니다."
   },
   {
     "id": "hl-025",
@@ -373,13 +373,13 @@
     "difficulty": "고급",
     "type": "code-fill",
     "question": "다음은 vendor manifest XML 파일에서 HAL 서비스를 선언하는 코드입니다. 빈칸을 채우시오.",
-    "codeTemplate": "<manifest version=\"1.0\" type=\"___\">\n    <hal format=\"hidl\">\n        <name>android.hardware.camera</name>\n        <transport>___</transport>\n        <version>2.0</version>\n        <interface>\n            <name>___</name>\n            <instance>default</instance>\n        </interface>\n    </hal>\n</manifest>",
+    "codeTemplate": "<manifest version=\"1.0\" type=\"___\">\n    <hal format=\"hidl\">\n        <name>android.hardware.camera.provider</name>\n        <transport>___</transport>\n        <version>2.4</version>\n        <interface>\n            <name>___</name>\n            <instance>default</instance>\n        </interface>\n    </hal>\n</manifest>",
     "codeLanguage": "xml",
     "blankAnswers": [
       ["device"],
       ["hwbinder"],
       ["ICameraProvider"]
     ],
-    "explanation": "vendor manifest는 type=\"device\"로 디바이스 측 manifest임을 선언합니다. transport 태그에 \"hwbinder\"를 지정하면 Binderized HAL로 동작하며, \"passthrough\"를 지정하면 Passthrough HAL로 동작합니다. interface의 name은 HIDL 인터페이스 이름(예: ICameraProvider)을 지정하고, instance는 서비스 인스턴스 이름(보통 \"default\")을 지정합니다."
+    "explanation": "vendor manifest는 type=\"device\"로 디바이스 측 manifest임을 선언합니다. transport 태그에 \"hwbinder\"를 지정하면 Binderized HAL로 동작하며, \"passthrough\"를 지정하면 Passthrough HAL로 동작합니다. 카메라 HAL의 경우 패키지명은 android.hardware.camera.provider이고 인터페이스 이름은 ICameraProvider이며, 초기 버전은 2.4입니다. instance는 서비스 인스턴스 이름(보통 \"default\")을 지정합니다."
   }
 ]

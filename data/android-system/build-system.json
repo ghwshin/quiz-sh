@@ -37,7 +37,7 @@
     "subcategory": "build-system",
     "difficulty": "초급",
     "type": "multiple-choice",
-    "question": "Android 빌드 variant 중 디버깅 기능이 활성화되어 있고 root 접근이 가능하며, 개발자가 주로 사용하는 variant는?",
+    "question": "Android 빌드 variant 중 프로덕션(user)과 유사한 환경에서 디버깅이 필요할 때(예: 제품 검증, 성능 테스트) 주로 사용하며, root 접근과 디버깅 기능이 추가된 variant는?",
     "options": [
       "user",
       "userdebug",
@@ -45,7 +45,7 @@
       "debug"
     ],
     "answer": 1,
-    "explanation": "userdebug variant는 user variant와 유사하지만 root 접근과 디버깅 기능이 추가로 활성화됩니다. user는 최종 출시용으로 보안이 강화되어 있고, eng는 개발용으로 모든 디버깅 도구와 기능이 포함됩니다. 실제 제품 검증에는 userdebug가 가장 많이 사용됩니다."
+    "explanation": "userdebug variant는 user variant와 유사하지만 root 접근(adb root)과 디버깅 기능이 추가로 활성화됩니다. user는 최종 출시용으로 보안이 강화되어 있고, eng는 개발용으로 모든 디버깅 도구와 기능이 포함되어 성능 특성이 프로덕션과 다릅니다. 프로덕션에 가까운 환경에서 디버깅이 필요한 제품 검증에는 userdebug가 가장 많이 사용됩니다."
   },
   {
     "id": "bs-004",
@@ -59,7 +59,7 @@
       ["repo init", "repo init -u"],
       ["repo sync"]
     ],
-    "explanation": "repo 도구는 manifest.xml 파일을 기반으로 수백 개의 Git 저장소를 일괄적으로 관리합니다. repo init은 작업 디렉토리를 초기화하고, repo sync는 모든 프로젝트를 동기화하며, repo start/upload 등의 명령으로 브랜치 생성과 코드 리뷰 제출도 할 수 있습니다."
+    "explanation": "repo 도구는 manifest.xml 파일을 기반으로 수백 개의 Git 저장소를 일괄적으로 관리합니다. repo init은 작업 디렉토리를 초기화하며, -u <manifest-url> 옵션으로 manifest 저장소의 URL을 지정합니다(예: repo init -u https://android.googlesource.com/platform/manifest). repo sync는 모든 프로젝트를 동기화하며, repo start/upload 등의 명령으로 브랜치 생성과 코드 리뷰 제출도 할 수 있습니다."
   },
   {
     "id": "bs-005",
@@ -86,9 +86,9 @@
     "codeLanguage": "bash",
     "blankAnswers": [
       ["source", "."],
-      ["aosp_oriole-userdebug", "oriole-userdebug"]
+      ["aosp_oriole-userdebug"]
     ],
-    "explanation": "'source' 또는 '.' 명령으로 envsetup.sh를 현재 셸에 로드합니다. lunch 명령에는 '<product>-<variant>' 형식의 빌드 타겟을 지정합니다. Pixel 6의 코드명은 oriole이며, 개발용 빌드에는 userdebug variant를 사용합니다. m 명령은 전체 시스템을 빌드하는 명령으로, -j 옵션으로 병렬 빌드 스레드 수를 지정합니다."
+    "explanation": "'source' 또는 '.' 명령으로 envsetup.sh를 현재 셸에 로드합니다. lunch 명령에는 '<product>-<variant>' 형식의 빌드 타겟을 지정합니다. Pixel 6의 코드명은 oriole이며, AOSP 빌드에서는 aosp_ 접두사를 붙여 aosp_oriole-userdebug 형식으로 사용합니다. m 명령은 전체 시스템을 빌드하는 명령으로, -j 옵션으로 병렬 빌드 스레드 수를 지정합니다."
   },
   {
     "id": "bs-007",
@@ -98,11 +98,11 @@
     "type": "code-fill",
     "question": "Android.bp 파일에서 간단한 C++ 공유 라이브러리를 정의하는 코드를 완성하시오.",
     "codeTemplate": "___ {\n    name: \"libexample\",\n    srcs: [\"example.cpp\"],\n    shared_libs: [\n        \"liblog\",\n        \"libutils\",\n    ],\n    export_include_dirs: [\"include\"],\n}",
-    "codeLanguage": "json",
+    "codeLanguage": "text",
     "blankAnswers": [
-      ["cc_library_shared", "cc_library"]
+      ["cc_library_shared"]
     ],
-    "explanation": "cc_library_shared는 Android.bp에서 C/C++ 공유 라이브러리(.so)를 정의하는 모듈 타입입니다. name은 모듈 이름, srcs는 소스 파일 목록, shared_libs는 링크할 다른 공유 라이브러리, export_include_dirs는 이 라이브러리를 사용하는 다른 모듈에 공개할 헤더 파일 경로입니다. cc_library를 사용하면 정적/공유 라이브러리가 모두 생성됩니다."
+    "explanation": "cc_library_shared는 Android.bp에서 C/C++ 공유 라이브러리(.so)를 정의하는 모듈 타입입니다. name은 모듈 이름, srcs는 소스 파일 목록, shared_libs는 링크할 다른 공유 라이브러리, export_include_dirs는 이 라이브러리를 사용하는 다른 모듈에 공개할 헤더 파일 경로입니다. 참고로 cc_library를 사용하면 정적/공유 라이브러리가 모두 생성되지만, 이 코드에서는 명시적으로 공유 라이브러리만 정의하므로 cc_library_shared가 적합합니다."
   },
   {
     "id": "bs-008",
@@ -174,13 +174,13 @@
     "subcategory": "build-system",
     "difficulty": "중급",
     "type": "short-answer",
-    "question": "Android.bp는 Soong 빌드 시스템이 사용하는 ___형식의 파일로 변수나 조건문을 지원하지 않으며, Android.mk는 GNU Make 기반의 ___형식 파일로 복잡한 로직이 가능하고, Google은 ___도구를 제공하여 변환을 지원한다.",
+    "question": "Android.bp는 Soong 빌드 시스템이 사용하는 ___형식의 파일로 조건문이나 제어 흐름을 지원하지 않으며, Android.mk는 GNU Make 기반의 ___형식 파일로 복잡한 로직이 가능하고, Google은 ___도구를 제공하여 변환을 지원한다.",
     "blankAnswers": [
       ["선언적", "declarative"],
       ["절차적", "imperative"],
       ["androidmk"]
     ],
-    "explanation": "Android.bp의 선언적 특성은 빌드 파일의 파싱과 분석을 더 빠르고 안정적으로 만듭니다. 복잡한 조건부 로직이 필요한 경우에는 Go로 작성된 Soong 플러그인이나 soong_config_module_type을 활용할 수 있습니다."
+    "explanation": "Android.bp는 선언적 형식으로 변수 할당은 지원하지만 조건문(if/else)이나 제어 흐름(for/while)은 지원하지 않습니다. 이러한 제약은 빌드 파일의 파싱과 분석을 더 빠르고 안정적으로 만듭니다. 복잡한 조건부 로직이 필요한 경우에는 Go로 작성된 Soong 플러그인이나 soong_config_module_type을 활용할 수 있습니다."
   },
   {
     "id": "bs-013",
@@ -218,7 +218,7 @@
     "type": "code-fill",
     "question": "Android.bp에서 Java 라이브러리 모듈과 이를 의존하는 Android 앱 모듈을 정의하는 코드를 완성하시오.",
     "codeTemplate": "___ {\n    name: \"mylib-java\",\n    srcs: [\"src/**/*.java\"],\n    sdk_version: \"current\",\n}\n\n___ {\n    name: \"MyApp\",\n    srcs: [\"src/**/*.java\"],\n    resource_dirs: [\"res\"],\n    manifest: \"AndroidManifest.xml\",\n    static_libs: [\"mylib-java\"],\n    sdk_version: \"current\",\n    certificate: \"platform\",\n}",
-    "codeLanguage": "json",
+    "codeLanguage": "text",
     "blankAnswers": [
       ["java_library"],
       ["android_app"]
@@ -238,7 +238,7 @@
       ["PRODUCT_PACKAGES"],
       ["PRODUCT_PROPERTY_OVERRIDES", "PRODUCT_SYSTEM_PROPERTIES"]
     ],
-    "explanation": "PRODUCT_PACKAGES는 빌드에 포함할 모듈(앱, 라이브러리, 바이너리 등)의 목록입니다. PRODUCT_PROPERTY_OVERRIDES(또는 최신 버전에서는 PRODUCT_SYSTEM_PROPERTIES)는 시스템 프로퍼티를 설정합니다. PRODUCT_COPY_FILES는 빌드 결과물에 특정 파일을 복사합니다. '+=' 연산자를 사용하여 기존 값에 추가합니다."
+    "explanation": "PRODUCT_PACKAGES는 빌드에 포함할 모듈(앱, 라이브러리, 바이너리 등)의 목록입니다. PRODUCT_PROPERTY_OVERRIDES는 시스템 프로퍼티를 설정하는 변수이지만, Android 12 이후 deprecated되었으며 PRODUCT_SYSTEM_PROPERTIES(또는 파티션별 PRODUCT_VENDOR_PROPERTIES 등)로 대체되었습니다. PRODUCT_COPY_FILES는 빌드 결과물에 특정 파일을 복사합니다. '+=' 연산자를 사용하여 기존 값에 추가합니다."
   },
   {
     "id": "bs-017",
@@ -248,7 +248,7 @@
     "type": "code-fill",
     "question": "Android.bp에서 조건부 빌드를 위해 soong_config_module_type을 사용하는 코드를 완성하시오.",
     "codeTemplate": "soong_config_string_variable {\n    name: \"my_feature\",\n    values: [\"enabled\", \"disabled\"],\n}\n\nsoong_config_module_type {\n    name: \"my_cc_library\",\n    module_type: \"cc_library_shared\",\n    config_namespace: \"my_namespace\",\n    variables: [\"my_feature\"],\n}\n\n___ {\n    name: \"libconditional\",\n    srcs: [\"base.cpp\"],\n    soong_config_variables: {\n        my_feature: {\n            enabled: {\n                ___: [\"feature.cpp\"],\n            },\n        },\n    },\n}",
-    "codeLanguage": "json",
+    "codeLanguage": "text",
     "blankAnswers": [
       ["my_cc_library"],
       ["srcs"]
@@ -265,11 +265,11 @@
     "options": [
       "Android.mk 파일로 변환 후 Make로 처리",
       "Kati를 통해 Makefile을 Ninja로 변환",
-      "Blueprint → Go AST → Ninja 파일 생성",
+      "Blueprint → Blueprint AST → Ninja 파일 생성",
       "Protocol Buffer로 직렬화 후 처리"
     ],
     "answer": 2,
-    "explanation": "Soong은 Go 언어로 작성되어 있으며, Blueprint 파일을 Go의 AST(Abstract Syntax Tree)로 파싱한 후 모듈 정의를 분석하고 의존성을 해결하여 최종적으로 Ninja 빌드 파일을 생성합니다. Kati는 Android.mk 파일을 Ninja로 변환하는 별도의 도구로, Make에서 Soong으로의 전환 기간에 공존하면서 사용됩니다."
+    "explanation": "Soong은 Go 언어로 작성되어 있으며, Blueprint 파일을 Blueprint AST(Abstract Syntax Tree)로 파싱한 후 모듈 정의를 분석하고 의존성을 해결하여 최종적으로 Ninja 빌드 파일을 생성합니다. Blueprint 파서는 Go로 구현되어 있지만 생성하는 AST는 Blueprint 문법에 특화된 구조입니다. Kati는 Android.mk 파일을 Ninja로 변환하는 별도의 도구로, Make에서 Soong으로의 전환 기간에 공존하면서 사용됩니다."
   },
   {
     "id": "bs-019",
@@ -353,7 +353,7 @@
     "type": "code-fill",
     "question": "Android.bp에서 HIDL 인터페이스 라이브러리를 정의하고 vendor 파티션에 설치되는 HAL 서비스를 빌드하는 코드를 완성하시오.",
     "codeTemplate": "cc_binary {\n    name: \"android.hardware.example@1.0-service\",\n    defaults: [\"hidl_defaults\"],\n    ___: true,\n    relative_install_path: \"hw\",\n    srcs: [\"service.cpp\", \"Example.cpp\"],\n    shared_libs: [\n        \"libhidlbase\",\n        \"libutils\",\n        \"liblog\",\n        \"android.hardware.example@1.0\",\n    ],\n    init_rc: [\"android.hardware.example@1.0-service.rc\"],\n    ___: [\"android.hardware.example@1.0-service.xml\"],\n}",
-    "codeLanguage": "json",
+    "codeLanguage": "text",
     "blankAnswers": [
       ["vendor", "proprietary"],
       ["vintf_fragments"]
