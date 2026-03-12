@@ -212,3 +212,21 @@
   - CodeFillQuiz follows same prop pattern: { quiz, questionNumber, onNext }
   - For previously answered code-fill quizzes, show the first acceptable answer for each blank
 ---
+
+## 2026-03-12 - US-016
+- What was implemented: Quiz session page at src/app/quiz/[category]/[subcategory]/[difficulty]/page.tsx with QuizSession client component
+  - Server page with generateStaticParams for all category/subcategory/difficulty combos (88 paths)
+  - QuizSession client component handles quiz rendering and navigation
+  - Renders correct component per quiz type (MultipleChoiceQuiz, ShortAnswerQuiz, CodeFillQuiz)
+  - Progress bar showing current question / total
+  - Previous/Next navigation buttons
+  - Random difficulty shuffles quizzes on mount
+  - Back link to difficulty selection page
+  - Empty state when no quizzes match
+- Files changed: src/app/quiz/[category]/[subcategory]/[difficulty]/page.tsx (new), src/components/QuizSession.tsx (new)
+- **Learnings for future iterations:**
+  - QuizSession is a client component receiving pre-filtered quizzes from server page
+  - Use `key={quiz.id}` on quiz components to reset state when navigating between questions
+  - Random shuffle done once via useMemo with empty deps to prevent re-shuffle on re-render
+  - generateStaticParams must include "all" subcategory and "random" difficulty
+---
