@@ -142,3 +142,20 @@
   - Next.js App Router dynamic routes use params as Promise in page props
   - SubcategoryProgress is a reusable client component for showing progress counts
 ---
+
+## 2026-03-12 - US-012
+- What was implemented: Difficulty selection page at src/app/quiz/[category]/[subcategory]/page.tsx
+  - 4 difficulty cards: 초급(green), 중급(yellow), 고급(red), 랜덤(purple)
+  - Each card shows quiz count and progress (N/M 완료)
+  - Progress displayed via DifficultyProgress client component
+  - ResetButton client component with confirmation dialog
+  - generateStaticParams for all category+subcategory combinations (including "all")
+  - Back link to subcategory page
+  - Responsive grid: 1 col mobile, 2 col desktop
+- Files changed: src/app/quiz/[category]/[subcategory]/page.tsx (new), src/components/DifficultyProgress.tsx (new)
+- **Learnings for future iterations:**
+  - DifficultyProgress and ResetButton are separate client components in the same file
+  - Reset button only shows when there is progress to reset (answered > 0)
+  - "random" difficulty maps to all quizzes (totalCount) and uses purple color scheme
+  - generateStaticParams must include "all" as a subcategory option
+---
