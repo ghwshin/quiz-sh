@@ -102,7 +102,7 @@
         "Typecheck 통과"
       ],
       "priority": 6,
-      "passes": false,
+      "passes": true,
       "notes": "hal: HAL interface, passthrough/binderized, HIDL/AIDL HAL 등. android-runtime: ART, DEX, AOT/JIT, GC 등. build-system: Android.bp, Soong, Make, lunch, m/mm/mmm 등."
     },
     {

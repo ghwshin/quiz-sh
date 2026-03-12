@@ -57,3 +57,14 @@
   - Android quiz code examples use Java/Kotlin/C++ and XML (AndroidManifest) as appropriate
   - Parallel agent creation continues to work well for independent quiz files
 ---
+
+## 2026-03-12 - US-006
+- What was implemented: Android System quiz data for 3 subcategories - hal (25 quizzes), android-runtime (25 quizzes), build-system (25 quizzes). Total: 75 quizzes. Android System running total: 150 quizzes.
+- Files changed: data/android-system/hal.json, data/android-system/android-runtime.json, data/android-system/build-system.json
+- **Learnings for future iterations:**
+  - Quiz ID prefixes: hl- (hal), ar- (android-runtime), bs- (build-system)
+  - HAL quizzes cover HIDL, AIDL HAL, Treble, VNDK, VTS, passthrough/binderized
+  - ART quizzes cover DEX, AOT/JIT, dex2oat, GC, OAT/VDEX/CDEX files
+  - Build system quizzes cover Soong, Android.bp, lunch, m/mm/mmm, build variants
+  - Parallel agent creation continues to work well for independent quiz files
+---
