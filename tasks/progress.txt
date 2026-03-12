@@ -159,3 +159,21 @@
   - "random" difficulty maps to all quizzes (totalCount) and uses purple color scheme
   - generateStaticParams must include "all" as a subcategory option
 ---
+
+## 2026-03-12 - US-013
+- What was implemented: Multiple choice quiz component at src/components/MultipleChoiceQuiz.tsx
+  - Displays question number, difficulty badge (color-coded), subcategory
+  - 4 options with A/B/C/D labels, single selection
+  - Submit button (disabled until selection made)
+  - Correct (green) / incorrect (red) visual feedback after submission
+  - Shows explanation after answering
+  - "다음 문제" (next) button after answering
+  - Auto-saves result to LocalStorage via useQuizProgress hook
+  - Supports previously answered questions (shows result without re-answering)
+- Files changed: src/components/MultipleChoiceQuiz.tsx (new)
+- **Learnings for future iterations:**
+  - Quiz components receive quiz, questionNumber, and onNext callback as props
+  - Use getResult() to check if quiz was previously answered, show result immediately if so
+  - Difficulty badge colors: 초급=green, 중급=yellow, 고급=red (matching constants)
+  - Component is "use client" since it uses useState and hooks
+---
