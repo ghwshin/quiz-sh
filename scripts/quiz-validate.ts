@@ -1,4 +1,4 @@
-import { loadAllQuizFiles, SUBCATEGORY_PREFIX_MAP, countBlanks, classifyShape } from "./quiz-data";
+import { loadAllQuizFiles, getExpectedPrefix, countBlanks, classifyShape } from "./quiz-data";
 import type { Quiz } from "../src/types/quiz";
 
 interface ValidationError {
@@ -12,7 +12,7 @@ interface ValidationWarning {
 }
 
 const VALID_DIFFICULTIES = ["초급", "중급", "고급"] as const;
-const VALID_TYPES = ["multiple-choice", "short-answer", "code-fill"] as const;
+const VALID_TYPES = ["multiple-choice", "short-answer", "code-fill", "conversation"] as const;
 
 function validateFile(
   filePath: string,
@@ -23,14 +23,15 @@ function validateFile(
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
   const idsInFile = new Set<string>();
-  const expectedPrefix = SUBCATEGORY_PREFIX_MAP[subcategory];
+  const expectedPrefix = getExpectedPrefix(subcategory, category);
 
   // File-level: question count and type distribution
   if (quizzes.length !== 25) {
     errors.push({ id: filePath, message: `expected 25 questions, got ${quizzes.length}` });
   }
 
-  const typeCounts: Record<string, number> = { "multiple-choice": 0, "short-answer": 0, "code-fill": 0 };
+  const isConversationFile = subcategory === "dev-conversation";
+  const typeCounts: Record<string, number> = { "multiple-choice": 0, "short-answer": 0, "code-fill": 0, "conversation": 0 };
 
   for (const q of quizzes) {
     const id = q.id || "(missing id)";
@@ -195,26 +196,91 @@ function validateFile(
         }
       }
     }
+
+    if (q.type === "conversation") {
+      if (!q.conversation || q.conversation.length === 0) {
+        errors.push({ id, message: `conversation type missing conversation array` });
+      } else {
+        for (let i = 0; i < q.conversation.length; i++) {
+          const msg = q.conversation[i];
+          if (!msg.speaker) errors.push({ id, message: `conversation[${i}] missing speaker` });
+          if (!msg.role) errors.push({ id, message: `conversation[${i}] missing role` });
+          if (!msg.avatar) errors.push({ id, message: `conversation[${i}] missing avatar` });
+          if (!msg.text && !msg.code) {
+            errors.push({ id, message: `conversation[${i}] must have text or code` });
+          }
+        }
+      }
+      if (!q.conversationMode) {
+        errors.push({ id, message: `conversation type missing conversationMode` });
+      } else if (q.conversationMode !== "objective" && q.conversationMode !== "fill-blank") {
+        errors.push({ id, message: `invalid conversationMode "${q.conversationMode}"` });
+      }
+      if (q.conversationMode === "objective") {
+        if (!q.options || q.options.length !== 4) {
+          errors.push({ id, message: `conversation objective must have exactly 4 options` });
+        }
+        if (q.answer === undefined || q.answer < 0 || q.answer > 3) {
+          errors.push({ id, message: `answer index ${q.answer} out of range (0-3)` });
+        }
+      }
+      if (q.conversationMode === "fill-blank") {
+        // Count blanks in conversation text fields
+        let conversationBlanks = 0;
+        if (q.conversation) {
+          for (const msg of q.conversation) {
+            if (msg.text) {
+              const matches = msg.text.match(/___/g);
+              if (matches) conversationBlanks += matches.length;
+            }
+          }
+        }
+        const answers = q.blankAnswers?.length ?? 0;
+        if (conversationBlanks !== answers) {
+          errors.push({
+            id,
+            message: `conversation blank count mismatch: ${conversationBlanks} in conversation text, ${answers} in blankAnswers`,
+          });
+        }
+        if (q.blankAnswers) {
+          for (let i = 0; i < q.blankAnswers.length; i++) {
+            if (!q.blankAnswers[i] || q.blankAnswers[i].length === 0) {
+              errors.push({ id, message: `blankAnswers[${i}] is empty` });
+            }
+          }
+        }
+      }
+    }
   }
 
   // Type distribution check
-  if (typeCounts["multiple-choice"] !== 10) {
-    errors.push({
-      id: filePath,
-      message: `expected 10 multiple-choice, got ${typeCounts["multiple-choice"]}`,
-    });
-  }
-  if (typeCounts["short-answer"] !== 8) {
-    errors.push({
-      id: filePath,
-      message: `expected 8 short-answer, got ${typeCounts["short-answer"]}`,
-    });
-  }
-  if (typeCounts["code-fill"] !== 7) {
-    errors.push({
-      id: filePath,
-      message: `expected 7 code-fill, got ${typeCounts["code-fill"]}`,
-    });
+  if (isConversationFile) {
+    // Conversation files: all 25 questions must be "conversation" type
+    if (typeCounts["conversation"] !== 25) {
+      errors.push({
+        id: filePath,
+        message: `expected 25 conversation, got ${typeCounts["conversation"]}`,
+      });
+    }
+  } else {
+    if (typeCounts["multiple-choice"] !== 10) {
+      errors.push({
+        id: filePath,
+        message: `expected 10 multiple-choice, got ${typeCounts["multiple-choice"]}`,
+      });
+    }
+    if (typeCounts["short-answer"] !== 8) {
+      errors.push({
+        id: filePath,
+        message: `expected 8 short-answer, got ${typeCounts["short-answer"]}`,
+      });
+    }
+    if (typeCounts["code-fill"] !== 7) {
+      errors.push({
+        id: filePath,
+        message: `expected 7 code-fill, got ${typeCounts["code-fill"]}`,
+      });
+    }
   }
 
   return { errors, warnings };

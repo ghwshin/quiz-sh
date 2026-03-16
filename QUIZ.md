@@ -6,7 +6,7 @@
 
 ```
 data/
-├── linux-kernel/          # 14개 서브카테고리
+├── linux-kernel/          # 15개 서브카테고리
 │   ├── process-management.json
 │   ├── memory-management.json
 │   ├── filesystem.json
@@ -20,8 +20,9 @@ data/
 │   ├── kernel-observability-debugging.json
 │   ├── containers-isolation.json
 │   ├── block-storage-io.json
-│   └── arm64-architecture.json
-└── android-system/        # 14개 서브카테고리
+│   ├── arm64-architecture.json
+│   └── dev-conversation.json
+└── android-system/        # 15개 서브카테고리
     ├── system-architecture.json
     ├── activity-service.json
     ├── binder-ipc.json
@@ -35,12 +36,15 @@ data/
     ├── boot-integrity-updates.json
     ├── platform-debugging-performance.json
     ├── platform-modularity-virtualization.json
-    └── arm64-platform.json
+    ├── arm64-platform.json
+    └── dev-conversation.json
 ```
 
 각 JSON 파일은 퀴즈 객체의 배열(`Quiz[]`)입니다.
 
 ## 파일당 구성
+
+### 일반 서브카테고리 (28파일)
 
 | 항목 | 값 |
 |------|-----|
@@ -49,6 +53,15 @@ data/
 | 빈칸 채우기 (short-answer) | 8문제 |
 | 코드 빈칸 채우기 (code-fill) | 7문제 |
 | 난이도 분배 | 초급/중급/고급 균등 |
+
+### 대화형 서브카테고리 (dev-conversation, 2파일)
+
+| 항목 | 값 |
+|------|-----|
+| 총 문제 수 | 25문제 |
+| 대화형 객관식 (conversation/objective) | 15문제 |
+| 대화형 빈칸 (conversation/fill-blank) | 10문제 |
+| 난이도 분배 | 초급 8 / 중급 9 / 고급 8 |
 
 ## 공통 필드
 
@@ -60,7 +73,7 @@ data/
 | `category` | `"linux-kernel" \| "android-system"` | O | 상위 카테고리 |
 | `subcategory` | `string` | O | 서브카테고리 (파일명과 일치) |
 | `difficulty` | `"초급" \| "중급" \| "고급"` | O | 난이도 |
-| `type` | `"multiple-choice" \| "short-answer" \| "code-fill"` | O | 문제 유형 |
+| `type` | `"multiple-choice" \| "short-answer" \| "code-fill" \| "conversation"` | O | 문제 유형 |
 | `question` | `string` | O | 문제 텍스트 |
 | `explanation` | `string` | O | 해설 |
 
@@ -145,6 +158,68 @@ data/
 - `codeLanguage`는 코드 블록의 언어 표시에 사용
 - 채점 방식은 short-answer와 동일
 
+### 4. 대화형 (`conversation`)
+
+개발자 대화 시나리오를 읽고 기술적 상황을 파악하는 문제입니다. 슬랙/메신저 스타일의 대화를 제시하고, 객관식(objective) 또는 빈칸 채우기(fill-blank) 형식으로 출제합니다.
+
+| 필드 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| `conversation` | `ConversationMessage[]` | O | 대화 메시지 배열 |
+| `conversationMode` | `"objective" \| "fill-blank"` | O | 대화형 하위 모드 |
+| `options` | `string[]` | objective만 | 선택지 배열 (4개) |
+| `answer` | `number` | objective만 | 정답 인덱스 (0-based) |
+| `blankAnswers` | `string[][]` | fill-blank만 | 빈칸별 허용 답안 배열 |
+| `blankDistractors` | `string[][]` | fill-blank만 | 빈칸별 오답 선택지 (2-3개) |
+
+**ConversationMessage 인터페이스:**
+
+| 필드 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| `speaker` | `string` | O | 화자 이름 (예: "이시니어") |
+| `role` | `string` | O | 역할 (팀장/시니어/신입/AI/고객) |
+| `avatar` | `string` | O | 이모지 아바타 |
+| `text` | `string` | △ | 메시지 텍스트 (fill-blank이면 `___` 포함 가능) |
+| `code` | `string` | △ | 코드 블록 (선택) |
+| `codeLanguage` | `string` | △ | 코드 언어 (선택) |
+
+**페르소나:**
+
+| 아바타 | 이름 | 역할 | 특성 |
+|--------|------|------|------|
+| 🧑‍💼 | 최팀장 | 팀장 | 경력 많지만 시스템은 약함. 자신있게 틀린 판단 |
+| 👩‍💻 | 이시니어 | 시니어 | 시스템 전문가. 정확하고 간결한 피드백 |
+| 🧑‍💻 | 박신입 | 신입 | 열정적이지만 경험 부족 |
+| 🤖 | Copilot | AI | 그럴듯한 hallucination |
+| 😤 | 김과장 | 고객 | 모호한 증상만 전달 |
+
+```json
+{
+  "id": "dc-001",
+  "category": "linux-kernel",
+  "subcategory": "dev-conversation",
+  "difficulty": "중급",
+  "type": "conversation",
+  "conversationMode": "objective",
+  "conversation": [
+    { "speaker": "김과장", "role": "고객", "avatar": "😤",
+      "text": "서버가 갑자기 느려졌어요." },
+    { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻",
+      "code": "[3412.56] Out of memory: Killed process 1234 (java)",
+      "codeLanguage": "shell" }
+  ],
+  "question": "고객의 '느려졌어요' 증상의 실제 기술적 원인은?",
+  "options": ["OOM Killer에 의한 프로세스 강제 종료", "디스크 I/O 병목", "CPU 과부하", "네트워크 타임아웃"],
+  "answer": 0,
+  "explanation": "dmesg 로그에서 OOM Killer가 동작한 것을 확인할 수 있다."
+}
+```
+
+규칙:
+- `conversation` 배열에 최소 2개의 메시지
+- 각 메시지에 `text` 또는 `code` 중 하나 이상 존재
+- fill-blank: 대화 메시지 `text` 내 `___` 개수 = `blankAnswers.length`
+- objective: `options` 4개, `answer` 0~3
+
 ## ID 규칙
 
 | 카테고리 | 서브카테고리 | 접두어 |
@@ -177,6 +252,8 @@ data/
 | android-system | platform-modularity-virtualization | `mv-` |
 | linux-kernel | arm64-architecture | `aa-` |
 | android-system | arm64-platform | `ap-` |
+| linux-kernel | dev-conversation | `dc-` |
+| android-system | dev-conversation | `ad-` |
 
 번호는 3자리 zero-padded (예: `mm-001`, `mm-025`). 파일 내에서 순번이 연속적이어야 합니다.
 
@@ -188,7 +265,7 @@ data/
 - [ ] `id`가 파일 내에서 유일
 - [ ] `category`/`subcategory`가 파일 경로와 일치
 - [ ] `difficulty`가 `"초급"`, `"중급"`, `"고급"` 중 하나
-- [ ] `type`이 `"multiple-choice"`, `"short-answer"`, `"code-fill"` 중 하나
+- [ ] `type`이 `"multiple-choice"`, `"short-answer"`, `"code-fill"`, `"conversation"` 중 하나
 - [ ] 객관식: `options` 4개, `answer` 0~3
 - [ ] 빈칸 채우기: `question` 내 `___` 개수 = `blankAnswers.length`
 - [ ] 코드 빈칸: `codeTemplate` 내 `___` 개수 = `blankAnswers.length`
@@ -198,9 +275,20 @@ data/
 ## TypeScript 타입 정의
 
 ```typescript
-type QuizType = "multiple-choice" | "short-answer" | "code-fill";
+type QuizType = "multiple-choice" | "short-answer" | "code-fill" | "conversation";
 type Difficulty = "초급" | "중급" | "고급";
 type Category = "linux-kernel" | "android-system";
+
+interface ConversationMessage {
+  speaker: string;
+  role: string;
+  avatar: string;
+  text?: string;
+  code?: string;
+  codeLanguage?: string;
+}
+
+type ConversationMode = "objective" | "fill-blank";
 
 interface Quiz {
   id: string;
@@ -209,11 +297,14 @@ interface Quiz {
   difficulty: Difficulty;
   type: QuizType;
   question: string;
-  options?: string[];       // multiple-choice only
-  answer?: number;          // multiple-choice only
-  codeTemplate?: string;    // code-fill only
-  codeLanguage?: string;    // code-fill only
-  blankAnswers?: string[][]; // short-answer & code-fill
+  options?: string[];               // multiple-choice & conversation/objective
+  answer?: number;                  // multiple-choice & conversation/objective
+  codeTemplate?: string;            // code-fill only
+  codeLanguage?: string;            // code-fill only
+  blankAnswers?: string[][];        // short-answer, code-fill & conversation/fill-blank
+  blankDistractors?: string[][];    // word bank distractors
+  conversation?: ConversationMessage[]; // conversation only
+  conversationMode?: ConversationMode;  // conversation only
   explanation: string;
 }
 ```

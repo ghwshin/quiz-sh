@@ -16,6 +16,7 @@ import kernelObservabilityDebugging from "../../data/linux-kernel/kernel-observa
 import containersIsolation from "../../data/linux-kernel/containers-isolation.json";
 import blockStorageIo from "../../data/linux-kernel/block-storage-io.json";
 import arm64Architecture from "../../data/linux-kernel/arm64-architecture.json";
+import linuxDevConversation from "../../data/linux-kernel/dev-conversation.json";
 
 // Android System quiz data
 import systemArchitecture from "../../data/android-system/system-architecture.json";
@@ -32,6 +33,7 @@ import bootIntegrityUpdates from "../../data/android-system/boot-integrity-updat
 import platformDebuggingPerformance from "../../data/android-system/platform-debugging-performance.json";
 import platformModularityVirtualization from "../../data/android-system/platform-modularity-virtualization.json";
 import arm64Platform from "../../data/android-system/arm64-platform.json";
+import androidDevConversation from "../../data/android-system/dev-conversation.json";
 
 const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
   "linux-kernel": {
@@ -49,6 +51,7 @@ const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
     "containers-isolation": containersIsolation as Quiz[],
     "block-storage-io": blockStorageIo as Quiz[],
     "arm64-architecture": arm64Architecture as Quiz[],
+    "dev-conversation": linuxDevConversation as Quiz[],
   },
   "android-system": {
     "system-architecture": systemArchitecture as Quiz[],
@@ -65,6 +68,7 @@ const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
     "platform-debugging-performance": platformDebuggingPerformance as Quiz[],
     "platform-modularity-virtualization": platformModularityVirtualization as Quiz[],
     "arm64-platform": arm64Platform as Quiz[],
+    "dev-conversation": androidDevConversation as Quiz[],
   },
 };
 

@@ -8,6 +8,7 @@ import { useQuizProgress } from "@/hooks/useQuizProgress";
 import { MultipleChoiceQuiz } from "@/components/MultipleChoiceQuiz";
 import { ShortAnswerQuiz } from "@/components/ShortAnswerQuiz";
 import { CodeFillQuiz } from "@/components/CodeFillQuiz";
+import { ConversationQuiz } from "@/components/ConversationQuiz";
 import { BuffTux, type TuxMood } from "@/components/BuffTux";
 import { useQuizMode } from "@/hooks/useQuizMode";
 
@@ -138,8 +139,8 @@ export function QuizSession({
       {/* Tux - mobile: above quiz card, desktop: right side */}
       <div className="w-full max-w-3xl flex flex-col md:flex-row gap-4 md:items-start">
         <div className="flex-1 bg-gray-900 border border-gray-700 rounded-xl p-6 min-w-0 order-2 md:order-1">
-          {/* Mode toggle for short-answer / code-fill */}
-          {quiz.type !== "multiple-choice" && quiz.blankDistractors && (
+          {/* Mode toggle for short-answer / code-fill / conversation fill-blank */}
+          {quiz.type !== "multiple-choice" && !(quiz.type === "conversation" && quiz.conversationMode === "objective") && quiz.blankDistractors && (
             <div className="flex justify-end mb-4">
               <div className="inline-flex rounded-lg border border-gray-700 overflow-hidden text-xs">
                 <button
@@ -188,6 +189,16 @@ export function QuizSession({
           )}
           {quiz.type === "code-fill" && (
             <CodeFillQuiz
+              key={quiz.id}
+              quiz={quiz}
+              questionNumber={currentIndex + 1}
+              onNext={goNext}
+              onResult={handleResult}
+              mode={mode}
+            />
+          )}
+          {quiz.type === "conversation" && (
+            <ConversationQuiz
               key={quiz.id}
               quiz={quiz}
               questionNumber={currentIndex + 1}

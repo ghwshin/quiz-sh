@@ -72,7 +72,7 @@ function main() {
     let modified = false;
 
     for (const q of file.data) {
-      if (q.type !== "short-answer" && q.type !== "code-fill") continue;
+      if (q.type !== "short-answer" && q.type !== "code-fill" && !(q.type === "conversation" && q.conversationMode === "fill-blank")) continue;
       if (!q.blankAnswers) continue;
 
       totalBlanks += q.blankAnswers.length;

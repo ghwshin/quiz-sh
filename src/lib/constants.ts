@@ -29,6 +29,7 @@ export const SUBCATEGORIES: Record<Category, { id: string; name: string }[]> = {
     { id: "containers-isolation", name: "컨테이너/격리" },
     { id: "block-storage-io", name: "블록 스토리지/I/O" },
     { id: "arm64-architecture", name: "ARM64 아키텍처" },
+    { id: "dev-conversation", name: "개발자 대화 상황" },
   ],
   "android-system": [
     { id: "system-architecture", name: "시스템 아키텍처" },
@@ -45,6 +46,7 @@ export const SUBCATEGORIES: Record<Category, { id: string; name: string }[]> = {
     { id: "platform-debugging-performance", name: "플랫폼 디버깅/성능" },
     { id: "platform-modularity-virtualization", name: "플랫폼 모듈화/가상화" },
     { id: "arm64-platform", name: "ARM64 플랫폼" },
+    { id: "dev-conversation", name: "개발자 대화 상황" },
   ],
 };
 

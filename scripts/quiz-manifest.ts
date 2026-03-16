@@ -29,6 +29,16 @@ function main() {
       if (q.codeTemplate) {
         for (const kw of extractKeywords(q.codeTemplate)) keywordSet.add(kw);
       }
+      if (q.conversation) {
+        for (const msg of q.conversation) {
+          if (msg.text) {
+            for (const kw of extractKeywords(msg.text)) keywordSet.add(kw);
+          }
+          if (msg.code) {
+            for (const kw of extractKeywords(msg.code)) keywordSet.add(kw);
+          }
+        }
+      }
     }
 
     ids.sort();

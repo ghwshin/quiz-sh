@@ -1,0 +1,1087 @@
+[
+  {
+    "id": "ad-001",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "김과장",
+        "role": "고객",
+        "avatar": "😤",
+        "text": "앱이 갑자기 멈추고 '응답 없음' 팝업이 뜹니다. 뭔가 고장난 것 같아요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "혹시 ANR이 발생한 건 아닐까요? 로그를 확인해봐야 할 것 같습니다."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "ANR 맞아요. traces.txt를 확인해봅시다.",
+        "code": "adb pull /data/anr/traces.txt",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "ANR은 메모리 부족이라 RAM을 늘리면 해결되는 거 아닌가?"
+      }
+    ],
+    "question": "ANR(Application Not Responding)이 발생하는 주된 원인은 무엇인가?",
+    "options": [
+      "메인 스레드(UI 스레드)에서 장시간 블로킹 작업을 수행했을 때",
+      "RAM 용량이 부족할 때",
+      "CPU 클럭 속도가 낮을 때",
+      "네트워크 연결이 끊어졌을 때"
+    ],
+    "answer": 0,
+    "explanation": "ANR은 메인 스레드가 일정 시간(Activity는 5초, BroadcastReceiver는 전경 10초/배경 60초) 내에 응답하지 못할 때 발생합니다. 메모리 부족과는 직접적인 관계가 없으며, 메인 스레드에서 네트워크 요청, 디스크 I/O, 긴 연산 등의 블로킹 작업이 원인입니다."
+  },
+  {
+    "id": "ad-002",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "Activity에서 화면 회전하면 데이터가 다 날아가요! 버그인 건가요?"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "매니페스트에 android:configChanges=\"orientation\" 넣으면 되지 않나? 우리 항상 그렇게 했잖아."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "configChanges는 권장되지 않아요. 화면 회전 시 Activity가 재생성되는 건 정상 동작이에요. ViewModel이나 onSaveInstanceState를 사용해야 합니다."
+      }
+    ],
+    "question": "Android에서 화면 회전(configuration change) 시 Activity에 일어나는 일로 올바른 것은?",
+    "options": [
+      "Activity가 destroy되고 새로 create된다",
+      "Activity가 일시 중지(pause)만 된다",
+      "Activity는 그대로 유지되고 레이아웃만 다시 그려진다",
+      "앱 프로세스가 종료되고 다시 시작된다"
+    ],
+    "answer": 0,
+    "explanation": "Configuration change(화면 회전 등)가 발생하면 기본적으로 Activity는 onDestroy() 후 다시 onCreate()가 호출됩니다. 데이터를 유지하려면 ViewModel, onSaveInstanceState(), 또는 Jetpack SavedStateHandle을 활용해야 합니다."
+  },
+  {
+    "id": "ad-003",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "김과장",
+        "role": "고객",
+        "avatar": "😤",
+        "text": "앱을 설치했는데 카메라가 안 됩니다. 폰이 고장인가요?"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "권한 문제일 수 있어요. Android 6.0부터는 런타임 퍼미션이 필요하거든요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "맞습니다. AndroidManifest.xml에 uses-permission을 추가하면 자동으로 권한이 부여됩니다. 별도의 런타임 요청은 필요 없습니다."
+      }
+    ],
+    "question": "Copilot의 답변에서 잘못된 부분은 무엇인가?",
+    "options": [
+      "AndroidManifest.xml 선언만으로는 dangerous 권한이 자동 부여되지 않으며, 런타임에 사용자에게 명시적 요청이 필요하다",
+      "uses-permission 태그 자체가 존재하지 않는다",
+      "Android 6.0이 아니라 Android 8.0부터 런타임 퍼미션이 도입되었다",
+      "카메라는 권한이 필요 없는 하드웨어이다"
+    ],
+    "answer": 0,
+    "explanation": "Android 6.0(API 23)부터 dangerous 카테고리 권한(카메라, 위치 등)은 매니페스트 선언 외에 런타임에 requestPermissions()를 호출하여 사용자 동의를 받아야 합니다. Copilot의 '자동 부여' 설명은 잘못되었습니다."
+  },
+  {
+    "id": "ad-004",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "앱 시작이 너무 느려요. 로그를 보니 Zygote에서 fork한다고 나오는데 이게 뭔가요?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Zygote는 모든 Android 앱 프로세스의 부모예요. 미리 로드된 클래스와 리소스를 fork로 공유해서 앱 시작 시간을 줄여줍니다."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "Zygote가 느리면 재부팅하면 되는 거 아닌가?"
+      }
+    ],
+    "question": "Zygote 프로세스의 역할로 가장 정확한 것은?",
+    "options": [
+      "앱의 네트워크 통신을 중계하는 프록시 서버",
+      "공통 프레임워크 클래스와 리소스를 미리 로딩한 뒤 fork하여 앱 프로세스를 빠르게 생성하는 부모 프로세스",
+      "Android 앱의 APK를 설치하는 설치 관리자",
+      "시스템 로그를 수집하는 데몬 프로세스"
+    ],
+    "answer": 1,
+    "explanation": "Zygote는 Android 부팅 시 init에 의해 시작되며, ART 런타임과 공통 프레임워크 클래스를 미리 로드합니다. 새 앱이 실행되면 fork()를 통해 이 미리 로드된 상태를 복사(COW)하여 빠르게 프로세스를 생성합니다."
+  },
+  {
+    "id": "ad-005",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "김과장",
+        "role": "고객",
+        "avatar": "😤",
+        "text": "OTA 업데이트 후에 앱이 전부 안 돌아가요. 어떻게 된 건가요?"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "OTA는 앱하고 관계없는 거 아닌가? OS 업데이트인데."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "OTA 후 targetSdkVersion과 새 OS의 동작 변경(behavior change)이 호환되지 않을 수 있어요. 또한 A/B 파티션 업데이트라면 부팅 슬롯 전환 과정에서 문제가 생겼을 수도 있습니다."
+      }
+    ],
+    "question": "Android A/B OTA 업데이트에 대한 설명으로 올바른 것은?",
+    "options": [
+      "업데이트 중 기기를 사용할 수 없으며 반드시 재부팅해야 한다",
+      "두 개의 파티션 슬롯(A/B)을 사용하여 비활성 슬롯에 업데이트를 적용하고, 재부팅 시 슬롯을 전환한다",
+      "앱 데이터를 모두 삭제하고 초기화한다",
+      "OTA 업데이트는 커널만 교체하고 프레임워크는 변경하지 않는다"
+    ],
+    "answer": 1,
+    "explanation": "A/B(Seamless) 업데이트는 두 개의 시스템 파티션 슬롯을 사용합니다. 현재 사용 중인 슬롯에서 정상 동작하면서 비활성 슬롯에 업데이트를 기록하고, 재부팅 시 업데이트된 슬롯으로 전환합니다. 실패 시 이전 슬롯으로 롤백할 수 있습니다."
+  },
+  {
+    "id": "ad-006",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "Binder 트랜잭션에서 TransactionTooLargeException이 발생했어요! 데이터가 겨우 500KB인데..."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "서버 메모리를 늘리면 해결되지 않을까?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Binder 트랜잭션 버퍼는 프로세스당 1MB로 제한되어 있어요. 그리고 이 버퍼는 해당 프로세스의 모든 진행 중인 트랜잭션이 공유합니다."
+      }
+    ],
+    "question": "Binder 트랜잭션 버퍼의 크기 제한과 관련하여 올바른 설명은?",
+    "options": [
+      "트랜잭션당 1MB로 제한되며 동시 트랜잭션에 영향받지 않는다",
+      "프로세스당 1MB의 버퍼를 모든 진행 중인 트랜잭션이 공유한다",
+      "시스템 전체에서 1MB를 공유한다",
+      "제한이 없으며 시스템 메모리만큼 사용할 수 있다"
+    ],
+    "answer": 1,
+    "explanation": "Binder 트랜잭션 버퍼는 프로세스당 약 1MB(1,048,576 bytes)로 제한되며, 해당 프로세스에서 진행 중인 모든 트랜잭션이 이 버퍼를 공유합니다. 따라서 동시에 여러 트랜잭션이 진행되면 개별 데이터가 작아도 초과할 수 있습니다."
+  },
+  {
+    "id": "ad-007",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "SELinux 로그에 avc: denied가 계속 나와요. 어떻게 해야 하나요?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "setenforce 0으로 SELinux를 끄면 됩니다. 개발 중에는 꺼두는 게 편합니다."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "절대 그러면 안 돼요. audit2allow로 필요한 정책을 생성하고, 해당 도메인의 .te 파일에 추가해야 합니다.",
+        "code": "adb shell dmesg | grep 'avc: denied' | audit2allow -p policy",
+        "codeLanguage": "shell"
+      }
+    ],
+    "question": "Android에서 SELinux avc: denied 에러를 올바르게 해결하는 방법은?",
+    "options": [
+      "setenforce 0으로 SELinux를 비활성화한다",
+      "audit log를 분석하여 필요한 최소 권한 정책을 .te 파일에 추가한다",
+      "앱의 targetSdkVersion을 낮춘다",
+      "루트 권한으로 앱을 실행한다"
+    ],
+    "answer": 1,
+    "explanation": "SELinux를 끄는 것은 보안상 절대 금지입니다. 올바른 방법은 audit2allow 등으로 denied 로그를 분석하여 필요한 최소 권한만 허용하는 정책을 작성하고, 해당 도메인의 sepolicy .te 파일에 추가하는 것입니다."
+  },
+  {
+    "id": "ad-008",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "빌드 에러가 나는데 Android.mk 파일을 수정해야 하나요?"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "Android.mk가 빌드 파일 아니었나? 거기 고치면 되지."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "AOSP는 Soong 빌드 시스템으로 전환했어요. Android.bp 파일을 확인해야 합니다. Android.mk는 레거시이고 점차 제거되고 있어요."
+      }
+    ],
+    "question": "Android AOSP의 현재 빌드 시스템에 대한 설명으로 올바른 것은?",
+    "options": [
+      "GNU Make 기반의 Android.mk가 유일한 빌드 시스템이다",
+      "Soong 빌드 시스템이 Android.bp(Blueprint) 파일을 사용하며 Android.mk를 대체하고 있다",
+      "Gradle이 AOSP 플랫폼 빌드에 사용된다",
+      "CMake가 Android 시스템 빌드의 표준이다"
+    ],
+    "answer": 1,
+    "explanation": "Android 7.0부터 Soong 빌드 시스템이 도입되었고, Blueprint 형식(JSON과 유사한 선언적 포맷)의 Android.bp 파일을 사용합니다. 기존 Android.mk(Make 기반)는 레거시로 분류되어 점차 Soong으로 변환되고 있습니다."
+  },
+  {
+    "id": "ad-009",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "김과장",
+        "role": "고객",
+        "avatar": "😤",
+        "text": "기기가 부팅하다가 멈춰요. 로고만 나오고 더 이상 진행이 안 돼요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "bootloop인가요? 어디서 확인해야 하죠?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "시리얼 콘솔로 커널 로그를 확인하고, system_server 시작 여부를 봐야 해요. init 프로세스의 .rc 파일 파싱부터 확인합시다.",
+        "code": "adb logcat -b all | grep -E 'init|system_server|zygote'",
+        "codeLanguage": "shell"
+      }
+    ],
+    "question": "Android 부팅 순서로 올바른 것은?",
+    "options": [
+      "Bootloader → Kernel → Zygote → init → system_server",
+      "Bootloader → Kernel → init → Zygote → system_server",
+      "Kernel → Bootloader → init → system_server → Zygote",
+      "Bootloader → init → Kernel → Zygote → system_server"
+    ],
+    "answer": 1,
+    "explanation": "Android 부팅 순서는 Bootloader → Linux Kernel → init 프로세스(PID 1, .rc 파일 파싱) → Zygote 시작(앱 런타임 초기화) → system_server 시작(프레임워크 서비스 초기화) 순서입니다."
+  },
+  {
+    "id": "ad-010",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "코드 리뷰 중인데, Service에서 onStartCommand() 리턴값을 START_STICKY로 해놨어요. 이게 맞나요?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "용도에 따라 달라요. START_STICKY는 시스템이 서비스를 kill한 후 메모리가 충분해지면 재생성해요. 하지만 Intent가 null로 전달됩니다."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "START_STICKY든 뭐든 서비스는 절대 죽지 않는 거 아닌가?"
+      }
+    ],
+    "question": "Service의 onStartCommand() 리턴값 START_STICKY에 대한 설명으로 올바른 것은?",
+    "options": [
+      "서비스가 시스템에 의해 kill되면 재생성하지 않는다",
+      "서비스가 kill된 후 메모리가 충분하면 재생성하되, 마지막 Intent를 다시 전달한다",
+      "서비스가 kill된 후 메모리가 충분하면 재생성하되, Intent는 null로 전달된다",
+      "서비스가 절대 kill되지 않도록 보장한다"
+    ],
+    "answer": 2,
+    "explanation": "START_STICKY는 시스템이 메모리 부족으로 서비스를 kill한 후, 리소스가 확보되면 서비스를 재생성합니다. 이때 onStartCommand()의 Intent 파라미터는 null이 됩니다. 마지막 Intent를 재전달하려면 START_REDELIVER_INTENT를 사용해야 합니다."
+  },
+  {
+    "id": "ad-011",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "system_server가 크래시하면서 기기가 재부팅돼요! 로그에 Watchdog이라고 나오는데요."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Watchdog이 system_server 내부의 주요 스레드가 락에 걸려 응답하지 않는 걸 감지한 거예요. 60초 타임아웃 후 system_server를 kill합니다.",
+        "code": "adb logcat -b system | grep -i watchdog",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "Watchdog 타임아웃을 늘리면 안 되나?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "근본 원인인 데드락이나 긴 블로킹을 해결해야지, 타임아웃을 늘리면 사용자가 더 오래 먹통 상태를 겪게 됩니다."
+      }
+    ],
+    "question": "Android system_server의 Watchdog에 대한 설명으로 올바른 것은?",
+    "options": [
+      "앱 프로세스의 ANR을 감지하고 앱을 종료하는 메커니즘이다",
+      "system_server 내부의 주요 스레드가 일정 시간 응답하지 않으면 system_server를 kill하여 소프트 리부트를 유발한다",
+      "하드웨어 오류를 감지하여 기기를 완전 리부트하는 하드웨어 타이머이다",
+      "배터리 과열 시 시스템을 종료하는 안전 메커니즘이다"
+    ],
+    "answer": 1,
+    "explanation": "system_server의 Watchdog은 주요 시스템 스레드(ActivityManager, WindowManager 등)를 모니터링합니다. 스레드가 60초(기본값) 동안 응답하지 않으면 데드락으로 판단하고 system_server를 kill하여 소프트 리부트(Zygote부터 재시작)를 유발합니다."
+  },
+  {
+    "id": "ad-012",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "HAL 구현에서 passthrough 모드와 binderized 모드의 차이를 이해해야 해요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "passthrough HAL은 Binder를 통해 별도 프로세스에서 실행됩니다. binderized HAL은 같은 프로세스에서 직접 링크됩니다."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Copilot이 정반대로 말하고 있네요. passthrough는 같은 프로세스에서 dlopen으로 로드되고, binderized는 별도 프로세스에서 hwbinder를 통해 통신합니다."
+      }
+    ],
+    "question": "Android HIDL HAL의 passthrough 모드에 대한 설명으로 올바른 것은?",
+    "options": [
+      "Binder를 통해 별도 HAL 프로세스와 통신한다",
+      "HAL 구현을 dlopen()으로 클라이언트 프로세스에 직접 로드한다",
+      "네트워크 소켓을 통해 원격 HAL 서버와 통신한다",
+      "HAL이 커널 모듈로 동작한다"
+    ],
+    "answer": 1,
+    "explanation": "passthrough 모드에서 HAL 구현체는 .so 라이브러리로 dlopen()을 통해 클라이언트 프로세스에 직접 로드됩니다. 반면 binderized 모드에서는 HAL이 별도 프로세스에서 실행되며 /dev/hwbinder를 통한 IPC로 통신합니다."
+  },
+  {
+    "id": "ad-013",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "Low Memory Killer가 앱을 자꾸 죽이는데, oom_adj 값이 뭔가요?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "oom_adj는 프로세스의 중요도를 나타내요. 값이 낮을수록 중요하고 높을수록 먼저 kill 대상이 됩니다.",
+        "code": "adb shell cat /proc/<pid>/oom_score_adj",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "그럼 우리 앱의 oom_adj를 0으로 고정하면 안 죽지 않을까?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "oom_score_adj는 ActivityManagerService가 프로세스 상태에 따라 동적으로 관리해요. 임의로 고정하면 시스템 안정성에 심각한 문제가 생깁니다."
+      }
+    ],
+    "question": "Android Low Memory Killer(lmkd)의 동작 원리로 올바른 것은?",
+    "options": [
+      "모든 프로세스를 균등하게 종료한다",
+      "RAM 사용량이 많은 프로세스부터 순서대로 종료한다",
+      "메모리 압박 수준에 따라 oom_score_adj 값이 높은(덜 중요한) 프로세스부터 종료한다",
+      "사용자가 마지막으로 사용한 앱부터 종료한다"
+    ],
+    "answer": 2,
+    "explanation": "lmkd(Low Memory Killer Daemon)는 메모리 압박(memory pressure) 수준에 따라 oom_score_adj 값이 높은 프로세스부터 종료합니다. Foreground 앱은 낮은 값(0), Cached 프로세스는 높은 값(900+)을 가지며, AMS가 프로세스 상태 변경 시 이 값을 동적으로 조정합니다."
+  },
+  {
+    "id": "ad-014",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "ART에서 AOT 컴파일이랑 JIT 컴파일이 동시에 존재하는 건가요? 헷갈려요."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "맞아요. Android 7.0부터 ART는 프로필 기반 컴파일(PGC)을 사용해요. 처음엔 인터프리터와 JIT으로 실행하면서 핫 메서드를 프로파일링하고, idle 상태에서 해당 메서드만 AOT 컴파일합니다."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "ART는 설치 시 전체 앱을 AOT 컴파일합니다. JIT는 Dalvik에서만 사용되었고 ART에서는 제거되었습니다."
+      }
+    ],
+    "question": "Android ART의 프로필 기반 컴파일(Profile-Guided Compilation)에 대한 올바른 설명은?",
+    "options": [
+      "설치 시 전체 DEX를 AOT 컴파일하고, 런타임에는 JIT을 사용하지 않는다",
+      "JIT만 사용하고 AOT 컴파일은 하지 않는다",
+      "런타임에 JIT으로 핫 메서드를 프로파일링하고, idle 시 프로파일 기반으로 선택적 AOT 컴파일을 수행한다",
+      "사용자가 직접 컴파일 대상 메서드를 지정해야 한다"
+    ],
+    "answer": 2,
+    "explanation": "Android 7.0+의 ART는 hybrid 접근을 사용합니다. 앱 최초 실행 시 인터프리터/JIT으로 동작하며 핫 메서드를 .prof 파일에 기록합니다. 기기 idle 시 BackgroundDexOptService가 프로파일을 기반으로 핫 메서드만 AOT 컴파일하여 저장공간과 성능을 균형있게 관리합니다."
+  },
+  {
+    "id": "ad-015",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "conversation": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Binder에서 데드락이 발생했어요. 서비스 A가 서비스 B를 동기 호출하고, B가 다시 A를 동기 호출하는 상황이에요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "그럼 타임아웃이 걸리면서 풀리지 않나요?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Binder 동기 호출은 기본적으로 타임아웃이 없어요. 한쪽이 응답할 때까지 무한 대기합니다. 그래서 양방향 동기 호출은 설계적으로 피해야 해요.",
+        "code": "adb shell service call SurfaceFlinger 1013",
+        "codeLanguage": "shell"
+      }
+    ],
+    "question": "Binder IPC에서 발생하는 데드락의 원인과 해결 방법으로 올바른 것은?",
+    "options": [
+      "Binder 동기 호출에는 타임아웃이 있으므로 데드락이 발생하지 않는다",
+      "양방향 동기 Binder 호출이 순환 의존을 만들면 데드락이 발생하며, oneway(비동기) 호출이나 설계 변경으로 해결해야 한다",
+      "Binder 스레드풀이 무한하므로 데드락이 불가능하다",
+      "커널이 자동으로 데드락을 감지하고 해제한다"
+    ],
+    "answer": 1,
+    "explanation": "Binder 동기 호출은 타임아웃이 없으며, A→B→A 순환 호출이 발생하면 두 서비스 모두 무한 대기 상태(데드락)에 빠집니다. 해결 방법으로는 oneway(비동기) 호출 사용, 콜백 패턴 도입, 또는 호출 방향을 단방향으로 재설계하는 것이 있습니다."
+  },
+  {
+    "id": "ad-016",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "시스템 서비스 상태를 어떻게 확인하나요?"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "설정 앱에서 확인하면 되지 않나?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "adb shell ___ 명령어를 사용하면 시스템 서비스의 상태를 덤프할 수 있어요. 예를 들어 Activity 관련 정보는 adb shell ___ activity로 확인할 수 있습니다."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "dumpsys"
+      ],
+      [
+        "dumpsys"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "logcat",
+        "dumpstate"
+      ],
+      [
+        "getprop",
+        "settings"
+      ]
+    ],
+    "explanation": "dumpsys는 Android 시스템 서비스의 상태 정보를 덤프하는 명령어입니다. dumpsys activity, dumpsys meminfo, dumpsys battery 등 다양한 서비스 정보를 확인할 수 있습니다."
+  },
+  {
+    "id": "ad-017",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "김과장",
+        "role": "고객",
+        "avatar": "😤",
+        "text": "앱이 백그라운드에서 죽어요!"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "혹시 메모리 관련 문제일까요? 로그에 뭔가 나올 것 같은데..."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Android에서는 메모리가 부족하면 ___가 oom_score_adj 값을 기준으로 프로세스를 종료해요. 백그라운드 앱은 ___가 높아서 먼저 종료 대상이 됩니다."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "lmkd",
+        "Low Memory Killer"
+      ],
+      [
+        "oom_score_adj"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "OOM Killer",
+        "init"
+      ],
+      [
+        "priority",
+        "nice value"
+      ]
+    ],
+    "explanation": "lmkd(Low Memory Killer Daemon)는 메모리 부족 시 oom_score_adj 값이 높은 프로세스(덜 중요한 백그라운드 프로세스)부터 종료하여 시스템 메모리를 확보합니다."
+  },
+  {
+    "id": "ad-018",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "앱 프로세스가 어떻게 시작되는지 설명해줄 수 있나?"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "Android 앱은 어떤 프로세스에서 fork되나요?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "모든 Android 앱 프로세스는 ___에서 fork됩니다. 이 프로세스는 부팅 시 ___ 프로세스가 시작시키죠."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "Zygote",
+        "zygote"
+      ],
+      [
+        "init"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "system_server",
+        "SystemServer"
+      ],
+      [
+        "kernel",
+        "bootloader"
+      ]
+    ],
+    "explanation": "Zygote는 Android의 모든 앱 프로세스의 부모 프로세스입니다. init 프로세스(PID 1)가 init.rc 스크립트에 따라 Zygote를 시작하며, Zygote는 fork()를 통해 앱 프로세스를 생성합니다."
+  },
+  {
+    "id": "ad-019",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "AIDL 관련 빌드 이슈가 있다고 들었는데, 뭐가 문제야?"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "AIDL 파일 빌드 에러가 나요. Stable AIDL이랑 일반 AIDL이 뭐가 다르죠?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Stable AIDL은 인터페이스의 ___을 보장해요. 한번 정의한 메서드 시그니처를 변경할 수 없고, 새 메서드는 끝에만 추가해야 합니다. Android 11부터 HAL 인터페이스는 HIDL 대신 ___을 사용하도록 권장됩니다."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "하위 호환성",
+        "backward compatibility",
+        "ABI 호환성"
+      ],
+      [
+        "Stable AIDL"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "성능 최적화",
+        "타입 안전성"
+      ],
+      [
+        "HIDL",
+        "gRPC"
+      ]
+    ],
+    "explanation": "Stable AIDL은 ABI(Application Binary Interface) 하위 호환성을 보장하는 AIDL 확장입니다. Android 11+에서는 HAL 인터페이스 정의 시 HIDL 대신 Stable AIDL을 사용하도록 권장합니다."
+  },
+  {
+    "id": "ad-020",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "코드 리뷰인데, 이 AIDL 메서드에 oneway 키워드가 빠져있네요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "oneway가 뭐예요?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "oneway는 Binder 호출을 ___로 만들어요. 호출자가 응답을 ___하지 않고 바로 리턴하죠. 콜백이나 이벤트 알림에 적합해요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "비동기",
+        "asynchronous",
+        "async"
+      ],
+      [
+        "대기",
+        "wait"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "동기",
+        "synchronous"
+      ],
+      [
+        "수신",
+        "확인"
+      ]
+    ],
+    "explanation": "AIDL의 oneway 키워드는 Binder 호출을 비동기(asynchronous)로 만듭니다. 호출자는 서버의 응답을 기다리지 않고 즉시 리턴하므로 데드락 방지와 성능 향상에 유용합니다."
+  },
+  {
+    "id": "ad-021",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "SELinux 정책 수정이 필요한데, 누가 좀 도와줄 수 있나?"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "SELinux 정책 파일에서 allow 규칙을 추가해야 하는데 문법을 모르겠어요."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "SELinux의 allow 규칙 형식은 'allow ___ ___:file { read open };' 처럼 소스 타입, 타겟 타입, 오브젝트 클래스, 퍼미션 순이에요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "source_type",
+        "소스타입",
+        "source_t"
+      ],
+      [
+        "target_type",
+        "타겟타입",
+        "target_t"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "user_type",
+        "subject_type"
+      ],
+      [
+        "object_type",
+        "domain_type"
+      ]
+    ],
+    "explanation": "SELinux allow 규칙의 문법은 'allow source_type target_type:object_class { permissions };'입니다. source_type은 접근을 시도하는 주체의 보안 타입, target_type은 접근 대상의 보안 타입입니다."
+  },
+  {
+    "id": "ad-022",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "김과장",
+        "role": "고객",
+        "avatar": "😤",
+        "text": "앱이 5초만에 '응답 없음' 팝업이 뜹니다."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "ANR인 것 같은데, 로그를 확인해봐."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "ANR 트레이스를 확인해봅시다. Activity의 입력 이벤트 처리 ANR 타임아웃은 ___초이고, BroadcastReceiver의 전경(foreground) 타임아웃은 ___초입니다."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "5"
+      ],
+      [
+        "10"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "3",
+        "8"
+      ],
+      [
+        "15",
+        "30"
+      ]
+    ],
+    "explanation": "Android ANR 타임아웃: Activity의 입력 이벤트(키/터치) 처리는 5초, foreground BroadcastReceiver는 10초, background BroadcastReceiver는 60초입니다. Service는 전경 20초, 배경 200초입니다."
+  },
+  {
+    "id": "ad-023",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "빌드 시스템을 보면 Soong이 Android.bp를 파싱해서 Ninja 파일을 생성하죠."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "Android.bp 파일 포맷이 뭐예요?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Android.bp는 ___ 형식으로 작성해요. Soong이 이걸 파싱해서 ___ 빌드 파일로 변환한 뒤, Ninja가 실제 빌드를 수행합니다."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "Blueprint",
+        "JSON-like"
+      ],
+      [
+        "Ninja",
+        "ninja",
+        ".ninja"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "YAML",
+        "XML"
+      ],
+      [
+        "Make",
+        "CMake"
+      ]
+    ],
+    "explanation": "Android.bp는 Blueprint 형식(JSON과 유사한 선언적 포맷)으로 작성됩니다. Soong 빌드 시스템이 이를 파싱하여 .ninja 파일을 생성하고, Ninja 빌드 도구가 실제 컴파일을 수행합니다."
+  },
+  {
+    "id": "ad-024",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "GC 때문에 앱이 버벅인다는 리포트가 왔어. 확인해봐."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "ART 런타임에서 GC가 앱을 멈추게 하는 문제가 있어요."
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "ART는 ___GC를 사용해서 pause 시간을 최소화해요. 대부분의 GC 작업이 앱 스레드와 ___으로 수행되기 때문에 Dalvik보다 훨씬 짧은 pause를 가집니다."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "Concurrent",
+        "concurrent",
+        "동시"
+      ],
+      [
+        "동시에",
+        "concurrently"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "Stop-the-world",
+        "Generational"
+      ],
+      [
+        "순차적",
+        "비동기"
+      ]
+    ],
+    "explanation": "ART의 Concurrent Copying GC는 대부분의 GC 작업을 앱 스레드와 동시에(concurrently) 수행합니다. 이를 통해 GC pause 시간을 수 밀리초 이내로 줄여 Dalvik의 stop-the-world GC 대비 크게 개선되었습니다."
+  },
+  {
+    "id": "ad-025",
+    "category": "android-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "conversation": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Treble 아키텍처 이후 vendor 파티션과 system 파티션이 분리되었어요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "그럼 vendor 코드가 framework API를 직접 호출할 수 없나요?"
+      },
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "맞아요. vendor 코드는 반드시 ___를 통해서만 framework와 통신해야 해요. 이 인터페이스를 통해 system 파티션을 vendor 변경 없이 ___할 수 있게 된 거죠."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      [
+        "HAL interface",
+        "HIDL",
+        "Stable AIDL"
+      ],
+      [
+        "업데이트",
+        "update"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "Binder",
+        "JNI"
+      ],
+      [
+        "빌드",
+        "컴파일"
+      ]
+    ],
+    "explanation": "Project Treble은 vendor(HAL) 파티션과 system(framework) 파티션을 HIDL/AIDL 인터페이스(VINTF)로 분리했습니다. 이를 통해 OEM이 vendor 파티션을 수정하지 않고도 system 파티션만 독립적으로 업데이트할 수 있게 되었습니다."
+  }
+]

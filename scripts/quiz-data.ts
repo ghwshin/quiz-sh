@@ -66,12 +66,28 @@ export const ID_PREFIX_MAP: Record<string, string> = {
   dp: "platform-debugging-performance",
   mv: "platform-modularity-virtualization",
   ap: "arm64-platform",
+  dc: "dev-conversation",
+  ad: "dev-conversation",
 };
 
-// Reverse map: subcategory -> prefix
+// Reverse map: subcategory -> prefix (for subcategories with multiple prefixes, use category-aware lookup)
 export const SUBCATEGORY_PREFIX_MAP: Record<string, string> = Object.fromEntries(
   Object.entries(ID_PREFIX_MAP).map(([prefix, sub]) => [sub, prefix])
 );
+
+// Category-aware prefix map for subcategories shared across categories
+export const CATEGORY_PREFIX_MAP: Record<string, Record<string, string>> = {
+  "linux-kernel": { "dev-conversation": "dc" },
+  "android-system": { "dev-conversation": "ad" },
+};
+
+/** Get expected ID prefix for a subcategory, optionally with category context */
+export function getExpectedPrefix(subcategory: string, category?: string): string | undefined {
+  if (category && CATEGORY_PREFIX_MAP[category]?.[subcategory]) {
+    return CATEGORY_PREFIX_MAP[category][subcategory];
+  }
+  return SUBCATEGORY_PREFIX_MAP[subcategory];
+}
 
 export function extractKeywords(text: string): string[] {
   // Remove code-like syntax noise

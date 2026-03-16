@@ -1,6 +1,17 @@
-export type QuizType = "multiple-choice" | "short-answer" | "code-fill";
+export type QuizType = "multiple-choice" | "short-answer" | "code-fill" | "conversation";
 export type Difficulty = "초급" | "중급" | "고급";
 export type Category = "linux-kernel" | "android-system";
+
+export interface ConversationMessage {
+  speaker: string;
+  role: string;
+  avatar: string;
+  text?: string;
+  code?: string;
+  codeLanguage?: string;
+}
+
+export type ConversationMode = "objective" | "fill-blank";
 
 export interface Quiz {
   id: string;
@@ -15,5 +26,7 @@ export interface Quiz {
   blankAnswers?: string[][];
   blankDistractors?: string[][];
   answer?: number;
+  conversation?: ConversationMessage[];
+  conversationMode?: ConversationMode;
   explanation: string;
 }

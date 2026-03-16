@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { checkBlank } from "@/lib/quiz-utils";
+import { checkBlank, countConversationBlanks } from "@/lib/quiz-utils";
 
 describe("checkBlank", () => {
   it("returns true for exact match", () => {
@@ -38,5 +38,38 @@ describe("checkBlank", () => {
 
   it("returns false for whitespace-only input", () => {
     expect(checkBlank("   ", ["TLB"])).toBe(false);
+  });
+});
+
+describe("countConversationBlanks", () => {
+  it("counts blanks across multiple messages", () => {
+    const messages = [
+      { text: "소스에 ___ 매크로를 추가해야 해요." },
+      { text: "보통 ___로 설정합니다." },
+    ];
+    expect(countConversationBlanks(messages)).toBe(2);
+  });
+
+  it("counts multiple blanks in one message", () => {
+    const messages = [
+      { text: "___ 명령어로 ___ 파일을 확인해요." },
+    ];
+    expect(countConversationBlanks(messages)).toBe(2);
+  });
+
+  it("returns 0 for messages without blanks", () => {
+    const messages = [
+      { text: "에러가 났어요." },
+      { text: "확인해볼게요." },
+    ];
+    expect(countConversationBlanks(messages)).toBe(0);
+  });
+
+  it("skips messages without text", () => {
+    const messages = [
+      { text: "___ 확인해요." },
+      {},
+    ];
+    expect(countConversationBlanks(messages)).toBe(1);
   });
 });
