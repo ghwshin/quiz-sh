@@ -13,7 +13,10 @@ const ROLE_COLORS: Record<string, string> = {
   "시니어": "text-blue-400",
   "신입": "text-green-400",
   "AI": "text-purple-400",
-  "고객": "text-red-400",
+  "QA": "text-amber-400",
+  "리뷰어": "text-cyan-400",
+  "PM": "text-pink-400",
+  "동료": "text-teal-400",
 };
 
 const LANGUAGE_LABELS: Record<string, string> = {
@@ -59,6 +62,7 @@ export function ConversationQuiz({
   );
 
   const [submitted, setSubmitted] = useState(false);
+  const [showHint, setShowHint] = useState<boolean>(false);
   const { saveResult, getResult, clearResult } = useQuizProgress();
 
   const useWordBank =
@@ -260,6 +264,11 @@ export function ConversationQuiz({
         <span className="text-xs px-2 py-0.5 rounded bg-purple-400/20 text-purple-400">
           대화형
         </span>
+        {quiz.scenarioType && (
+          <span className="text-xs px-2 py-0.5 rounded bg-indigo-400/20 text-indigo-400">
+            {quiz.scenarioType === "bug-report" ? "버그 리포트" : quiz.scenarioType === "code-review" ? "코드 리뷰" : "설계 토론"}
+          </span>
+        )}
       </div>
 
       {/* Conversation Messages */}
@@ -303,6 +312,62 @@ export function ConversationQuiz({
           </div>
         ))}
       </div>
+
+      {/* Senior Hint */}
+      {quiz.seniorHint && quiz.seniorHint.length > 0 && (
+        <div>
+          <button
+            type="button"
+            onClick={() => setShowHint(!showHint)}
+            className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+          >
+            <span>{showHint ? "▼" : "▶"}</span>
+            <span>💡 시니어에게 도움 받기</span>
+          </button>
+          {showHint && (
+            <div className="mt-3 space-y-3 border-l-2 border-blue-400/50 pl-4">
+              {quiz.seniorHint.map((msg, i) => (
+                <div key={i} className="flex gap-3 items-start">
+                  <div className="flex-shrink-0 text-xl w-7 h-7 flex items-center justify-center" aria-hidden="true">
+                    {msg.avatar}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-medium text-gray-200">
+                        {msg.speaker}
+                      </span>
+                      <span
+                        className={`text-xs px-1.5 py-0.5 rounded ${
+                          ROLE_COLORS[msg.role] ?? "text-gray-400"
+                        } bg-gray-800`}
+                      >
+                        {msg.role}
+                      </span>
+                    </div>
+                    {msg.text && (
+                      <div className="text-sm text-gray-300 leading-relaxed">
+                        <span>{msg.text}</span>
+                      </div>
+                    )}
+                    {msg.code && (
+                      <div className="mt-2 border border-gray-700 rounded-lg overflow-hidden">
+                        {msg.codeLanguage && (
+                          <div className="text-xs text-gray-500 px-3 py-1 bg-gray-800 border-b border-gray-700">
+                            {LANGUAGE_LABELS[msg.codeLanguage] ?? msg.codeLanguage}
+                          </div>
+                        )}
+                        <pre className="p-3 bg-gray-900 text-xs text-gray-300 overflow-x-auto font-mono whitespace-pre-wrap">
+                          {msg.code}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Question */}
       <p className="text-lg font-medium text-gray-100">{quiz.question}</p>
@@ -424,6 +489,7 @@ export function ConversationQuiz({
                   setAnswers(Array(blankCount).fill(""));
                   setFilledValues(Array(blankCount).fill(null));
                   setActiveBlankIndex(blankCount > 0 ? 0 : null);
+                  setShowHint(false);
                 }}
                 className="px-6 py-2 rounded-lg border border-yellow-600 text-yellow-400 font-medium hover:bg-yellow-600/10 transition-colors"
               >

@@ -38,7 +38,7 @@ src/
 │   ├── MultipleChoiceQuiz.tsx    # Multiple choice quiz component
 │   ├── ShortAnswerQuiz.tsx       # Fill-in-the-blank quiz (inline inputs or word bank)
 │   ├── CodeFillQuiz.tsx          # Code fill-in-the-blank (code block with inputs or word bank)
-│   ├── ConversationQuiz.tsx      # Conversation scenario quiz (slack-style chat + objective/fill-blank)
+│   ├── ConversationQuiz.tsx      # Conversation scenario quiz (slack-style chat + senior hint + objective/fill-blank)
 │   ├── WordBank.tsx              # Word bank chip selection component (Duolingo-style)
 │   ├── QuizSession.tsx           # Quiz session container (navigation, progress, mode toggle)
 │   ├── DifficultyProgress.tsx    # Progress display per difficulty
@@ -49,9 +49,9 @@ src/
 ├── lib/
 │   ├── quiz-loader.ts           # Quiz data loading, filtering, shuffle
 │   ├── quiz-utils.ts            # Shared utilities (checkBlank, countConversationBlanks)
-│   └── constants.ts             # Categories, subcategories, difficulties
+│   └── constants.ts             # Categories, subcategories, difficulties, scenario types
 ├── types/
-│   └── quiz.ts                  # Quiz, Category, Difficulty types
+│   └── quiz.ts                  # Quiz, Category, Difficulty, ScenarioType types
 └── test/
     └── setup.ts                 # Vitest setup (jest-dom matchers, RTL cleanup)
 data/
@@ -76,7 +76,8 @@ scripts/
 - See `QUIZ.md` for quiz data format rules
 - 4 quiz types: multiple-choice, short-answer, code-fill, conversation
 - Both `short-answer` and `code-fill` use `blankAnswers` field for blank grading (shared `checkBlank()`)
-- `conversation` type: slack-style developer dialog scenarios with objective or fill-blank sub-modes
+- `conversation` type: slack-style developer dialog with senior hint (collapsible), 3 scenario types (bug-report, code-review, design-discussion)
+- 8 personas: 시니어(hint only), 신입, AI, 팀장, QA, 리뷰어, PM, 동료. Senior never in conversation array, only in `seniorHint`
 - `blankDistractors` field: per-blank wrong choices for word bank mode (2-3 per blank)
 - Grading: case-insensitive, trim, internal whitespace normalization
 - Word bank (normal) mode: tap chips to fill blanks; Hard mode: type answers manually

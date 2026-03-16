@@ -11,28 +11,38 @@ const mockObjectiveQuiz: Quiz = {
   difficulty: "중급",
   type: "conversation",
   conversationMode: "objective",
+  scenarioType: "bug-report",
   conversation: [
     {
-      speaker: "김과장",
-      role: "고객",
-      avatar: "😤",
-      text: "서버가 갑자기 느려졌어요.",
+      speaker: "환영",
+      role: "QA",
+      avatar: "🔍",
+      text: "프로덕션 서버에서 Java 프로세스가 갑자기 종료되었습니다.",
     },
     {
-      speaker: "이시니어",
-      role: "시니어",
-      avatar: "👩‍💻",
-      text: "dmesg 로그를 확인해볼게요.",
-    },
-    {
-      speaker: "이시니어",
-      role: "시니어",
-      avatar: "👩‍💻",
+      speaker: "박신입",
+      role: "신입",
+      avatar: "🧑‍💻",
+      text: "dmesg에 이런 로그가 있어요.",
       code: "[3412.56] Out of memory: Killed process 1234 (java)",
       codeLanguage: "shell",
     },
+    {
+      speaker: "최팀장",
+      role: "팀장",
+      avatar: "🧑‍💼",
+      text: "Java 버그 아니야? JVM 힙 설정 확인해봐.",
+    },
   ],
-  question: "고객의 '느려졌어요' 증상의 실제 기술적 원인은?",
+  seniorHint: [
+    {
+      speaker: "이시니어",
+      role: "시니어",
+      avatar: "👩‍💻",
+      text: "dmesg 로그의 'Out of memory' 키워드에 주목해보세요. 커널 레벨의 메모리 관리 메커니즘을 확인해보면 됩니다.",
+    },
+  ],
+  question: "dmesg 로그에서 확인된 현상의 원인은 무엇인가?",
   options: [
     "OOM Killer에 의한 프로세스 강제 종료",
     "디스크 I/O 병목",
@@ -51,18 +61,27 @@ const mockFillBlankQuiz: Quiz = {
   difficulty: "고급",
   type: "conversation",
   conversationMode: "fill-blank",
+  scenarioType: "code-review",
   conversation: [
     {
-      speaker: "박신입",
-      role: "신입",
-      avatar: "🧑‍💻",
-      text: "커널 모듈 빌드하다가 에러 났어요.",
+      speaker: "민수",
+      role: "리뷰어",
+      avatar: "👀",
+      text: "커널 모듈 코드인데 라이선스 선언이 빠져있네요.",
     },
+    {
+      speaker: "지훈",
+      role: "동료",
+      avatar: "💬",
+      text: "소스에 ___ 매크로를 추가해야 해요. 보통 ___로 설정하죠.",
+    },
+  ],
+  seniorHint: [
     {
       speaker: "이시니어",
       role: "시니어",
       avatar: "👩‍💻",
-      text: "소스에 ___ 매크로를 추가해야 해요. 보통 ___로 설정합니다.",
+      text: "커널 모듈의 라이선스 관련 매크로를 확인해보세요.",
     },
   ],
   question: "대화의 빈칸을 채우시오.",
@@ -91,10 +110,10 @@ describe("ConversationQuiz", () => {
       );
 
       expect(
-        screen.getByText("서버가 갑자기 느려졌어요.")
+        screen.getByText("프로덕션 서버에서 Java 프로세스가 갑자기 종료되었습니다.")
       ).toBeInTheDocument();
       expect(
-        screen.getByText("dmesg 로그를 확인해볼게요.")
+        screen.getByText("Java 버그 아니야? JVM 힙 설정 확인해봐.")
       ).toBeInTheDocument();
       expect(
         screen.getByText(mockObjectiveQuiz.question)
@@ -110,9 +129,10 @@ describe("ConversationQuiz", () => {
         />
       );
 
-      expect(screen.getByText("김과장")).toBeInTheDocument();
-      expect(screen.getAllByText("이시니어").length).toBeGreaterThanOrEqual(1);
-      expect(screen.getByText("고객")).toBeInTheDocument();
+      expect(screen.getByText("환영")).toBeInTheDocument();
+      expect(screen.getByText("QA")).toBeInTheDocument();
+      expect(screen.getByText("최팀장")).toBeInTheDocument();
+      expect(screen.getByText("팀장")).toBeInTheDocument();
     });
 
     it("renders code blocks in messages", () => {
@@ -142,6 +162,18 @@ describe("ConversationQuiz", () => {
       );
 
       expect(screen.getByText("대화형")).toBeInTheDocument();
+    });
+
+    it("shows scenario type badge", () => {
+      render(
+        <ConversationQuiz
+          quiz={mockObjectiveQuiz}
+          questionNumber={1}
+          onNext={() => {}}
+        />
+      );
+
+      expect(screen.getByText("버그 리포트")).toBeInTheDocument();
     });
 
     it("submit button disabled without selection", () => {
@@ -216,6 +248,115 @@ describe("ConversationQuiz", () => {
     });
   });
 
+  describe("senior hint", () => {
+    it("renders hint toggle button when seniorHint exists", () => {
+      render(
+        <ConversationQuiz
+          quiz={mockObjectiveQuiz}
+          questionNumber={1}
+          onNext={() => {}}
+        />
+      );
+
+      expect(
+        screen.getByText("💡 시니어에게 도움 받기")
+      ).toBeInTheDocument();
+    });
+
+    it("hint is collapsed by default", () => {
+      render(
+        <ConversationQuiz
+          quiz={mockObjectiveQuiz}
+          questionNumber={1}
+          onNext={() => {}}
+        />
+      );
+
+      expect(
+        screen.queryByText(mockObjectiveQuiz.seniorHint![0].text!)
+      ).not.toBeInTheDocument();
+    });
+
+    it("expands hint on click", async () => {
+      const user = userEvent.setup();
+      render(
+        <ConversationQuiz
+          quiz={mockObjectiveQuiz}
+          questionNumber={1}
+          onNext={() => {}}
+        />
+      );
+
+      await user.click(screen.getByText("💡 시니어에게 도움 받기"));
+
+      expect(
+        screen.getByText(mockObjectiveQuiz.seniorHint![0].text!)
+      ).toBeInTheDocument();
+      expect(screen.getByText("시니어")).toBeInTheDocument();
+    });
+
+    it("collapses hint on second click", async () => {
+      const user = userEvent.setup();
+      render(
+        <ConversationQuiz
+          quiz={mockObjectiveQuiz}
+          questionNumber={1}
+          onNext={() => {}}
+        />
+      );
+
+      await user.click(screen.getByText("💡 시니어에게 도움 받기"));
+      await user.click(screen.getByText("💡 시니어에게 도움 받기"));
+
+      expect(
+        screen.queryByText(mockObjectiveQuiz.seniorHint![0].text!)
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("new role colors", () => {
+    it("renders QA role badge with correct color", () => {
+      render(
+        <ConversationQuiz
+          quiz={mockObjectiveQuiz}
+          questionNumber={1}
+          onNext={() => {}}
+        />
+      );
+
+      const qaBadge = screen.getByText("QA");
+      expect(qaBadge.className).toContain("text-amber-400");
+    });
+
+    it("renders 리뷰어 role badge with correct color", () => {
+      render(
+        <ConversationQuiz
+          quiz={mockFillBlankQuiz}
+          questionNumber={1}
+          onNext={() => {}}
+          mode="hard"
+        />
+      );
+
+      const reviewerBadge = screen.getByText("리뷰어");
+      expect(reviewerBadge.className).toContain("text-cyan-400");
+    });
+
+    it("renders 동료 role badge with correct color", () => {
+      render(
+        <ConversationQuiz
+          quiz={mockFillBlankQuiz}
+          questionNumber={1}
+          onNext={() => {}}
+          mode="hard"
+        />
+      );
+
+      const peerBadge = screen.getByText("동료");
+      expect(peerBadge.className).toContain("text-teal-400");
+    });
+  });
+
   describe("fill-blank mode (hard)", () => {
     it("renders conversation with blank inputs", () => {
       render(
@@ -228,7 +369,7 @@ describe("ConversationQuiz", () => {
       );
 
       expect(
-        screen.getByText("커널 모듈 빌드하다가 에러 났어요.")
+        screen.getByText("커널 모듈 코드인데 라이선스 선언이 빠져있네요.")
       ).toBeInTheDocument();
       expect(screen.getByPlaceholderText("빈칸 1")).toBeInTheDocument();
       expect(screen.getByPlaceholderText("빈칸 2")).toBeInTheDocument();

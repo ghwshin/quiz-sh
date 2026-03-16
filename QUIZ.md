@@ -164,8 +164,10 @@ data/
 
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
-| `conversation` | `ConversationMessage[]` | O | 대화 메시지 배열 |
+| `conversation` | `ConversationMessage[]` | O | 대화 메시지 배열 (시니어 제외) |
+| `seniorHint` | `ConversationMessage[]` | O | 시니어 힌트 메시지 (접힌 상태로 표시) |
 | `conversationMode` | `"objective" \| "fill-blank"` | O | 대화형 하위 모드 |
+| `scenarioType` | `"bug-report" \| "code-review" \| "design-discussion"` | O | 시나리오 유형 |
 | `options` | `string[]` | objective만 | 선택지 배열 (4개) |
 | `answer` | `number` | objective만 | 정답 인덱스 (0-based) |
 | `blankAnswers` | `string[][]` | fill-blank만 | 빈칸별 허용 답안 배열 |
@@ -175,8 +177,8 @@ data/
 
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
-| `speaker` | `string` | O | 화자 이름 (예: "이시니어") |
-| `role` | `string` | O | 역할 (팀장/시니어/신입/AI/고객) |
+| `speaker` | `string` | O | 화자 이름 (예: "박신입") |
+| `role` | `string` | O | 역할 (팀장/신입/AI/QA/리뷰어/PM/동료) |
 | `avatar` | `string` | O | 이모지 아바타 |
 | `text` | `string` | △ | 메시지 텍스트 (fill-blank이면 `___` 포함 가능) |
 | `code` | `string` | △ | 코드 블록 (선택) |
@@ -184,39 +186,71 @@ data/
 
 **페르소나:**
 
-| 아바타 | 이름 | 역할 | 특성 |
-|--------|------|------|------|
-| 🧑‍💼 | 최팀장 | 팀장 | 경력 많지만 시스템은 약함. 자신있게 틀린 판단 |
-| 👩‍💻 | 이시니어 | 시니어 | 시스템 전문가. 정확하고 간결한 피드백 |
-| 🧑‍💻 | 박신입 | 신입 | 열정적이지만 경험 부족 |
-| 🤖 | Copilot | AI | 그럴듯한 hallucination |
-| 😤 | 김과장 | 고객 | 모호한 증상만 전달 |
+| 아바타 | 이름 | 역할 | 특성 | 배치 |
+|--------|------|------|------|------|
+| 👩‍💻 | 이시니어 | 시니어 | 시스템 전문가. 방향만 제시하는 힌트 | `seniorHint` 전용 |
+| 🧑‍💻 | 박신입 | 신입 | 열정적이지만 경험 부족. 증상 보고, 잘못된 추측 | `conversation` |
+| 🤖 | Copilot | AI | 그럴듯한 hallucination. 틀린/불완전한 조언 | `conversation` |
+| 🧑‍💼 | 최팀장 | 팀장 | 경력 많지만 시스템은 약함. 지시, 성급한 결론 | `conversation` |
+| 🔍 | 환영 | QA | 버그 증상/로그 보고 | `conversation` |
+| 👀 | 민수 | 리뷰어 | "이게 맞나요?" 식 지적 | `conversation` |
+| 📋 | 수진 | PM | 비기술적 요구사항 전달 | `conversation` |
+| 💬 | 지훈 | 동료 | 대등한 토론, 확신 없는 의견 | `conversation` |
+
+**시나리오 유형:**
+
+| 유형 | 설명 | 전형적 대화 흐름 |
+|------|------|-----------------|
+| `bug-report` | QA가 증상 보고 | QA → 신입 잘못된 추측 → AI 틀린 조언 |
+| `code-review` | 리뷰어가 문제 지적 | 리뷰어 → 동료 의견 → 토론 |
+| `design-discussion` | PM이 요구사항 전달 | PM → 동료들이 다른 접근법 제안 |
+
+**seniorHint 규칙:**
+
+- 시니어(이시니어)는 `conversation` 배열에 절대 포함되지 않음
+- `seniorHint` 배열에만 존재하며, UI에서 접힌 힌트로 표시
+- 힌트는 방향만 제시하고 정답을 직접 말하지 않음
+- `seniorHint` 메시지에 `___` (빈칸) 금지
+- `conversation` 배열에 role "고객" 금지 (삭제된 역할)
 
 ```json
 {
   "id": "dc-001",
   "category": "linux-kernel",
   "subcategory": "dev-conversation",
-  "difficulty": "중급",
+  "difficulty": "초급",
   "type": "conversation",
   "conversationMode": "objective",
+  "scenarioType": "bug-report",
   "conversation": [
-    { "speaker": "김과장", "role": "고객", "avatar": "😤",
-      "text": "서버가 갑자기 느려졌어요." },
-    { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻",
-      "code": "[3412.56] Out of memory: Killed process 1234 (java)",
-      "codeLanguage": "shell" }
+    { "speaker": "환영", "role": "QA", "avatar": "🔍",
+      "text": "프로덕션 서버에서 Java 프로세스가 갑자기 종료되었습니다." },
+    { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻",
+      "text": "dmesg에 이런 로그가 있어요.",
+      "code": "Out of memory: Killed process 3421 (java) total-vm:8192000kB",
+      "codeLanguage": "shell" },
+    { "speaker": "최팀장", "role": "팀장", "avatar": "🧑‍💼",
+      "text": "Java 버그 아니야? JVM 힙 설정 확인해봐." }
   ],
-  "question": "고객의 '느려졌어요' 증상의 실제 기술적 원인은?",
-  "options": ["OOM Killer에 의한 프로세스 강제 종료", "디스크 I/O 병목", "CPU 과부하", "네트워크 타임아웃"],
+  "seniorHint": [
+    { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻",
+      "text": "dmesg 로그의 'Out of memory' 키워드에 주목해보세요. 커널 레벨의 메모리 관리 메커니즘을 확인해보면 됩니다." }
+  ],
+  "question": "dmesg 로그에서 확인된 현상의 원인은 무엇인가?",
+  "options": ["시스템 메모리 부족으로 OOM Killer가 프로세스를 강제 종료함", "..."],
   "answer": 0,
-  "explanation": "dmesg 로그에서 OOM Killer가 동작한 것을 확인할 수 있다."
+  "explanation": "OOM Killer는 시스템 메모리가 극도로 부족할 때 커널이 프로세스를 강제 종료하는 메커니즘입니다."
 }
 ```
 
 규칙:
 - `conversation` 배열에 최소 2개의 메시지
 - 각 메시지에 `text` 또는 `code` 중 하나 이상 존재
+- `seniorHint` 필수, 최소 1개의 메시지
+- `seniorHint` 메시지의 role은 반드시 "시니어"
+- `conversation` 배열에 role "시니어" 금지 (seniorHint로 분리)
+- `conversation` 배열에 role "고객" 금지 (삭제된 역할)
+- `scenarioType` 필수: "bug-report", "code-review", "design-discussion" 중 하나
 - fill-blank: 대화 메시지 `text` 내 `___` 개수 = `blankAnswers.length`
 - objective: `options` 4개, `answer` 0~3
 
@@ -271,6 +305,11 @@ data/
 - [ ] 코드 빈칸: `codeTemplate` 내 `___` 개수 = `blankAnswers.length`
 - [ ] `blankAnswers`의 각 항목에 최소 1개의 비어있지 않은 답안
 - [ ] `explanation`이 비어있지 않음
+- [ ] 대화형: `seniorHint` 배열 필수, 각 메시지의 role은 "시니어"
+- [ ] 대화형: `conversation` 배열에 role "시니어" 금지
+- [ ] 대화형: `conversation` 배열에 role "고객" 금지
+- [ ] 대화형: `seniorHint` 메시지에 `___` 금지
+- [ ] 대화형: `scenarioType` 필수 ("bug-report", "code-review", "design-discussion")
 
 ## TypeScript 타입 정의
 
@@ -278,6 +317,7 @@ data/
 type QuizType = "multiple-choice" | "short-answer" | "code-fill" | "conversation";
 type Difficulty = "초급" | "중급" | "고급";
 type Category = "linux-kernel" | "android-system";
+type ScenarioType = "bug-report" | "code-review" | "design-discussion";
 
 interface ConversationMessage {
   speaker: string;
@@ -305,6 +345,8 @@ interface Quiz {
   blankDistractors?: string[][];    // word bank distractors
   conversation?: ConversationMessage[]; // conversation only
   conversationMode?: ConversationMode;  // conversation only
+  seniorHint?: ConversationMessage[];   // conversation only - senior hint messages
+  scenarioType?: ScenarioType;          // conversation only - scenario type
   explanation: string;
 }
 ```

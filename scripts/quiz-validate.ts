@@ -250,6 +250,44 @@ function validateFile(
           }
         }
       }
+
+      // seniorHint validation
+      if (!q.seniorHint || q.seniorHint.length === 0) {
+        errors.push({ id, message: `conversation type missing seniorHint array` });
+      } else {
+        for (let i = 0; i < q.seniorHint.length; i++) {
+          const hint = q.seniorHint[i];
+          if (hint.role !== "시니어") {
+            errors.push({ id, message: `seniorHint[${i}] role must be "시니어", got "${hint.role}"` });
+          }
+          if (!hint.speaker) errors.push({ id, message: `seniorHint[${i}] missing speaker` });
+          if (!hint.avatar) errors.push({ id, message: `seniorHint[${i}] missing avatar` });
+          if (!hint.text && !hint.code) {
+            errors.push({ id, message: `seniorHint[${i}] must have text or code` });
+          }
+          if (hint.text && hint.text.includes("___")) {
+            errors.push({ id, message: `seniorHint[${i}] must not contain blanks (___) ` });
+          }
+        }
+      }
+
+      if (q.conversation) {
+        for (let i = 0; i < q.conversation.length; i++) {
+          if (q.conversation[i].role === "시니어") {
+            errors.push({ id, message: `conversation[${i}] must not have role "시니어" (use seniorHint instead)` });
+          }
+          if (q.conversation[i].role === "고객") {
+            errors.push({ id, message: `conversation[${i}] must not have role "고객" (deprecated)` });
+          }
+        }
+      }
+
+      const validScenarioTypes = ["bug-report", "code-review", "design-discussion"];
+      if (!q.scenarioType) {
+        errors.push({ id, message: `conversation type missing scenarioType` });
+      } else if (!validScenarioTypes.includes(q.scenarioType)) {
+        errors.push({ id, message: `invalid scenarioType "${q.scenarioType}"` });
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import type { Category, Difficulty } from "@/types/quiz";
+import type { Category, Difficulty, ScenarioType } from "@/types/quiz";
 
 export const CATEGORIES: { id: Category; name: string; description: string }[] = [
   {
@@ -54,6 +54,12 @@ export const DIFFICULTIES: { id: Difficulty; slug: string; name: string; color: 
   { id: "초급", slug: "beginner", name: "초급", color: "text-green-400" },
   { id: "중급", slug: "intermediate", name: "중급", color: "text-yellow-400" },
   { id: "고급", slug: "advanced", name: "고급", color: "text-red-400" },
+];
+
+export const SCENARIO_TYPES: { id: ScenarioType; name: string }[] = [
+  { id: "bug-report", name: "버그 리포트" },
+  { id: "code-review", name: "코드 리뷰" },
+  { id: "design-discussion", name: "설계 토론" },
 ];
 
 /** Map URL slug to Difficulty value */

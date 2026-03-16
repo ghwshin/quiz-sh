@@ -1,6 +1,7 @@
 export type QuizType = "multiple-choice" | "short-answer" | "code-fill" | "conversation";
 export type Difficulty = "초급" | "중급" | "고급";
 export type Category = "linux-kernel" | "android-system";
+export type ScenarioType = "bug-report" | "code-review" | "design-discussion";
 
 export interface ConversationMessage {
   speaker: string;
@@ -28,5 +29,7 @@ export interface Quiz {
   answer?: number;
   conversation?: ConversationMessage[];
   conversationMode?: ConversationMode;
+  seniorHint?: ConversationMessage[];
+  scenarioType?: ScenarioType;
   explanation: string;
 }
