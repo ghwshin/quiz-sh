@@ -6,6 +6,24 @@ import { useQuizProgress } from "@/hooks/useQuizProgress";
 import { DIFFICULTIES } from "@/lib/constants";
 import { createTerminalState, executeCommand, type TerminalState } from "@/lib/terminal/terminal-state";
 import { evaluateGoals, type GoalCheckResult } from "@/lib/terminal/goal-checker";
+const KNOWN_COMMANDS = [
+  "ls", "cat", "echo", "cp", "mv", "rm", "mkdir", "touch", "chmod", "grep",
+  "find", "head", "tail", "wc", "ln", "cd", "pwd", "uname", "whoami", "id",
+  "date", "env", "export", "insmod", "rmmod", "lsmod", "dmesg", "modprobe",
+  "modinfo", "sysctl", "ps", "kill", "ip", "ss", "ping", "adb", "fastboot",
+  "logcat", "mount", "clear", "help", "true", "false", "getenforce", "chcon",
+];
+
+function findCommonPrefix(strings: string[]): string {
+  if (strings.length === 0) return "";
+  let prefix = strings[0];
+  for (let i = 1; i < strings.length; i++) {
+    while (!strings[i].startsWith(prefix)) {
+      prefix = prefix.slice(0, -1);
+    }
+  }
+  return prefix;
+}
 
 interface TerminalLine {
   type: "input" | "output" | "error";
@@ -95,11 +113,82 @@ export function TerminalQuiz({
     setHistoryIndex(-1);
   }, [lines, prompt, terminalState]);
 
+  function handleTabComplete() {
+    const parts = input.split(/\s+/);
+    const current = parts[parts.length - 1];
+    if (!current) return;
+
+    // First word: command completion
+    if (parts.length === 1) {
+      const matches = KNOWN_COMMANDS.filter(c => c.startsWith(current));
+      if (matches.length === 1) {
+        setInput(matches[0] + " ");
+      } else if (matches.length > 1) {
+        // Show matches in terminal, then find common prefix
+        const common = findCommonPrefix(matches);
+        if (common.length > current.length) {
+          setInput(common);
+        } else {
+          setLines(prev => [...prev, { type: "output", text: matches.join("  ") }]);
+        }
+      }
+      return;
+    }
+
+    // Subsequent words: path completion
+    const isAbsolute = current.startsWith("/");
+    const lastSlash = current.lastIndexOf("/");
+    const dirPart = lastSlash >= 0 ? current.substring(0, lastSlash) || "/" : ".";
+    const prefix = lastSlash >= 0 ? current.substring(lastSlash + 1) : current;
+
+    const absDir = terminalState.fs.resolvePath(dirPart, terminalState.cwd);
+    const entries = terminalState.fs.readdir(absDir);
+    if (!entries) return;
+
+    const matches = entries.filter(e => e.startsWith(prefix));
+    if (matches.length === 0) return;
+
+    const buildPath = (name: string) => {
+      if (lastSlash >= 0) {
+        const base = current.substring(0, lastSlash + 1);
+        return base + name;
+      }
+      return name;
+    };
+
+    if (matches.length === 1) {
+      const match = matches[0];
+      const fullPath = buildPath(match);
+      const absPath = terminalState.fs.resolvePath(
+        isAbsolute ? fullPath : dirPart + "/" + match,
+        terminalState.cwd
+      );
+      const stat = terminalState.fs.stat(absPath);
+      const suffix = stat?.type === "dir" ? "/" : " ";
+      parts[parts.length - 1] = fullPath + suffix;
+      setInput(parts.join(" "));
+    } else {
+      const common = findCommonPrefix(matches);
+      if (common.length > prefix.length) {
+        parts[parts.length - 1] = buildPath(common);
+        setInput(parts.join(" "));
+      } else {
+        setLines(prev => [...prev,
+          { type: "input", text: `${prompt}${input}` },
+          { type: "output", text: matches.join("  ") },
+        ]);
+      }
+    }
+  }
+
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     // Prevent QuizSession arrow navigation
     e.stopPropagation();
 
-    if (e.key === "Enter") {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      handleTabComplete();
+    } else if (e.key === "Enter") {
       handleCommand(input);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
@@ -231,7 +320,7 @@ export function TerminalQuiz({
           {/* Input line */}
           {!isAnswered && (
             <div className="flex items-center">
-              <span className="text-green-400 whitespace-nowrap">{prompt}</span>
+              <span className="text-green-400 whitespace-pre">{prompt}</span>
               <input
                 ref={inputRef}
                 type="text"
