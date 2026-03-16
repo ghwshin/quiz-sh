@@ -4,7 +4,9 @@ registerCommand("ps", (args, state) => {
   if (args.includes("--help") || args.includes("-h")) {
     return { stdout: "Usage: ps [OPTION]...\nReport a snapshot of current processes.\n\nOptions: aux (all processes, BSD style), -ef (all processes, UNIX style)\n", stderr: "", exitCode: 0 };
   }
-  const showAll = args.includes("aux") || args.includes("-ef") || args.includes("-e");
+  // Combine all flag characters from short flags for flexible matching
+  const allFlags = args.join("");
+  const showAll = allFlags.includes("a") || allFlags.includes("e") || args.includes("aux") || args.includes("-ef");
 
   const header = showAll
     ? "USER       PID %CPU %MEM COMMAND\n"
@@ -54,7 +56,9 @@ registerCommand("kill", (args, state) => {
     if (!proc) {
       return { stdout: "", stderr: `kill: (${pid}) - No such process\n`, exitCode: 1 };
     }
-    if (signal === "9" || signal === "KILL" || signal === "TERM" || signal === "15") {
+    // Normalize signal: strip leading SIG, treat 9/KILL and 15/TERM as kill signals
+    const normalizedSignal = signal.replace(/^SIG/, "");
+    if (normalizedSignal === "9" || normalizedSignal === "KILL" || normalizedSignal === "TERM" || normalizedSignal === "15") {
       sideEffects.push({ type: "remove-process" as const, payload: { pid } });
     }
   }

@@ -211,6 +211,7 @@ registerCommand("help", () => ({
     "Available commands (use --help for details):",
     "",
     "  File system:  ls, cat, touch, mkdir, rm, cp, mv, chmod, grep, find, head, tail, wc, ln",
+    "  Text tools:   sort, uniq, tee",
     "  Navigation:   cd, pwd",
     "  System info:  uname, whoami, id, date, env, export, mount",
     "  Kernel:       insmod, rmmod, lsmod, dmesg, modprobe, modinfo, sysctl",

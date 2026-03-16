@@ -268,3 +268,257 @@ describe("mount command", () => {
     expect(mounts).toContain("ro");
   });
 });
+
+describe("rm flag variations", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig());
+  });
+
+  it("rm -r -f removes directory", () => {
+    state.fs.mkdirp("/tmp/mydir");
+    state.fs.writeFile("/tmp/mydir/file.txt", "content");
+    const result = executeCommand(state, "rm -r -f /tmp/mydir");
+    expect(result.exitCode).toBe(0);
+    expect(state.fs.exists("/tmp/mydir")).toBe(false);
+  });
+
+  it("rm --recursive --force removes directory", () => {
+    state.fs.mkdirp("/tmp/mydir2");
+    const result = executeCommand(state, "rm --recursive --force /tmp/mydir2");
+    expect(result.exitCode).toBe(0);
+    expect(state.fs.exists("/tmp/mydir2")).toBe(false);
+  });
+});
+
+describe("mkdir flag variations", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig());
+  });
+
+  it("mkdir --parents creates nested directories", () => {
+    const result = executeCommand(state, "mkdir --parents /tmp/x/y/z");
+    expect(result.exitCode).toBe(0);
+    expect(state.fs.exists("/tmp/x/y/z")).toBe(true);
+  });
+});
+
+describe("cp flag variations", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig({
+      filesystem: {
+        "/root": { type: "dir" },
+        "/tmp": { type: "dir" },
+        "/etc": { type: "dir" },
+        "/etc/test.conf": { type: "file", content: "line1\nline2\nline3\n" },
+      },
+    }));
+  });
+
+  it("cp --recursive copies directory", () => {
+    state.fs.mkdirp("/tmp/srcdir");
+    state.fs.writeFile("/tmp/srcdir/file.txt", "data");
+    const result = executeCommand(state, "cp --recursive /tmp/srcdir /tmp/dstdir");
+    expect(result.exitCode).toBe(0);
+  });
+});
+
+describe("chmod symbolic modes", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig());
+  });
+
+  it("chmod +x sets execute bit", () => {
+    executeCommand(state, "touch /tmp/script.sh");
+    executeCommand(state, "chmod +x /tmp/script.sh");
+    const perms = state.fs.stat("/tmp/script.sh")?.permissions ?? "";
+    expect(parseInt(perms, 8) & 0o111).toBeGreaterThan(0);
+  });
+
+  it("chmod u+x sets user execute bit", () => {
+    executeCommand(state, "touch /tmp/myscript");
+    executeCommand(state, "chmod u+x /tmp/myscript");
+    const perms = state.fs.stat("/tmp/myscript")?.permissions ?? "";
+    expect(parseInt(perms, 8) & 0o100).toBeGreaterThan(0);
+  });
+
+  it("chmod 755 still works (octal)", () => {
+    executeCommand(state, "touch /tmp/prog");
+    executeCommand(state, "chmod 755 /tmp/prog");
+    expect(state.fs.stat("/tmp/prog")?.permissions).toBe("755");
+  });
+});
+
+describe("grep flag variations", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig({
+      filesystem: {
+        "/root": { type: "dir" },
+        "/tmp": { type: "dir" },
+        "/etc": { type: "dir" },
+        "/etc/test.conf": { type: "file", content: "line1\nLine2\nline3\nERROR: something\n" },
+      },
+    }));
+  });
+
+  it("grep -i matches case insensitively", () => {
+    const result = executeCommand(state, "grep -i error /etc/test.conf");
+    expect(result.stdout).toContain("ERROR");
+    expect(result.exitCode).toBe(0);
+  });
+
+  it("grep -v inverts match", () => {
+    const result = executeCommand(state, "grep -v line /etc/test.conf");
+    expect(result.stdout).not.toContain("line1");
+    expect(result.stdout).toContain("ERROR");
+    expect(result.exitCode).toBe(0);
+  });
+
+  it("grep -n shows line numbers", () => {
+    const result = executeCommand(state, "grep -n line /etc/test.conf");
+    expect(result.stdout).toContain("1:line1");
+    expect(result.stdout).toContain("3:line3");
+    expect(result.exitCode).toBe(0);
+  });
+
+  it("grep combined flags -iv work", () => {
+    const result = executeCommand(state, "grep -iv line /etc/test.conf");
+    // -i and -v: lines that do NOT match 'line' case-insensitively
+    expect(result.stdout).not.toContain("line1");
+    expect(result.stdout).not.toContain("Line2");
+    expect(result.stdout).toContain("ERROR");
+  });
+});
+
+describe("sort command", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig());
+  });
+
+  it("sort sorts lines alphabetically from stdin", () => {
+    const result = executeCommand(state, "echo 'banana\napple\ncherry' | sort");
+    const lines = result.stdout.trim().split("\n");
+    expect(lines[0]).toBe("apple");
+    expect(lines[1]).toBe("banana");
+    expect(lines[2]).toBe("cherry");
+  });
+
+  it("sort -r reverses sort order", () => {
+    const result = executeCommand(state, "echo 'banana\napple\ncherry' | sort -r");
+    const lines = result.stdout.trim().split("\n");
+    expect(lines[0]).toBe("cherry");
+  });
+});
+
+describe("uniq command", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig());
+  });
+
+  it("uniq removes consecutive duplicates", () => {
+    executeCommand(state, "echo 'apple\napple\nbanana\nbanana\ncherry' > /tmp/dupes.txt");
+    const result = executeCommand(state, "uniq /tmp/dupes.txt");
+    const lines = result.stdout.trim().split("\n");
+    expect(lines).toEqual(["apple", "banana", "cherry"]);
+  });
+
+  it("sort | uniq removes all duplicates", () => {
+    executeCommand(state, "echo 'b\na\nb\na' > /tmp/unsorted.txt");
+    const result = executeCommand(state, "sort /tmp/unsorted.txt | uniq");
+    const lines = result.stdout.trim().split("\n");
+    expect(lines).toEqual(["a", "b"]);
+  });
+});
+
+describe("tee command", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig());
+  });
+
+  it("tee writes stdin to file and passes through to stdout", () => {
+    const result = executeCommand(state, "echo hello | tee /tmp/tee-out.txt");
+    expect(result.stdout).toBe("hello\n");
+    expect(state.fs.readFile("/tmp/tee-out.txt")).toBe("hello\n");
+  });
+
+  it("tee -a appends to file", () => {
+    executeCommand(state, "echo first > /tmp/tee-append.txt");
+    executeCommand(state, "echo second | tee -a /tmp/tee-append.txt");
+    expect(state.fs.readFile("/tmp/tee-append.txt")).toBe("first\nsecond\n");
+  });
+});
+
+describe("ps flag variations", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig({
+      processes: [
+        { pid: 1, name: "init", user: "root", cpu: "0.0", mem: "0.5", command: "/sbin/init" },
+        { pid: 100, name: "sshd", user: "root", cpu: "0.0", mem: "0.3", command: "/usr/sbin/sshd" },
+      ],
+    }));
+  });
+
+  it("ps aux shows all processes", () => {
+    const result = executeCommand(state, "ps aux");
+    expect(result.stdout).toContain("sshd");
+  });
+
+  it("ps -aux shows all processes", () => {
+    const result = executeCommand(state, "ps -aux");
+    expect(result.stdout).toContain("sshd");
+  });
+
+  it("ps -ef shows all processes", () => {
+    const result = executeCommand(state, "ps -ef");
+    expect(result.stdout).toContain("sshd");
+  });
+});
+
+describe("kill signal variations", () => {
+  let state: TerminalState;
+
+  beforeEach(() => {
+    state = createTerminalState(makeConfig({
+      processes: [
+        { pid: 1234, name: "myproc", user: "root", cpu: "0.0", mem: "0.5", command: "/usr/bin/myproc" },
+        { pid: 5678, name: "myproc2", user: "root", cpu: "0.0", mem: "0.5", command: "/usr/bin/myproc2" },
+        { pid: 9012, name: "myproc3", user: "root", cpu: "0.0", mem: "0.5", command: "/usr/bin/myproc3" },
+      ],
+    }));
+  });
+
+  it("kill -KILL terminates process", () => {
+    const result = executeCommand(state, "kill -KILL 1234");
+    expect(result.exitCode).toBe(0);
+    expect(state.processes.find(p => p.pid === 1234)).toBeUndefined();
+  });
+
+  it("kill -SIGKILL terminates process", () => {
+    const result = executeCommand(state, "kill -SIGKILL 5678");
+    expect(result.exitCode).toBe(0);
+    expect(state.processes.find(p => p.pid === 5678)).toBeUndefined();
+  });
+
+  it("kill -SIGTERM terminates process", () => {
+    const result = executeCommand(state, "kill -SIGTERM 9012");
+    expect(result.exitCode).toBe(0);
+    expect(state.processes.find(p => p.pid === 9012)).toBeUndefined();
+  });
+});

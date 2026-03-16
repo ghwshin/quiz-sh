@@ -94,16 +94,16 @@ registerCommand("dmesg", (args, state) => {
     return { stdout: "Usage: dmesg [OPTION]...\nPrint or control the kernel ring buffer.\n\nOptions: -c (clear after printing), -n LEVEL (set console log level)\n", stderr: "", exitCode: 0 };
   }
   // For quiz purposes, dmesg output comes from scriptedOutputs or module log
-  const lines: string[] = [];
+  const lines: string[] = [
+    "[    0.000] Linux version 5.15.0 (root@build) (gcc 11.2.0)",
+    "[    0.001] Command line: console=ttyS0,115200",
+    "[    0.010] Memory: 1024MB available",
+    "[    0.050] PCI: Using configuration type 1",
+    "[    0.100] NET: Registered protocol family 2",
+  ];
 
   for (const mod of state.loadedModules) {
-    lines.push(`[    0.000] ${mod.name}: module loaded`);
-  }
-
-  if (lines.length === 0) {
-    lines.push("[    0.000] Linux version 5.15.0 (root@build) (gcc 11.2.0)");
-    lines.push("[    0.001] Command line: console=ttyS0,115200");
-    lines.push("[    0.010] Memory: 1024MB available");
+    lines.push(`[    1.000] ${mod.name}: module loaded`);
   }
 
   return { stdout: lines.join("\n") + "\n", stderr: "", exitCode: 0 };
