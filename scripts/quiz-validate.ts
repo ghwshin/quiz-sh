@@ -12,7 +12,7 @@ interface ValidationWarning {
 }
 
 const VALID_DIFFICULTIES = ["초급", "중급", "고급"] as const;
-const VALID_TYPES = ["multiple-choice", "short-answer", "code-fill", "conversation"] as const;
+const VALID_TYPES = ["multiple-choice", "short-answer", "code-fill", "conversation", "terminal"] as const;
 
 function validateFile(
   filePath: string,
@@ -25,13 +25,19 @@ function validateFile(
   const idsInFile = new Set<string>();
   const expectedPrefix = getExpectedPrefix(subcategory, category);
 
-  // File-level: question count and type distribution
-  if (quizzes.length !== 25) {
+  const isConversationFile = subcategory === "dev-conversation";
+  const isTerminalFile = subcategory === "terminal-lab";
+
+  // File-level: question count
+  if (isTerminalFile) {
+    if (quizzes.length < 5 || quizzes.length > 25) {
+      errors.push({ id: filePath, message: `terminal-lab expected 5-25 questions, got ${quizzes.length}` });
+    }
+  } else if (quizzes.length !== 25) {
     errors.push({ id: filePath, message: `expected 25 questions, got ${quizzes.length}` });
   }
 
-  const isConversationFile = subcategory === "dev-conversation";
-  const typeCounts: Record<string, number> = { "multiple-choice": 0, "short-answer": 0, "code-fill": 0, "conversation": 0 };
+  const typeCounts: Record<string, number> = { "multiple-choice": 0, "short-answer": 0, "code-fill": 0, "conversation": 0, "terminal": 0 };
 
   for (const q of quizzes) {
     const id = q.id || "(missing id)";
@@ -42,8 +48,8 @@ function validateFile(
     }
     idsInFile.add(q.id);
 
-    // ID format: {prefix}-{NNN}
-    const idMatch = q.id.match(/^([a-z]+)-(\d{3})$/);
+    // ID format: {prefix}-{NNN} (prefix may contain hyphens, e.g., "lk-tl")
+    const idMatch = q.id.match(/^(.+)-(\d{3})$/);
     if (!idMatch) {
       errors.push({ id, message: `id format invalid, expected {prefix}-{NNN}` });
     } else {
@@ -289,10 +295,52 @@ function validateFile(
         errors.push({ id, message: `invalid scenarioType "${q.scenarioType}"` });
       }
     }
+
+    if (q.type === "terminal") {
+      if (!q.terminalConfig) {
+        errors.push({ id, message: `terminal type missing terminalConfig` });
+      } else {
+        const tc = q.terminalConfig;
+        if (!tc.environment || !tc.environment.hostname || !tc.environment.user || !tc.environment.cwd) {
+          errors.push({ id, message: `terminalConfig.environment missing required fields (hostname, user, cwd)` });
+        }
+        if (!tc.filesystem || Object.keys(tc.filesystem).length === 0) {
+          errors.push({ id, message: `terminalConfig.filesystem is empty` });
+        }
+        if (!tc.goalChecks || tc.goalChecks.length === 0) {
+          errors.push({ id, message: `terminalConfig.goalChecks is empty` });
+        } else {
+          const validGoalTypes = ["file-exists", "file-not-exists", "file-contains", "file-permissions", "module-loaded", "module-not-loaded", "process-running", "process-stopped", "env-equals"];
+          for (let i = 0; i < tc.goalChecks.length; i++) {
+            const gc = tc.goalChecks[i];
+            if (!gc.description) errors.push({ id, message: `goalChecks[${i}] missing description` });
+            if (!validGoalTypes.includes(gc.type)) errors.push({ id, message: `goalChecks[${i}] invalid type "${gc.type}"` });
+          }
+        }
+      }
+      // Terminal questions must not have blank markers or answer/blankAnswers
+      if (q.question.includes("___")) {
+        errors.push({ id, message: `terminal type question must not contain blank markers (___)` });
+      }
+      if (q.answer !== undefined) {
+        errors.push({ id, message: `terminal type must not have answer field` });
+      }
+      if (q.blankAnswers) {
+        errors.push({ id, message: `terminal type must not have blankAnswers field` });
+      }
+    }
   }
 
   // Type distribution check
-  if (isConversationFile) {
+  if (isTerminalFile) {
+    // Terminal files: all questions must be "terminal" type
+    if (typeCounts["terminal"] !== quizzes.length) {
+      errors.push({
+        id: filePath,
+        message: `terminal-lab: all questions must be type "terminal", got ${typeCounts["terminal"]}/${quizzes.length}`,
+      });
+    }
+  } else if (isConversationFile) {
     // Conversation files: all 25 questions must be "conversation" type
     if (typeCounts["conversation"] !== 25) {
       errors.push({

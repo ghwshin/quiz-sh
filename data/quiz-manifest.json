@@ -1,6 +1,6 @@
 {
-  "generated": "2026-03-16T04:03:59.253Z",
-  "totalQuestions": 750,
+  "generated": "2026-03-16T06:42:33.122Z",
+  "totalQuestions": 760,
   "files": [
     {
       "path": "linux-kernel/arm64-architecture.json",
@@ -736,6 +736,53 @@
       ]
     },
     {
+      "path": "linux-kernel/terminal-lab.json",
+      "category": "linux-kernel",
+      "subcategory": "terminal-lab",
+      "questionCount": 5,
+      "byType": {
+        "terminal": 5
+      },
+      "byDifficulty": {
+        "초급": 2,
+        "중급": 2,
+        "고급": 1
+      },
+      "idRange": "lk-tl-001 ~ lk-tl-005",
+      "keywords": [
+        "gpio",
+        "led",
+        "드라이버",
+        "모듈",
+        "gpio_led",
+        "ko",
+        "로드하고",
+        "디바이스가",
+        "정상",
+        "등록되었는지",
+        "확인하세요",
+        "insmod",
+        "lib",
+        "modules",
+        "ko로",
+        "모듈을",
+        "로드하면",
+        "커널이",
+        "모듈의",
+        "init",
+        "함수를",
+        "실행하여",
+        "디바이스를",
+        "등록합니다",
+        "lsmod로",
+        "로드된",
+        "확인하고",
+        "sys",
+        "class",
+        "leds"
+      ]
+    },
+    {
       "path": "android-system/activity-service.json",
       "category": "android-system",
       "subcategory": "activity-service",
@@ -1467,6 +1514,53 @@
         "관리",
         "프로세스"
       ]
+    },
+    {
+      "path": "android-system/terminal-lab.json",
+      "category": "android-system",
+      "subcategory": "terminal-lab",
+      "questionCount": 5,
+      "byType": {
+        "terminal": 5
+      },
+      "byDifficulty": {
+        "초급": 2,
+        "중급": 2,
+        "고급": 1
+      },
+      "idRange": "as-tl-001 ~ as-tl-005",
+      "keywords": [
+        "adb를",
+        "사용하여",
+        "연결된",
+        "디바이스",
+        "목록을",
+        "확인하고",
+        "시스템",
+        "프로퍼티에서",
+        "android",
+        "버전",
+        "정보를",
+        "조회하세요",
+        "결과를",
+        "tmp",
+        "device",
+        "info",
+        "txt에",
+        "저장하세요",
+        "adb",
+        "devices로",
+        "디바이스를",
+        "shell",
+        "getprop",
+        "ro",
+        "build",
+        "version",
+        "release로",
+        "버전을",
+        "조회합니다",
+        "리다이렉션"
+      ]
     }
   ],
   "allIds": [
@@ -1595,6 +1689,11 @@
     "as-023",
     "as-024",
     "as-025",
+    "as-tl-001",
+    "as-tl-002",
+    "as-tl-003",
+    "as-tl-004",
+    "as-tl-005",
     "bi-001",
     "bi-002",
     "bi-003",
@@ -1995,6 +2094,11 @@
     "km-023",
     "km-024",
     "km-025",
+    "lk-tl-001",
+    "lk-tl-002",
+    "lk-tl-003",
+    "lk-tl-004",
+    "lk-tl-005",
     "mm-001",
     "mm-002",
     "mm-003",
@@ -2251,6 +2355,8 @@
     "mv": "platform-modularity-virtualization",
     "ap": "arm64-platform",
     "dc": "dev-conversation",
-    "ad": "dev-conversation"
+    "ad": "dev-conversation",
+    "lk-tl": "terminal-lab",
+    "as-tl": "terminal-lab"
   }
 }

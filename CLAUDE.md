@@ -39,6 +39,7 @@ src/
 │   ├── ShortAnswerQuiz.tsx       # Fill-in-the-blank quiz (inline inputs or word bank)
 │   ├── CodeFillQuiz.tsx          # Code fill-in-the-blank (code block with inputs or word bank)
 │   ├── ConversationQuiz.tsx      # Conversation scenario quiz (slack-style chat + senior hint + objective/fill-blank)
+│   ├── TerminalQuiz.tsx          # Terminal emulator quiz (interactive shell missions)
 │   ├── WordBank.tsx              # Word bank chip selection component (Duolingo-style)
 │   ├── QuizSession.tsx           # Quiz session container (navigation, progress, mode toggle)
 │   ├── DifficultyProgress.tsx    # Progress display per difficulty
@@ -49,14 +50,26 @@ src/
 ├── lib/
 │   ├── quiz-loader.ts           # Quiz data loading, filtering, shuffle
 │   ├── quiz-utils.ts            # Shared utilities (checkBlank, countConversationBlanks)
-│   └── constants.ts             # Categories, subcategories, difficulties, scenario types
+│   ├── constants.ts             # Categories, subcategories, difficulties, scenario types
+│   └── terminal/                # Terminal quiz engine
+│       ├── shell.ts             # Shell parser (tokenizer, pipeline AST, executor)
+│       ├── virtual-fs.ts        # In-memory virtual filesystem
+│       ├── terminal-state.ts    # Unified state manager
+│       ├── goal-checker.ts      # Mission completion verifier
+│       └── commands/            # Command implementations (~30 commands)
+│           ├── index.ts         # Command registry + info commands
+│           ├── fs.ts            # Filesystem commands (ls, cat, grep, find, etc.)
+│           ├── kernel.ts        # Kernel module commands (insmod, rmmod, lsmod, etc.)
+│           ├── process.ts       # Process commands (ps, kill)
+│           ├── network.ts       # Network commands (ip, ss, ping)
+│           └── android.ts       # Android commands (adb, fastboot, logcat)
 ├── types/
 │   └── quiz.ts                  # Quiz, Category, Difficulty, ScenarioType types
 └── test/
     └── setup.ts                 # Vitest setup (jest-dom matchers, RTL cleanup)
 data/
-├── linux-kernel/*.json          # 15 subcategory quiz files (25 questions each)
-└── android-system/*.json        # 15 subcategory quiz files (25 questions each)
+├── linux-kernel/*.json          # 16 subcategory quiz files (25 questions each, terminal-lab: 5)
+└── android-system/*.json        # 16 subcategory quiz files (25 questions each, terminal-lab: 5)
 e2e/
 └── quiz-flow.spec.ts            # Playwright E2E tests
 scripts/
@@ -70,17 +83,19 @@ scripts/
 
 ## Quiz Data
 
-- 750 questions total: 30 files x 25 questions
+- 760 questions total: 32 files (30 x 25 + 2 x 5)
   - 28 standard files: 10 multiple-choice + 8 fill-in-the-blank + 7 code-fill per file
   - 2 conversation files (dev-conversation): 15 objective + 10 fill-blank per file
+  - 2 terminal-lab files: 5 terminal questions per file
 - See `QUIZ.md` for quiz data format rules
-- 4 quiz types: multiple-choice, short-answer, code-fill, conversation
+- 5 quiz types: multiple-choice, short-answer, code-fill, conversation, terminal
 - Both `short-answer` and `code-fill` use `blankAnswers` field for blank grading (shared `checkBlank()`)
 - `conversation` type: slack-style developer dialog with senior hint (collapsible), 3 scenario types (bug-report, code-review, design-discussion)
 - 8 personas: 시니어(hint only), 신입, AI, 팀장, QA, 리뷰어, PM, 동료. Senior never in conversation array, only in `seniorHint`
 - `blankDistractors` field: per-blank wrong choices for word bank mode (2-3 per blank)
 - Grading: case-insensitive, trim, internal whitespace normalization
 - Word bank (normal) mode: tap chips to fill blanks; Hard mode: type answers manually
+- `terminal` type: interactive shell missions with virtual filesystem, goal-based grading (goalChecks)
 
 ## Quiz Data Tooling
 
@@ -93,7 +108,7 @@ npm run quiz:distractors # Generate/regenerate blankDistractors for word bank
 ```
 
 When working with quiz data:
-- Read `data/quiz-manifest.json` first for overview (instead of reading all 30 JSON files)
+- Read `data/quiz-manifest.json` first for overview (instead of reading all 32 JSON files)
 - Run `npm run quiz:validate` after any quiz data changes
 - Use `npm run quiz:search -- --keyword "..."` to find existing questions before adding new ones
 

@@ -6,7 +6,7 @@
 
 ```
 data/
-├── linux-kernel/          # 15개 서브카테고리
+├── linux-kernel/          # 16개 서브카테고리
 │   ├── process-management.json
 │   ├── memory-management.json
 │   ├── filesystem.json
@@ -21,8 +21,9 @@ data/
 │   ├── containers-isolation.json
 │   ├── block-storage-io.json
 │   ├── arm64-architecture.json
-│   └── dev-conversation.json
-└── android-system/        # 15개 서브카테고리
+│   ├── dev-conversation.json
+│   └── terminal-lab.json
+└── android-system/        # 16개 서브카테고리
     ├── system-architecture.json
     ├── activity-service.json
     ├── binder-ipc.json
@@ -37,14 +38,15 @@ data/
     ├── platform-debugging-performance.json
     ├── platform-modularity-virtualization.json
     ├── arm64-platform.json
-    └── dev-conversation.json
+    ├── dev-conversation.json
+    └── terminal-lab.json
 ```
 
 각 JSON 파일은 퀴즈 객체의 배열(`Quiz[]`)입니다.
 
 ## 파일당 구성
 
-### 일반 서브카테고리 (28파일)
+### 일반 서브카테고리 (28파일, 25문제/파일)
 
 | 항목 | 값 |
 |------|-----|
@@ -63,6 +65,14 @@ data/
 | 대화형 빈칸 (conversation/fill-blank) | 10문제 |
 | 난이도 분배 | 초급 8 / 중급 9 / 고급 8 |
 
+### 터미널 실습 서브카테고리 (terminal-lab, 2파일)
+
+| 항목 | 값 |
+|------|-----|
+| 총 문제 수 | 5-25문제 (가변) |
+| 터미널 (terminal) | 전체 |
+| 난이도 분배 | 초급/중급/고급 혼합 |
+
 ## 공통 필드
 
 모든 퀴즈 유형에 공통으로 존재하는 필드:
@@ -73,7 +83,7 @@ data/
 | `category` | `"linux-kernel" \| "android-system"` | O | 상위 카테고리 |
 | `subcategory` | `string` | O | 서브카테고리 (파일명과 일치) |
 | `difficulty` | `"초급" \| "중급" \| "고급"` | O | 난이도 |
-| `type` | `"multiple-choice" \| "short-answer" \| "code-fill" \| "conversation"` | O | 문제 유형 |
+| `type` | `"multiple-choice" \| "short-answer" \| "code-fill" \| "conversation" \| "terminal"` | O | 문제 유형 |
 | `question` | `string` | O | 문제 텍스트 |
 | `explanation` | `string` | O | 해설 |
 
@@ -254,6 +264,40 @@ data/
 - fill-blank: 대화 메시지 `text` 내 `___` 개수 = `blankAnswers.length`
 - objective: `options` 4개, `answer` 0~3
 
+### 5. 터미널 (`terminal`)
+
+브라우저 내 가상 터미널에서 임베디드 시스템 미션을 수행하는 인터랙티브 퀴즈입니다.
+
+| 필드 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| `terminalConfig` | `TerminalConfig` | O | 터미널 환경 설정 |
+
+**TerminalConfig 구조:**
+
+| 필드 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| `environment` | `{ hostname, user, cwd, env? }` | O | 터미널 환경 |
+| `filesystem` | `Record<string, FileEntry>` | O | 초기 파일시스템 (경로→파일) |
+| `processes` | `ProcessEntry[]` | △ | 초기 프로세스 목록 |
+| `network` | `NetworkState` | △ | 초기 네트워크 상태 |
+| `goalChecks` | `GoalCheck[]` | O | 미션 완료 조건 |
+| `hints` | `string[]` | △ | 단계적 힌트 (최대 3개) |
+| `scriptedOutputs` | `Record<string, string>` | △ | 사전 정의 명령어 출력 |
+
+**GoalCheck 타입:**
+- `file-exists`, `file-not-exists`: 파일 존재 여부
+- `file-contains`: 파일 내용 정규식 매칭
+- `file-permissions`: 파일 권한 확인
+- `module-loaded`, `module-not-loaded`: 커널 모듈 로드 상태
+- `process-running`, `process-stopped`: 프로세스 실행 상태
+- `env-equals`: 환경 변수 값 확인
+
+규칙:
+- `question`에 `___` (빈칸 마커) 금지
+- `answer`, `blankAnswers` 필드 사용 금지
+- 채점은 `goalChecks` 기반 (최종 상태 검증)
+- `terminalConfig`의 `environment`, `filesystem`, `goalChecks`는 필수
+
 ## ID 규칙
 
 | 카테고리 | 서브카테고리 | 접두어 |
@@ -288,8 +332,10 @@ data/
 | android-system | arm64-platform | `ap-` |
 | linux-kernel | dev-conversation | `dc-` |
 | android-system | dev-conversation | `ad-` |
+| linux-kernel | terminal-lab | `lk-tl-` |
+| android-system | terminal-lab | `as-tl-` |
 
-번호는 3자리 zero-padded (예: `mm-001`, `mm-025`). 파일 내에서 순번이 연속적이어야 합니다.
+번호는 3자리 zero-padded (예: `mm-001`, `mm-025`, `lk-tl-001`). 파일 내에서 순번이 연속적이어야 합니다.
 
 ## 검증 체크리스트
 
@@ -299,7 +345,7 @@ data/
 - [ ] `id`가 파일 내에서 유일
 - [ ] `category`/`subcategory`가 파일 경로와 일치
 - [ ] `difficulty`가 `"초급"`, `"중급"`, `"고급"` 중 하나
-- [ ] `type`이 `"multiple-choice"`, `"short-answer"`, `"code-fill"`, `"conversation"` 중 하나
+- [ ] `type`이 `"multiple-choice"`, `"short-answer"`, `"code-fill"`, `"conversation"`, `"terminal"` 중 하나
 - [ ] 객관식: `options` 4개, `answer` 0~3
 - [ ] 빈칸 채우기: `question` 내 `___` 개수 = `blankAnswers.length`
 - [ ] 코드 빈칸: `codeTemplate` 내 `___` 개수 = `blankAnswers.length`
@@ -310,11 +356,14 @@ data/
 - [ ] 대화형: `conversation` 배열에 role "고객" 금지
 - [ ] 대화형: `seniorHint` 메시지에 `___` 금지
 - [ ] 대화형: `scenarioType` 필수 ("bug-report", "code-review", "design-discussion")
+- [ ] 터미널: `terminalConfig` 필수 (environment, filesystem, goalChecks)
+- [ ] 터미널: `question`에 `___` 금지
+- [ ] 터미널: `answer`, `blankAnswers` 필드 사용 금지
 
 ## TypeScript 타입 정의
 
 ```typescript
-type QuizType = "multiple-choice" | "short-answer" | "code-fill" | "conversation";
+type QuizType = "multiple-choice" | "short-answer" | "code-fill" | "conversation" | "terminal";
 type Difficulty = "초급" | "중급" | "고급";
 type Category = "linux-kernel" | "android-system";
 type ScenarioType = "bug-report" | "code-review" | "design-discussion";
@@ -347,6 +396,7 @@ interface Quiz {
   conversationMode?: ConversationMode;  // conversation only
   seniorHint?: ConversationMessage[];   // conversation only - senior hint messages
   scenarioType?: ScenarioType;          // conversation only - scenario type
+  terminalConfig?: TerminalConfig;      // terminal only - terminal configuration
   explanation: string;
 }
 ```
