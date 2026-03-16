@@ -1,0 +1,181 @@
+[
+  {
+    "id": "as-tl-001",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "ADB를 사용하여 연결된 디바이스 목록을 확인하고, 시스템 프로퍼티에서 Android 버전 정보를 조회하세요. 결과를 /tmp/device-info.txt에 저장하세요.",
+    "explanation": "adb devices로 연결된 디바이스를 확인하고, adb shell getprop ro.build.version.release로 Android 버전을 조회합니다. 리다이렉션(>)을 사용하여 결과를 파일에 저장할 수 있습니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "dev-workstation",
+        "user": "developer",
+        "cwd": "/home/developer"
+      },
+      "filesystem": {
+        "/home/developer": { "type": "dir" },
+        "/tmp": { "type": "dir" },
+        "/usr/bin/adb": { "type": "file", "content": "(binary)", "permissions": "755" }
+      },
+      "goalChecks": [
+        { "description": "디바이스 정보 파일이 생성됨", "type": "file-exists", "path": "/tmp/device-info.txt" },
+        { "description": "디바이스 정보에 Android 버전 포함", "type": "file-contains", "path": "/tmp/device-info.txt", "pattern": "14" }
+      ],
+      "hints": [
+        "adb devices로 연결된 디바이스를 확인할 수 있습니다",
+        "echo와 >를 사용하여 결과를 파일에 저장하세요"
+      ],
+      "scriptedOutputs": {
+        "adb devices": "List of devices attached\nemulator-5554\tdevice\n",
+        "adb shell getprop ro.build.version.release": "14"
+      }
+    }
+  },
+  {
+    "id": "as-tl-002",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "init.rc 파일에서 zygote 서비스 설정을 확인하고, zygote의 실행 경로를 /tmp/zygote-path.txt에 저장하세요.",
+    "explanation": "Android의 init.rc 파일에는 시스템 서비스 정의가 포함되어 있습니다. grep을 사용하여 zygote 서비스 정의를 찾고, 실행 바이너리 경로를 확인할 수 있습니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "aosp-build",
+        "user": "root",
+        "cwd": "/system"
+      },
+      "filesystem": {
+        "/system": { "type": "dir" },
+        "/system/etc": { "type": "dir" },
+        "/system/etc/init": { "type": "dir" },
+        "/system/etc/init/init.rc": { "type": "file", "content": "# Android Init Configuration\n\nservice zygote /system/bin/app_process64 -Xzygote /system/bin --zygote --start-system-server\n    class main\n    priority -20\n    user root\n    group root readproc reserved_disk\n    socket zygote stream 660 root system\n    socket usap_pool_primary stream 660 root system\n    onrestart exec_background -- /system/bin/vdc volume abort_fuse\n    onrestart write /sys/power/state on\n" },
+        "/tmp": { "type": "dir" },
+        "/system/bin": { "type": "dir" },
+        "/system/bin/app_process64": { "type": "file", "content": "(binary)", "permissions": "755" }
+      },
+      "goalChecks": [
+        { "description": "zygote 경로 파일이 생성됨", "type": "file-exists", "path": "/tmp/zygote-path.txt" },
+        { "description": "파일에 app_process64 경로 포함", "type": "file-contains", "path": "/tmp/zygote-path.txt", "pattern": "/system/bin/app_process64" }
+      ],
+      "hints": [
+        "grep 명령어로 파일에서 특정 패턴을 찾을 수 있습니다",
+        "grep zygote /system/etc/init/init.rc 로 zygote 관련 설정을 확인하세요"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "as-tl-003",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "SELinux가 enforcing 모드로 동작 중입니다. /data/local/tmp/test.sh 스크립트 파일을 생성하고, 실행 권한(755)을 부여하세요. 그리고 SELinux 컨텍스트를 shell_exec 타입으로 변경하기 위한 명령을 /tmp/selinux-cmd.txt에 기록하세요.",
+    "explanation": "Android에서 SELinux는 파일의 보안 컨텍스트를 기반으로 접근을 제어합니다. 스크립트를 실행하려면 적절한 파일 권한과 SELinux 컨텍스트가 모두 필요합니다. chcon 명령어로 SELinux 레이블을 변경할 수 있습니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "pixel-dev",
+        "user": "root",
+        "cwd": "/data/local/tmp"
+      },
+      "filesystem": {
+        "/data": { "type": "dir" },
+        "/data/local": { "type": "dir" },
+        "/data/local/tmp": { "type": "dir" },
+        "/tmp": { "type": "dir" },
+        "/proc": { "type": "dir" },
+        "/sys": { "type": "dir" },
+        "/sys/fs": { "type": "dir" },
+        "/sys/fs/selinux": { "type": "dir" },
+        "/sys/fs/selinux/enforce": { "type": "file", "content": "1" }
+      },
+      "goalChecks": [
+        { "description": "테스트 스크립트 파일이 생성됨", "type": "file-exists", "path": "/data/local/tmp/test.sh" },
+        { "description": "스크립트 파일에 실행 권한 부여됨", "type": "file-permissions", "path": "/data/local/tmp/test.sh", "permissions": "755" },
+        { "description": "SELinux 명령이 기록됨", "type": "file-contains", "path": "/tmp/selinux-cmd.txt", "pattern": "chcon.*shell_exec" }
+      ],
+      "hints": [
+        "echo '#!/bin/sh' > test.sh 로 스크립트 파일을 생성할 수 있습니다",
+        "chmod 755로 실행 권한을 부여하세요",
+        "chcon 명령어로 SELinux 컨텍스트를 변경합니다"
+      ],
+      "scriptedOutputs": {
+        "getenforce": "Enforcing",
+        "ls -Z /data/local/tmp/": "u:object_r:shell_data_file:s0 ."
+      }
+    }
+  },
+  {
+    "id": "as-tl-004",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "logcat에서 ActivityManager 관련 로그를 확인하여 크래시 발생 여부를 파악하세요. 크래시가 발생한 앱의 패키지명을 /tmp/crash-app.txt에 저장하세요.",
+    "explanation": "logcat은 Android 시스템의 로그를 확인하는 핵심 도구입니다. ActivityManager 태그를 필터링하면 앱의 생명주기 이벤트와 크래시 정보를 확인할 수 있습니다. 'Process ... has died' 또는 'Force finishing' 메시지로 크래시를 식별합니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "debug-station",
+        "user": "developer",
+        "cwd": "/home/developer"
+      },
+      "filesystem": {
+        "/home/developer": { "type": "dir" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "크래시 앱 정보 파일이 생성됨", "type": "file-exists", "path": "/tmp/crash-app.txt" },
+        { "description": "파일에 크래시 패키지명 포함", "type": "file-contains", "path": "/tmp/crash-app.txt", "pattern": "com\\.example\\.buggyapp" }
+      ],
+      "hints": [
+        "logcat 명령어로 시스템 로그를 확인할 수 있습니다",
+        "logcat -s ActivityManager 로 태그별 필터링이 가능합니다",
+        "출력에서 'has died' 또는 'crash' 키워드를 찾아보세요"
+      ],
+      "scriptedOutputs": {
+        "logcat -d -s ActivityManager": "01-15 10:23:45.123  1234  1234 I ActivityManager: Start proc 5678:com.example.camera/u0a85 for activity\n01-15 10:23:47.456  1234  1234 I ActivityManager: Displayed com.example.camera/.MainActivity: +1s234ms\n01-15 10:24:01.789  1234  1234 W ActivityManager: Force finishing activity com.example.buggyapp/.CrashActivity\n01-15 10:24:01.890  1234  1234 W ActivityManager: Process com.example.buggyapp (pid 6789) has died: fg  TOP\n01-15 10:24:02.012  1234  1234 I ActivityManager: Process com.example.buggyapp (pid 6789) has died",
+        "logcat -d": "01-15 10:23:45.123  1234  1234 I ActivityManager: Start proc 5678:com.example.camera/u0a85\n01-15 10:24:01.789  1234  1234 E AndroidRuntime: FATAL EXCEPTION: main\n01-15 10:24:01.789  1234  1234 E AndroidRuntime: java.lang.NullPointerException\n01-15 10:24:01.789  1234  1234 E AndroidRuntime:   at com.example.buggyapp.CrashActivity.onCreate"
+      }
+    }
+  },
+  {
+    "id": "as-tl-005",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "고급",
+    "type": "terminal",
+    "question": "시스템 파티션이 read-only로 마운트되어 있습니다. /system/etc/hosts 파일을 수정하여 'ads.example.com'을 127.0.0.1로 리다이렉트하는 항목을 추가하세요. 먼저 시스템 파티션을 remount해야 합니다. 작업 완료 후 다시 read-only로 되돌리세요.",
+    "explanation": "Android 시스템 파티션은 보안을 위해 기본적으로 read-only로 마운트됩니다. mount -o remount,rw /system으로 일시적으로 쓰기 가능하게 변경하고, hosts 파일을 수정한 뒤 다시 mount -o remount,ro /system으로 보안 상태를 복원합니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "aosp-device",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/system": { "type": "dir" },
+        "/system/etc": { "type": "dir" },
+        "/system/etc/hosts": { "type": "file", "content": "127.0.0.1 localhost\n::1 ip6-localhost\n", "permissions": "644" },
+        "/proc": { "type": "dir" },
+        "/proc/mounts": { "type": "file", "content": "/dev/block/dm-0 /system ext4 ro,relatime 0 0\n/dev/block/dm-1 /data ext4 rw,nosuid,nodev 0 0\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "hosts 파일에 ads.example.com 항목 추가됨", "type": "file-contains", "path": "/system/etc/hosts", "pattern": "127\\.0\\.0\\.1\\s+ads\\.example\\.com" },
+        { "description": "시스템 파티션이 read-only로 복원됨", "type": "file-contains", "path": "/proc/mounts", "pattern": "/system.*\\bro\\b" }
+      ],
+      "hints": [
+        "mount -o remount,rw /system 으로 쓰기 가능하게 변경합니다",
+        "echo와 >>를 사용하여 hosts 파일에 항목을 추가하세요",
+        "작업 후 mount -o remount,ro /system 으로 복원해야 합니다"
+      ],
+      "scriptedOutputs": {
+        "mount | grep system": "/dev/block/dm-0 on /system type ext4 (ro,relatime)",
+        "adb root": "adbd is already running as root"
+      }
+    }
+  }
+]

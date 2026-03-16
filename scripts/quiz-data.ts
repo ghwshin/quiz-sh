@@ -68,6 +68,8 @@ export const ID_PREFIX_MAP: Record<string, string> = {
   ap: "arm64-platform",
   dc: "dev-conversation",
   ad: "dev-conversation",
+  "lk-tl": "terminal-lab",
+  "as-tl": "terminal-lab",
 };
 
 // Reverse map: subcategory -> prefix (for subcategories with multiple prefixes, use category-aware lookup)
@@ -77,8 +79,8 @@ export const SUBCATEGORY_PREFIX_MAP: Record<string, string> = Object.fromEntries
 
 // Category-aware prefix map for subcategories shared across categories
 export const CATEGORY_PREFIX_MAP: Record<string, Record<string, string>> = {
-  "linux-kernel": { "dev-conversation": "dc" },
-  "android-system": { "dev-conversation": "ad" },
+  "linux-kernel": { "dev-conversation": "dc", "terminal-lab": "lk-tl" },
+  "android-system": { "dev-conversation": "ad", "terminal-lab": "as-tl" },
 };
 
 /** Get expected ID prefix for a subcategory, optionally with category context */

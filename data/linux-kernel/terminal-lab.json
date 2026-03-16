@@ -1,0 +1,203 @@
+[
+  {
+    "id": "lk-tl-001",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "GPIO LED 드라이버 모듈(gpio_led.ko)을 로드하고, 디바이스가 정상 등록되었는지 확인하세요.",
+    "explanation": "insmod /lib/modules/gpio_led.ko로 모듈을 로드하면 커널이 모듈의 init 함수를 실행하여 GPIO LED 디바이스를 등록합니다. lsmod로 로드된 모듈을 확인하고, /sys/class/leds/ 아래에 새 디바이스 파일이 생성됩니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "rpi-dev",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/lib/modules": { "type": "dir" },
+        "/lib/modules/gpio_led.ko": { "type": "file", "content": "(binary)", "permissions": "644" },
+        "/proc": { "type": "dir" },
+        "/proc/modules": { "type": "file", "content": "" },
+        "/sys": { "type": "dir" },
+        "/sys/class": { "type": "dir" },
+        "/sys/class/leds": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "gpio_led 모듈이 로드됨", "type": "module-loaded", "moduleName": "gpio_led" },
+        { "description": "LED 디바이스 파일이 생성됨", "type": "file-exists", "path": "/sys/class/leds/gpio_led0" }
+      ],
+      "hints": [
+        "insmod 명령어로 커널 모듈을 로드할 수 있습니다",
+        "insmod에 .ko 파일의 전체 경로를 지정하세요"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-rpi"
+      }
+    }
+  },
+  {
+    "id": "lk-tl-002",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "/etc/sysctl.conf 파일에 'net.ipv4.ip_forward=1' 설정을 추가하고, sysctl로 적용하세요.",
+    "explanation": "echo 명령어로 sysctl.conf에 설정을 추가한 뒤, sysctl -p 로 설정을 즉시 적용합니다. IP 포워딩은 라우터/게이트웨이 역할을 수행할 때 필수적인 커널 파라미터입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "gateway",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/etc": { "type": "dir" },
+        "/etc/sysctl.conf": { "type": "file", "content": "# System default settings\nnet.core.somaxconn=128\n" },
+        "/proc": { "type": "dir" },
+        "/proc/sys": { "type": "dir" },
+        "/proc/sys/net": { "type": "dir" },
+        "/proc/sys/net/ipv4": { "type": "dir" },
+        "/proc/sys/net/ipv4/ip_forward": { "type": "file", "content": "0" }
+      },
+      "goalChecks": [
+        { "description": "sysctl.conf에 ip_forward=1 설정 포함", "type": "file-contains", "path": "/etc/sysctl.conf", "pattern": "net\\.ipv4\\.ip_forward\\s*=\\s*1" },
+        { "description": "IP 포워딩이 활성화됨", "type": "file-contains", "path": "/proc/sys/net/ipv4/ip_forward", "pattern": "^1$" }
+      ],
+      "hints": [
+        "echo 명령어와 >> 리다이렉션으로 파일에 내용을 추가할 수 있습니다",
+        "sysctl -p 명령어로 설정 파일을 다시 로드합니다"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-generic"
+      }
+    }
+  },
+  {
+    "id": "lk-tl-003",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "I2C 센서 드라이버 모듈(i2c_sensor.ko)을 로드하고, 센서 디바이스 노드의 권한을 666으로 변경하여 일반 사용자도 접근할 수 있도록 하세요.",
+    "explanation": "insmod로 모듈을 로드하면 /dev/i2c_sensor0 디바이스 노드가 생성됩니다. 기본적으로 디바이스 노드는 root만 접근 가능하므로, chmod 666으로 권한을 변경하면 일반 사용자도 읽기/쓰기 접근이 가능합니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "embedded-dev",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/lib/modules": { "type": "dir" },
+        "/lib/modules/i2c_sensor.ko": { "type": "file", "content": "(binary)", "permissions": "644" },
+        "/dev": { "type": "dir" },
+        "/proc": { "type": "dir" },
+        "/proc/modules": { "type": "file", "content": "" },
+        "/sys": { "type": "dir" },
+        "/sys/class": { "type": "dir" },
+        "/sys/bus": { "type": "dir" },
+        "/sys/bus/i2c": { "type": "dir" },
+        "/sys/bus/i2c/devices": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "i2c_sensor 모듈이 로드됨", "type": "module-loaded", "moduleName": "i2c_sensor" },
+        { "description": "디바이스 노드가 생성됨", "type": "file-exists", "path": "/dev/i2c_sensor0" },
+        { "description": "디바이스 노드 권한이 666", "type": "file-permissions", "path": "/dev/i2c_sensor0", "permissions": "666" }
+      ],
+      "hints": [
+        "insmod로 모듈을 먼저 로드해야 디바이스 노드가 생성됩니다",
+        "chmod 명령어로 파일 권한을 변경할 수 있습니다",
+        "chmod 666 /dev/i2c_sensor0 형식으로 권한을 지정합니다"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-embedded",
+        "cat /proc/devices": "Character devices:\n  1 mem\n  4 ttyS\n  5 /dev/tty\n 89 i2c\n180 usb"
+      }
+    }
+  },
+  {
+    "id": "lk-tl-004",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "watchdog 타이머 모듈(softdog.ko)이 시스템을 불안정하게 만들고 있습니다. 해당 모듈을 언로드하고, /etc/modprobe.d/blacklist.conf에 블랙리스트 등록하여 재부팅 시 자동 로드를 방지하세요.",
+    "explanation": "rmmod로 실행 중인 모듈을 언로드하고, blacklist.conf에 'blacklist softdog' 줄을 추가하면 모듈의 자동 로드가 방지됩니다. 이는 문제를 일으키는 모듈을 영구적으로 비활성화하는 표준 방법입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "prod-server",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/proc": { "type": "dir" },
+        "/proc/modules": { "type": "file", "content": "softdog 16384 0 - Live 0xffffffffa0000000\nusbcore 307200 3 - Live 0xffffffffa0100000\n" },
+        "/etc": { "type": "dir" },
+        "/etc/modprobe.d": { "type": "dir" },
+        "/etc/modprobe.d/blacklist.conf": { "type": "file", "content": "# Kernel module blacklist\nblacklist pcspkr\n" },
+        "/lib/modules": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "softdog 모듈이 언로드됨", "type": "module-not-loaded", "moduleName": "softdog" },
+        { "description": "블랙리스트에 softdog 등록됨", "type": "file-contains", "path": "/etc/modprobe.d/blacklist.conf", "pattern": "blacklist\\s+softdog" }
+      ],
+      "hints": [
+        "rmmod 명령어로 로드된 모듈을 언로드할 수 있습니다",
+        "echo와 >>를 사용해 blacklist.conf에 항목을 추가하세요"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-generic",
+        "dmesg | tail -3": "[  120.456] softdog: watchdog timer expired\n[  120.457] softdog: initiating system reboot\n[  120.458] softdog: reboot cancelled by user"
+      }
+    }
+  },
+  {
+    "id": "lk-tl-005",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "고급",
+    "type": "terminal",
+    "question": "네트워크 인터페이스 eth0이 DOWN 상태입니다. 인터페이스를 UP으로 변경하고, IP 주소 192.168.1.100/24를 할당한 뒤, 기본 게이트웨이(192.168.1.1)로의 연결을 확인하세요. 또한 DNS 서버(8.8.8.8)를 /etc/resolv.conf에 설정하세요.",
+    "explanation": "ip link set eth0 up으로 인터페이스를 활성화하고, ip addr add로 IP를 할당합니다. /etc/resolv.conf에 nameserver를 추가하면 DNS 해석이 가능해집니다. 이는 임베디드 시스템의 네트워크 수동 설정 기본 절차입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "edge-device",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/etc": { "type": "dir" },
+        "/etc/resolv.conf": { "type": "file", "content": "# DNS configuration\n" },
+        "/proc": { "type": "dir" },
+        "/proc/net": { "type": "dir" },
+        "/sys": { "type": "dir" },
+        "/sys/class": { "type": "dir" },
+        "/sys/class/net": { "type": "dir" },
+        "/sys/class/net/eth0": { "type": "dir" },
+        "/sys/class/net/lo": { "type": "dir" }
+      },
+      "network": {
+        "interfaces": [
+          { "name": "lo", "ip": "127.0.0.1", "mask": "255.0.0.0", "state": "UP" },
+          { "name": "eth0", "mac": "aa:bb:cc:dd:ee:ff", "state": "DOWN" }
+        ]
+      },
+      "goalChecks": [
+        { "description": "eth0 인터페이스가 UP 상태", "type": "file-contains", "path": "/sys/class/net/eth0/operstate", "pattern": "up" },
+        { "description": "resolv.conf에 DNS 서버 설정됨", "type": "file-contains", "path": "/etc/resolv.conf", "pattern": "nameserver\\s+8\\.8\\.8\\.8" }
+      ],
+      "hints": [
+        "ip link set <인터페이스> up 으로 인터페이스를 활성화합니다",
+        "ip addr add <IP>/<PREFIX> dev <인터페이스> 로 IP를 할당합니다",
+        "/etc/resolv.conf에 'nameserver 8.8.8.8'을 추가하세요"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-edge",
+        "ping -c 1 192.168.1.1": "PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.\n64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.5 ms\n\n--- 192.168.1.1 ping statistics ---\n1 packets transmitted, 1 received, 0% packet loss, time 0ms"
+      }
+    }
+  }
+]
