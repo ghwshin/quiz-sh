@@ -1,6 +1,6 @@
-# Linux & Android Quiz
+# quiz.sh
 
-Static quiz web app for learning Linux Kernel and Android System concepts.
+CS quiz web app for developers.
 
 **This file must be written in English only.**
 

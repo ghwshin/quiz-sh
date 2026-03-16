@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Linux & Android 퀴즈",
-  description: "Linux Kernel & Android System 학습 퀴즈",
+  title: "quiz.sh",
+  description: "개발자를 위한 CS 학습 퀴즈",
 };
 
 export default function RootLayout({

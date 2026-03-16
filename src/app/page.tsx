@@ -83,7 +83,7 @@ export default function Home() {
       </svg>
 
       <h1 className="text-4xl font-bold mb-2 text-center">
-        Linux &amp; Android 퀴즈
+        quiz.sh
       </h1>
       <p className="text-gray-400 mb-10 text-center">
         Linux Kernel과 Android System의 핵심 개념을 퀴즈로 학습하세요
