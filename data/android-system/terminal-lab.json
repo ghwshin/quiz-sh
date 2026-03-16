@@ -177,5 +177,191 @@
         "adb root": "adbd is already running as root"
       }
     }
+  },
+  {
+    "id": "as-tl-006",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "시스템 빌드 로그(build.log)에서 'FAILED' 키워드를 검색하여 빌드 실패 원인을 파악하세요. 실패한 모듈명을 /tmp/failed-module.txt에 저장하세요.",
+    "explanation": "grep으로 빌드 로그에서 에러를 필터링하고, 실패한 모듈을 식별합니다. Android 빌드 시스템의 로그 분석은 플랫폼 개발자의 필수 스킬입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "build-server",
+        "user": "developer",
+        "cwd": "/home/developer"
+      },
+      "filesystem": {
+        "/home/developer": { "type": "dir" },
+        "/home/developer/build.log": { "type": "file", "content": "[100%  1/150] building target/product/generic/system.img\n[100%  2/150] building frameworks/base/core\n[100% 50/150] building packages/apps/Settings\n[FAILED] ninja: error building 'out/target/product/generic/vendor/lib64/hw/audio.primary.default.so'\n[100% 51/150] Install: out/target/product/generic/system/app/Camera.apk\n[FAILED] packages/modules/Bluetooth: cc_library 'libbluetooth' failed\n[100% 149/150] building system image\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "실패 모듈 파일이 생성됨", "type": "file-exists", "path": "/tmp/failed-module.txt" },
+        { "description": "파일에 실패 모듈명 포함", "type": "file-contains", "path": "/tmp/failed-module.txt", "pattern": "audio\\.primary|libbluetooth|Bluetooth" }
+      ],
+      "hints": [
+        "grep FAILED build.log 로 실패 항목을 찾을 수 있습니다",
+        "리다이렉션(>)으로 결과를 파일에 저장하세요"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "as-tl-007",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "init.rc 파일에서 'healthd' 서비스의 설정을 확인하고, 서비스 클래스(class), 실행 바이너리 경로, 재시작 정책을 /tmp/healthd-info.txt에 정리하세요.",
+    "explanation": "Android의 init 시스템은 .rc 파일로 서비스를 정의합니다. 각 서비스의 class, 실행 경로, oneshot/restart 옵션을 파악하는 것은 시스템 디버깅의 핵심입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "aosp-dev",
+        "user": "root",
+        "cwd": "/system/etc/init"
+      },
+      "filesystem": {
+        "/system": { "type": "dir" },
+        "/system/etc": { "type": "dir" },
+        "/system/etc/init": { "type": "dir" },
+        "/system/etc/init/healthd.rc": { "type": "file", "content": "service healthd /system/bin/healthd\n    class charger\n    critical\n    group root system wakelock\n    seclabel u:r:healthd:s0\n    onrestart restart charger\n" },
+        "/system/etc/init/surfaceflinger.rc": { "type": "file", "content": "service surfaceflinger /system/bin/surfaceflinger\n    class core animation\n    user system\n    group graphics\n    onrestart restart zygote\n" },
+        "/system/bin": { "type": "dir" },
+        "/system/bin/healthd": { "type": "file", "content": "(binary)", "permissions": "755" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "healthd 정보 파일이 생성됨", "type": "file-exists", "path": "/tmp/healthd-info.txt" },
+        { "description": "서비스 클래스 정보 포함", "type": "file-contains", "path": "/tmp/healthd-info.txt", "pattern": "charger" },
+        { "description": "바이너리 경로 포함", "type": "file-contains", "path": "/tmp/healthd-info.txt", "pattern": "/system/bin/healthd" }
+      ],
+      "hints": [
+        "cat으로 .rc 파일 내용을 확인하세요",
+        "grep으로 특정 서비스 설정을 필터링할 수 있습니다"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "as-tl-008",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "시스템에서 'system_server' 프로세스(PID 1234)가 응답하지 않습니다. 프로세스를 강제 종료하고, ANR 로그에서 원인을 파악하여 /tmp/anr-cause.txt에 기록하세요.",
+    "explanation": "system_server는 Android의 핵심 프로세스입니다. 응답 없음(ANR) 상태가 되면 logcat과 /data/anr/ 디렉터리에서 원인을 분석합니다. kill로 프로세스를 종료하면 zygote가 자동으로 재시작합니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "pixel-debug",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/data": { "type": "dir" },
+        "/data/anr": { "type": "dir" },
+        "/data/anr/traces.txt": { "type": "file", "content": "--- pid 1234 at 2026-03-16 10:00:00 ---\nCmd line: system_server\n\n\"main\" prio=5 tid=1 Blocked\n  at com.android.server.wm.WindowManagerService.performLayoutLocked(WindowManagerService.java:1234)\n  - waiting to lock <0x0001> held by thread 42\n  at com.android.server.wm.WindowManagerService.relayoutWindow(WindowManagerService.java:567)\n\n\"Binder:1234_5\" prio=5 tid=42 Blocked\n  at com.android.server.am.ActivityManagerService.broadcastIntent(AMS.java:890)\n  - waiting to lock <0x0002> held by thread 1\n  --- DEADLOCK DETECTED ---\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "processes": [
+        { "pid": 1, "name": "init", "user": "root", "cpu": "0.0", "mem": "0.5", "command": "/init" },
+        { "pid": 500, "name": "zygote", "user": "root", "cpu": "0.5", "mem": "3.0", "command": "zygote64" },
+        { "pid": 1234, "name": "system_server", "user": "system", "cpu": "0.0", "mem": "15.0", "command": "system_server" }
+      ],
+      "goalChecks": [
+        { "description": "system_server가 종료됨", "type": "process-stopped", "processName": "system_server" },
+        { "description": "ANR 원인 파일이 생성됨", "type": "file-exists", "path": "/tmp/anr-cause.txt" },
+        { "description": "데드락 원인이 기록됨", "type": "file-contains", "path": "/tmp/anr-cause.txt", "pattern": "DEADLOCK|deadlock|데드락" }
+      ],
+      "hints": [
+        "ps로 프로세스 상태를 확인하세요",
+        "/data/anr/traces.txt 에 ANR 스택 트레이스가 저장되어 있습니다",
+        "cat으로 traces.txt를 읽고 원인을 파악하세요"
+      ],
+      "scriptedOutputs": {
+        "logcat -d -s ActivityManager": "03-16 10:00:00.000  500  500 E ActivityManager: ANR in system_server\n03-16 10:00:00.001  500  500 E ActivityManager: Reason: Input dispatching timed out"
+      }
+    }
+  },
+  {
+    "id": "as-tl-009",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "고급",
+    "type": "terminal",
+    "question": "vendor 파티션의 HAL 라이브러리 구성을 감사하세요. /vendor/lib64/hw/ 아래의 모든 .so 파일 목록을 /tmp/hal-list.txt에 저장하고, HIDL manifest에서 android.hardware.audio 서비스의 버전을 /tmp/audio-hal-version.txt에 기록하세요.",
+    "explanation": "Android HAL(Hardware Abstraction Layer)은 /vendor/lib64/hw/에 .so 라이브러리로 존재합니다. HIDL manifest에서 각 HAL의 인터페이스 버전을 확인할 수 있으며, 이는 프레임워크-벤더 호환성 검증의 핵심입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "vendor-audit",
+        "user": "root",
+        "cwd": "/vendor"
+      },
+      "filesystem": {
+        "/vendor": { "type": "dir" },
+        "/vendor/lib64": { "type": "dir" },
+        "/vendor/lib64/hw": { "type": "dir" },
+        "/vendor/lib64/hw/audio.primary.default.so": { "type": "file", "content": "(binary)" },
+        "/vendor/lib64/hw/camera.provider@2.4.so": { "type": "file", "content": "(binary)" },
+        "/vendor/lib64/hw/gralloc.default.so": { "type": "file", "content": "(binary)" },
+        "/vendor/lib64/hw/sensors.default.so": { "type": "file", "content": "(binary)" },
+        "/vendor/etc": { "type": "dir" },
+        "/vendor/etc/vintf": { "type": "dir" },
+        "/vendor/etc/vintf/manifest.xml": { "type": "file", "content": "<manifest version=\"2.0\" type=\"device\">\n    <hal format=\"hidl\">\n        <name>android.hardware.audio</name>\n        <transport>hwbinder</transport>\n        <version>7.1</version>\n        <interface>\n            <name>IDevicesFactory</name>\n            <instance>default</instance>\n        </interface>\n    </hal>\n    <hal format=\"hidl\">\n        <name>android.hardware.camera.provider</name>\n        <transport>hwbinder</transport>\n        <version>2.4</version>\n    </hal>\n</manifest>\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "HAL 라이브러리 목록이 생성됨", "type": "file-exists", "path": "/tmp/hal-list.txt" },
+        { "description": "목록에 .so 파일 포함", "type": "file-contains", "path": "/tmp/hal-list.txt", "pattern": "\\.so" },
+        { "description": "오디오 HAL 버전 파일이 생성됨", "type": "file-exists", "path": "/tmp/audio-hal-version.txt" },
+        { "description": "버전 정보에 7.1 포함", "type": "file-contains", "path": "/tmp/audio-hal-version.txt", "pattern": "7\\.1" }
+      ],
+      "hints": [
+        "ls 또는 find로 /vendor/lib64/hw/ 아래의 .so 파일을 찾으세요",
+        "grep으로 manifest.xml에서 audio 관련 HAL 정보를 추출하세요",
+        "grep version manifest.xml 로 버전 정보를 확인할 수 있습니다"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "as-tl-010",
+    "category": "android-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "고급",
+    "type": "terminal",
+    "question": "부팅 시간을 분석하세요. bootstat 로그에서 각 부팅 단계의 소요 시간을 확인하고, 가장 오래 걸린 단계를 /tmp/slowest-phase.txt에 기록하세요. 또한 전체 부팅 시간을 /tmp/total-boot-time.txt에 저장하세요.",
+    "explanation": "Android 부팅 성능 분석은 플랫폼 최적화의 핵심입니다. bootstat 로그에서 각 단계(bootloader, kernel, init, zygote, system_server)의 시간을 파악하고 병목을 찾습니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "perf-lab",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/data": { "type": "dir" },
+        "/data/misc": { "type": "dir" },
+        "/data/misc/bootstat": { "type": "dir" },
+        "/data/misc/bootstat/boot_complete": { "type": "file", "content": "45200" },
+        "/proc": { "type": "dir" },
+        "/proc/bootprof": { "type": "file", "content": "      0.000: ON\n      0.500: Preloader done (500ms)\n      2.100: Bootloader done (1600ms)\n      5.800: Kernel init done (3700ms)\n     12.300: Init stage 1 done (6500ms)\n     18.000: Zygote started (5700ms)\n     28.500: System server ready (10500ms)\n     38.200: Boot animation end (9700ms)\n     45.200: Boot complete (7000ms)\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "가장 느린 단계가 기록됨", "type": "file-exists", "path": "/tmp/slowest-phase.txt" },
+        { "description": "System server가 가장 느린 단계", "type": "file-contains", "path": "/tmp/slowest-phase.txt", "pattern": "[Ss]ystem.*server|10500" },
+        { "description": "전체 부팅 시간이 기록됨", "type": "file-exists", "path": "/tmp/total-boot-time.txt" },
+        { "description": "부팅 시간 45.2초 기록됨", "type": "file-contains", "path": "/tmp/total-boot-time.txt", "pattern": "45\\.?2|45200" }
+      ],
+      "hints": [
+        "cat /proc/bootprof 로 부팅 단계별 시간을 확인하세요",
+        "각 단계의 괄호 안 시간(ms)을 비교하세요",
+        "가장 큰 값이 병목 구간입니다"
+      ],
+      "scriptedOutputs": {}
+    }
   }
 ]

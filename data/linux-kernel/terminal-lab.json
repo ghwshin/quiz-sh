@@ -199,5 +199,199 @@
         "ping -c 1 192.168.1.1": "PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.\n64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.5 ms\n\n--- 192.168.1.1 ping statistics ---\n1 packets transmitted, 1 received, 0% packet loss, time 0ms"
       }
     }
+  },
+  {
+    "id": "lk-tl-006",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "/var/log/kern.log 파일에서 'error' 키워드가 포함된 로그를 찾아 /tmp/errors.txt에 저장하세요. 에러가 몇 줄인지도 /tmp/error-count.txt에 기록하세요.",
+    "explanation": "grep으로 특정 패턴을 검색하고 리다이렉션으로 파일에 저장할 수 있습니다. grep -c 옵션이나 wc -l 파이프로 매칭 줄 수를 셀 수 있습니다. 커널 로그 분석은 디버깅의 기본입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "debug-box",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/var": { "type": "dir" },
+        "/var/log": { "type": "dir" },
+        "/var/log/kern.log": { "type": "file", "content": "[  1.000] usb 1-1: new high-speed USB device\n[  1.200] error: i2c adapter not found\n[  2.300] ext4: mounted filesystem with ordered mode\n[  3.100] error: gpio chip gpiochip0 request failed\n[  3.500] error: spi1.0: probe failed with -22\n[  4.000] NET: Registered protocol family 17\n[  5.000] systemd: Started Journal Service\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "에러 로그 파일이 생성됨", "type": "file-exists", "path": "/tmp/errors.txt" },
+        { "description": "에러 로그에 error 키워드 포함", "type": "file-contains", "path": "/tmp/errors.txt", "pattern": "error" },
+        { "description": "에러 카운트 파일이 생성됨", "type": "file-exists", "path": "/tmp/error-count.txt" },
+        { "description": "에러 카운트가 3", "type": "file-contains", "path": "/tmp/error-count.txt", "pattern": "3" }
+      ],
+      "hints": [
+        "grep 명령어로 파일에서 패턴을 검색할 수 있습니다",
+        "grep -c 옵션은 매칭된 줄의 수를 출력합니다"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "lk-tl-007",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "시스템에 runaway 프로세스 'crypto_miner'(PID 4567)가 CPU를 과점하고 있습니다. 해당 프로세스를 강제 종료하고, /var/log/action.log에 조치 내용을 기록하세요.",
+    "explanation": "ps 명령어로 프로세스 목록을 확인하고, kill -9로 강제 종료합니다. 보안 사고 대응 시 조치 내용을 로그로 남기는 것은 중요한 관행입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "prod-node",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/var": { "type": "dir" },
+        "/var/log": { "type": "dir" },
+        "/tmp": { "type": "dir" }
+      },
+      "processes": [
+        { "pid": 1, "name": "init", "user": "root", "cpu": "0.0", "mem": "0.5", "command": "/sbin/init" },
+        { "pid": 234, "name": "sshd", "user": "root", "cpu": "0.1", "mem": "0.3", "command": "/usr/sbin/sshd" },
+        { "pid": 4567, "name": "crypto_miner", "user": "nobody", "cpu": "98.5", "mem": "12.0", "command": "/tmp/.hidden/crypto_miner --threads=4" }
+      ],
+      "goalChecks": [
+        { "description": "crypto_miner 프로세스가 종료됨", "type": "process-stopped", "processName": "crypto_miner" },
+        { "description": "조치 로그가 기록됨", "type": "file-exists", "path": "/var/log/action.log" },
+        { "description": "로그에 종료 조치 내용 포함", "type": "file-contains", "path": "/var/log/action.log", "pattern": "kill|종료|terminate" }
+      ],
+      "hints": [
+        "ps aux로 실행 중인 프로세스 목록을 확인하세요",
+        "kill -9 PID로 프로세스를 강제 종료할 수 있습니다"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "lk-tl-008",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "/etc 디렉터리 아래에서 '.conf' 확장자를 가진 설정 파일 목록을 찾아 /tmp/config-list.txt에 저장하세요. 또한 전체 설정 파일 수를 /tmp/config-count.txt에 기록하세요.",
+    "explanation": "find 명령어로 특정 패턴의 파일을 재귀적으로 검색하고, wc -l로 줄 수(파일 수)를 셀 수 있습니다. 시스템 설정 파일 감사는 보안/관리의 기본 작업입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "audit-srv",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/etc": { "type": "dir" },
+        "/etc/sysctl.conf": { "type": "file", "content": "net.ipv4.ip_forward=0\n" },
+        "/etc/resolv.conf": { "type": "file", "content": "nameserver 8.8.8.8\n" },
+        "/etc/modprobe.d": { "type": "dir" },
+        "/etc/modprobe.d/blacklist.conf": { "type": "file", "content": "blacklist pcspkr\n" },
+        "/etc/security": { "type": "dir" },
+        "/etc/security/limits.conf": { "type": "file", "content": "* soft nofile 1024\n" },
+        "/etc/hostname": { "type": "file", "content": "audit-srv\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "설정 파일 목록이 생성됨", "type": "file-exists", "path": "/tmp/config-list.txt" },
+        { "description": "목록에 .conf 파일 포함", "type": "file-contains", "path": "/tmp/config-list.txt", "pattern": "\\.conf" },
+        { "description": "카운트 파일이 생성됨", "type": "file-exists", "path": "/tmp/config-count.txt" },
+        { "description": "카운트가 4", "type": "file-contains", "path": "/tmp/config-count.txt", "pattern": "4" }
+      ],
+      "hints": [
+        "find /etc -name '*.conf' 로 .conf 파일을 검색할 수 있습니다",
+        "wc -l 은 줄 수를 세어줍니다"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "lk-tl-009",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "고급",
+    "type": "terminal",
+    "question": "dmesg 로그에서 프로브 실패(probe failed)한 드라이버를 식별하고, 해당 모듈(spi_sensor.ko)을 언로드한 뒤, 디바이스 트리 오버레이 설정을 수정하여 올바른 SPI 버스 번호(spi0)로 변경하세요.",
+    "explanation": "dmesg로 커널 로그를 확인하고, grep으로 probe 실패 메시지를 필터링합니다. 잘못된 드라이버를 rmmod로 제거하고, 디바이스 트리 오버레이 설정에서 SPI 버스 번호를 수정한 후 다시 로드합니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "iot-gateway",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/lib/modules": { "type": "dir" },
+        "/lib/modules/spi_sensor.ko": { "type": "file", "content": "(binary)" },
+        "/proc": { "type": "dir" },
+        "/proc/modules": { "type": "file", "content": "spi_sensor 8192 0 - Live 0xffff000000\n" },
+        "/boot": { "type": "dir" },
+        "/boot/overlays": { "type": "dir" },
+        "/boot/overlays/spi-sensor.dtbo": { "type": "file", "content": "# Device Tree Overlay\n# SPI sensor configuration\nbus = spi1\nchip_select = 0\nmax_speed = 1000000\n" },
+        "/sys": { "type": "dir" },
+        "/sys/bus": { "type": "dir" },
+        "/sys/bus/spi": { "type": "dir" },
+        "/sys/bus/spi/devices": { "type": "dir" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "DT 오버레이에서 SPI 버스가 spi0으로 변경됨", "type": "file-contains", "path": "/boot/overlays/spi-sensor.dtbo", "pattern": "bus\\s*=\\s*spi0" },
+        { "description": "spi_sensor 모듈이 (재)로드됨", "type": "module-loaded", "moduleName": "spi_sensor" }
+      ],
+      "hints": [
+        "dmesg | grep probe 로 프로브 실패 메시지를 확인하세요",
+        "rmmod로 모듈을 언로드한 뒤 설정을 수정하세요",
+        "cat과 echo/리다이렉션으로 설정 파일 내용을 수정할 수 있습니다"
+      ],
+      "scriptedOutputs": {
+        "dmesg | grep probe": "[    2.100] spi_sensor: probe failed on spi1.0 with error -22\n[    2.101] spi_sensor: check bus configuration in device tree overlay",
+        "dmesg | grep spi": "[    1.000] spi spi0: registered master\n[    1.001] spi spi1: registered master\n[    2.100] spi_sensor: probe failed on spi1.0 with error -22"
+      }
+    }
+  },
+  {
+    "id": "lk-tl-010",
+    "category": "linux-kernel",
+    "subcategory": "terminal-lab",
+    "difficulty": "고급",
+    "type": "terminal",
+    "question": "시스템의 메모리 사용량이 높습니다. /proc 파일시스템에서 메모리 정보를 확인하고, vm.swappiness 값을 60에서 10으로 변경하세요. 그리고 /proc/sys/vm/drop_caches에 3을 써서 페이지 캐시를 정리하세요.",
+    "explanation": "vm.swappiness는 커널의 스왑 사용 경향을 제어합니다. 낮은 값은 스왑 사용을 줄여 임베디드 시스템에서 eMMC/SD 카드의 수명을 보호합니다. drop_caches에 3을 쓰면 페이지 캐시, dentries, inodes를 모두 정리합니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "mem-constrained",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/proc": { "type": "dir" },
+        "/proc/meminfo": { "type": "file", "content": "MemTotal:        1024000 kB\nMemFree:          128000 kB\nMemAvailable:     256000 kB\nBuffers:           32000 kB\nCached:           384000 kB\nSwapTotal:        512000 kB\nSwapFree:         256000 kB\n" },
+        "/proc/sys": { "type": "dir" },
+        "/proc/sys/vm": { "type": "dir" },
+        "/proc/sys/vm/swappiness": { "type": "file", "content": "60" },
+        "/proc/sys/vm/drop_caches": { "type": "file", "content": "0" },
+        "/etc": { "type": "dir" },
+        "/etc/sysctl.conf": { "type": "file", "content": "# VM settings\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "swappiness가 10으로 변경됨", "type": "file-contains", "path": "/proc/sys/vm/swappiness", "pattern": "10" },
+        { "description": "drop_caches에 3이 기록됨", "type": "file-contains", "path": "/proc/sys/vm/drop_caches", "pattern": "3" }
+      ],
+      "hints": [
+        "cat /proc/meminfo 로 메모리 상태를 확인하세요",
+        "sysctl -w vm.swappiness=10 또는 echo로 직접 /proc/sys를 수정할 수 있습니다",
+        "echo 3 > /proc/sys/vm/drop_caches 로 캐시를 정리합니다"
+      ],
+      "scriptedOutputs": {
+        "free -m": "              total        used        free      shared  buff/cache   available\nMem:           1000         640         125          10         235         250\nSwap:           500         250         250"
+      }
+    }
   }
 ]

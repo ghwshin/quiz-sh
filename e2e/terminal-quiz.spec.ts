@@ -231,3 +231,121 @@ test.describe("Terminal Quiz — UI Interaction", () => {
     await expect(input).toHaveValue("echo second");
   });
 });
+
+test.describe("Terminal Quiz — New Linux Kernel Questions", () => {
+  test("lk-tl-006: 커널 로그 에러 분석", async ({ page }) => {
+    await page.goto("/quiz/linux-kernel/terminal-lab/beginner");
+    // Navigate past first two beginner questions
+    await page.getByText("다음").click();
+    await page.getByText("다음").click();
+    await expect(page.getByText("kern.log")).toBeVisible();
+
+    const input = page.locator('input[type="text"]');
+    await input.fill("grep error /var/log/kern.log > /tmp/errors.txt");
+    await input.press("Enter");
+    await input.fill("grep -c error /var/log/kern.log > /tmp/error-count.txt");
+    await input.press("Enter");
+
+    await page.getByText("미션 완료 확인").click();
+    await expect(page.getByText("미션 성공!")).toBeVisible();
+  });
+
+  test("lk-tl-007: runaway 프로세스 종료", async ({ page }) => {
+    await page.goto("/quiz/linux-kernel/terminal-lab/intermediate");
+    // Navigate past first two intermediate questions
+    await page.getByText("다음").click();
+    await page.getByText("다음").click();
+    await expect(page.getByText("crypto_miner")).toBeVisible();
+
+    const input = page.locator('input[type="text"]');
+    await input.fill("kill -9 4567");
+    await input.press("Enter");
+    await input.fill("echo 'killed crypto_miner process' > /var/log/action.log");
+    await input.press("Enter");
+
+    await page.getByText("미션 완료 확인").click();
+    await expect(page.getByText("미션 성공!")).toBeVisible();
+  });
+
+  test("lk-tl-008: 설정 파일 감사", async ({ page }) => {
+    await page.goto("/quiz/linux-kernel/terminal-lab/intermediate");
+    await page.getByText("다음").click();
+    await page.getByText("다음").click();
+    await page.getByText("다음").click();
+    await expect(page.getByText(".conf")).toBeVisible();
+
+    const input = page.locator('input[type="text"]');
+    await input.fill("find /etc -name '*.conf' > /tmp/config-list.txt");
+    await input.press("Enter");
+    await input.fill("find /etc -name '*.conf' | wc -l > /tmp/config-count.txt");
+    await input.press("Enter");
+
+    await page.getByText("미션 완료 확인").click();
+    await expect(page.getByText("미션 성공!")).toBeVisible();
+  });
+
+  test("lk-tl-010: 메모리 튜닝", async ({ page }) => {
+    await page.goto("/quiz/linux-kernel/terminal-lab/advanced");
+    // Navigate past first two advanced questions
+    await page.getByText("다음").click();
+    await page.getByText("다음").click();
+    await expect(page.getByText("swappiness")).toBeVisible();
+
+    const input = page.locator('input[type="text"]');
+    await input.fill("sysctl -w vm.swappiness=10");
+    await input.press("Enter");
+    await input.fill("echo 3 > /proc/sys/vm/drop_caches");
+    await input.press("Enter");
+
+    await page.getByText("미션 완료 확인").click();
+    await expect(page.getByText("미션 성공!")).toBeVisible();
+  });
+});
+
+test.describe("Terminal Quiz — New Android Questions", () => {
+  test("as-tl-006: 빌드 로그 분석", async ({ page }) => {
+    await page.goto("/quiz/android-system/terminal-lab/beginner");
+    await page.getByText("다음").click();
+    await page.getByText("다음").click();
+    await expect(page.getByText("FAILED")).toBeVisible();
+
+    const input = page.locator('input[type="text"]');
+    await input.fill("grep FAILED build.log > /tmp/failed-module.txt");
+    await input.press("Enter");
+
+    await page.getByText("미션 완료 확인").click();
+    await expect(page.getByText("미션 성공!")).toBeVisible();
+  });
+
+  test("as-tl-008: system_server ANR 분석", async ({ page }) => {
+    await page.goto("/quiz/android-system/terminal-lab/intermediate");
+    await page.getByText("다음").click();
+    await page.getByText("다음").click();
+    await page.getByText("다음").click();
+    await expect(page.getByText("system_server")).toBeVisible();
+
+    const input = page.locator('input[type="text"]');
+    await input.fill("kill -9 1234");
+    await input.press("Enter");
+    await input.fill("grep DEADLOCK /data/anr/traces.txt > /tmp/anr-cause.txt");
+    await input.press("Enter");
+
+    await page.getByText("미션 완료 확인").click();
+    await expect(page.getByText("미션 성공!")).toBeVisible();
+  });
+
+  test("as-tl-009: HAL 라이브러리 감사", async ({ page }) => {
+    await page.goto("/quiz/android-system/terminal-lab/advanced");
+    await page.getByText("다음").click();
+    await expect(page.getByText("HAL")).toBeVisible();
+
+    const input = page.locator('input[type="text"]');
+    await input.fill("ls /vendor/lib64/hw > /tmp/hal-list.txt");
+    await input.press("Enter");
+    await input.fill("grep version /vendor/etc/vintf/manifest.xml > /tmp/audio-hal-version.txt");
+    await input.press("Enter");
+
+    await page.getByText("미션 완료 확인").click();
+    await expect(page.getByText("미션 성공!")).toBeVisible();
+  });
+});

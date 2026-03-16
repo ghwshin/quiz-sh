@@ -1,6 +1,6 @@
 {
-  "generated": "2026-03-16T06:54:54.340Z",
-  "totalQuestions": 760,
+  "generated": "2026-03-16T07:26:02.835Z",
+  "totalQuestions": 770,
   "files": [
     {
       "path": "linux-kernel/arm64-architecture.json",
@@ -739,16 +739,16 @@
       "path": "linux-kernel/terminal-lab.json",
       "category": "linux-kernel",
       "subcategory": "terminal-lab",
-      "questionCount": 5,
+      "questionCount": 10,
       "byType": {
-        "terminal": 5
+        "terminal": 10
       },
       "byDifficulty": {
-        "초급": 2,
-        "중급": 2,
-        "고급": 1
+        "초급": 3,
+        "중급": 4,
+        "고급": 3
       },
-      "idRange": "lk-tl-001 ~ lk-tl-005",
+      "idRange": "lk-tl-001 ~ lk-tl-010",
       "keywords": [
         "gpio",
         "led",
@@ -1519,16 +1519,16 @@
       "path": "android-system/terminal-lab.json",
       "category": "android-system",
       "subcategory": "terminal-lab",
-      "questionCount": 5,
+      "questionCount": 10,
       "byType": {
-        "terminal": 5
+        "terminal": 10
       },
       "byDifficulty": {
-        "초급": 2,
-        "중급": 2,
-        "고급": 1
+        "초급": 3,
+        "중급": 4,
+        "고급": 3
       },
-      "idRange": "as-tl-001 ~ as-tl-005",
+      "idRange": "as-tl-001 ~ as-tl-010",
       "keywords": [
         "adb를",
         "사용하여",
@@ -1694,6 +1694,11 @@
     "as-tl-003",
     "as-tl-004",
     "as-tl-005",
+    "as-tl-006",
+    "as-tl-007",
+    "as-tl-008",
+    "as-tl-009",
+    "as-tl-010",
     "bi-001",
     "bi-002",
     "bi-003",
@@ -2099,6 +2104,11 @@
     "lk-tl-003",
     "lk-tl-004",
     "lk-tl-005",
+    "lk-tl-006",
+    "lk-tl-007",
+    "lk-tl-008",
+    "lk-tl-009",
+    "lk-tl-010",
     "mm-001",
     "mm-002",
     "mm-003",

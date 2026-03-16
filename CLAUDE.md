@@ -68,8 +68,8 @@ src/
 └── test/
     └── setup.ts                 # Vitest setup (jest-dom matchers, RTL cleanup)
 data/
-├── linux-kernel/*.json          # 16 subcategory quiz files (25 questions each, terminal-lab: 5)
-└── android-system/*.json        # 16 subcategory quiz files (25 questions each, terminal-lab: 5)
+├── linux-kernel/*.json          # 16 subcategory quiz files (25 questions each, terminal-lab: 10)
+└── android-system/*.json        # 16 subcategory quiz files (25 questions each, terminal-lab: 10)
 e2e/
 └── quiz-flow.spec.ts            # Playwright E2E tests
 scripts/
@@ -83,10 +83,10 @@ scripts/
 
 ## Quiz Data
 
-- 760 questions total: 32 files (30 x 25 + 2 x 5)
+- 770 questions total: 32 files (30 x 25 + 2 x 10)
   - 28 standard files: 10 multiple-choice + 8 fill-in-the-blank + 7 code-fill per file
   - 2 conversation files (dev-conversation): 15 objective + 10 fill-blank per file
-  - 2 terminal-lab files: 5 terminal questions per file
+  - 2 terminal-lab files: 10 terminal questions per file
 - See `QUIZ.md` for quiz data format rules
 - 5 quiz types: multiple-choice, short-answer, code-fill, conversation, terminal
 - Both `short-answer` and `code-fill` use `blankAnswers` field for blank grading (shared `checkBlank()`)
