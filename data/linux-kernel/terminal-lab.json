@@ -6,7 +6,7 @@
     "difficulty": "초급",
     "type": "terminal",
     "question": "GPIO LED 드라이버 모듈(gpio_led.ko)을 로드하고, 디바이스가 정상 등록되었는지 확인하세요.",
-    "explanation": "insmod /lib/modules/gpio_led.ko로 모듈을 로드하면 커널이 모듈의 init 함수를 실행하여 GPIO LED 디바이스를 등록합니다. lsmod로 로드된 모듈을 확인하고, /sys/class/leds/ 아래에 새 디바이스 파일이 생성됩니다.",
+    "explanation": "insmod /lib/modules/gpio_led.ko로 모듈을 로드하면 커널이 모듈의 init 함수를 실행하여 GPIO LED 디바이스를 등록합니다. lsmod로 로드된 모듈을 확인하고, /sys/class/leds/ 아래에 새 sysfs 엔트리가 생성됩니다.",
     "terminalConfig": {
       "environment": {
         "hostname": "rpi-dev",
@@ -25,7 +25,7 @@
       },
       "goalChecks": [
         { "description": "gpio_led 모듈이 로드됨", "type": "module-loaded", "moduleName": "gpio_led" },
-        { "description": "LED 디바이스 파일이 생성됨", "type": "file-exists", "path": "/sys/class/leds/gpio_led0" }
+        { "description": "LED sysfs 엔트리가 생성됨", "type": "file-exists", "path": "/sys/class/leds/gpio_led0" }
       ],
       "hints": [
         "insmod 명령어로 커널 모듈을 로드할 수 있습니다",
@@ -159,7 +159,7 @@
     "subcategory": "terminal-lab",
     "difficulty": "고급",
     "type": "terminal",
-    "question": "네트워크 인터페이스 eth0이 DOWN 상태입니다. 인터페이스를 UP으로 변경하고, IP 주소 192.168.1.100/24를 할당한 뒤, 기본 게이트웨이(192.168.1.1)로의 연결을 확인하세요. 또한 DNS 서버(8.8.8.8)를 /etc/resolv.conf에 설정하세요.",
+    "question": "네트워크 인터페이스 eth0이 DOWN 상태입니다. 인터페이스를 UP으로 활성화하고, DNS 서버(8.8.8.8)를 /etc/resolv.conf에 설정하세요. IP 주소 할당과 기본 라우트 설정도 함께 수행해 보세요.",
     "explanation": "ip link set eth0 up으로 인터페이스를 활성화하고, ip addr add로 IP를 할당합니다. /etc/resolv.conf에 nameserver를 추가하면 DNS 해석이 가능해집니다. 이는 임베디드 시스템의 네트워크 수동 설정 기본 절차입니다.",
     "terminalConfig": {
       "environment": {

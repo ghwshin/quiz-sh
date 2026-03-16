@@ -84,7 +84,7 @@ test.describe("Terminal Quiz — Linux Kernel", () => {
 
   test("lk-tl-005: 네트워크 인터페이스 설정", async ({ page }) => {
     await page.goto("/quiz/linux-kernel/terminal-lab/advanced");
-    await expect(page.getByText("네트워크 인터페이스")).toBeVisible();
+    await expect(page.getByText(/eth0.*DOWN/)).toBeVisible();
 
     const input = page.locator('input[type="text"]');
 
@@ -135,7 +135,7 @@ test.describe("Terminal Quiz — Android System", () => {
 
   test("as-tl-003: SELinux 스크립트 파일 생성", async ({ page }) => {
     await page.goto("/quiz/android-system/terminal-lab/intermediate");
-    await expect(page.getByText("SELinux")).toBeVisible();
+    await expect(page.getByText(/test\.sh/)).toBeVisible();
 
     const input = page.locator('input[type="text"]');
 

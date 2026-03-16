@@ -72,8 +72,8 @@
     "subcategory": "terminal-lab",
     "difficulty": "중급",
     "type": "terminal",
-    "question": "SELinux가 enforcing 모드로 동작 중입니다. /data/local/tmp/test.sh 스크립트 파일을 생성하고, 실행 권한(755)을 부여하세요. 그리고 SELinux 컨텍스트를 shell_exec 타입으로 변경하기 위한 명령을 /tmp/selinux-cmd.txt에 기록하세요.",
-    "explanation": "Android에서 SELinux는 파일의 보안 컨텍스트를 기반으로 접근을 제어합니다. 스크립트를 실행하려면 적절한 파일 권한과 SELinux 컨텍스트가 모두 필요합니다. chcon 명령어로 SELinux 레이블을 변경할 수 있습니다.",
+    "question": "/data/local/tmp/test.sh 스크립트 파일을 생성하고 실행 권한(755)을 부여하세요. SELinux enforcing 환경에서 스크립트 실행을 위해 필요한 chcon 명령을 /tmp/selinux-cmd.txt에 기록하세요.",
+    "explanation": "Android에서 SELinux는 파일의 보안 컨텍스트를 기반으로 접근을 제어합니다. /data/local/tmp의 파일은 기본적으로 shell_data_file 컨텍스트를 가지므로, 실행하려면 chmod로 파일 권한을 설정하고, chcon으로 적절한 SELinux 타입(예: shell_exec)으로 변경해야 합니다.",
     "terminalConfig": {
       "environment": {
         "hostname": "pixel-dev",
