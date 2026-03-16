@@ -98,9 +98,24 @@ registerCommand("dmesg", (args, state) => {
 });
 
 registerCommand("modprobe", (args, state) => {
+  const removeFlag = args.includes("-r") || args.includes("--remove");
   const moduleName = args.filter(a => !a.startsWith("-"))[0];
   if (!moduleName) {
     return { stdout: "", stderr: "modprobe: missing module name\n", exitCode: 1 };
+  }
+
+  // modprobe -r: remove module (same as rmmod)
+  if (removeFlag) {
+    const mod = state.loadedModules.find(m => m.name === moduleName);
+    if (!mod) {
+      return { stdout: "", stderr: `modprobe: FATAL: Module ${moduleName} is not currently loaded\n`, exitCode: 1 };
+    }
+    return {
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      sideEffects: [{ type: "remove-module", payload: { name: moduleName } }],
+    };
   }
 
   // Check if already loaded

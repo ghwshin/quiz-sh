@@ -16,6 +16,9 @@ registerCommand("ip", (args, state) => {
       if (!iface) {
         return { stdout: "", stderr: `Cannot find device "${ifName}"\n`, exitCode: 1 };
       }
+      if (action !== "up" && action !== "down") {
+        return { stdout: "", stderr: `Error: argument "${action}" is wrong\n`, exitCode: 1 };
+      }
       const newState = action === "up" ? "UP" : "DOWN";
       const sideEffects: StateChange[] = [
         { type: "set-interface-state", payload: { name: ifName, state: newState } },
@@ -50,6 +53,10 @@ registerCommand("ip", (args, state) => {
       if (!ifName) {
         return { stdout: "", stderr: "ip: missing device name\n", exitCode: 1 };
       }
+      const iface = state.network.interfaces.find(i => i.name === ifName);
+      if (!iface) {
+        return { stdout: "", stderr: `RTNETLINK answers: Cannot find device "${ifName}"\n`, exitCode: 2 };
+      }
       const ip = ipAddr.split("/")[0];
       return {
         stdout: "",
@@ -78,7 +85,16 @@ registerCommand("ip", (args, state) => {
   // ip route
   if (subcommand === "route") {
     if (args[1] === "add") {
-      // ip route add default via 192.168.1.1
+      // ip route add default via GATEWAY dev IFACE
+      // Parse: args[2] = destination, args[3] = "via", args[4] = gateway, args[5] = "dev", args[6] = iface
+      const destination = args[2] ?? "default";
+      const viaIdx = args.indexOf("via");
+      const gateway = viaIdx >= 0 ? (args[viaIdx + 1] ?? "") : "";
+      const devIdx = args.indexOf("dev");
+      const ifName = devIdx >= 0 ? (args[devIdx + 1] ?? "") : "";
+      // Persist to state directly
+      state.network.routes = state.network.routes ?? [];
+      state.network.routes.push({ destination, gateway, interface: ifName });
       return { stdout: "", stderr: "", exitCode: 0 };
     }
 

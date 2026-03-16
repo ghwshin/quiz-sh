@@ -69,7 +69,7 @@ registerCommand("uname", (args) => {
 });
 
 registerCommand("whoami", (_args, state) => {
-  return { stdout: state.env["USER"] ?? "root" + "\n", stderr: "", exitCode: 0 };
+  return { stdout: (state.env["USER"] ?? "root") + "\n", stderr: "", exitCode: 0 };
 });
 
 registerCommand("id", (_args, state) => {
@@ -145,13 +145,18 @@ registerCommand("mount", (args, state) => {
     if (mountPoint && (isRW || isRO)) {
       const mountsContent = state.fs.readFile("/proc/mounts") ?? "";
       const lines = mountsContent.split("\n").filter(Boolean);
+      let changed = false;
       const newLines = lines.map(line => {
         if (line.includes(mountPoint)) {
-          if (isRW) return line.replace(/\bro\b/, "rw");
-          if (isRO) return line.replace(/\brw\b/, "ro");
+          const newLine = isRW ? line.replace(/\bro\b/, "rw") : line.replace(/\brw\b/, "ro");
+          if (newLine !== line) changed = true;
+          return newLine;
         }
         return line;
       });
+      if (!changed) {
+        return { stdout: "", stderr: `mount: ${mountPoint}: not mounted or mount point not found\n`, exitCode: 1 };
+      }
       return {
         stdout: "",
         stderr: "",

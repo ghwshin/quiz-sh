@@ -256,20 +256,28 @@ function executePipeline(
     let cmdStdin = stdin;
     for (const redir of cmd.redirects) {
       if (redir.type === "<") {
+        // Skip redirects with empty targets
+        if (!redir.target) continue;
         const absPath = ctx.fs.resolvePath(redir.target, ctx.cwd);
         const content = ctx.fs.readFile(absPath);
-        if (content !== null) cmdStdin = content;
+        if (content === null) {
+          return { stdout: "", stderr: `bash: ${redir.target}: No such file or directory\n`, exitCode: 1 };
+        }
+        cmdStdin = content;
       }
     }
 
+    // Skip output redirects with empty targets
+    const validRedirects = cmd.redirects.filter(r => r.target || r.type === "<");
     const result = ctx.execute(cmd.args, cmdStdin);
     lastExitCode = result.exitCode;
     lastStderr += result.stderr;
 
-    // Handle output redirects
+    // Handle output redirects (skip those with empty targets)
     let stdout = result.stdout;
     let redirected = false;
-    for (const redir of cmd.redirects) {
+    for (const redir of validRedirects) {
+      if (!redir.target) continue;
       const absPath = ctx.fs.resolvePath(redir.target, ctx.cwd);
       if (redir.type === ">") {
         ctx.fs.writeFile(absPath, stdout);
@@ -298,7 +306,7 @@ function executePipeline(
   }
 
   return {
-    stdout: pipeline.commands.length > 0 && !pipeline.commands[pipeline.commands.length - 1].redirects.some(r => r.type === ">" || r.type === ">>") ? stdin : "",
+    stdout: pipeline.commands.length > 0 && !pipeline.commands[pipeline.commands.length - 1].redirects.some(r => (r.type === ">" || r.type === ">>") && r.target) ? stdin : "",
     stderr: lastStderr,
     exitCode: lastExitCode,
   };

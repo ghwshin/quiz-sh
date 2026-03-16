@@ -83,8 +83,11 @@ registerCommand("cat", (args, state, stdin) => {
 });
 
 registerCommand("touch", (args, state) => {
-  for (const file of args) {
-    if (file.startsWith("-")) continue;
+  const files = args.filter(a => !a.startsWith("-"));
+  if (files.length === 0) {
+    return { stdout: "", stderr: "touch: missing file operand\n", exitCode: 1 };
+  }
+  for (const file of files) {
     const absPath = state.fs.resolvePath(file, state.cwd);
     if (!state.fs.exists(absPath)) {
       state.fs.writeFile(absPath, "");
@@ -96,6 +99,9 @@ registerCommand("touch", (args, state) => {
 registerCommand("mkdir", (args, state) => {
   const pFlag = args.includes("-p");
   const paths = args.filter(a => !a.startsWith("-"));
+  if (paths.length === 0) {
+    return { stdout: "", stderr: "mkdir: missing operand\n", exitCode: 1 };
+  }
   for (const p of paths) {
     const absPath = state.fs.resolvePath(p, state.cwd);
     if (pFlag) {
@@ -113,6 +119,9 @@ registerCommand("rm", (args, state) => {
   const recursive = args.includes("-r") || args.includes("-rf") || args.includes("-fr");
   const force = args.includes("-f") || args.includes("-rf") || args.includes("-fr");
   const paths = args.filter(a => !a.startsWith("-"));
+  if (paths.length === 0) {
+    return { stdout: "", stderr: "rm: missing operand\n", exitCode: 1 };
+  }
   for (const p of paths) {
     const absPath = state.fs.resolvePath(p, state.cwd);
     if (!state.fs.exists(absPath)) {
@@ -204,7 +213,12 @@ registerCommand("grep", (args, state, stdin) => {
 
   const pattern = nonFlags[0];
   const files = nonFlags.slice(1);
-  const regex = new RegExp(pattern, ignoreCase ? "i" : "");
+  let regex: RegExp;
+  try {
+    regex = new RegExp(pattern, ignoreCase ? "i" : "");
+  } catch {
+    return { stdout: "", stderr: "grep: Invalid regular expression\n", exitCode: 2 };
+  }
   const results: string[] = [];
 
   function matchLines(content: string, prefix: string) {
@@ -284,6 +298,9 @@ registerCommand("find", (args, state) => {
 
 registerCommand("head", (args, state, stdin) => {
   let n = 10;
+  // Support compact form: -5 means -n 5
+  const compactArg = args.find(a => /^-\d+$/.test(a));
+  if (compactArg) n = parseInt(compactArg.slice(1), 10);
   const nIdx = args.indexOf("-n");
   if (nIdx >= 0 && args[nIdx + 1]) n = parseInt(args[nIdx + 1], 10);
   const files = args.filter(a => !a.startsWith("-") && args.indexOf(a) !== nIdx + 1);
@@ -307,6 +324,9 @@ registerCommand("head", (args, state, stdin) => {
 
 registerCommand("tail", (args, state, stdin) => {
   let n = 10;
+  // Support compact form: -5 means -n 5
+  const compactArg = args.find(a => /^-\d+$/.test(a));
+  if (compactArg) n = parseInt(compactArg.slice(1), 10);
   const nIdx = args.indexOf("-n");
   if (nIdx >= 0 && args[nIdx + 1]) n = parseInt(args[nIdx + 1], 10);
   const files = args.filter(a => !a.startsWith("-") && args.indexOf(a) !== nIdx + 1);
@@ -370,10 +390,11 @@ registerCommand("ln", (args, state) => {
   if (paths.length < 2) {
     return { stdout: "", stderr: "ln: missing operand\n", exitCode: 1 };
   }
+  if (!isSymbolic) {
+    return { stdout: "", stderr: "ln: hard links not supported in this environment\n", exitCode: 1 };
+  }
   const target = paths[0];
   const linkPath = state.fs.resolvePath(paths[1], state.cwd);
-  if (isSymbolic) {
-    state.fs.ln(target, linkPath);
-  }
+  state.fs.ln(target, linkPath);
   return { stdout: "", stderr: "", exitCode: 0 };
 });

@@ -5,7 +5,32 @@ registerCommand("adb", (args) => {
     return { stdout: "Android Debug Bridge\nUsage: adb [options] command\n", stderr: "", exitCode: 0 };
   }
 
-  const subcommand = args[0];
+  // Skip global options like -s <serial>, -d, -e before the subcommand
+  const remaining: string[] = [];
+  let i = 0;
+  while (i < args.length) {
+    const a = args[i];
+    if (a === "-s" || a === "-H" || a === "-P") {
+      // These flags consume the next arg as a value
+      i += 2;
+    } else if (a.startsWith("-") && a !== "-d" && a !== "-e") {
+      // Unknown single flag, skip it
+      i++;
+    } else if (a === "-d" || a === "-e") {
+      // Transport selector flags with no value
+      i++;
+    } else {
+      remaining.push(...args.slice(i));
+      break;
+    }
+  }
+
+  if (remaining.length === 0) {
+    return { stdout: "Android Debug Bridge\nUsage: adb [options] command\n", stderr: "", exitCode: 0 };
+  }
+
+  const subcommand = remaining[0];
+  const subArgs = remaining.slice(1);
 
   if (subcommand === "devices") {
     return {
@@ -16,17 +41,23 @@ registerCommand("adb", (args) => {
   }
 
   if (subcommand === "shell") {
-    const shellCmd = args.slice(1).join(" ");
+    // Join all args after "shell" into a single string for accurate matching
+    const shellCmd = subArgs.join(" ");
     if (shellCmd.startsWith("getprop")) {
-      const prop = args[2];
+      // Extract the property name from the joined string
+      const parts = shellCmd.split(/\s+/);
+      const prop = parts[1];
       const props: Record<string, string> = {
         "ro.build.version.release": "14",
         "ro.build.version.sdk": "34",
         "ro.product.model": "Pixel 8",
         "ro.product.brand": "google",
       };
-      const value = props[prop] ?? "";
+      const value = prop ? (props[prop] ?? "") : Object.entries(props).map(([k, v]) => `[${k}]: [${v}]`).join("\n");
       return { stdout: value + "\n", stderr: "", exitCode: 0 };
+    }
+    if (shellCmd.length > 0) {
+      return { stdout: "(simulated) shell command not available in this environment\n", stderr: "", exitCode: 0 };
     }
     return { stdout: "", stderr: "", exitCode: 0 };
   }
@@ -40,11 +71,17 @@ registerCommand("adb", (args) => {
   }
 
   if (subcommand === "push") {
-    return { stdout: `${args[1] ?? "file"}: 1 file pushed.\n`, stderr: "", exitCode: 0 };
+    if (subArgs.length < 2) {
+      return { stdout: "", stderr: "adb: push requires exactly 2 arguments\n", exitCode: 1 };
+    }
+    return { stdout: `${subArgs[0]}: 1 file pushed.\n`, stderr: "", exitCode: 0 };
   }
 
   if (subcommand === "pull") {
-    return { stdout: `${args[1] ?? "file"}: 1 file pulled.\n`, stderr: "", exitCode: 0 };
+    if (subArgs.length < 2) {
+      return { stdout: "", stderr: "adb: pull requires exactly 2 arguments\n", exitCode: 1 };
+    }
+    return { stdout: `${subArgs[0]}: 1 file pulled.\n`, stderr: "", exitCode: 0 };
   }
 
   return { stdout: "", stderr: `adb: unknown command '${subcommand}'\n`, exitCode: 1 };
