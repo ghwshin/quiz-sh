@@ -1,8 +1,12 @@
 import { registerCommand } from "./index";
 
 registerCommand("adb", (args) => {
-  if (args.length === 0) {
-    return { stdout: "Android Debug Bridge\nUsage: adb [options] command\n", stderr: "", exitCode: 0 };
+  if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
+    return {
+      stdout: "Usage: adb [options] <command>\nAndroid Debug Bridge.\n\nCommands: devices, shell, root, remount, push, pull\nOptions: -s SERIAL (target device by serial number)\n",
+      stderr: "",
+      exitCode: 0,
+    };
   }
 
   // Skip global options like -s <serial>, -d, -e before the subcommand
@@ -26,7 +30,7 @@ registerCommand("adb", (args) => {
   }
 
   if (remaining.length === 0) {
-    return { stdout: "Android Debug Bridge\nUsage: adb [options] command\n", stderr: "", exitCode: 0 };
+    return { stdout: "Usage: adb [options] <command>\nAndroid Debug Bridge.\n\nCommands: devices, shell, root, remount, push, pull\nOptions: -s SERIAL (target device by serial number)\n", stderr: "", exitCode: 0 };
   }
 
   const subcommand = remaining[0];
@@ -88,8 +92,12 @@ registerCommand("adb", (args) => {
 });
 
 registerCommand("fastboot", (args) => {
-  if (args.length === 0) {
-    return { stdout: "usage: fastboot [OPTION...] COMMAND...\n", stderr: "", exitCode: 0 };
+  if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
+    return {
+      stdout: "Usage: fastboot [options] <command>\nCommunicate with a device in fastboot mode.\n\nCommands: devices, getvar, flash, reboot, oem\nOptions: -s SERIAL (target device)\n",
+      stderr: "",
+      exitCode: 0,
+    };
   }
 
   const subcommand = args[0];
@@ -114,6 +122,9 @@ registerCommand("fastboot", (args) => {
 });
 
 registerCommand("logcat", (args) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: logcat [OPTION]... [TAG:PRIORITY]...\nPrint Android log messages.\n\nOptions: -d (dump and exit), -s TAG (filter by tag), -c (clear log)\n", stderr: "", exitCode: 0 };
+  }
   // logcat output is typically from scriptedOutputs; provide fallback
   const hasDump = args.includes("-d");
   const hasTag = args.includes("-s");
@@ -133,11 +144,17 @@ registerCommand("logcat", (args) => {
   };
 });
 
-registerCommand("getenforce", (_args) => {
+registerCommand("getenforce", (args) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: getenforce\nPrint the current SELinux enforcement mode (Enforcing, Permissive, or Disabled).\n", stderr: "", exitCode: 0 };
+  }
   return { stdout: "Enforcing\n", stderr: "", exitCode: 0 };
 });
 
 registerCommand("chcon", (args) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: chcon [OPTION]... CONTEXT FILE...\nChange the SELinux security context of FILE(s).\n\nOptions: -R (recursive)\n", stderr: "", exitCode: 0 };
+  }
   // chcon is simulated — no actual side effect needed for quiz purposes
   if (args.length < 2) {
     return { stdout: "", stderr: "chcon: missing operand\n", exitCode: 1 };

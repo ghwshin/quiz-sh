@@ -1,6 +1,9 @@
 import { registerCommand } from "./index";
 
 registerCommand("ps", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: ps [OPTION]...\nReport a snapshot of current processes.\n\nOptions: aux (all processes, BSD style), -ef (all processes, UNIX style)\n", stderr: "", exitCode: 0 };
+  }
   const showAll = args.includes("aux") || args.includes("-ef") || args.includes("-e");
 
   const header = showAll
@@ -26,6 +29,9 @@ registerCommand("ps", (args, state) => {
 });
 
 registerCommand("kill", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: kill [-SIGNAL] PID...\nSend a signal to a process.\n\nOptions: -9 or -KILL (force kill), -15 or -TERM (terminate, default)\n", stderr: "", exitCode: 0 };
+  }
   let signal = "TERM";
   const pids: number[] = [];
 

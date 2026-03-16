@@ -36,6 +36,9 @@ export function hasCommand(name: string): boolean {
 
 // Info commands registered directly
 registerCommand("cd", (args, state) => {
+  if (args[0] === "--help" || args[0] === "-h") {
+    return { stdout: "Usage: cd [DIR]\nChange the current directory to DIR.\nDefaults to HOME if DIR is omitted.\n", stderr: "", exitCode: 0 };
+  }
   const target = args[0] ?? state.env["HOME"] ?? "/";
   const resolved = state.fs.resolvePath(target, state.cwd);
   if (!state.fs.exists(resolved)) {
@@ -53,11 +56,17 @@ registerCommand("cd", (args, state) => {
   };
 });
 
-registerCommand("pwd", (_args, state) => {
+registerCommand("pwd", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: pwd\nPrint the name of the current working directory.\n", stderr: "", exitCode: 0 };
+  }
   return { stdout: state.cwd + "\n", stderr: "", exitCode: 0 };
 });
 
 registerCommand("uname", (args) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: uname [OPTION]...\nPrint system information.\n\nOptions: -a (all), -r (kernel release), -s (kernel name)\n", stderr: "", exitCode: 0 };
+  }
   const flags = args.filter(a => a.startsWith("-")).join("");
   if (flags.includes("a")) {
     return { stdout: "Linux embedded 5.15.0 #1 SMP aarch64 GNU/Linux\n", stderr: "", exitCode: 0 };
@@ -68,11 +77,17 @@ registerCommand("uname", (args) => {
   return { stdout: "Linux\n", stderr: "", exitCode: 0 };
 });
 
-registerCommand("whoami", (_args, state) => {
+registerCommand("whoami", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: whoami\nPrint the effective username of the current user.\n", stderr: "", exitCode: 0 };
+  }
   return { stdout: (state.env["USER"] ?? "root") + "\n", stderr: "", exitCode: 0 };
 });
 
-registerCommand("id", (_args, state) => {
+registerCommand("id", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: id [USER]\nPrint user and group information for USER (default: current user).\n", stderr: "", exitCode: 0 };
+  }
   const user = state.env["USER"] ?? "root";
   if (user === "root") {
     return { stdout: "uid=0(root) gid=0(root) groups=0(root)\n", stderr: "", exitCode: 0 };
@@ -80,16 +95,25 @@ registerCommand("id", (_args, state) => {
   return { stdout: `uid=1000(${user}) gid=1000(${user}) groups=1000(${user})\n`, stderr: "", exitCode: 0 };
 });
 
-registerCommand("date", () => {
+registerCommand("date", (args) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: date [OPTION]... [+FORMAT]\nPrint or set the system date and time.\n\nOptions: -u (UTC), +FORMAT (strftime format string)\n", stderr: "", exitCode: 0 };
+  }
   return { stdout: "Mon Mar 16 09:00:00 KST 2026\n", stderr: "", exitCode: 0 };
 });
 
-registerCommand("env", (_args, state) => {
+registerCommand("env", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: env [NAME=VALUE]... [COMMAND]\nPrint environment variables, or run COMMAND with a modified environment.\n", stderr: "", exitCode: 0 };
+  }
   const lines = Object.entries(state.env).map(([k, v]) => `${k}=${v}`).join("\n");
   return { stdout: lines + "\n", stderr: "", exitCode: 0 };
 });
 
 registerCommand("export", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: export [NAME[=VALUE]]...\nSet environment variables and mark them for export to child processes.\n", stderr: "", exitCode: 0 };
+  }
   const sideEffects: StateChange[] = [];
   for (const arg of args) {
     const eqIdx = arg.indexOf("=");
@@ -108,6 +132,9 @@ registerCommand("export", (args, state) => {
 });
 
 registerCommand("echo", (args, _state, _stdin) => {
+  if (args.includes("--help")) {
+    return { stdout: "Usage: echo [OPTION]... [STRING]...\nWrite STRING(s) to standard output.\n\nOptions: -n (no trailing newline), -e (enable backslash escapes)\n", stderr: "", exitCode: 0 };
+  }
   let newline = true;
   let enableEscape = false;
   const outputArgs: string[] = [];
@@ -134,6 +161,9 @@ registerCommand("true", () => ({ stdout: "", stderr: "", exitCode: 0 }));
 registerCommand("false", () => ({ stdout: "", stderr: "", exitCode: 1 }));
 
 registerCommand("mount", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: mount [-o OPTIONS] [DEVICE] DIR\nMount a filesystem or show current mounts.\n\nOptions: -o remount,rw (remount read-write), -o remount,ro (remount read-only)\n", stderr: "", exitCode: 0 };
+  }
   // mount -o remount,rw /system or mount -o remount,ro /system
   if (args.includes("-o") && args.some(a => a.startsWith("remount"))) {
     const optIdx = args.indexOf("-o");
@@ -177,7 +207,19 @@ registerCommand("mount", (args, state) => {
 registerCommand("clear", () => ({ stdout: "\x1B[clear]", stderr: "", exitCode: 0 }));
 
 registerCommand("help", () => ({
-  stdout: "Available commands: ls, cat, echo, cp, mv, rm, mkdir, touch, chmod, grep, find, head, tail, wc, ln, cd, pwd, uname, whoami, id, date, env, export, insmod, rmmod, lsmod, dmesg, modprobe, modinfo, sysctl, ps, kill, ip, ss, ping, adb, fastboot, logcat, mount, clear\n",
+  stdout: [
+    "Available commands (use --help for details):",
+    "",
+    "  File system:  ls, cat, touch, mkdir, rm, cp, mv, chmod, grep, find, head, tail, wc, ln",
+    "  Navigation:   cd, pwd",
+    "  System info:  uname, whoami, id, date, env, export, mount",
+    "  Kernel:       insmod, rmmod, lsmod, dmesg, modprobe, modinfo, sysctl",
+    "  Processes:    ps, kill",
+    "  Network:      ip, ss, ping",
+    "  Android:      adb, fastboot, logcat, getenforce, chcon",
+    "  Shell:        echo, clear, help, true, false",
+    "",
+  ].join("\n"),
   stderr: "",
   exitCode: 0,
 }));

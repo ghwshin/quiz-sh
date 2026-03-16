@@ -1,6 +1,9 @@
 import { registerCommand } from "./index";
 
 registerCommand("ls", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: ls [OPTION]... [FILE]...\nList directory contents.\n\nOptions: -a (all, including hidden), -l (long format)\n", stderr: "", exitCode: 0 };
+  }
   const flags = args.filter(a => a.startsWith("-")).join("");
   const paths = args.filter(a => !a.startsWith("-"));
   if (paths.length === 0) paths.push(".");
@@ -65,6 +68,9 @@ function formatPerms(perms: string): string {
 }
 
 registerCommand("cat", (args, state, stdin) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: cat [FILE]...\nConcatenate FILE(s) and print to standard output.\nWith no FILE, read standard input.\n", stderr: "", exitCode: 0 };
+  }
   if (args.length === 0) {
     // Read from stdin
     return { stdout: stdin, stderr: "", exitCode: 0 };
@@ -83,6 +89,9 @@ registerCommand("cat", (args, state, stdin) => {
 });
 
 registerCommand("touch", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: touch [OPTION]... FILE...\nUpdate the access and modification times of FILE(s).\nCreate FILE if it does not exist.\n", stderr: "", exitCode: 0 };
+  }
   const files = args.filter(a => !a.startsWith("-"));
   if (files.length === 0) {
     return { stdout: "", stderr: "touch: missing file operand\n", exitCode: 1 };
@@ -97,6 +106,9 @@ registerCommand("touch", (args, state) => {
 });
 
 registerCommand("mkdir", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: mkdir [OPTION]... DIRECTORY...\nCreate DIRECTORY(ies) if they do not already exist.\n\nOptions: -p (create parent directories as needed)\n", stderr: "", exitCode: 0 };
+  }
   const pFlag = args.includes("-p");
   const paths = args.filter(a => !a.startsWith("-"));
   if (paths.length === 0) {
@@ -116,6 +128,9 @@ registerCommand("mkdir", (args, state) => {
 });
 
 registerCommand("rm", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: rm [OPTION]... FILE...\nRemove (unlink) FILE(s).\n\nOptions: -r (recursive), -f (force, ignore missing)\n", stderr: "", exitCode: 0 };
+  }
   const recursive = args.includes("-r") || args.includes("-rf") || args.includes("-fr");
   const force = args.includes("-f") || args.includes("-rf") || args.includes("-fr");
   const paths = args.filter(a => !a.startsWith("-"));
@@ -144,6 +159,9 @@ registerCommand("rm", (args, state) => {
 });
 
 registerCommand("cp", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: cp [OPTION]... SOURCE DEST\nCopy SOURCE to DEST.\n\nOptions: -r, -R (copy directories recursively)\n", stderr: "", exitCode: 0 };
+  }
   const flags = args.filter(a => a.startsWith("-"));
   const paths = args.filter(a => !a.startsWith("-"));
   if (paths.length < 2) {
@@ -168,6 +186,9 @@ registerCommand("cp", (args, state) => {
 });
 
 registerCommand("mv", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: mv [OPTION]... SOURCE DEST\nMove (rename) SOURCE to DEST.\n", stderr: "", exitCode: 0 };
+  }
   const paths = args.filter(a => !a.startsWith("-"));
   if (paths.length < 2) {
     return { stdout: "", stderr: "mv: missing operand\n", exitCode: 1 };
@@ -181,6 +202,9 @@ registerCommand("mv", (args, state) => {
 });
 
 registerCommand("chmod", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: chmod [OPTION]... MODE FILE...\nChange the file mode bits of FILE(s).\n\nMODE: octal (755) or symbolic (u+x, a-w)\n", stderr: "", exitCode: 0 };
+  }
   const paths = args.filter(a => !a.startsWith("-"));
   if (paths.length < 2) {
     return { stdout: "", stderr: "chmod: missing operand\n", exitCode: 1 };
@@ -196,6 +220,9 @@ registerCommand("chmod", (args, state) => {
 });
 
 registerCommand("grep", (args, state, stdin) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: grep [OPTION]... PATTERN [FILE]...\nSearch for PATTERN in each FILE (or stdin).\n\nOptions: -i (ignore case), -c (count matches only)\n", stderr: "", exitCode: 0 };
+  }
   let ignoreCase = false;
   let countOnly = false;
   const nonFlags: string[] = [];
@@ -251,6 +278,9 @@ registerCommand("grep", (args, state, stdin) => {
 });
 
 registerCommand("find", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: find [PATH] [OPTION]...\nSearch for files in a directory hierarchy.\n\nOptions: -name PATTERN, -type f|d\n", stderr: "", exitCode: 0 };
+  }
   const paths = args.filter(a => !a.startsWith("-"));
   const searchPath = paths[0] ?? ".";
   const nameIdx = args.indexOf("-name");
@@ -297,6 +327,9 @@ registerCommand("find", (args, state) => {
 });
 
 registerCommand("head", (args, state, stdin) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: head [OPTION]... [FILE]...\nPrint the first 10 lines of FILE(s) to standard output.\n\nOptions: -n NUM (print first NUM lines)\n", stderr: "", exitCode: 0 };
+  }
   let n = 10;
   // Support compact form: -5 means -n 5
   const compactArg = args.find(a => /^-\d+$/.test(a));
@@ -323,6 +356,9 @@ registerCommand("head", (args, state, stdin) => {
 });
 
 registerCommand("tail", (args, state, stdin) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: tail [OPTION]... [FILE]...\nPrint the last 10 lines of FILE(s) to standard output.\n\nOptions: -n NUM (print last NUM lines)\n", stderr: "", exitCode: 0 };
+  }
   let n = 10;
   // Support compact form: -5 means -n 5
   const compactArg = args.find(a => /^-\d+$/.test(a));
@@ -351,6 +387,9 @@ registerCommand("tail", (args, state, stdin) => {
 });
 
 registerCommand("wc", (args, state, stdin) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: wc [OPTION]... [FILE]...\nPrint line, word, and byte counts for FILE(s).\n\nOptions: -l (lines), -w (words), -c (bytes)\n", stderr: "", exitCode: 0 };
+  }
   const files = args.filter(a => !a.startsWith("-"));
   const flags = args.filter(a => a.startsWith("-")).join("");
 
@@ -385,6 +424,9 @@ registerCommand("wc", (args, state, stdin) => {
 });
 
 registerCommand("ln", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: ln [OPTION]... TARGET LINK_NAME\nCreate a link to TARGET with the name LINK_NAME.\n\nOptions: -s (create a symbolic link)\n", stderr: "", exitCode: 0 };
+  }
   const isSymbolic = args.includes("-s");
   const paths = args.filter(a => !a.startsWith("-"));
   if (paths.length < 2) {

@@ -1,6 +1,9 @@
 import { registerCommand, type StateChange } from "./index";
 
 registerCommand("ip", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: ip [OPTIONS] OBJECT {COMMAND}\nShow or manipulate network configuration.\n\nObjects: link (network interfaces), addr (IP addresses), route (routing table)\nCommands: show, set, add\n", stderr: "", exitCode: 0 };
+  }
   if (args.length === 0) {
     return { stdout: "", stderr: "Usage: ip [ OPTIONS ] OBJECT { COMMAND }\n", exitCode: 1 };
   }
@@ -109,6 +112,9 @@ registerCommand("ip", (args, state) => {
 });
 
 registerCommand("ss", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: ss [OPTION]...\nDisplay socket statistics.\n\nOptions: -l (listening), -t (TCP), -u (UDP), -n (numeric ports)\n", stderr: "", exitCode: 0 };
+  }
   const showListening = args.includes("-l") || args.includes("-lt") || args.includes("-ltn");
   const showTcp = args.includes("-t") || args.includes("-lt") || args.includes("-ltn");
 
@@ -123,6 +129,9 @@ registerCommand("ss", (args, state) => {
 });
 
 registerCommand("ping", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: ping [OPTION]... HOST\nSend ICMP ECHO_REQUEST packets to HOST.\n\nOptions: -c COUNT (stop after COUNT packets)\n", stderr: "", exitCode: 0 };
+  }
   let count = 1;
   const cIdx = args.indexOf("-c");
   if (cIdx >= 0 && args[cIdx + 1]) count = parseInt(args[cIdx + 1], 10);

@@ -1,6 +1,9 @@
 import { registerCommand, type StateChange } from "./index";
 
 registerCommand("insmod", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: insmod FILE [PARAM=VALUE]...\nInsert a module into the Linux kernel.\n", stderr: "", exitCode: 0 };
+  }
   const modulePath = args[0];
   if (!modulePath) {
     return { stdout: "", stderr: "insmod: missing module path\n", exitCode: 1 };
@@ -47,6 +50,9 @@ registerCommand("insmod", (args, state) => {
 });
 
 registerCommand("rmmod", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: rmmod [OPTION]... MODULE\nRemove a module from the Linux kernel.\n\nOptions: -f (force removal)\n", stderr: "", exitCode: 0 };
+  }
   const moduleName = args[0];
   if (!moduleName) {
     return { stdout: "", stderr: "rmmod: missing module name\n", exitCode: 1 };
@@ -65,7 +71,10 @@ registerCommand("rmmod", (args, state) => {
   };
 });
 
-registerCommand("lsmod", (_args, state) => {
+registerCommand("lsmod", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: lsmod\nShow the status of modules in the Linux kernel.\nOutput columns: Module, Size, Used by.\n", stderr: "", exitCode: 0 };
+  }
   if (state.loadedModules.length === 0) {
     return { stdout: "Module                  Size  Used by\n", stderr: "", exitCode: 0 };
   }
@@ -81,6 +90,9 @@ registerCommand("lsmod", (_args, state) => {
 });
 
 registerCommand("dmesg", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: dmesg [OPTION]...\nPrint or control the kernel ring buffer.\n\nOptions: -c (clear after printing), -n LEVEL (set console log level)\n", stderr: "", exitCode: 0 };
+  }
   // For quiz purposes, dmesg output comes from scriptedOutputs or module log
   const lines: string[] = [];
 
@@ -98,6 +110,9 @@ registerCommand("dmesg", (args, state) => {
 });
 
 registerCommand("modprobe", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: modprobe [OPTION]... MODULE [PARAM=VALUE]...\nAdd or remove modules from the Linux kernel (with dependency handling).\n\nOptions: -r, --remove (remove module)\n", stderr: "", exitCode: 0 };
+  }
   const removeFlag = args.includes("-r") || args.includes("--remove");
   const moduleName = args.filter(a => !a.startsWith("-"))[0];
   if (!moduleName) {
@@ -144,6 +159,9 @@ registerCommand("modprobe", (args, state) => {
 });
 
 registerCommand("modinfo", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: modinfo [OPTION]... MODULE\nDisplay information about a Linux kernel module.\n\nFields: filename, license, description, author, vermagic\n", stderr: "", exitCode: 0 };
+  }
   const moduleName = args[0];
   if (!moduleName) {
     return { stdout: "", stderr: "modinfo: missing module name\n", exitCode: 1 };
@@ -167,6 +185,9 @@ registerCommand("modinfo", (args, state) => {
 });
 
 registerCommand("sysctl", (args, state) => {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { stdout: "Usage: sysctl [OPTION]... [KEY[=VALUE]]...\nRead or write kernel parameters at runtime.\n\nOptions: -a (list all), -w (write), -p [FILE] (load from file)\n", stderr: "", exitCode: 0 };
+  }
   if (args.length === 0 || args[0] === "-a") {
     // Show all
     const results: string[] = [];
