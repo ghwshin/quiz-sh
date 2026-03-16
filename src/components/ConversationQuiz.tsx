@@ -265,8 +265,8 @@ export function ConversationQuiz({
       {/* Conversation Messages */}
       <div className="space-y-3 border border-gray-700 rounded-lg p-4 bg-gray-900/50">
         {quiz.conversation?.map((msg, i) => (
-          <div key={i} className="flex gap-3">
-            <div className="flex-shrink-0 text-2xl w-8 text-center" aria-hidden="true">
+          <div key={i} className="flex gap-3 items-start">
+            <div className="flex-shrink-0 text-xl w-7 h-7 flex items-center justify-center" aria-hidden="true">
               {msg.avatar}
             </div>
             <div className="flex-1 min-w-0">
