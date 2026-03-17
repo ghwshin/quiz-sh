@@ -1,0 +1,545 @@
+[
+  {
+    "id": "ac-001",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "ARM64 프로세서의 캐시 계층 구조에 대한 설명으로 올바른 것은?",
+    "options": [
+      "L1 캐시는 명령과 데이터가 통합(unified)된 단일 캐시이다",
+      "L1 캐시는 명령 캐시(L1I)와 데이터 캐시(L1D)로 분리되어 있고, L2는 일반적으로 통합 캐시이다",
+      "모든 ARM64 SoC는 반드시 L3 캐시를 포함해야 한다",
+      "L2 캐시도 L1과 마찬가지로 명령과 데이터가 분리되어 있다"
+    ],
+    "answer": 1,
+    "explanation": "ARM64 프로세서에서 L1 캐시는 파이프라인 효율을 위해 명령 캐시(L1I)와 데이터 캐시(L1D)로 분리(split)되어 있습니다. L2 캐시는 일반적으로 명령과 데이터가 통합(unified)된 캐시입니다. 시스템 캐시(L3/LLC)는 존재하는 경우 여러 코어가 공유하지만, 모든 SoC에 반드시 포함되는 것은 아닙니다."
+  },
+  {
+    "id": "ac-002",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "대부분의 ARM Cortex-A 구현에서 캐시 라인 크기는 얼마이며, false sharing과 어떤 관련이 있는가?",
+    "options": [
+      "32바이트이며, false sharing은 캐시와 무관한 현상이다",
+      "64바이트이며, 서로 다른 CPU가 같은 캐시 라인 내의 다른 변수를 수정하면 false sharing이 발생한다",
+      "128바이트이며, false sharing은 L2 캐시에서만 발생한다",
+      "캐시 라인 크기는 소프트웨어에서 자유롭게 설정할 수 있다"
+    ],
+    "answer": 1,
+    "explanation": "대부분의 Cortex-A 구현에서 캐시 라인 크기는 64바이트입니다. False sharing은 서로 다른 CPU 코어가 동일한 캐시 라인에 속하는 서로 다른 변수를 동시에 수정할 때, 캐시 일관성 프로토콜에 의해 불필요한 캐시 라인 전송이 반복되는 성능 저하 현상입니다. Linux 커널에서는 ____cacheline_aligned 속성으로 이를 방지합니다."
+  },
+  {
+    "id": "ac-003",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "ARM64 캐시의 write-back과 write-through 정책에 대한 설명으로 올바른 것은?",
+    "options": [
+      "write-through는 쓰기를 캐시에만 반영하고 메인 메모리 갱신을 지연한다",
+      "write-back은 쓰기를 캐시와 메인 메모리에 동시에 반영한다",
+      "write-back은 쓰기를 캐시에만 반영하고, 캐시 라인이 축출될 때 메인 메모리에 기록한다",
+      "ARM64는 write-through 정책만 지원한다"
+    ],
+    "answer": 2,
+    "explanation": "Write-back 정책은 쓰기를 캐시에만 반영하고, dirty 캐시 라인이 축출(eviction)될 때 메인 메모리에 기록합니다. Write-through 정책은 쓰기를 캐시와 메인 메모리에 동시에 반영합니다. ARM64는 두 정책 모두 지원하며, 일반적으로 성능이 우수한 write-back 정책이 Normal 메모리에 사용됩니다. Allocate 전략으로는 write-allocate(쓰기 미스 시 캐시 라인 할당)와 read-allocate 등이 있습니다."
+  },
+  {
+    "id": "ac-004",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ARM64에서 하드웨어 캐시 일관성과 shareability 도메인에 대한 설명으로 올바른 것은?",
+    "options": [
+      "ARM 아키텍처는 MESI 프로토콜을 표준으로 지정하고 있다",
+      "Shareability 도메인은 소프트웨어에서 동적으로 변경할 수 없다",
+      "구현체별 일관성 프로토콜을 통해 같은 shareability 도메인 내의 관찰자 간 캐시 일관성이 하드웨어적으로 유지된다",
+      "캐시 일관성은 오직 소프트웨어 관리로만 보장된다"
+    ],
+    "answer": 2,
+    "explanation": "ARM 아키텍처는 특정 캐시 일관성 프로토콜(MESI, MOESI 등)을 명시하지 않으며, 구현체별로 일관성 프로토콜을 자유롭게 선택합니다. 같은 shareability 도메인 내의 관찰자(CPU 코어 등) 사이에서는 하드웨어가 자동으로 캐시 일관성을 유지합니다. Shareability 도메인은 페이지 테이블 엔트리의 SH 비트를 통해 메모리 영역별로 설정됩니다."
+  },
+  {
+    "id": "ac-005",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ARM64의 shareability 도메인 중 Inner Shareable, Outer Shareable, Non-Shareable에 대한 설명으로 올바른 것은?",
+    "options": [
+      "Non-Shareable 영역은 모든 코어가 하드웨어 일관성을 유지한다",
+      "Inner Shareable은 일반적으로 같은 클러스터 내 CPU 코어들의 일관성 도메인이고, Outer Shareable은 GPU 등 외부 에이전트를 포함하는 더 넓은 도메인이다",
+      "Outer Shareable 도메인은 항상 Inner Shareable 도메인보다 좁은 범위이다",
+      "세 도메인 사이에는 아무런 포함 관계가 없다"
+    ],
+    "answer": 1,
+    "explanation": "Inner Shareable(ISH) 도메인은 일반적으로 같은 클러스터 내 CPU 코어들의 일관성 범위를 나타내며, Outer Shareable(OSH)은 GPU, DMA 컨트롤러 등을 포함하는 더 넓은 범위입니다. Outer Shareable 도메인은 Inner Shareable 도메인을 포함합니다. Non-Shareable 메모리는 해당 코어만 접근한다고 가정하므로 하드웨어 일관성이 보장되지 않습니다. Linux 커널은 일반 메모리를 대부분 Inner Shareable로 설정합니다."
+  },
+  {
+    "id": "ac-006",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ARM64의 메모리 타입에서 Normal과 Device 메모리의 차이에 대한 설명으로 올바른 것은?",
+    "options": [
+      "Normal 메모리는 캐싱, 재배열, 병합이 모두 허용되며, Device 메모리는 MMIO 접근에 사용되어 이러한 최적화가 제한된다",
+      "Device 메모리에는 하나의 속성만 존재한다",
+      "Normal 메모리에서는 메모리 접근 순서가 항상 프로그램 순서를 따른다",
+      "Device(GRE) 타입은 gathering, reordering, early write acknowledgement를 모두 금지한다"
+    ],
+    "answer": 0,
+    "explanation": "Normal 메모리는 캐싱, 접근 순서 재배열, 쓰기 병합이 모두 가능합니다. Device 메모리는 MMIO 레지스터 접근에 사용되며, 4가지 변형이 있습니다: nGnRnE(가장 엄격, gathering/reordering/early-ack 모두 금지), nGnRE, nGRE, GRE(가장 완화). GRE는 gathering, reordering, early write acknowledgement를 모두 허용하는 가장 완화된 Device 메모리 타입입니다."
+  },
+  {
+    "id": "ac-007",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ARM64의 메모리 배리어 명령 DMB, DSB, ISB의 차이에 대한 설명으로 올바른 것은?",
+    "options": [
+      "DMB는 파이프라인을 완전히 플러시하고, ISB는 메모리 접근만 순서를 보장한다",
+      "DSB는 메모리 접근 순서만 보장하며, 후속 명령의 실행은 차단하지 않는다",
+      "DMB는 메모리 접근 순서를 보장하고, DSB는 이전 메모리 접근이 완료될 때까지 후속 명령 실행을 차단하며, ISB는 파이프라인을 플러시하여 이후 명령을 다시 페치한다",
+      "세 배리어 모두 동일한 기능을 수행하며 성능 차이만 있다"
+    ],
+    "answer": 2,
+    "explanation": "DMB(Data Memory Barrier)는 DMB 이전의 메모리 접근이 DMB 이후의 메모리 접근보다 먼저 관찰되도록 순서를 보장합니다. DSB(Data Synchronization Barrier)는 DMB의 기능에 더해 이전 메모리 접근이 완료될 때까지 후속 명령의 실행 자체를 차단합니다. ISB(Instruction Synchronization Barrier)는 파이프라인을 플러시하여 ISB 이후의 명령이 새로운 컨텍스트(시스템 레지스터 변경 등)로 다시 페치되도록 합니다."
+  },
+  {
+    "id": "ac-008",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "ARM AMBA 버스 계층 구조에서 AXI, AHB, APB의 역할에 대한 설명으로 올바른 것은?",
+    "options": [
+      "APB는 고성능 CPU-메모리 인터커넥트로 사용되고, AXI는 저전력 주변장치에 사용된다",
+      "AXI는 고성능 인터커넥트(CPU, 메모리 컨트롤러 등)에, AHB는 중간 성능 장치에, APB는 저전력 주변장치(UART, GPIO 등)에 사용된다",
+      "AHB, AXI, APB는 모두 동일한 대역폭과 레이턴시를 제공한다",
+      "AMBA 버스는 ARM64에서 더 이상 사용되지 않는 레거시 기술이다"
+    ],
+    "answer": 1,
+    "explanation": "AMBA(Advanced Microcontroller Bus Architecture)는 ARM의 SoC 인터커넥트 표준입니다. AXI(Advanced eXtensible Interface)는 고성능 인터커넥트로 CPU, 메모리 컨트롤러, DMA 등에 사용됩니다. AHB(Advanced High-performance Bus)는 중간 성능의 시스템 버스입니다. APB(Advanced Peripheral Bus)는 UART, GPIO, 타이머 등 저전력 주변장치에 사용되는 단순한 버스입니다."
+  },
+  {
+    "id": "ac-009",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "ARMv8.1의 LSE(Large System Extensions) 원자적 연산에 대한 설명으로 올바른 것은?",
+    "options": [
+      "LSE는 기존 LL/SC(Load-Linked/Store-Conditional) 방식을 완전히 대체하여 LL/SC는 더 이상 사용할 수 없다",
+      "LSE 명령어(LDADD, SWPAL, CAS 등)는 단일 명령어로 원자적 연산을 수행하여, 대규모 시스템에서 LL/SC의 확장성 문제를 해결한다",
+      "LSE 원자적 연산은 커널 공간에서만 사용할 수 있다",
+      "CAS 명령어는 LSE와 무관한 ARMv8.0의 기본 명령어이다"
+    ],
+    "answer": 1,
+    "explanation": "LSE(ARMv8.1-A)는 LDADD(atomic add), SWP(atomic swap), CAS(compare-and-swap) 등의 단일 명령어 원자적 연산을 도입했습니다. 기존 LL/SC(LDXR/STXR) 방식은 많은 코어가 경합할 때 실패 확률이 높아 확장성이 떨어지는데, LSE 명령어는 하드웨어가 원자성을 보장하므로 대규모 시스템에서 훨씬 효율적입니다. LL/SC도 여전히 사용 가능하며, SWPAL은 acquire-release 시맨틱을 가진 swap 명령어입니다."
+  },
+  {
+    "id": "ac-010",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "ARM64 시스템에서 DMA 일관성을 유지하는 두 가지 방식에 대한 설명으로 올바른 것은?",
+    "options": [
+      "모든 ARM64 시스템은 하드웨어 일관성(HW coherent) DMA를 지원한다",
+      "소프트웨어 관리 방식에서는 DMA 전후로 캐시 유지보수가 불필요하다",
+      "하드웨어 일관성 방식은 CCI, CMN 등의 인터커넥트가 DMA 트래픽을 일관성 도메인에 포함시키고, 소프트웨어 관리 방식은 DMA 전후에 명시적 캐시 유지보수(clean/invalidate)를 수행한다",
+      "소프트웨어 관리 방식이 하드웨어 일관성 방식보다 항상 더 높은 성능을 제공한다"
+    ],
+    "answer": 2,
+    "explanation": "하드웨어 일관성(HW coherent) DMA는 CCI-400, CCI-500, CMN-600 등의 인터커넥트가 DMA 트래픽을 CPU 캐시 일관성 도메인에 포함시켜, 소프트웨어가 별도의 캐시 유지보수를 수행할 필요가 없습니다. 소프트웨어 관리(SW managed) 방식에서는 DMA 전에 캐시를 clean하고, DMA 후에 캐시를 invalidate하는 등의 명시적 캐시 유지보수가 필요합니다. 모든 SoC가 HW coherent DMA를 지원하는 것은 아닙니다."
+  },
+  {
+    "id": "ac-011",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "ARM64에서 가상 주소 기준으로 데이터 캐시를 clean하고 invalidate하는 캐시 유지보수 명령은 ___이다.",
+    "blankAnswers": [
+      [
+        "DC CIVAC"
+      ]
+    ],
+    "explanation": "DC CIVAC(Data Cache Clean and Invalidate by Virtual Address to Point of Coherency)는 지정된 가상 주소의 캐시 라인을 clean(dirty 데이터를 메모리에 기록)하고 invalidate(캐시에서 제거)합니다. Clean은 변경된 데이터를 메모리에 반영하고, Invalidate는 캐시 라인을 무효화합니다. DMA 전송 전후에 자주 사용됩니다.",
+    "blankDistractors": [
+      [
+        "DC ZVA",
+        "arm,cci-400-ctrl-if",
+        "dmb ish"
+      ]
+    ]
+  },
+  {
+    "id": "ac-012",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "ARM64에서 모든 이전 메모리 접근이 완료될 때까지 후속 명령의 실행을 차단하는 배리어 명령은 ___이다.",
+    "blankAnswers": [
+      [
+        "DSB"
+      ]
+    ],
+    "explanation": "DSB(Data Synchronization Barrier)는 DSB 이전의 모든 메모리 접근(load/store)이 완료될 때까지 후속 명령의 실행을 차단합니다. DMB(Data Memory Barrier)는 메모리 접근 순서만 보장하고 후속 비메모리 명령은 실행될 수 있습니다. 캐시 유지보수 명령이나 TLB 무효화 후에 DSB를 사용하여 완료를 보장합니다.",
+    "blankDistractors": [
+      [
+        "STLR",
+        "DCZID_EL0",
+        "MAIR_EL1"
+      ]
+    ]
+  },
+  {
+    "id": "ac-013",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "ARM64에서 캐시 라인을 0으로 채우는 명령은 ___이며, 제로화 블록 크기는 ___ 레지스터로 확인한다.",
+    "blankAnswers": [
+      [
+        "DC ZVA"
+      ],
+      [
+        "DCZID_EL0"
+      ]
+    ],
+    "explanation": "DC ZVA(Data Cache Zero by Virtual Address)는 지정된 가상 주소의 캐시 라인 크기만큼의 메모리 블록을 0으로 채웁니다. 제로화 블록 크기는 고정 값이 아니라 DCZID_EL0 레지스터의 BS 필드로 확인해야 하며, 값에 따라 블록 크기가 달라질 수 있습니다. 이 명령은 메모리 초기화에 효율적이며, Linux 커널의 clear_page() 구현에 활용됩니다.",
+    "blankDistractors": [
+      [
+        "__flush_dcache_area",
+        "dmb ish",
+        "arm,cci-400"
+      ],
+      [
+        "LDAR",
+        "DSB",
+        "MAIR_EL1"
+      ]
+    ]
+  },
+  {
+    "id": "ac-014",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Linux 커널에서 DMA 디바이스와 CPU 간 일관성이 보장되는 메모리를 할당하는 API는 ___이다.",
+    "blankAnswers": [
+      [
+        "dma_alloc_coherent"
+      ]
+    ],
+    "explanation": "dma_alloc_coherent()는 DMA와 CPU 간 일관성이 보장되는 메모리 버퍼를 할당합니다. 반환된 메모리는 CPU 가상 주소와 DMA 버스 주소를 모두 제공합니다. HW coherent 시스템에서는 일반 캐시 가능 메모리로 할당되고, 그렇지 않은 시스템에서는 uncached 매핑을 사용하여 일관성을 보장합니다. 해제 시에는 dma_free_coherent()를 사용합니다.",
+    "blankDistractors": [
+      [
+        "PoU",
+        "ldadd",
+        "dcache_clean_inval_poc"
+      ]
+    ]
+  },
+  {
+    "id": "ac-015",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "ARM64에서 페이지 테이블 엔트리의 AttrIndx 필드가 참조하는, 메모리 속성 인코딩을 저장하는 시스템 레지스터는 ___이다.",
+    "blankAnswers": [
+      [
+        "MAIR_EL1"
+      ]
+    ],
+    "explanation": "MAIR_EL1(Memory Attribute Indirection Register)은 8개의 8비트 속성 인코딩 슬롯을 저장합니다. 페이지 테이블 엔트리의 AttrIndx[2:0] 필드(3비트)가 MAIR_EL1의 8개 슬롯 중 하나를 선택하여 해당 페이지의 메모리 타입(Normal, Device 등)과 캐시 정책(write-back, write-through 등)을 결정합니다.",
+    "blankDistractors": [
+      [
+        "DSB",
+        "STLR",
+        "DCZID_EL0"
+      ]
+    ]
+  },
+  {
+    "id": "ac-016",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "ARM64에서 load-acquire 시맨틱을 제공하는 명령은 ___이고, store-release 시맨틱을 제공하는 명령은 ___이다.",
+    "blankAnswers": [
+      [
+        "LDAR"
+      ],
+      [
+        "STLR"
+      ]
+    ],
+    "explanation": "LDAR(Load-Acquire Register)은 이 로드 이후의 모든 메모리 접근이 이 로드 이후에 관찰되도록 보장합니다(acquire 시맨틱). STLR(Store-Release Register)은 이 스토어 이전의 모든 메모리 접근이 이 스토어 이전에 관찰되도록 보장합니다(release 시맨틱). 이 둘을 조합하면 별도의 DMB 없이도 효율적인 동기화를 구현할 수 있으며, C11의 memory_order_acquire/release에 대응합니다.",
+    "blankDistractors": [
+      [
+        "MAIR_EL1",
+        "DSB",
+        "DCZID_EL0"
+      ],
+      [
+        "DCZID_EL0",
+        "DSB",
+        "MAIR_EL1"
+      ]
+    ]
+  },
+  {
+    "id": "ac-017",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Linux 커널에서 ARM64의 데이터 캐시를 PoC(Point of Coherency)까지 clean하고 invalidate하는 내부 함수는 ___이다.",
+    "blankAnswers": [
+      [
+        "dcache_clean_inval_poc",
+        "__flush_dcache_area"
+      ]
+    ],
+    "explanation": "dcache_clean_inval_poc()는 Linux 커널의 ARM64 아키텍처 코드에서 지정된 가상 주소 범위의 데이터 캐시를 PoC(Point of Coherency)까지 clean하고 invalidate하는 함수입니다. PoC는 모든 관찰자(CPU, DMA, GPU 등)가 동일한 메모리 복사본을 보는 지점으로, DMA 전송 등에서 데이터 일관성을 보장하기 위해 사용됩니다. 이전에는 __flush_dcache_area()가 사용되었으나 최근 커널에서 이름이 변경되었습니다.",
+    "blankDistractors": [
+      [
+        "PoC",
+        "ldadd",
+        "memory-region"
+      ]
+    ]
+  },
+  {
+    "id": "ac-018",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "ARM64 캐시 토폴로지에서 모든 관찰자(CPU, DMA, GPU 등)가 동일한 메모리 복사본을 보는 지점을 ___라 하고, 명령 캐시와 데이터 캐시가 통합되는 지점을 ___라 한다.",
+    "blankAnswers": [
+      [
+        "PoC",
+        "Point of Coherency"
+      ],
+      [
+        "PoU",
+        "Point of Unification"
+      ]
+    ],
+    "explanation": "PoC(Point of Coherency)는 시스템 내 모든 관찰자(모든 CPU 코어, DMA 컨트롤러, GPU 등)가 동일한 메모리 복사본을 보장받는 지점으로, 일반적으로 메인 메모리 또는 시스템 캐시(존재하는 경우)에 해당합니다. PoU(Point of Unification)는 명령 캐시(I-cache)와 데이터 캐시(D-cache)가 동일한 복사본을 보는 지점으로, 자기 수정 코드(self-modifying code)나 코드 로딩 시 데이터를 PoU까지 clean한 후 I-cache를 invalidate해야 합니다.",
+    "blankDistractors": [
+      [
+        "dma_alloc_coherent",
+        "civac",
+        "dcache_clean_inval_poc"
+      ],
+      [
+        "dma_unmap_single",
+        "dma_map_single",
+        "memory-region"
+      ]
+    ]
+  },
+  {
+    "id": "ac-019",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "Linux 커널에서 DMA 스트리밍 매핑을 수행하고 해제하는 코드를 완성하시오.",
+    "codeTemplate": "dma_addr_t dma_handle;\n\ndma_handle = ___(dev, buf, size, DMA_TO_DEVICE);\n/* DMA 전송 수행 */\n___(dev, dma_handle, size, DMA_TO_DEVICE);",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      [
+        "dma_map_single"
+      ],
+      [
+        "dma_unmap_single"
+      ]
+    ],
+    "explanation": "dma_map_single()은 CPU 가상 주소의 버퍼를 DMA 장치가 접근할 수 있는 버스 주소로 매핑합니다. DMA_TO_DEVICE 방향은 CPU→장치 전송을 의미하며, 매핑 시 캐시를 clean합니다. DMA 전송 완료 후 dma_unmap_single()로 매핑을 해제해야 하며, 이때 필요한 캐시 유지보수도 수행됩니다. 매핑-해제 사이에 CPU가 해당 버퍼에 접근하면 안 됩니다.",
+    "blankDistractors": [
+      [
+        "dma_alloc_coherent",
+        "civac",
+        "no-map"
+      ],
+      [
+        "dma_alloc_coherent",
+        "civac",
+        "memory-region"
+      ]
+    ]
+  },
+  {
+    "id": "ac-020",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "ARM64에서 inner shareable 도메인에 대한 데이터 메모리 배리어를 인라인 어셈블리로 삽입하는 코드를 완성하시오.",
+    "codeTemplate": "/* inner shareable data memory barrier */\nasm volatile(\"___\" ::: \"memory\");",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      [
+        "dmb ish"
+      ]
+    ],
+    "explanation": "dmb ish(Data Memory Barrier, Inner Shareable)는 Inner Shareable 도메인 내에서 DMB 이전의 메모리 접근이 DMB 이후의 메모리 접근보다 먼저 관찰되도록 순서를 보장합니다. Linux 커널에서 smp_mb() 매크로는 ARM64에서 dmb ish로 구현됩니다. GCC 인라인 어셈블리의 \"memory\" clobber는 컴파일러에게 메모리가 변경될 수 있음을 알려 최적화에 의한 재배열을 방지합니다.",
+    "blankDistractors": [
+      [
+        "__flush_dcache_area",
+        "DC CIVAC",
+        "DC ZVA"
+      ]
+    ]
+  },
+  {
+    "id": "ac-021",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "커널에서 특정 가상 주소 범위의 데이터 캐시를 PoC까지 flush하는 코드를 완성하시오.",
+    "codeTemplate": "void flush_buffer(void *addr, size_t size)\n{\n    ___(addr, size);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      [
+        "__flush_dcache_area",
+        "dcache_clean_inval_poc"
+      ]
+    ],
+    "explanation": "dcache_clean_inval_poc()(이전 이름: __flush_dcache_area())은 지정된 가상 주소에서 size 바이트 범위의 데이터 캐시를 PoC까지 clean하고 invalidate합니다. 내부적으로 해당 범위를 캐시 라인 단위로 순회하며 DC CIVAC 명령을 실행합니다. DMA 전송 전 CPU가 작성한 데이터를 메인 메모리에 기록하고, DMA 전송 후 캐시의 오래된 데이터를 무효화하는 데 사용됩니다.",
+    "blankDistractors": [
+      [
+        "DC ZVA",
+        "arm,cci-400",
+        "arm,cci-400-ctrl-if"
+      ]
+    ]
+  },
+  {
+    "id": "ac-022",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Device Tree에서 DMA 전용 reserved memory 영역을 선언하고 디바이스에 연결하는 코드를 완성하시오.",
+    "codeTemplate": "reserved-memory {\n    #address-cells = <2>;\n    #size-cells = <2>;\n    ranges;\n\n    dma_pool: dma-buffer@90000000 {\n        compatible = \"shared-dma-pool\";\n        reg = <0x0 0x90000000 0x0 0x1000000>;\n        ___;\n    };\n};\n\nmy_device {\n    ___ = <&dma_pool>;\n};",
+    "codeLanguage": "dts",
+    "blankAnswers": [
+      [
+        "no-map"
+      ],
+      [
+        "memory-region"
+      ]
+    ],
+    "explanation": "no-map 속성은 해당 reserved memory 영역이 커널의 일반 메모리 매핑에서 제외되어야 함을 나타냅니다. 이 영역은 DMA 전용으로 사용되며, 커널이 이 영역을 일반 할당에 사용하지 않습니다. memory-region 속성은 디바이스 노드에서 해당 디바이스가 사용할 reserved memory 영역을 phandle로 참조합니다. 이를 통해 특정 디바이스에 전용 DMA 버퍼 영역을 할당할 수 있습니다.",
+    "blankDistractors": [
+      [
+        "dma_unmap_single",
+        "ldadd",
+        "dcache_clean_inval_poc"
+      ],
+      [
+        "ldadd",
+        "PoC",
+        "dma_alloc_coherent"
+      ]
+    ]
+  },
+  {
+    "id": "ac-023",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "ARMv8.1 LSE 확장의 원자적 덧셈 명령으로, x1이 가리키는 메모리 위치에 x0 값을 원자적으로 더하고 이전 값을 x2에 로드하는 코드를 완성하시오.",
+    "codeTemplate": "___ x0, x2, [x1]",
+    "codeLanguage": "asm",
+    "blankAnswers": [
+      [
+        "ldadd",
+        "LDADD"
+      ]
+    ],
+    "explanation": "LDADD(Atomic Add)는 ARMv8.1 LSE(Large System Extensions)에서 도입된 원자적 덧셈 명령어입니다. LDADD Xs, Xt, [Xn] 형식으로, [Xn] 메모리 위치의 값을 Xt에 로드하고 Xs 값을 더한 결과를 메모리에 기록합니다. 이 연산은 단일 명령어로 원자적으로 수행되므로, LL/SC(LDXR/STXR) 루프보다 많은 코어 환경에서 확장성이 뛰어납니다. LDADDAL은 acquire-release 시맨틱을 추가한 변형입니다.",
+    "blankDistractors": [
+      [
+        "dcache_clean_inval_poc",
+        "PoC",
+        "civac"
+      ]
+    ]
+  },
+  {
+    "id": "ac-024",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "ARM64에서 주어진 가상 주소의 캐시 라인을 clean하고 invalidate하는 인라인 어셈블리 코드를 완성하시오.",
+    "codeTemplate": "static inline void cache_clean_inval(void *addr)\n{\n    asm volatile(\"dc ___, %0\" :: \"r\"(addr) : \"memory\");\n    asm volatile(\"dsb sy\");\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      [
+        "civac",
+        "CIVAC"
+      ]
+    ],
+    "explanation": "dc civac(Data Cache Clean and Invalidate by Virtual Address to Point of Coherency)는 지정된 가상 주소가 속한 캐시 라인을 PoC까지 clean하고 invalidate합니다. Clean은 dirty 데이터를 하위 캐시/메모리에 기록하고, invalidate는 캐시 라인을 무효화합니다. 이후 dsb sy(전체 시스템 동기화 배리어)로 캐시 유지보수 완료를 보장합니다. DMA 전송이나 코어 간 공유 데이터의 일관성 보장에 사용됩니다.",
+    "blankDistractors": [
+      [
+        "no-map",
+        "dma_unmap_single",
+        "memory-region"
+      ]
+    ]
+  },
+  {
+    "id": "ac-025",
+    "category": "linux-kernel",
+    "subcategory": "arm64-cache-memory",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "Device Tree에서 ARM CCI-400 캐시 일관성 인터커넥트와 CPU 클러스터의 연결을 선언하는 코드를 완성하시오.",
+    "codeTemplate": "cci@2c090000 {\n    compatible = \"___\";\n    reg = <0x0 0x2c090000 0x0 0x1000>;\n    #address-cells = <1>;\n    #size-cells = <1>;\n    ranges = <0x0 0x0 0x2c090000 0x10000>;\n\n    cci_control0: slave-if@4000 {\n        compatible = \"___\";\n        interface-type = \"ace\";\n        reg = <0x4000 0x1000>;\n    };\n};",
+    "codeLanguage": "dts",
+    "blankAnswers": [
+      [
+        "arm,cci-400"
+      ],
+      [
+        "arm,cci-400-ctrl-if"
+      ]
+    ],
+    "explanation": "CCI-400(Cache Coherent Interconnect)은 ARM의 하드웨어 캐시 일관성 인터커넥트로, 여러 CPU 클러스터 간 캐시 일관성을 유지합니다. Device Tree에서 compatible = \"arm,cci-400\"으로 CCI-400 컨트롤러를 선언하고, 각 slave interface는 compatible = \"arm,cci-400-ctrl-if\"로 선언합니다. interface-type = \"ace\"는 ACE(AXI Coherency Extensions) 프로토콜을 사용하는 완전 일관성 인터페이스를 의미하며, CPU 클러스터가 이를 통해 연결됩니다.",
+    "blankDistractors": [
+      [
+        "dmb ish",
+        "DC CIVAC",
+        "__flush_dcache_area"
+      ],
+      [
+        "dmb ish",
+        "DC ZVA",
+        "DC CIVAC"
+      ]
+    ]
+  }
+]

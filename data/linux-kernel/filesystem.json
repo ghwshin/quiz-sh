@@ -68,13 +68,13 @@
     "blankDistractors": [
       [
         "readpage",
-        "open",
-        "superblock"
+        "proc_ops",
+        "my_fops"
       ],
       [
+        "커널",
         "장치",
-        "프로세스",
-        "커널"
+        "가상 파일 시스템"
       ]
     ]
   },
@@ -103,19 +103,19 @@
     "explanation": "/proc 파일 시스템(procfs)은 커널과 프로세스 정보를 파일 인터페이스로 노출하는 가상 파일 시스템입니다. 실제 디스크 I/O 없이 커널 자료구조를 직접 읽거나 수정할 수 있어 시스템 모니터링과 커널 파라미터 튜닝에 활용됩니다.",
     "blankDistractors": [
       [
+        "장치",
+        "디렉토리 엔트리",
+        "스택 포인터"
+      ],
+      [
+        "장치",
+        "디렉토리 엔트리",
+        "레지스터"
+      ],
+      [
         "디렉토리 엔트리",
         "장치",
         "우선순위"
-      ],
-      [
-        "장치",
-        "디렉토리 엔트리",
-        "고아 프로세스"
-      ],
-      [
-        "장치",
-        "디렉토리 엔트리",
-        "구체적"
       ]
     ]
   },
@@ -142,19 +142,19 @@
     "explanation": "파일 I/O의 기본 흐름은 open() -> read()/write() -> close()입니다. open()은 파일 디스크립터를 반환하고, read()는 파일 디스크립터로부터 데이터를 버퍼로 읽으며, close()는 파일 디스크립터를 해제합니다. 이 세 가지는 리눅스 시스템 프로그래밍의 가장 기본적인 시스템 콜입니다.",
     "blankDistractors": [
       [
-        "my_fops",
-        "myfs_s_ops",
-        "inode_operations"
+        "inode",
+        "writepage",
+        "address_space"
       ],
       [
-        "copy_from_user",
-        "superblock",
-        "st_size"
+        "stat",
+        "inode_operations",
+        "writepage"
       ],
       [
         "readpage",
-        "journal",
-        "inode_operations"
+        "writepage",
+        "address_space"
       ]
     ]
   },
@@ -181,19 +181,19 @@
     "explanation": "stat() 시스템 콜은 struct stat 구조체에 파일의 메타데이터를 채워줍니다. st_size는 파일의 바이트 크기, st_ino는 inode 번호를 나타냅니다. 이 외에도 st_mode(권한), st_nlink(하드 링크 수), st_uid(소유자 UID) 등 다양한 필드가 있습니다.",
     "blankDistractors": [
       [
-        "my_show",
-        "pos",
+        "kobject",
+        "read",
+        "proc_ops"
+      ],
+      [
+        "kobject",
+        "superblock",
         "myfs_alloc_inode"
       ],
       [
-        "i_ino",
-        "journal",
-        "dirty"
-      ],
-      [
-        "read",
-        "my_fops",
-        "writeback"
+        "readpage",
+        "vfsmount",
+        "writepage"
       ]
     ]
   },
@@ -281,13 +281,13 @@
     "blankDistractors": [
       [
         "page cache",
-        "linux/mm_types.h",
-        "struct page"
+        "-p",
+        "init="
       ],
       [
         "page cache",
-        "page fault",
-        "_IO"
+        "root=",
+        "DC CIVAC"
       ]
     ]
   },
@@ -312,14 +312,14 @@
     "explanation": "sysfs는 리눅스 2.6에서 도입되었으며, 이전에 /proc에 혼재되어 있던 장치 관련 정보를 분리하여 체계적으로 관리합니다. /sys/class, /sys/devices, /sys/bus 등의 디렉토리로 구성되며, 각 파일은 보통 하나의 속성 값만 포함합니다.",
     "blankDistractors": [
       [
-        "superblock",
         "open",
-        "journal"
+        "myfs_alloc_inode",
+        "readpage"
       ],
       [
-        "디렉토리 엔트리",
-        "프로세스",
-        "가상 파일 시스템"
+        "커널",
+        "가상 파일 시스템",
+        "프로세스"
       ]
     ]
   },
@@ -343,14 +343,14 @@
     "explanation": "마운트 과정에서 커널은 파일 시스템 타입에 맞는 super_operations의 fill_super 또는 mount 콜백을 호출하여 superblock을 초기화합니다. 마운트된 파일 시스템은 VFS의 마운트 트리에 추가되어 경로 탐색 시 올바른 파일 시스템으로 라우팅됩니다.",
     "blankDistractors": [
       [
-        "writepage",
-        "kobject",
-        "journal"
+        "st_size",
+        "inode_operations",
+        "close"
       ],
       [
-        "myfs_s_ops",
-        "address_space",
-        "open"
+        "inode",
+        "open",
+        "myfs_s_ops"
       ]
     ]
   },
@@ -378,19 +378,19 @@
     "explanation": "proc 파일을 생성할 때는 proc_create()를 사용하며, 파일 연산을 위한 구조체(커널 5.6 이상에서는 struct proc_ops, 이전에는 struct file_operations)를 정의해야 합니다. single_open()은 seq_file 인터페이스의 간편한 래퍼로, show 콜백 함수를 인자로 받아 파일 읽기 시 호출합니다.",
     "blankDistractors": [
       [
-        "inode_operations",
-        "inode",
-        "ordered"
-      ],
-      [
-        "copy_from_user",
-        "st_ino",
-        "read"
-      ],
-      [
-        "writeback",
-        "st_ino",
+        "address_space",
+        "dirty",
         "pos"
+      ],
+      [
+        "i_ino",
+        "writeback",
+        "stat"
+      ],
+      [
+        "ordered",
+        "journal",
+        "myfs_alloc_inode"
       ]
     ]
   },
@@ -417,19 +417,19 @@
     "explanation": "file_operations 구조체는 VFS가 파일 연산을 수행할 때 호출할 함수 포인터들을 정의합니다. copy_from_user()는 사용자 공간에서 커널 공간으로 데이터를 복사하고, copy_to_user()는 그 반대입니다. THIS_MODULE은 현재 모듈에 대한 참조로, 모듈 사용 중 언로드를 방지합니다.",
     "blankDistractors": [
       [
+        "dirty",
         "inode",
-        "vfsmount",
-        "ordered"
+        "dir_context"
       ],
       [
         "O_TRUNC",
         "SEEK_SET",
-        "LRU"
+        "SYSCALL_DEFINE2"
       ],
       [
         "address_space",
-        "dir_context",
-        "pos"
+        "i_ino",
+        "dirty"
       ]
     ]
   },
@@ -454,13 +454,13 @@
     "blankDistractors": [
       [
         "THIS_MODULE",
-        "EPERM",
+        "TTBR1_EL1",
         "PATH"
       ],
       [
         "THIS_MODULE",
-        "CPU_COUNT",
-        "SCHED_FIFO"
+        "CONFIG_PREEMPT",
+        "STP"
       ]
     ]
   },
@@ -490,17 +490,17 @@
       [
         "struct inode",
         "struct file",
-        "kernel panic"
+        "grace period"
       ],
       [
         "my_show",
-        "myfs_alloc_inode",
+        "close",
         "inode_operations"
       ],
       [
         "open",
-        "my_show",
-        "myfs_alloc_inode"
+        "read",
+        "pos"
       ]
     ]
   },
@@ -573,19 +573,19 @@
     "explanation": "ordered 모드가 ext4의 기본 모드인 이유는 성능과 안전성의 균형이 좋기 때문입니다. journal 모드는 모든 데이터를 두 번 쓰므로 성능 부담이 크고, writeback 모드는 충돌 시 stale data exposure 위험이 있습니다.",
     "blankDistractors": [
       [
-        "close",
-        "readpage",
-        "superblock"
-      ],
-      [
+        "open",
         "address_space",
-        "dirty",
-        "myfs_alloc_inode"
+        "copy_from_user"
       ],
       [
-        "myfs_alloc_inode",
-        "superblock",
-        "address_space"
+        "read",
+        "stat",
+        "dirty"
+      ],
+      [
+        "i_ino",
+        "dirty",
+        "kobject"
       ]
     ]
   },
@@ -612,19 +612,19 @@
     "explanation": "address_space는 radix tree(또는 xarray)를 사용하여 파일 오프셋과 페이지 간의 매핑을 효율적으로 관리합니다. VFS는 read/write 시스템 콜 처리 시 address_space_operations의 콜백을 호출하여 파일 시스템별로 적절한 방식으로 디스크 I/O를 수행합니다.",
     "blankDistractors": [
       [
-        "myfs_s_ops",
         "journal",
-        "kobject"
+        "myfs_alloc_inode",
+        "open"
       ],
       [
-        "st_ino",
-        "inode_operations",
-        "stat"
+        "myfs_alloc_inode",
+        "dir_context",
+        "i_ino"
       ],
       [
-        "proc_ops",
-        "inode",
-        "dir_context"
+        "journal",
+        "dirty",
+        "my_show"
       ]
     ]
   },
@@ -651,19 +651,19 @@
     "explanation": "커널 파일 시스템을 구현할 때 super_operations는 inode 할당/해제, 파일 시스템 정보 조회 등의 연산을, inode_operations는 디렉토리 내 파일 탐색(lookup), 생성(create), 디렉토리 생성(mkdir) 등의 연산을 정의합니다. fill_super 함수에서 sb->s_op에 super_operations를 설정하여 VFS가 해당 연산을 호출할 수 있게 합니다.",
     "blankDistractors": [
       [
-        "my_fops",
-        "ordered",
-        "read"
+        "journal",
+        "superblock",
+        "writeback"
       ],
       [
+        "writeback",
         "i_ino",
-        "open",
-        "read"
+        "pos"
       ],
       [
-        "dirty",
-        "copy_from_user",
-        "my_fops"
+        "writepage",
+        "writeback",
+        "vfsmount"
       ]
     ]
   },
@@ -690,18 +690,18 @@
     "explanation": "디렉토리 내용을 사용자 공간에 전달하기 위해 iterate_shared 콜백을 구현합니다. struct dir_context는 디렉토리 순회의 상태를 관리하며, dir_emit()은 디렉토리 엔트리 하나를 사용자 공간에 전달합니다. i_ino는 inode 번호, ctx->pos는 현재 디렉토리 탐색 위치를 나타내며, dir_emit_dots()는 '.'과 '..' 엔트리를 자동으로 처리합니다.",
     "blankDistractors": [
       [
-        "proc_ops",
-        "open",
-        "st_size"
-      ],
-      [
-        "st_size",
-        "myfs_alloc_inode",
-        "inode"
-      ],
-      [
-        "myfs_s_ops",
+        "readpage",
         "kobject",
+        "writepage"
+      ],
+      [
+        "journal",
+        "proc_ops",
+        "kobject"
+      ],
+      [
+        "inode_operations",
+        "journal",
         "inode"
       ]
     ]

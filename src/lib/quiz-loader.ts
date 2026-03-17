@@ -16,6 +16,8 @@ import kernelObservabilityDebugging from "../../data/linux-kernel/kernel-observa
 import containersIsolation from "../../data/linux-kernel/containers-isolation.json";
 import blockStorageIo from "../../data/linux-kernel/block-storage-io.json";
 import arm64Architecture from "../../data/linux-kernel/arm64-architecture.json";
+import arm64CacheMemory from "../../data/linux-kernel/arm64-cache-memory.json";
+import arm64VirtPower from "../../data/linux-kernel/arm64-virtualization-power.json";
 import linuxDevConversation from "../../data/linux-kernel/dev-conversation.json";
 import linuxTerminalLab from "../../data/linux-kernel/terminal-lab.json";
 
@@ -34,6 +36,7 @@ import bootIntegrityUpdates from "../../data/android-system/boot-integrity-updat
 import platformDebuggingPerformance from "../../data/android-system/platform-debugging-performance.json";
 import platformModularityVirtualization from "../../data/android-system/platform-modularity-virtualization.json";
 import arm64Platform from "../../data/android-system/arm64-platform.json";
+import arm64Development from "../../data/android-system/arm64-development.json";
 import androidDevConversation from "../../data/android-system/dev-conversation.json";
 import androidTerminalLab from "../../data/android-system/terminal-lab.json";
 
@@ -53,6 +56,8 @@ const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
     "containers-isolation": containersIsolation as Quiz[],
     "block-storage-io": blockStorageIo as Quiz[],
     "arm64-architecture": arm64Architecture as Quiz[],
+    "arm64-cache-memory": arm64CacheMemory as Quiz[],
+    "arm64-virtualization-power": arm64VirtPower as Quiz[],
     "dev-conversation": linuxDevConversation as Quiz[],
     "terminal-lab": linuxTerminalLab as unknown as Quiz[],
   },
@@ -71,6 +76,7 @@ const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
     "platform-debugging-performance": platformDebuggingPerformance as Quiz[],
     "platform-modularity-virtualization": platformModularityVirtualization as Quiz[],
     "arm64-platform": arm64Platform as Quiz[],
+    "arm64-development": arm64Development as Quiz[],
     "dev-conversation": androidDevConversation as Quiz[],
     "terminal-lab": androidTerminalLab as unknown as Quiz[],
   },

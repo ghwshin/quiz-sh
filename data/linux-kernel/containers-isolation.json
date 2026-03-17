@@ -174,9 +174,9 @@
     "explanation": "unshare 명령어는 지정한 namespace를 새로 생성하고 현재 프로세스(또는 자식 프로세스)를 그 namespace에서 실행합니다. 내부적으로 unshare(2) 시스템 콜을 호출하며, --pid, --mount, --net 등의 플래그로 생성할 namespace 유형을 지정합니다.",
     "blankDistractors": [
       [
-        "memory.events",
-        "veth1",
-        "slave"
+        "inheritable",
+        "effective",
+        "veth1"
       ]
     ]
   },
@@ -195,9 +195,9 @@
     "explanation": "nsenter 명령어는 /proc/<pid>/ns/ 디렉토리의 namespace 파일 디스크립터를 통해 기존 namespace에 진입합니다. 예를 들어 nsenter --target <pid> --mount --pid --net 명령으로 대상 프로세스의 mount, PID, network namespace에 동시에 진입할 수 있습니다. 컨테이너 내부 디버깅의 필수 도구입니다.",
     "blankDistractors": [
       [
-        "effective",
-        "unshare",
-        "some"
+        "some",
+        "oom",
+        "cpuset"
       ]
     ]
   },
@@ -222,19 +222,19 @@
     "explanation": "cgroup v2의 cpu 컨트롤러는 cpu.max 파일을 통해 CPU 대역폭을 제한합니다. cpuset 컨트롤러는 cpuset.cpus 파일로 특정 CPU 코어를 할당하여 프로세스를 바인딩합니다. memory 컨트롤러는 memory.max, memory.high 등의 파일로 메모리 사용량을 제한하고 계측합니다.",
     "blankDistractors": [
       [
-        "memory.max",
-        "ambient",
-        "propagation"
-      ],
-      [
         "veth0",
-        "Cap",
-        "nsenter"
+        "memory.events",
+        "oom_score_adj"
       ],
       [
-        "slave",
-        "oom_score_adj",
-        "memory.events"
+        "cgroup.subtree_control",
+        "oom",
+        "ambient"
+      ],
+      [
+        "some",
+        "ambient",
+        "oom"
       ]
     ]
   },
@@ -256,14 +256,14 @@
     "explanation": "oom_score_adj는 각 프로세스의 OOM score를 가감하여 OOM killer 대상 우선순위를 조절합니다. -1000으로 설정하면 OOM kill에서 제외되고, 1000이면 가장 먼저 종료 대상이 됩니다. cgroup의 memory.max는 해당 그룹의 절대적 메모리 상한이며, 이를 초과하면 cgroup 수준의 OOM killer가 발동됩니다.",
     "blankDistractors": [
       [
+        "inheritable",
         "slave",
-        "full",
-        "oom"
+        "effective"
       ],
       [
-        "ambient",
-        "Cap",
-        "oom"
+        "veth0",
+        "full",
+        "effective"
       ]
     ]
   },
@@ -291,19 +291,19 @@
     "explanation": "effective 집합은 커널이 권한 검사 시 실제로 확인하는 capability 목록입니다. inheritable 집합은 execve 시 새 프로그램의 inheritable 집합과 AND 연산되어 전달됩니다. ambient 집합은 커널 4.3에 추가되어, file capability가 없는 비특권 프로그램도 execve 시 capability를 유지할 수 있게 합니다.",
     "blankDistractors": [
       [
-        "veth0",
+        "oom",
+        "memory.events",
+        "veth0"
+      ],
+      [
         "unshare",
-        "oom_score_adj"
+        "cpuset",
+        "slave"
       ],
       [
-        "oom_score_adj",
-        "cgroup.subtree_control",
-        "propagation"
-      ],
-      [
-        "propagation",
-        "Cap",
-        "veth1"
+        "some",
+        "oom",
+        "memory.max"
       ]
     ]
   },
@@ -328,14 +328,14 @@
     "explanation": "mount propagation은 mount namespace 간에 마운트/언마운트 이벤트가 전파되는 방식을 제어합니다. shared는 양방향 전파, slave는 마스터에서 슬레이브로만 단방향 전파, private는 전파 없음, unbindable은 private이면서 bind mount도 불가합니다. 컨테이너에서 잘못된 propagation 설정은 호스트 파일시스템 노출이나 마운트 누수를 유발할 수 있습니다.",
     "blankDistractors": [
       [
-        "memory.max",
-        "unshare",
-        "ambient"
+        "cpuset",
+        "memory",
+        "effective"
       ],
       [
-        "veth0",
-        "veth1",
-        "some"
+        "full",
+        "oom",
+        "veth0"
       ]
     ]
   },
@@ -357,14 +357,14 @@
     "explanation": "PSI의 some 지표는 하나 이상의 태스크가 특정 자원(CPU, memory, I/O)을 기다리고 있지만 다른 태스크는 실행 중인 부분적 경합 상태를 나타냅니다. full 지표는 모든 태스크가 자원을 기다려 유용한 작업이 전혀 진행되지 않는 완전한 stall 상태를 의미합니다. full은 some보다 심각한 자원 압박을 나타내며, CPU의 경우 full 지표는 파일에 존재하지만 모든 태스크가 CPU를 기다리는 상태는 일반적으로 발생하지 않으므로 항상 0으로 보고됩니다.",
     "blankDistractors": [
       [
-        "cgroup.subtree_control",
-        "cpuset",
-        "memory.current"
+        "unshare",
+        "cpu",
+        "cgroup.controllers"
       ],
       [
-        "ambient",
-        "cpuset",
-        "Cap"
+        "memory.max",
+        "cgroup.subtree_control",
+        "oom"
       ]
     ]
   },
@@ -392,19 +392,19 @@
     "explanation": "SECCOMP_RET_ALLOW는 시스템 콜을 정상 통과시킵니다. SECCOMP_RET_ERRNO는 시스템 콜을 차단하고 지정된 errno를 반환합니다. SECCOMP_RET_KILL_PROCESS(커널 4.14+)는 전체 프로세스(스레드 그룹)를 SIGSYS로 종료합니다. 이와 구별되는 SECCOMP_RET_KILL_THREAD(=SECCOMP_RET_KILL)는 해당 스레드만 종료합니다. 이 외에도 SECCOMP_RET_TRAP(SIGSYS 시그널 전달), SECCOMP_RET_LOG(허용하되 로그 기록) 등의 동작이 있습니다.",
     "blankDistractors": [
       [
-        "SCMP_ACT_ALLOW",
         "EPERM",
-        "TASK_RUNNING"
+        "SCMP_ACT_ALLOW",
+        "LDAR"
       ],
       [
         "EPERM",
         "SCMP_ACT_ALLOW",
-        "IPC"
+        "VTTBR_EL2"
       ],
       [
-        "EPERM",
         "SCMP_ACT_ALLOW",
-        "NAPI"
+        "EPERM",
+        "STLR"
       ]
     ]
   },
@@ -434,9 +434,9 @@
     "explanation": "unshare --pid는 새로운 PID namespace, --mount는 새로운 mount namespace, --user는 새로운 user namespace를 생성합니다. --fork 플래그는 PID namespace가 올바르게 동작하도록 새로운 자식 프로세스를 생성하여 그 안에서 명령을 실행합니다. PID namespace를 사용할 때 --fork를 빠뜨리면 PID 1이 되지 않아 예상대로 동작하지 않습니다.",
     "blankDistractors": [
       [
+        "10.0.0.2/24",
         "--decode",
-        "50000 100000",
-        "10.0.0.2/24"
+        "50000 100000"
       ],
       [
         "10.0.0.2/24",
@@ -444,9 +444,9 @@
         "50000 100000"
       ],
       [
-        "--decode",
         "50000 100000",
-        "10.0.0.2/24"
+        "10.0.0.2/24",
+        "--decode"
       ]
     ]
   },
@@ -470,14 +470,14 @@
     "explanation": "cgroup.controllers 파일은 해당 cgroup에서 사용 가능한 컨트롤러 목록을 보여줍니다. cgroup.subtree_control 파일에 '+컨트롤러명'을 기록하면 자식 cgroup에서 해당 컨트롤러가 활성화됩니다. '-컨트롤러명'으로 비활성화할 수도 있습니다. cgroup v2에서는 이 계층적 위임 모델을 통해 자원 제어가 이루어집니다.",
     "blankDistractors": [
       [
-        "oom",
-        "cpuset",
-        "memory.max"
+        "oom_score_adj",
+        "effective",
+        "some"
       ],
       [
-        "nsenter",
-        "memory.max",
-        "cpu"
+        "inheritable",
+        "full",
+        "cpuset"
       ]
     ]
   },
@@ -502,14 +502,14 @@
     "explanation": "memory.max에는 바이트 단위 값(268435456 = 256*1024*1024)을 기록하여 메모리 상한을 설정합니다. cpu.max는 'quota period' 형식으로, 50000 100000은 100ms(100000μs) 주기 중 50ms(50000μs)만큼 CPU를 사용할 수 있음을 의미합니다. 이는 단일 CPU 코어의 50% 대역폭에 해당합니다.",
     "blankDistractors": [
       [
-        "1019",
+        "1",
         "3",
-        "4"
+        "12"
       ],
       [
-        "10.0.0.2/24",
+        "--user",
         "--mount",
-        "--decode"
+        "--pid"
       ]
     ]
   },
@@ -535,14 +535,14 @@
     "explanation": "/proc/<pid>/status 파일에서 Cap으로 시작하는 줄들(CapInh, CapPrm, CapEff, CapBnd, CapAmb)은 각각 inheritable, permitted, effective, bounding, ambient capability 집합의 16진수 비트마스크를 보여줍니다. capsh --decode=<hex_value> 명령으로 이 16진수 값을 CAP_NET_ADMIN 등 사람이 읽을 수 있는 capability 이름으로 변환할 수 있습니다. 마스크 값은 커널 버전과 설정에 따라 다를 수 있습니다.",
     "blankDistractors": [
       [
-        "memory.current",
+        "unshare",
         "effective",
-        "cpuset"
+        "veth0"
       ],
       [
+        "50000 100000",
         "--mount",
-        "--user",
-        "50000 100000"
+        "--pid"
       ]
     ]
   },
@@ -570,9 +570,9 @@
     "explanation": "seccomp_init(SCMP_ACT_ALLOW)는 기본적으로 모든 시스템 콜을 허용하는 필터를 생성합니다(화이트리스트 방식의 반대인 블랙리스트 방식). seccomp_rule_add로 특정 시스템 콜에 대한 예외 규칙을 추가하며, SCMP_ACT_ERRNO(EPERM)은 해당 시스템 콜 호출 시 EPERM 에러를 반환합니다. seccomp_load(ctx)로 커널에 필터를 적용합니다.",
     "blankDistractors": [
       [
+        "ERRNO",
         "KILL_PROCESS",
-        "ALLOW",
-        "ERRNO"
+        "ALLOW"
       ],
       [
         "ALLOW",
@@ -580,9 +580,9 @@
         "ERRNO"
       ],
       [
-        "pci_ioremap_bar(pdev, 0)",
-        "pipe(fd)",
-        "chdir(\"/\")"
+        "fork()",
+        "smp_wmb()",
+        "rcu_read_unlock()"
       ]
     ]
   },
@@ -612,24 +612,24 @@
     "explanation": "veth(Virtual Ethernet)는 항상 쌍으로 생성되며, 한쪽으로 들어간 패킷이 다른 쪽으로 나옵니다. ip link set <dev> netns 명령으로 네트워크 인터페이스를 다른 network namespace로 이동시킬 수 있습니다. 호스트와 컨테이너의 veth 끝단에 같은 서브넷의 IP를 할당하면 네트워크 통신이 가능해집니다. Docker, Kubernetes 등의 컨테이너 네트워킹의 기본 원리가 이 veth + netns 조합입니다.",
     "blankDistractors": [
       [
-        "oom_score_adj",
+        "effective",
+        "memory.max",
+        "memory.events"
+      ],
+      [
         "memory.current",
-        "full"
-      ],
-      [
-        "memory.events",
-        "nsenter",
-        "oom_score_adj"
-      ],
-      [
         "memory",
-        "cgroup.controllers",
-        "memory.max"
+        "slave"
       ],
       [
+        "slave",
+        "inheritable",
+        "cgroup.controllers"
+      ],
+      [
+        "--mount",
         "50000 100000",
-        "--decode",
-        "--pid"
+        "--user"
       ]
     ]
   },
@@ -662,19 +662,19 @@
     "explanation": "memory.events 파일은 low, high, max, oom, oom_kill, oom_group_kill 등의 이벤트 카운터를 포함하며, oom_kill 값이 해당 cgroup에서 OOM kill이 발생한 횟수입니다. dmesg에서 oom 관련 메시지를 검색하면 어떤 프로세스가 종료되었는지, 당시 메모리 상태는 어땠는지 확인할 수 있습니다. memory.current는 현재 메모리 사용량을, memory.stat는 상세 메모리 통계를 제공합니다.",
     "blankDistractors": [
       [
-        "cpu",
-        "some",
-        "Cap"
+        "cgroup.subtree_control",
+        "oom_score_adj",
+        "full"
       ],
       [
-        "memory.max",
-        "propagation",
-        "unshare"
+        "memory",
+        "veth1",
+        "nsenter"
       ],
       [
-        "Cap",
-        "memory.max",
-        "memory"
+        "veth1",
+        "cgroup.controllers",
+        "inheritable"
       ]
     ]
   }

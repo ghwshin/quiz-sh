@@ -74,18 +74,18 @@
     "blankDistractors": [
       [
         "링커 네임스페이스",
-        "주황색",
-        "프로세스"
+        "녹색",
+        "우선순위"
       ],
       [
         "링커 네임스페이스",
-        "광범위한 권한",
-        "최소 권한"
+        "하위 호환성",
+        "디스크립터"
       ],
       [
         "링커 네임스페이스",
-        "같은 프로세스",
-        "기밀성"
+        "녹색",
+        "선언적"
       ]
     ]
   },
@@ -117,14 +117,14 @@
         "10"
       ],
       [
-        "surfaceflinger",
-        "installd",
-        "public"
+        "getSystemService",
+        "public",
+        "servicemanager"
       ],
       [
-        "native",
-        "servicemanager",
-        "Java_com_example_app_"
+        "get",
+        "Java_com_example_app_",
+        "vendor"
       ]
     ]
   },
@@ -148,14 +148,14 @@
     "explanation": "SystemProperties.get()은 시스템 프로퍼티 값을 읽으며, 두 번째 인자는 프로퍼티가 없을 때의 기본값입니다. SystemProperties.set()은 프로퍼티 값을 설정하며, 시스템 권한이 필요합니다. 'ro.' 접두사가 붙은 프로퍼티는 읽기 전용이고, 'persist.' 접두사가 붙은 프로퍼티는 재부팅 후에도 유지됩니다.",
     "blankDistractors": [
       [
-        "surfaceflinger",
-        "public",
-        "private"
+        "Java_com_example_app_",
+        "vendor",
+        "surfaceflinger"
       ],
       [
-        "system",
-        "Java_com_example_app_",
-        "registerAsService"
+        "servicemanager",
+        "public",
+        "mmap"
       ]
     ]
   },
@@ -179,14 +179,14 @@
     "explanation": "System.loadLibrary()는 JNI 네이티브 라이브러리(.so 파일)를 로드합니다. 'mylib'을 인자로 전달하면 libmylib.so를 로드합니다. native 키워드는 해당 메서드의 구현이 네이티브 코드(C/C++)에 있음을 선언합니다. JNI는 Android Framework와 네이티브 라이브러리 사이의 브릿지 역할을 합니다.",
     "blankDistractors": [
       [
-        "servicemanager",
+        "getSystemService",
         "JNIEnv",
-        "interface"
+        "vendor"
       ],
       [
+        "system",
         "boot",
-        "allow",
-        "Java_com_example_app_"
+        "interface"
       ]
     ]
   },
@@ -210,14 +210,14 @@
     "explanation": "getSystemService()는 Android Framework가 제공하는 시스템 서비스에 접근하기 위한 메서드입니다. Context 클래스에 정의된 상수(ACTIVITY_SERVICE, CONNECTIVITY_SERVICE 등)를 인자로 전달하여 해당 서비스의 매니저 객체를 얻습니다. 내부적으로 Binder IPC를 통해 시스템 서버의 서비스와 통신합니다.",
     "blankDistractors": [
       [
-        "installd",
-        "vendor",
-        "surfaceflinger"
+        "public",
+        "mmap",
+        "allow"
       ],
       [
-        "property",
-        "boot",
-        "private"
+        "JNIEnv",
+        "registerAsService",
+        "Java_com_example_app_"
       ]
     ]
   },
@@ -310,24 +310,24 @@
     "explanation": "Treble 아키텍처 이후 system과 vendor 파티션의 분리가 강화되었습니다. 이외에도 recovery(복구 모드), cache(임시 데이터), metadata(암호화 메타데이터) 등의 파티션이 존재하며, Android 10부터는 super 파티션을 통한 동적 파티셔닝이 도입되었습니다.",
     "blankDistractors": [
       [
-        "dex2oat",
-        "private",
-        "init.rc"
+        "one-copy",
+        "installd",
+        "dex2oat"
+      ],
+      [
+        "mmap",
+        "native",
+        "public"
       ],
       [
         "JNIEnv",
-        "loadLibrary",
-        "surfaceflinger"
+        "registerAsService",
+        "init.rc"
       ],
       [
-        "property",
-        "servicemanager",
-        "get"
-      ],
-      [
-        "set",
+        "Java_com_example_app_",
         "dex2oat",
-        "registerAsService"
+        "native"
       ]
     ]
   },
@@ -355,19 +355,19 @@
     "explanation": "Binder는 일반적인 IPC(pipe, socket 등)와 달리 데이터 복사가 한 번만 이루어져 성능이 우수합니다. 커널 공간에서 송신 프로세스의 데이터를 수신 프로세스의 mmap된 영역에 직접 복사하는 방식입니다. 또한 커널이 호출자의 UID/PID를 보장하므로 보안 인증에도 활용됩니다.",
     "blankDistractors": [
       [
-        "/data/anr/traces.txt",
-        "/data/data/",
-        "/dev/vndbinder"
+        "/dev",
+        "/dev/vndbinder",
+        ".hal"
       ],
       [
-        "dex2oat",
-        "Java_com_example_app_",
-        "surfaceflinger"
+        "vendor",
+        "system",
+        "allow"
       ],
       [
+        "installd",
         "property",
-        "userdata",
-        "set"
+        "vendor"
       ]
     ]
   },
@@ -394,19 +394,19 @@
     "explanation": "이러한 native daemon들은 Android 프레임워크보다 먼저 시작되어 시스템의 기반 서비스를 제공합니다. 그 외에도 logd(로깅), vold(볼륨 관리), netd(네트워크 관리), healthd(배터리/충전 관리) 등이 있습니다.",
     "blankDistractors": [
       [
-        "getSystemService",
+        "public",
+        "one-copy",
+        "mmap"
+      ],
+      [
         "registerAsService",
-        "dex2oat"
+        "vendor",
+        "JNIEnv"
       ],
       [
-        "init.rc",
-        "boot",
-        "public"
-      ],
-      [
-        "boot",
-        "mmap",
-        "property"
+        "public",
+        "loadLibrary",
+        "vendor"
       ]
     ]
   },
@@ -427,9 +427,9 @@
     "explanation": "AIDL 파일에서 interface 키워드를 사용하여 Binder 서비스의 인터페이스를 정의합니다. AIDL 컴파일러가 이를 기반으로 Stub(서버 측)과 Proxy(클라이언트 측) 코드를 자동 생성합니다. oneway 키워드는 비동기 호출을 의미하며, 호출자가 응답을 기다리지 않습니다. AIDL은 프레임워크 수준의 IPC 인터페이스 정의에 사용됩니다.",
     "blankDistractors": [
       [
-        "getSystemService",
-        "property",
-        "get"
+        "loadLibrary",
+        "installd",
+        "surfaceflinger"
       ]
     ]
   },
@@ -453,14 +453,14 @@
     "explanation": "JNI 네이티브 함수의 이름은 'Java_패키지명_클래스명_메서드명' 형식을 따릅니다. com.example.app 패키지의 NativeBridge 클래스이므로 접두사는 Java_com_example_app_이 됩니다. 첫 번째 매개변수는 JNIEnv 포인터로, JNI 함수들(NewStringUTF, FindClass 등)에 접근할 수 있게 해줍니다. JNI는 Java/Kotlin 코드와 C/C++ 네이티브 코드 사이의 브릿지 역할을 하며, Android Framework의 많은 기능이 이를 통해 네이티브 라이브러리와 연결됩니다.",
     "blankDistractors": [
       [
-        "servicemanager",
-        "loadLibrary",
-        "registerAsService"
+        "set",
+        "userdata",
+        "getSystemService"
       ],
       [
-        "public",
-        "installd",
-        "set"
+        "vendor",
+        "property",
+        "init.rc"
       ]
     ]
   },
@@ -536,18 +536,18 @@
     "blankDistractors": [
       [
         "JIT",
-        "TARGET_KERNEL_CONFIG",
-        "BOARD_SYSTEMIMAGE_PARTITION_SIZE"
+        "SMC_TYPE_FAST",
+        "UID"
       ],
       [
         "JIT",
-        "PSI",
-        "DIST_DIR"
+        "LMK",
+        "UID"
       ],
       [
-        "인터페이스",
         "벤더",
-        "메모리"
+        "인터페이스",
+        "동시에"
       ]
     ]
   },
@@ -578,29 +578,29 @@
     "explanation": "이 구조는 Treble의 핵심 원칙인 시스템-벤더 분리를 보안 정책 수준에서도 구현합니다. 호환성 매핑(compatibility mapping) 파일을 통해 이전 platform 버전의 public 타입이 새 버전의 타입으로 매핑되어, 벤더 정책의 하위 호환성을 보장합니다.",
     "blankDistractors": [
       [
-        "vendor",
-        "init.rc",
-        "set"
-      ],
-      [
-        "userdata",
-        "installd",
-        "vendor"
-      ],
-      [
-        "loadLibrary",
-        "JNIEnv",
-        "servicemanager"
-      ],
-      [
         "interface",
+        "property",
+        "system"
+      ],
+      [
+        "boot",
+        "one-copy",
+        "registerAsService"
+      ],
+      [
+        "allow",
         "getSystemService",
         "Java_com_example_app_"
       ],
       [
-        "surfaceflinger",
-        "native",
-        "set"
+        "interface",
+        "mmap",
+        "system"
+      ],
+      [
+        "allow",
+        "servicemanager",
+        "native"
       ]
     ]
   },
@@ -628,17 +628,17 @@
       [
         "VNDK",
         "LLNDK",
-        "PELT"
+        "PRODUCT_PACKAGES"
       ],
       [
-        "native",
-        "loadLibrary",
-        "interface"
+        "allow",
+        "mmap",
+        "get"
       ],
       [
-        "ANDROID_SOCKET_<name>",
-        "linker namespace",
-        "Google Play"
+        "<pid>",
+        "arm_spe//",
+        "Energy Model"
       ]
     ]
   },
@@ -662,14 +662,14 @@
     "explanation": "HIDL에서 interface 키워드로 HAL 인터페이스를 정의하며, generates 절로 반환값을 지정합니다. registerAsService()를 호출하여 hwservicemanager에 서비스를 등록하면, 클라이언트가 IMyHal::getService()를 통해 접근할 수 있습니다. configureRpcThreadpool은 Binder 스레드 풀을 설정하고, joinRpcThreadpool은 메인 스레드를 Binder 처리에 합류시킵니다.",
     "blankDistractors": [
       [
-        "system",
-        "getSystemService",
-        "set"
+        "loadLibrary",
+        "public",
+        "JNIEnv"
       ],
       [
-        "system",
-        "getSystemService",
-        "init.rc"
+        "boot",
+        "mmap",
+        "system"
       ]
     ]
   },
@@ -693,14 +693,14 @@
     "explanation": "SELinux 정책에서 allow 규칙은 '소스 도메인이 타겟 타입의 특정 클래스에 대해 지정된 퍼미션을 허용한다'는 것을 의미합니다. init_daemon_domain() 매크로는 init 프로세스가 myservice_exec 타입의 파일을 실행할 때 myservice 도메인으로 자동 전환되도록 설정합니다. Android에서는 기본적으로 모든 접근이 거부(deny)되므로, 필요한 접근에 대해 명시적으로 allow 규칙을 정의해야 합니다.",
     "blankDistractors": [
       [
+        "set",
         "init.rc",
-        "get",
-        "set"
+        "vendor"
       ],
       [
-        "get",
-        "vendor",
-        "registerAsService"
+        "private",
+        "servicemanager",
+        "userdata"
       ]
     ]
   }

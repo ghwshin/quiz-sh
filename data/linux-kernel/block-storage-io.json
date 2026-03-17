@@ -179,14 +179,14 @@
     "explanation": "Major number는 해당 블록 디바이스를 담당하는 드라이버를 식별합니다(예: SCSI 디스크는 8). Minor number는 같은 드라이버가 관리하는 개별 디바이스나 파티션을 구분합니다(예: sda=0, sda1=1, sda2=2). ls -l /dev/sda로 확인할 수 있으며, /proc/devices에서 major 번호와 드라이버 매핑을 볼 수 있습니다.",
     "blankDistractors": [
       [
-        "free",
-        "result",
-        "status"
+        "stat",
+        "ext4",
+        "sector"
       ],
       [
-        "mq-deadline",
-        "logical_block_size",
-        "result"
+        "stat",
+        "lsblk",
+        "ext4"
       ]
     ]
   },
@@ -208,13 +208,13 @@
     "explanation": "lsblk 명령은 시스템에 연결된 블록 디바이스를 트리 구조로 보여주며, 디바이스 이름, 크기, 타입, 마운트 포인트 등을 한눈에 확인할 수 있습니다. /sys/block/ 디렉토리에는 커널이 인식한 각 블록 디바이스의 sysfs 항목이 존재하며, 큐 파라미터, 스케줄러, 통계 정보 등을 파일 형태로 제공합니다.",
     "blankDistractors": [
       [
-        "ext4",
-        "blktrace",
-        "logical_block_size"
+        "status",
+        "blkparse",
+        "dm-0"
       ],
       [
-        ".dts",
         "/proc/kallsyms",
+        "/sbin/init",
         "/etc/default/grub"
       ]
     ]
@@ -247,17 +247,17 @@
       [
         "dynamic partitions",
         "hardware queue",
-        "page fault"
+        "--decode"
       ],
       [
-        "software",
-        "dm-linear",
-        "dm-snapshot"
+        "minor",
+        "ext4",
+        "sda"
       ],
       [
-        "mounts",
-        "dirty",
-        "posix_memalign"
+        "posix_memalign",
+        "dm-0",
+        "stat"
       ]
     ]
   },
@@ -282,14 +282,14 @@
     "explanation": "Flush 명령(REQ_PREFLUSH)은 디바이스의 volatile write cache에 있는 모든 데이터를 비휘발성 매체에 기록하도록 강제합니다. FUA(Force Unit Access, REQ_FUA) 플래그는 해당 쓰기 요청의 데이터가 volatile cache를 우회하여 바로 영구 매체에 기록되도록 합니다. 파일시스템의 저널 커밋 등 데이터 무결성이 중요한 상황에서 이 두 메커니즘이 사용됩니다.",
     "blankDistractors": [
       [
-        "minor",
-        "writeback",
-        "hardware"
+        "sda",
+        "blktrace",
+        "stat"
       ],
       [
         "O_DIRECT",
-        "IRQ_HANDLED",
-        "DEVICE_ATTR"
+        "IRQ_NONE",
+        "SIGTERM"
       ]
     ]
   },
@@ -313,14 +313,14 @@
     "explanation": "파일에 쓰기를 하면 해당 page cache 페이지가 dirty로 표시됩니다. 커널의 writeback 스레드(bdi-default 워커)가 dirty_expire_centisecs 등의 파라미터에 따라 주기적으로 dirty 페이지를 block layer에 bio로 제출합니다. sync(), fsync() 같은 명시적 호출도 dirty 페이지의 writeback을 트리거합니다.",
     "blankDistractors": [
       [
-        "sector",
-        "mounts",
-        "blkparse"
+        "data",
+        "dm-linear",
+        "ext4"
       ],
       [
-        "posix_memalign",
-        "sector",
-        "direct"
+        "result",
+        "scheduler",
+        "blkparse"
       ]
     ]
   },
@@ -350,19 +350,19 @@
     "explanation": "blk-mq의 software queue는 per-CPU로 존재하며 I/O 요청을 락 없이 수집합니다. I/O 스케줄러(mq-deadline, bfq 등)가 요청 순서를 조정한 후 hardware dispatch queue로 보냅니다. Hardware queue의 수는 디바이스가 제공하는 실제 큐 수(NVMe의 경우 submission queue 수)에 매핑되어, CPU 코어 수만큼 병렬 처리가 가능합니다.",
     "blankDistractors": [
       [
-        "dm-snapshot",
-        "stat",
+        "scheduler",
+        "logical_block_size",
         "lsblk"
       ],
       [
-        "ext4",
-        "dmesg",
-        "sector"
+        "lsblk",
+        "minor",
+        "dm-linear"
       ],
       [
-        "dynamic partitions",
         "page cache",
-        "int 0x80"
+        "dynamic partitions",
+        "--decode"
       ]
     ]
   },
@@ -390,19 +390,19 @@
     "explanation": "dm-linear은 여러 물리 디바이스의 영역을 연결하여 하나의 연속된 가상 블록 디바이스를 만듭니다(LVM의 기본 구성 요소). dm-verity는 해시 트리를 사용하여 읽기 전용 파티션의 블록별 무결성을 검증합니다. dm-crypt는 AES 등의 암호 알고리즘으로 블록 단위 투명 암호화를 수행합니다. 이들은 스태킹하여 조합 사용이 가능합니다.",
     "blankDistractors": [
       [
-        "software",
-        "ext4",
-        "free"
+        "dm-0",
+        "major",
+        "sector"
       ],
       [
-        "free",
-        "lsblk",
-        "sda"
+        "status",
+        "dm-snapshot",
+        "dmsetup"
       ],
       [
-        "ext4",
-        "free",
-        "posix_memalign"
+        "logical_block_size",
+        "mq-deadline",
+        "blktrace"
       ]
     ]
   },
@@ -430,12 +430,12 @@
       [
         "page cache",
         "hardware queue",
-        "struct inode"
+        "kernel timer"
       ],
       [
-        "dm-verity",
-        "dm-0",
-        "sector"
+        "dirty",
+        "sector",
+        "dm-linear"
       ]
     ]
   },
@@ -462,19 +462,19 @@
     "explanation": "lsblk -o 옵션으로 출력할 컬럼을 지정할 수 있습니다. /sys/block/<device>/queue/ 디렉토리에는 logical_block_size, physical_block_size, nr_requests 등 블록 디바이스의 큐 파라미터가 파일로 노출됩니다. logical_block_size는 디바이스가 지원하는 최소 I/O 단위를 바이트로 나타냅니다.",
     "blankDistractors": [
       [
-        "mounts",
-        "mq-deadline",
-        "posix_memalign"
-      ],
-      [
-        "status",
         "ext4",
-        "writeback"
+        "flush",
+        "stat"
       ],
       [
-        "sector",
-        "stat",
-        "ext4"
+        "scheduler",
+        "data",
+        "major"
+      ],
+      [
+        "dm-snapshot",
+        "dm-crypt",
+        "mounts"
       ]
     ]
   },
@@ -501,19 +501,19 @@
     "explanation": "/proc/mounts는 커널이 관리하는 현재 마운트 목록을 실시간으로 보여주며, /etc/mtab보다 정확합니다. mount 명령에서 -t 옵션으로 파일시스템 타입을 지정하고, 소스 디바이스와 마운트 포인트를 인자로 전달합니다. findmnt 명령도 마운트 정보를 트리 구조로 보여주는 유용한 도구입니다.",
     "blankDistractors": [
       [
-        "flush",
-        "posix_memalign",
-        "dmesg"
-      ],
-      [
-        "software",
-        "dm-verity",
-        "dm-crypt"
+        "lsblk",
+        "dmsetup",
+        "scheduler"
       ],
       [
         "writeback",
-        "blktrace",
-        "dm-linear"
+        "dm-linear",
+        "dm-0"
+      ],
+      [
+        "dmesg",
+        "free",
+        "hardware"
       ]
     ]
   },
@@ -540,19 +540,19 @@
     "explanation": "/sys/block/<dev>/stat 파일은 읽기/쓰기 완료 횟수, 전송 섹터 수, I/O 대기 시간 등의 통계를 제공합니다(커널 4.18+ 기준 17개 필드, 이전 버전은 11개). /sys/block/<dev>/queue/scheduler에는 사용 가능한 스케줄러 목록이 표시되며 현재 활성 스케줄러가 대괄호로 감싸져 있습니다. echo로 스케줄러 이름을 쓰면 런타임에 변경할 수 있습니다.",
     "blankDistractors": [
       [
-        "dm-0",
-        "dm-verity",
+        "dm-linear",
+        "data",
         "sector"
       ],
       [
-        "hardware",
-        "logical_block_size",
-        "mounts"
+        "flush",
+        "dmesg",
+        "dmsetup"
       ],
       [
-        "posix_memalign",
-        "dmsetup",
-        "blkparse"
+        "ext4",
+        "logical_block_size",
+        "overlay"
       ]
     ]
   },
@@ -576,14 +576,14 @@
     "explanation": "dmsetup table 명령은 모든 device-mapper 디바이스의 target 타입과 매핑 테이블을 출력합니다(예: linear, crypt, verity 등의 target과 시작 섹터, 크기, 하위 디바이스 정보). /sys/block/dm-N/slaves/ 디렉토리에는 해당 DM 디바이스가 사용하는 하위 물리 블록 디바이스에 대한 심볼릭 링크가 존재합니다.",
     "blankDistractors": [
       [
-        "dm-crypt",
-        "ext4",
-        "dm-linear"
+        "direct",
+        "scheduler",
+        "stat"
       ],
       [
-        "dm-crypt",
-        "blkparse",
-        "sector"
+        "posix_memalign",
+        "ext4",
+        "result"
       ]
     ]
   },
@@ -610,19 +610,19 @@
     "explanation": "posix_memalign()은 지정한 경계에 정렬된 메모리를 할당합니다. O_DIRECT는 page cache를 우회하는 직접 I/O를 활성화하며, 이때 사용자 버퍼의 주소와 I/O 크기가 디바이스의 논리 블록 크기(일반적으로 512 또는 4096 바이트) 경계에 정렬되어야 합니다. 정렬되지 않으면 -EINVAL 에러가 반환됩니다.",
     "blankDistractors": [
       [
-        "mq-deadline",
-        "dm-verity",
-        "major"
+        "dmesg",
+        "result",
+        "dm-verity"
       ],
       [
         "FUA",
-        "SEEK_SET",
-        "CONFIG_PREEMPT"
+        "STRTAB_STE_0_CFG_S1_TRANS",
+        "XDP_PASS"
       ],
       [
-        "dmesg",
-        "software",
-        "mq-deadline"
+        "logical_block_size",
+        "flush",
+        "writeback"
       ]
     ]
   },
@@ -652,19 +652,19 @@
     "explanation": "blktrace는 커널의 블록 레이어에서 I/O 이벤트를 수집하는 도구입니다. blkparse는 수집된 바이너리 트레이스를 Q(Queue), G(GetRequest), D(Dispatch), C(Complete) 등의 이벤트로 파싱합니다. btt(Block Trace Times)는 Q2Q, Q2G, G2I, I2D, D2C 등 각 단계별 지연 시간을 통계적으로 분석하여 I/O 병목 구간을 식별하는 데 유용합니다.",
     "blankDistractors": [
       [
-        "dm-linear",
-        "scheduler",
-        "free"
-      ],
-      [
-        "dm-crypt",
-        "dirty",
-        "dm-0"
-      ],
-      [
-        "data",
         "posix_memalign",
-        "sda"
+        "major",
+        "direct"
+      ],
+      [
+        "writeback",
+        "mq-deadline",
+        "stat"
+      ],
+      [
+        "dirty",
+        "overlay",
+        "scheduler"
       ]
     ]
   },
@@ -691,19 +691,19 @@
     "explanation": "dmesg로 커널 로그에서 overlayfs 오류(copy-up 실패, upperdir 문제 등)를 확인할 수 있습니다. mount | grep overlay로 lowerdir, upperdir, workdir 경로와 마운트 옵션을 검증합니다. dmsetup status는 dm-snapshot의 COW 영역 사용량을 보여주며, COW 공간이 가득 차면 스냅샷이 무효화(invalidated)되어 I/O 오류가 발생할 수 있으므로 주기적 모니터링이 필요합니다.",
     "blankDistractors": [
       [
-        "dm-crypt",
-        "writeback",
-        "major"
-      ],
-      [
-        "lsblk",
-        "posix_memalign",
-        "blktrace"
-      ],
-      [
-        "data",
         "mq-deadline",
-        "software"
+        "dm-linear",
+        "ext4"
+      ],
+      [
+        "major",
+        "dm-0",
+        "dm-crypt"
+      ],
+      [
+        "blktrace",
+        "posix_memalign",
+        "scheduler"
       ]
     ]
   }

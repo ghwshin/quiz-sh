@@ -67,14 +67,14 @@
     "explanation": "vruntime은 CFS의 핵심 메커니즘입니다. 우선순위가 높은(nice 값이 낮은) 프로세스는 vruntime이 더 느리게 증가하므로 더 많은 CPU 시간을 할당받게 됩니다. 트리의 가장 왼쪽 노드(가장 작은 vruntime)가 다음 실행 대상이 됩니다.",
     "blankDistractors": [
       [
-        "runtime",
-        "sched_setaffinity",
-        "sched_priority"
+        "sched_class",
+        "sched_priority",
+        "period"
       ],
       [
-        "per-CPU",
-        "runqueue",
-        "prio"
+        "sched_entity",
+        "sched_getaffinity",
+        "current"
       ]
     ]
   },
@@ -105,9 +105,9 @@
     "explanation": "컨텍스트 스위칭은 멀티태스킹의 기본 메커니즘이지만 오버헤드가 발생합니다. 레지스터 저장/복원, TLB 플러시, 캐시 미스 증가 등이 성능에 영향을 줄 수 있으며, Linux 커널은 context_switch() 함수에서 이 과정을 처리합니다.",
     "blankDistractors": [
       [
-        "비선점형",
         "선점형",
-        "nice 값"
+        "nice 값",
+        "우선순위"
       ],
       [
         "우선순위",
@@ -115,9 +115,9 @@
         "nice 값"
       ],
       [
-        "prio",
-        "sched_getscheduler",
-        "sched_yield"
+        "sched_class",
+        "sched_latency",
+        "sched_priority"
       ]
     ]
   },
@@ -145,18 +145,18 @@
     "blankDistractors": [
       [
         "스택 포인터",
-        "락",
-        "우선순위"
+        "nice 값",
+        "레지스터"
       ],
       [
-        "스택 포인터",
-        "락",
-        "우선순위"
+        "nice 값",
+        "레지스터",
+        "스택 포인터"
       ],
       [
-        "SCHED_FIFO",
         "CPU_COUNT",
-        "TASK_RUNNING"
+        "TASK_RUNNING",
+        "SCHED_FIFO"
       ]
     ]
   },
@@ -180,14 +180,14 @@
     "explanation": "getpriority(PRIO_PROCESS, 0)는 현재 프로세스의 nice 값을 반환합니다. nice() 함수는 인자로 전달된 값만큼 현재 프로세스의 nice 값을 증가시킵니다. 양수 값은 우선순위를 낮추고, 음수 값은 우선순위를 높입니다(root 권한 필요).",
     "blankDistractors": [
       [
+        "CPU_COUNT",
         "TASK_RUNNING",
-        "CONFIG_PREEMPT",
-        "CPU_COUNT"
+        "EDF"
       ],
       [
-        "runqueue",
-        "sched_yield",
-        "current"
+        "sched_min_granularity",
+        "sched_latency",
+        "task_struct"
       ]
     ]
   },
@@ -211,14 +211,14 @@
     "explanation": "sched_yield()는 호출한 스레드가 자발적으로 CPU를 양보하여 같은 우선순위의 다른 프로세스가 실행될 수 있게 합니다. sched_getscheduler(0)는 현재 프로세스의 스케줄링 정책(SCHED_NORMAL, SCHED_FIFO, SCHED_RR 등)을 반환합니다. 인자 0은 호출 프로세스 자신을 의미합니다.",
     "blankDistractors": [
       [
-        "vruntime",
-        "for_each_process",
-        "runqueue"
+        "sched_min_granularity",
+        "task_struct",
+        "sched_entity"
       ],
       [
-        "sched_setaffinity",
-        "runqueue",
-        "runtime"
+        "sched_class",
+        "sched_latency",
+        "sched_getaffinity"
       ]
     ]
   },
@@ -311,18 +311,18 @@
     "blankDistractors": [
       [
         "nice",
+        "vruntime",
+        "sched_min_granularity"
+      ],
+      [
         "sched_min_granularity",
-        "period"
+        "se",
+        "context_switch"
       ],
       [
-        "pick_next_task",
-        "for_each_process",
-        "sched_yield"
-      ],
-      [
+        "우선순위",
         "비선점형",
-        "스택 포인터",
-        "nice 값"
+        "스택 포인터"
       ]
     ]
   },
@@ -349,19 +349,19 @@
     "explanation": "sched_entity는 스케줄링 가능한 엔티티를 추상화한 구조체입니다. 하나의 태스크뿐만 아니라 그룹(task_group)도 sched_entity로 표현될 수 있어, 계층적 스케줄링이 가능합니다. task_struct의 se 멤버가 이에 해당합니다.",
     "blankDistractors": [
       [
-        "sched_setaffinity",
         "runqueue",
-        "pick_next_task"
-      ],
-      [
-        "sched_class",
         "current",
-        "sched_yield"
+        "vruntime"
       ],
       [
-        "runtime",
-        "sched_getscheduler",
-        "context_switch"
+        "per-CPU",
+        "current",
+        "sched_setaffinity"
+      ],
+      [
+        "for_each_process",
+        "vruntime",
+        "sched_setaffinity"
       ]
     ]
   },
@@ -385,13 +385,13 @@
     "explanation": "sched_getaffinity()는 프로세스가 실행 가능한 CPU 집합을 가져옵니다. 첫 번째 인자 0은 호출 프로세스 자신을 의미합니다. CPU_COUNT() 매크로는 cpu_set_t에서 설정된 CPU의 수를 반환하며, CPU_ISSET()으로 특정 CPU가 집합에 포함되어 있는지 확인할 수 있습니다. 이를 통해 load balancing이 허용하는 CPU 범위를 확인할 수 있습니다.",
     "blankDistractors": [
       [
-        "se",
-        "context_switch",
-        "current"
+        "current",
+        "sched_getscheduler",
+        "prio"
       ],
       [
-        "SCHED_FIFO",
         "CONFIG_PREEMPT",
+        "SCHED_FIFO",
         "PRIO_PROCESS"
       ]
     ]
@@ -417,13 +417,13 @@
     "blankDistractors": [
       [
         "MODULE_LICENSE(\"GPL\")",
-        "MODULE_DEVICE_TABLE(of, my_of_match)",
-        "WIFEXITED(status)"
+        "WIFEXITED(status)",
+        "MODULE_DEVICE_TABLE(of, my_of_match)"
       ],
       [
-        "sched_getscheduler",
-        "se",
-        "prio"
+        "pick_next_task",
+        "vruntime",
+        "current"
       ]
     ]
   },
@@ -447,14 +447,14 @@
     "explanation": "sched_setscheduler()는 프로세스의 스케줄링 정책과 우선순위를 변경합니다. struct sched_param의 sched_priority 멤버에 실시간 우선순위(1~99)를 설정합니다. SCHED_FIFO 정책은 동일 우선순위의 다른 프로세스보다 먼저 실행이 보장되며, root 권한이나 CAP_SYS_NICE capability가 필요합니다.",
     "blankDistractors": [
       [
-        "per-CPU",
-        "runtime",
-        "current"
+        "nice",
+        "sched_min_granularity",
+        "sched_setaffinity"
       ],
       [
+        "CONFIG_PREEMPT",
         "TASK_RUNNING",
-        "PRIO_PROCESS",
-        "CPU_COUNT"
+        "EDF"
       ]
     ]
   },
@@ -530,19 +530,19 @@
     "explanation": "pick_next_task()는 스케줄러의 핵심 로직으로, 스케줄링 클래스 추상화를 통해 다양한 스케줄링 정책을 통합적으로 관리합니다. 각 스케줄링 클래스는 sched_class 구조체에 자신의 pick_next_task 콜백을 등록합니다.",
     "blankDistractors": [
       [
+        "sched_yield",
         "sched_getscheduler",
-        "sched_min_granularity",
-        "current"
+        "per-CPU"
       ],
       [
-        "스택 포인터",
         "선점형",
-        "레지스터"
+        "비선점형",
+        "스택 포인터"
       ],
       [
-        "vruntime",
-        "sched_priority",
-        "task_struct"
+        "sched_getaffinity",
+        "sched_yield",
+        "runqueue"
       ]
     ]
   },
@@ -568,19 +568,19 @@
     "explanation": "이 동적 time slice 방식 덕분에 CFS는 프로세스 수에 관계없이 공정한 CPU 분배를 유지합니다. nice 값이 1 차이 날 때 약 1.25배의 가중치 차이가 발생하도록 설계되어 있으며, 이는 prio_to_weight[] 배열에 정의되어 있습니다. sched_min_granularity는 각 프로세스에 보장되는 최소 실행 시간으로, sched_latency와 상호작용합니다. 프로세스 수가 많아져 sched_latency를 가중치로 나눈 값이 sched_min_granularity보다 작아지면, sched_min_granularity가 적용되어 실제 스케줄링 주기가 sched_latency보다 길어질 수 있습니다.",
     "blankDistractors": [
       [
-        "sched_getscheduler",
+        "sched_class",
         "task_struct",
-        "prio"
+        "sched_priority"
       ],
       [
-        "스택 포인터",
-        "락",
-        "우선순위"
+        "레지스터",
+        "우선순위",
+        "스택 포인터"
       ],
       [
-        "se",
-        "vruntime",
-        "per-CPU"
+        "red-black",
+        "for_each_process",
+        "sched_getscheduler"
       ]
     ]
   },
@@ -607,18 +607,18 @@
     "blankDistractors": [
       [
         "CONFIG_PREEMPT",
-        "CPU_COUNT",
+        "SCHED_FIFO",
         "TASK_RUNNING"
       ],
       [
-        "sched_getaffinity",
-        "pick_next_task",
-        "sched_yield"
+        "prio",
+        "sched_getscheduler",
+        "per-CPU"
       ],
       [
-        "sched_class",
-        "sched_entity",
-        "sched_getscheduler"
+        "sched_min_granularity",
+        "sched_priority",
+        "vruntime"
       ]
     ]
   },
@@ -642,14 +642,14 @@
     "explanation": "current 매크로는 현재 CPU에서 실행 중인 태스크의 task_struct 포인터를 반환합니다. task_struct에는 세 가지 우선순위 필드가 있습니다: static_prio는 nice 값에서 파생된 정적 우선순위, normal_prio는 스케줄링 정책을 고려한 정규 우선순위, prio는 우선순위 역전 방지 등을 위해 일시적으로 조정될 수 있는 동적 우선순위입니다.",
     "blankDistractors": [
       [
-        "runqueue",
-        "sched_getaffinity",
-        "vruntime"
+        "vruntime",
+        "sched_latency",
+        "red-black"
       ],
       [
-        "sched_getscheduler",
-        "for_each_process",
-        "context_switch"
+        "task_struct",
+        "sched_priority",
+        "sched_getaffinity"
       ]
     ]
   },
@@ -673,13 +673,13 @@
     "explanation": "for_each_process()는 시스템의 모든 태스크를 순회하는 매크로로, init_task부터 시작하여 tasks 리스트를 따라갑니다. TASK_RUNNING(값 0)은 실행 중이거나 runqueue에서 실행 대기 중인 상태를 나타냅니다. 최신 커널에서는 task_struct의 상태 필드가 __state로 변경되었습니다. 이 코드는 학습 목적이며, 실제로는 적절한 락(RCU 등)을 사용해야 합니다.",
     "blankDistractors": [
       [
+        "per-CPU",
         "context_switch",
-        "se",
-        "nice"
+        "se"
       ],
       [
-        "PRIO_PROCESS",
-        "SCHED_FIFO",
+        "EDF",
+        "CONFIG_PREEMPT",
         "CPU_COUNT"
       ]
     ]

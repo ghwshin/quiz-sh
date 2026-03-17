@@ -47,9 +47,9 @@
     "explanation": "net_device는 include/linux/netdevice.h에 정의되어 있으며, 물리적 또는 가상 네트워크 인터페이스를 나타내는 핵심 구조체입니다. alloc_netdev() 또는 alloc_etherdev()를 통해 할당하고 register_netdev()로 등록합니다.",
     "blankDistractors": [
       [
-        "dev_add_pack",
-        "napi_complete_done",
-        "my_net_open"
+        "packet_type",
+        "func",
+        "netif_receive_skb"
       ]
     ]
   },
@@ -90,13 +90,13 @@
     "blankDistractors": [
       [
         "커널",
-        "백업 복사본",
-        "장치"
+        "안정성",
+        "비선점형"
       ],
       [
         "커널",
-        "공개 키",
-        "레지스터"
+        "유효성",
+        "재빌드"
       ]
     ]
   },
@@ -120,14 +120,14 @@
     "explanation": "TCP 서버 소켓 프로그래밍에서 socket() 호출 시 AF_INET(IPv4 주소 체계)과 SOCK_STREAM(TCP)을 지정합니다. 이후 bind()를 호출하여 소켓에 주소와 포트를 할당합니다.",
     "blankDistractors": [
       [
-        "IPC",
-        "L2",
-        "GRO"
+        "SOCK_RAW",
+        "NAPI",
+        "XDP_DROP"
       ],
       [
         "packet_type",
-        "napi_complete_done",
-        "trie"
+        "skb_put",
+        "netif_receive_skb"
       ]
     ]
   },
@@ -167,14 +167,14 @@
     "explanation": "SOCK_RAW 타입의 소켓은 프로토콜 헤더를 포함한 원시 패킷을 직접 송수신할 수 있습니다. IPPROTO_ICMP를 지정하면 ICMP 패킷만 수신하며, recvfrom()으로 발신자 주소와 함께 데이터를 읽습니다.",
     "blankDistractors": [
       [
-        "NF_INET_PRE_ROUTING",
-        "GSO",
-        "NAPI"
+        "NF_ACCEPT",
+        "XDP_DROP",
+        "GSO"
       ],
       [
-        "alloc_skb",
-        "fib_lookup",
-        "dev_add_pack"
+        "trie",
+        "netif_receive_skb",
+        "alloc_skb"
       ]
     ]
   },
@@ -201,19 +201,19 @@
     "explanation": "패킷 수신 경로: NIC 하드웨어 → DMA 전송 → 드라이버 인터럽트 → NAPI poll → napi_gro_receive()/netif_receive_skb() → L3 (ip_rcv → ip_rcv_finish → ip_local_deliver) → L4 (tcp_v4_rcv → tcp_v4_do_rcv) → 소켓 수신 큐. 이 경로는 softirq(NET_RX_SOFTIRQ) 컨텍스트에서 처리됩니다.",
     "blankDistractors": [
       [
-        "AF_INET",
-        "XDP_PASS",
-        "MAC"
+        "L2",
+        "MAC",
+        "STP"
       ],
       [
-        "fib_lookup",
-        "work_done",
-        "trie"
+        "trie",
+        "my_net_open",
+        "work_done"
       ],
       [
+        "my_net_open",
         "net_device",
-        "func",
-        "alloc_skb"
+        "packet_type"
       ]
     ]
   },
@@ -257,14 +257,14 @@
     "explanation": "netfilter 훅 함수는 NF_ACCEPT(허용), NF_DROP(차단) 등의 verdict를 반환합니다. hooknum은 패킷 처리 경로상의 훅 포인트를 지정하며, NF_INET_PRE_ROUTING(라우팅 전), NF_INET_LOCAL_IN(로컬 입력), NF_INET_FORWARD(포워딩), NF_INET_LOCAL_OUT(로컬 출력), NF_INET_POST_ROUTING(라우팅 후) 중 하나를 선택합니다.",
     "blankDistractors": [
       [
-        "MAC",
-        "SOCK_RAW",
-        "STP"
+        "XDP_PASS",
+        "IPC",
+        "GSO"
       ],
       [
-        "STP",
-        "XDP_PASS",
-        "SOCK_RAW"
+        "GRO",
+        "NAPI",
+        "GSO"
       ]
     ]
   },
@@ -290,10 +290,10 @@
       [
         "인터럽트 폭주",
         "폴링",
-        "고아 프로세스"
+        "데드락"
       ],
       [
-        "XDP_DROP",
+        "MAC",
         "SOCK_RAW",
         "GSO"
       ]
@@ -339,19 +339,19 @@
     "explanation": "리눅스 bridge는 br_add_bridge()로 생성하고, br_add_if()로 인터페이스를 추가합니다. br_handle_frame()에서 수신 프레임을 처리하며, FDB(Forwarding Database)에서 MAC 주소를 학습합니다. STP(Spanning Tree Protocol)를 지원하여 루프를 방지하고, VLAN 필터링도 가능합니다.",
     "blankDistractors": [
       [
-        "NAPI",
-        "GRO",
+        "NF_ACCEPT",
+        "FIB",
         "SOCK_RAW"
       ],
       [
+        "XDP_DROP",
         "IPC",
-        "FIB",
-        "XDP_PASS"
+        "NF_INET_PRE_ROUTING"
       ],
       [
+        "NAPI",
         "IPC",
-        "GSO",
-        "FIB"
+        "XDP_DROP"
       ]
     ]
   },
@@ -375,14 +375,14 @@
     "explanation": "alloc_skb()는 지정된 크기의 sk_buff를 할당합니다. skb_reserve()는 빈 버퍼에서 data/tail 포인터를 앞으로 이동시켜 프로토콜 헤더를 위한 headroom을 확보합니다. skb_put()은 tail 포인터를 뒤로 이동시켜 데이터 공간을 확장하고, 추가된 영역의 시작 포인터를 반환합니다.",
     "blankDistractors": [
       [
-        "dev_add_pack",
-        "func",
-        "packet_type"
+        "netif_receive_skb",
+        "napi_complete_done",
+        "my_net_xmit"
       ],
       [
-        "napi_complete_done",
-        "ip_rcv",
-        "work_done"
+        "netif_receive_skb",
+        "recvfrom",
+        "net_device"
       ]
     ]
   },
@@ -427,19 +427,19 @@
     "explanation": "FIB는 ip route 명령으로 설정한 라우팅 규칙을 LC-trie(Level Compressed trie) 구조로 저장하여 빠른 최장 접두사 매칭(LPM)을 수행합니다. fib_lookup()은 목적지 주소에 대한 라우팅 결과(fib_result)를 반환하며, nexthop 게이트웨이와 출력 인터페이스 정보를 포함합니다.",
     "blankDistractors": [
       [
-        "XDP_DROP",
+        "NF_INET_PRE_ROUTING",
         "SOCK_RAW",
-        "XDP_PASS"
+        "XDP_DROP"
       ],
       [
+        "packet_type",
         "netif_receive_skb",
-        "my_net_open",
-        "my_net_xmit"
+        "ip_rcv"
       ],
       [
-        "alloc_skb",
-        "my_net_open",
-        "packet_type"
+        "dev_add_pack",
+        "work_done",
+        "my_net_xmit"
       ]
     ]
   },
@@ -463,13 +463,13 @@
     "explanation": "XDP는 드라이버 레벨에서 패킷을 처리하는 고성능 패킷 처리 프레임워크입니다. XDP_DROP은 패킷을 즉시 폐기하고, XDP_PASS는 일반 네트워크 스택으로 전달합니다. XDP_TX는 같은 인터페이스로 패킷을 반송하고, XDP_REDIRECT는 다른 인터페이스로 리다이렉트합니다. 데이터 경계 검사(bounds check)는 eBPF 검증기(verifier)를 통과하기 위해 필수입니다.",
     "blankDistractors": [
       [
-        "MAC",
-        "NF_INET_PRE_ROUTING",
-        "SOCK_RAW"
+        "FIB",
+        "AF_INET",
+        "STP"
       ],
       [
-        "NF_ACCEPT",
-        "AF_INET",
+        "IPC",
+        "L2",
         "FIB"
       ]
     ]
@@ -512,19 +512,19 @@
     "explanation": "네트워크 패킷이 netif_receive_skb()에 도달하면, 커널은 이더넷 프레임의 프로토콜 필드를 확인하고 등록된 packet_type 핸들러를 호출합니다. 예를 들어 IPv4의 경우 ip_rcv()가 ETH_P_IP(0x0800)에 대한 핸들러로 등록되어 있습니다. ptype_base 해시 테이블과 ptype_all 리스트로 관리됩니다.",
     "blankDistractors": [
       [
-        "trie",
-        "napi_complete_done",
-        "recvfrom"
-      ],
-      [
-        "net_device",
-        "fib_lookup",
-        "alloc_skb"
-      ],
-      [
-        "trie",
         "netif_receive_skb",
-        "recvfrom"
+        "recvfrom",
+        "skb_put"
+      ],
+      [
+        "skb_put",
+        "trie",
+        "fib_lookup"
+      ],
+      [
+        "recvfrom",
+        "napi_complete_done",
+        "skb_put"
       ]
     ]
   },
@@ -548,14 +548,14 @@
     "explanation": "net_device_ops 구조체는 네트워크 디바이스의 주요 동작을 정의합니다. ndo_open은 ifconfig up 시 호출되어 인터페이스를 활성화하고, ndo_stop은 ifconfig down 시 호출됩니다. ndo_start_xmit은 패킷 전송 시 호출되는 핵심 함수로, sk_buff를 받아 하드웨어로 전송합니다. netif_start_queue()와 netif_stop_queue()는 커널의 패킷 전송 큐를 제어합니다.",
     "blankDistractors": [
       [
-        "netif_receive_skb",
-        "trie",
-        "recvfrom"
+        "napi_complete_done",
+        "work_done",
+        "alloc_skb"
       ],
       [
-        "napi_complete_done",
-        "recvfrom",
-        "bind"
+        "bind",
+        "ip_rcv",
+        "alloc_skb"
       ]
     ]
   },
@@ -595,14 +595,14 @@
     "explanation": "GRO는 napi_gro_receive()에서 동일한 플로우의 패킷들을 병합합니다. TCP의 경우 시퀀스 번호가 연속인 세그먼트를 하나의 큰 sk_buff로 합칩니다. GSO는 dev_queue_xmit() 경로에서 하드웨어가 지원하지 않는 경우에만 분할을 수행합니다. 두 기술 모두 소프트웨어 기반이므로 하드웨어 의존성이 없으며, per-packet 오버헤드를 크게 줄여 처리량을 향상시킵니다.",
     "blankDistractors": [
       [
+        "MAC",
         "SOCK_RAW",
-        "L2",
-        "NF_INET_PRE_ROUTING"
+        "STP"
       ],
       [
+        "NAPI",
         "SOCK_RAW",
-        "IPC",
-        "NF_ACCEPT"
+        "STP"
       ]
     ]
   },
@@ -627,14 +627,14 @@
     "explanation": "NAPI poll 함수는 budget만큼의 패킷을 처리합니다. 처리한 패킷 수가 budget보다 적으면 더 이상 처리할 패킷이 없다는 의미이므로, napi_complete_done()을 호출하여 폴링 모드를 종료하고 인터럽트를 다시 활성화합니다. work_done을 반환하여 커널에 실제 처리한 패킷 수를 알립니다. budget만큼 모두 처리했다면 커널이 다시 poll을 호출합니다.",
     "blankDistractors": [
       [
+        "skb_put",
         "packet_type",
-        "fib_lookup",
         "func"
       ],
       [
+        "skb_put",
         "my_net_open",
-        "alloc_skb",
-        "net_device"
+        "func"
       ]
     ]
   },

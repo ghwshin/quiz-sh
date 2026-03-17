@@ -74,9 +74,9 @@
     "explanation": "semaphore는 down()(P 연산)으로 카운터를 감소시키고, up()(V 연산)으로 카운터를 증가시킵니다. 카운터가 0이면 down()을 호출한 스레드는 sleep합니다. mutex는 semaphore의 특수한 경우(카운터가 1인 경우)로 볼 수 있지만, Linux 커널에서 mutex는 소유권, 우선순위 역전 방지 등 추가 기능을 제공합니다.",
     "blankDistractors": [
       [
-        "비동기",
+        "우선순위 역전",
         "공유 메모리",
-        "우선순위 역전"
+        "인터럽트"
       ],
       [
         "wait queue",
@@ -85,8 +85,8 @@
       ],
       [
         "wake_up_interruptible",
-        "complete",
-        "spin_lock_irqsave"
+        "call_rcu",
+        "complete"
       ]
     ]
   },
@@ -112,19 +112,19 @@
     "explanation": "시그널은 Unix/Linux의 기본적인 IPC 메커니즘 중 하나입니다. kill() 시스템 콜이나 키보드 입력(Ctrl+C는 SIGINT) 등으로 전송됩니다. SIGKILL과 SIGSTOP은 핸들러를 등록하거나 블로킹할 수 없는 특수한 시그널입니다.",
     "blankDistractors": [
       [
-        "공유 메모리",
         "소유권",
+        "공유 메모리",
         "인터럽트"
       ],
       [
-        "ARM",
-        "EXPORT_SYMBOL",
-        "GICR"
+        "DTB",
+        "EL1",
+        "DEVICE_ATTR"
       ],
       [
-        "TTBR1_EL1",
-        "ARM",
-        "TASK_INTERRUPTIBLE"
+        "EL2",
+        "IRQ_NONE",
+        "NAPI"
       ]
     ]
   },
@@ -152,19 +152,19 @@
     "explanation": "공유 메모리는 커널을 거치지 않고 프로세스들이 직접 메모리를 읽고 쓸 수 있으므로, pipe나 message queue보다 대용량 데이터 전달에 효율적입니다. 다만, 동시 접근에 대한 동기화는 프로그래머가 직접 관리해야 합니다.",
     "blankDistractors": [
       [
-        "인터럽트",
         "우선순위 역전",
-        "소유권"
+        "소유권",
+        "비동기"
       ],
       [
-        "wait_for_completion",
-        "deadlock",
-        "call_rcu"
+        "atomic",
+        "spin_lock_irqsave",
+        "rt_mutex"
       ],
       [
-        "spin_unlock_irqrestore",
-        "wait_for_completion",
-        "down"
+        "down",
+        "synchronize_rcu",
+        "complete"
       ]
     ]
   },
@@ -188,14 +188,14 @@
     "explanation": "DEFINE_MUTEX()는 정적으로 mutex를 선언하고 초기화합니다. mutex_lock()은 잠금을 획득하며, 이미 다른 스레드가 보유 중이면 현재 스레드를 sleep 상태로 전환합니다. mutex_unlock()은 잠금을 해제하고 대기 중인 스레드를 깨웁니다.",
     "blankDistractors": [
       [
-        "atomic",
-        "mmap",
-        "spin_lock_irqsave"
+        "spin_lock_irqsave",
+        "rt_mutex",
+        "spin_unlock_irqrestore"
       ],
       [
         "wait_event_interruptible",
-        "futex",
-        "complete"
+        "wait_event",
+        "atomic_set"
       ]
     ]
   },
@@ -222,19 +222,19 @@
     "explanation": "pipe(fd)는 두 개의 파일 디스크립터를 생성합니다. fd[0]은 읽기용, fd[1]은 쓰기용입니다. 부모가 자식에게 데이터를 보내려면 부모는 fd[1]에 write하고 자식은 fd[0]에서 read합니다. 사용하지 않는 쪽의 파일 디스크립터는 close()로 닫아야 합니다.",
     "blankDistractors": [
       [
-        "rcu_read_lock()",
         "synchronize_rcu()",
-        "smp_rmb()"
+        "rcu_read_lock()",
+        "rcu_read_unlock()"
       ],
       [
-        "2",
-        "1019",
-        "128"
+        "268435456",
+        "3",
+        "4"
       ],
       [
-        "12",
-        "4",
-        "1019"
+        "128",
+        "0",
+        "12"
       ]
     ]
   },
@@ -331,14 +331,14 @@
         "counting semaphore"
       ],
       [
-        "mutex_unlock",
-        "deadlock",
-        "rt_mutex"
+        "rt_mutex",
+        "down",
+        "wake_up_interruptible"
       ],
       [
+        "complete",
         "wake_up_interruptible",
-        "mutex_unlock",
-        "futex"
+        "mmap"
       ]
     ]
   },
@@ -362,14 +362,14 @@
     "explanation": "futex는 사용자 공간의 정수 변수와 커널의 대기 큐를 결합한 하이브리드 메커니즘입니다. FUTEX_WAIT 연산으로 특정 값일 때 대기하고, FUTEX_WAKE 연산으로 대기 중인 스레드를 깨웁니다. 대부분의 잠금 획득이 경합 없이 이루어지는 실제 환경에서 높은 성능을 제공합니다.",
     "blankDistractors": [
       [
-        "shmget",
-        "wait_event_interruptible",
-        "rt_mutex"
+        "call_rcu",
+        "mmap",
+        "shmget"
       ],
       [
-        "wait_event",
-        "shmget",
-        "spin_lock_irqsave"
+        "down",
+        "complete",
+        "shmget"
       ]
     ]
   },
@@ -397,19 +397,19 @@
     "explanation": "spin_lock()만 사용하면, spinlock을 보유한 상태에서 인터럽트가 발생하고 인터럽트 핸들러가 같은 spinlock을 요청할 경우 deadlock이 발생합니다. spin_lock_irqsave()는 현재 인터럽트 상태를 flags에 저장하고 인터럽트를 비활성화한 후 spinlock을 획득합니다. spin_unlock_irqrestore()로 원래 인터럽트 상태를 복원합니다.",
     "blankDistractors": [
       [
-        "rt_mutex",
-        "mmap",
-        "wake_up"
+        "synchronize_rcu",
+        "down",
+        "futex"
       ],
       [
-        "공유 메모리",
         "우선순위 역전",
-        "소유권"
+        "소유권",
+        "공유 메모리"
       ],
       [
-        "mutex_lock",
+        "mmap",
         "spin_unlock_irqrestore",
-        "wake_up"
+        "wait_for_completion"
       ]
     ]
   },
@@ -433,14 +433,14 @@
     "explanation": "프로세스 컨텍스트에서 인터럽트 핸들러와 공유하는 데이터를 접근할 때는 spin_lock_irqsave()로 인터럽트를 비활성화하면서 spinlock을 획득해야 합니다. 인터럽트 핸들러 내부에서는 이미 인터럽트가 비활성화된 상태이므로 spin_lock()만 사용하면 됩니다.",
     "blankDistractors": [
       [
-        "call_rcu",
-        "atomic",
-        "complete"
+        "wake_up_interruptible",
+        "atomic_set",
+        "call_rcu"
       ],
       [
-        "synchronize_rcu",
-        "wake_up_interruptible",
-        "shmget"
+        "complete",
+        "mutex_unlock",
+        "wait_event_interruptible"
       ]
     ]
   },
@@ -465,14 +465,14 @@
     "explanation": "wait_event_interruptible()은 조건이 참이 될 때까지 현재 프로세스를 TASK_INTERRUPTIBLE 상태로 sleep시킵니다. 시그널 수신 시 -ERESTARTSYS를 반환하므로 반환값을 확인해야 합니다. wake_up_interruptible()은 TASK_INTERRUPTIBLE 상태의 대기자를 깨우며, wait_event_interruptible과 짝을 이루어 사용합니다.",
     "blankDistractors": [
       [
-        "mutex_lock",
-        "mutex_unlock",
-        "shmget"
+        "atomic_set",
+        "complete",
+        "synchronize_rcu"
       ],
       [
-        "synchronize_rcu",
-        "mutex_lock",
-        "down"
+        "wait_event",
+        "spin_unlock_irqrestore",
+        "atomic"
       ]
     ]
   },
@@ -496,14 +496,14 @@
     "explanation": "DECLARE_COMPLETION()으로 completion 구조체를 선언하고, wait_for_completion()으로 완료를 대기합니다. 작업이 끝나면 complete()를 호출하여 대기 중인 스레드를 깨웁니다. complete_all()을 사용하면 여러 대기자를 한 번에 깨울 수 있습니다.",
     "blankDistractors": [
       [
-        "shmget",
-        "wake_up_interruptible",
-        "rt_mutex"
+        "futex",
+        "wait_event_interruptible",
+        "mutex_unlock"
       ],
       [
-        "rt_mutex",
-        "shmget",
-        "mmap"
+        "wake_up",
+        "mutex_lock",
+        "atomic_set"
       ]
     ]
   },
@@ -579,19 +579,19 @@
     "explanation": "grace period 동안 새로운 reader는 이미 업데이트된 데이터를 보고, 이전 데이터를 참조하는 reader는 없어집니다. 이 시점 이후에 이전 데이터를 안전하게 해제할 수 있습니다. call_rcu()는 softirq 컨텍스트에서 콜백을 실행하므로, 콜백 내에서 sleep이 불가능합니다.",
     "blankDistractors": [
       [
-        "priority inheritance",
         "wait queue",
+        "priority inheritance",
         "counting semaphore"
       ],
       [
         "atomic",
-        "mmap",
-        "down"
+        "down",
+        "mutex_unlock"
       ],
       [
-        "wait_event",
         "mutex_lock",
-        "shmget"
+        "wait_for_completion",
+        "wait_event_interruptible"
       ]
     ]
   },
@@ -618,19 +618,19 @@
     "explanation": "우선순위 역전은 실시간 시스템에서 심각한 문제를 야기할 수 있습니다. Mars Pathfinder 사건이 대표적인 예입니다. Linux의 rt_mutex는 PI(Priority Inheritance) 체인을 통해 중첩된 잠금에서도 우선순위 역전을 해결합니다. CONFIG_RT_MUTEXES 설정으로 활성화됩니다.",
     "blankDistractors": [
       [
-        "비동기",
         "인터럽트",
-        "공유 메모리"
+        "비동기",
+        "소유권"
       ],
       [
-        "counting semaphore",
+        "grace period",
         "wait queue",
-        "grace period"
+        "counting semaphore"
       ],
       [
-        "mmap",
-        "wake_up_interruptible",
-        "call_rcu"
+        "wait_event_interruptible",
+        "spin_lock_irqsave",
+        "mmap"
       ]
     ]
   },
@@ -658,13 +658,13 @@
     "explanation": "reader는 rcu_read_lock()/rcu_read_unlock() 사이에서 rcu_dereference()로 포인터를 안전하게 읽습니다. writer는 update_lock mutex로 다른 writer와의 경합을 방지하고, 새 데이터를 할당한 뒤 rcu_assign_pointer()로 포인터를 교체합니다. synchronize_rcu()로 grace period가 완료될 때까지 대기한 후, 모든 기존 reader가 이전 데이터 참조를 마친 것이 보장되면 kfree()로 이전 데이터를 해제합니다.",
     "blankDistractors": [
       [
-        "smp_wmb()",
         "smp_rmb()",
-        "pipe(fd)"
+        "pipe(fd)",
+        "smp_wmb()"
       ],
       [
-        "pipe(fd)",
         "smp_rmb()",
+        "pipe(fd)",
         "smp_wmb()"
       ],
       [
@@ -702,18 +702,18 @@
     "blankDistractors": [
       [
         "rcu_read_lock()",
-        "rcu_read_unlock()",
-        "synchronize_rcu()"
+        "synchronize_rcu()",
+        "pipe(fd)"
       ],
       [
         "down",
-        "mutex_lock",
-        "synchronize_rcu"
+        "futex",
+        "mmap"
       ],
       [
-        "synchronize_rcu()",
         "rcu_read_unlock()",
-        "pipe(fd)"
+        "synchronize_rcu()",
+        "rcu_read_lock()"
       ]
     ]
   }

@@ -69,14 +69,14 @@
     "explanation": "x86 아키텍처는 Ring 0부터 Ring 3까지 4단계의 특권 레벨을 제공합니다. Linux는 Ring 0(커널 모드)과 Ring 3(사용자 모드)만 사용합니다. 이 분리를 통해 사용자 프로그램이 커널 메모리나 하드웨어를 직접 접근하는 것을 방지하여 시스템 안정성과 보안을 보장합니다.",
     "blankDistractors": [
       [
-        "read, write, exit, sigreturn",
-        "_IO",
-        "-p"
+        "_IOW",
+        "-p",
+        "int __user *"
       ],
       [
-        "_IOW",
-        "__x64_sys_my_custom",
-        "_IOR"
+        "open,read,write",
+        "int 0x80",
+        "-EINTR"
       ]
     ]
   },
@@ -98,14 +98,14 @@
     "explanation": "int 0x80은 IDT를 통해 인터럽트 핸들러를 찾는 과정이 필요하여 상대적으로 느립니다. sysenter/syscall은 MSR(Model Specific Register)에 미리 설정된 커널 진입점 주소를 사용하므로 오버헤드가 적습니다. 현대 Linux는 vDSO를 통해 최적의 시스템 콜 호출 방식을 자동으로 선택합니다.",
     "blankDistractors": [
       [
-        "__x64_sys_my_custom",
-        "int __user *",
-        "-p"
+        "read, write, exit, sigreturn",
+        "-EINTR",
+        "_IO"
       ],
       [
-        "copy_from_user",
+        "sys_call_table",
         "rax",
-        "seccomp"
+        "info"
       ]
     ]
   },
@@ -145,14 +145,14 @@
     "explanation": "strace -p PID는 이미 실행 중인 프로세스에 연결(attach)하여 시스템 콜을 추적합니다. -e trace=syscall_name 옵션을 사용하면 특정 시스템 콜만 필터링하여 출력할 수 있어 디버깅 시 유용합니다.",
     "blankDistractors": [
       [
-        "-EINTR",
+        "Ring 0",
         "int 0x80",
-        "__x64_sys_my_custom"
+        "__NR_my_custom"
       ],
       [
-        "int 0x80",
         "_IOR",
-        "Ring 3"
+        "_IOW",
+        "Ring 0"
       ]
     ]
   },
@@ -179,19 +179,19 @@
     "explanation": "copy_from_user(to, from, size)는 사용자 공간 포인터(from)에서 커널 공간 버퍼(to)로 데이터를 안전하게 복사합니다. 사용자 포인터의 유효성을 검증하여, 잘못된 주소 접근 시 커널 패닉 대신 에러를 반환합니다. 복사에 실패하면(반환값 != 0) -EFAULT를 반환하는 것이 관례입니다.",
     "blankDistractors": [
       [
-        "info",
+        "restart_syscall",
         "ioctl",
-        "sys_call_table"
-      ],
-      [
-        "info",
-        "syscall",
-        "sys_call_table"
-      ],
-      [
-        "glibc",
-        "syscall",
         "copy_to_user"
+      ],
+      [
+        "restart_syscall",
+        "sys_call_table",
+        "seccomp"
+      ],
+      [
+        "restart_syscall",
+        "info",
+        "ioctl"
       ]
     ]
   },
@@ -251,24 +251,24 @@
     "explanation": "ioctl 매크로는 명령 번호에 방향(direction), 타입(magic number), 번호(sequence number), 데이터 크기를 인코딩하여 충돌을 방지하고 커널이 데이터 복사 방향을 결정할 수 있게 합니다. 각 디바이스 드라이버는 고유한 magic number(type)를 사용하여 ioctl 명령을 구분합니다.",
     "blankDistractors": [
       [
-        "seccomp",
-        "restart_syscall",
-        "syscall"
+        "sys_call_table",
+        "info",
+        "rax"
       ],
       [
-        "__NR_my_custom",
-        "(long)1",
-        "Ring 0"
+        "int __user *",
+        "Ring 3",
+        "int 0x80"
       ],
       [
-        "-EINTR",
         "read, write, exit, sigreturn",
+        "Ring 3",
         "open,read,write"
       ],
       [
-        "__x64_sys_my_custom",
-        "Ring 3",
-        "Ring 0"
+        "__NR_my_custom",
+        "-EINTR",
+        "open,read,write"
       ]
     ]
   },
@@ -314,24 +314,24 @@
     "explanation": "시스템 콜 처리는 사용자 모드와 커널 모드 간의 전환을 포함하는 과정입니다. 이 전환에는 레지스터 저장/복원, 권한 레벨 변경 등의 오버헤드가 수반되므로, 빈번한 시스템 콜 호출은 성능에 영향을 줄 수 있습니다.",
     "blankDistractors": [
       [
-        "copy_to_user",
-        "seccomp",
-        "ioctl"
+        "kernel_buf",
+        "ioctl",
+        "copy_from_user"
       ],
       [
-        "restart_syscall",
-        "copy_to_user",
-        "kernel_buf"
-      ],
-      [
-        "restart_syscall",
-        "copy_from_user",
+        "kernel_buf",
+        "user_buf",
         "ioctl"
       ],
       [
         "user_buf",
-        "kernel_buf",
-        "ioctl"
+        "copy_to_user",
+        "restart_syscall"
+      ],
+      [
+        "copy_from_user",
+        "info",
+        "seccomp"
       ]
     ]
   },
@@ -359,19 +359,19 @@
     "explanation": "이 함수들은 내부적으로 access_ok()를 호출하여 주소가 사용자 공간 범위 내에 있는지 검사하고, 특수한 예외 처리 테이블(exception table)을 등록하여 페이지 폴트 발생 시 안전하게 에러를 반환합니다. 보안상 커널 코드에서 사용자 공간 포인터를 다룰 때 반드시 사용해야 합니다.",
     "blankDistractors": [
       [
+        "user_buf",
         "sys_call_table",
+        "glibc"
+      ],
+      [
+        "glibc",
         "rax",
-        "user_buf"
+        "restart_syscall"
       ],
       [
-        "sys_call_table",
-        "info",
-        "syscall"
-      ],
-      [
-        "구체적",
-        "커널",
-        "장치"
+        "개인 키",
+        "우선순위 역전",
+        "인터럽트 폭주"
       ]
     ]
   },
@@ -394,14 +394,14 @@
     "explanation": "/proc/kallsyms는 커널 디버깅과 분석에 필수적인 도구입니다. 커널이 CONFIG_KALLSYMS 옵션으로 빌드되어야 사용 가능하며, root 권한이 없으면 주소가 0으로 표시될 수 있습니다(kptr_restrict 설정에 따라). T는 텍스트(코드) 섹션, D는 데이터 섹션의 심볼을 의미합니다.",
     "blankDistractors": [
       [
-        "/etc/default/grub",
-        "/sys/block",
-        "/boot/grub/grub.cfg"
+        "/proc/meminfo",
+        "/boot/grub/grub.cfg",
+        ".dts"
       ],
       [
-        "ioctl",
-        "glibc",
-        "restart_syscall"
+        "kernel_buf",
+        "syscall",
+        "glibc"
       ]
     ]
   },
@@ -423,8 +423,8 @@
     "blankDistractors": [
       [
         "MY_IOC_MAGIC",
-        "BPF",
-        "SA_RESTART"
+        "SA_RESTART",
+        "BPF"
       ]
     ]
   },
@@ -448,13 +448,13 @@
     "explanation": "copy_to_user(to, from, size)는 커널 공간의 데이터(from)를 사용자 공간 버퍼(to)로 안전하게 복사합니다. 복사 실패 시(예: 잘못된 사용자 주소) 0이 아닌 값을 반환하므로, 이를 체크하여 -EFAULT를 반환하는 것이 표준 패턴입니다.",
     "blankDistractors": [
       [
-        "ioctl",
-        "kernel_buf",
-        "user_buf"
+        "user_buf",
+        "glibc",
+        "ioctl"
       ],
       [
-        "copy_from_user",
-        "restart_syscall",
+        "sys_call_table",
+        "ioctl",
         "kernel_buf"
       ]
     ]
@@ -485,23 +485,23 @@
     "explanation": "_IOW(type, nr, datatype)는 사용자에서 커널로 데이터를 쓰는 ioctl 명령 번호를 생성합니다. _IOR는 그 반대입니다. ioctl 핸들러에서는 copy_from_user/copy_to_user를 사용하여 안전하게 데이터를 교환하고, 알 수 없는 명령에 대해서는 -ENOTTY를 반환하는 것이 관례입니다.",
     "blankDistractors": [
       [
-        "__x64_sys_my_custom",
-        "(long)1",
-        "open,read,write"
-      ],
-      [
-        "SA_RESTART",
-        "BPF",
-        "SYSCALL_DEFINE2"
-      ],
-      [
-        "copy_from_user",
-        "syscall",
-        "user_buf"
-      ],
-      [
         "-p",
-        "(long)1",
+        "int 0x80",
+        "Ring 0"
+      ],
+      [
+        "SYSCALL_DEFINE2",
+        "BPF",
+        "SA_RESTART"
+      ],
+      [
+        "rax",
+        "ioctl",
+        "seccomp"
+      ],
+      [
+        "Ring 3",
+        "Ring 0",
         "open,read,write"
       ]
     ]
@@ -578,18 +578,18 @@
     "explanation": "seccomp-BPF는 시스템 콜 진입 시점에서 BPF 필터를 실행하여 해당 시스템 콜의 허용 여부를 결정합니다. prctl(PR_SET_SECCOMP) 또는 seccomp() 시스템 콜로 설정하며, 한 번 설정하면 해제할 수 없어(fork된 자식에게도 상속됨) 강력한 샌드박싱이 가능합니다.",
     "blankDistractors": [
       [
-        "glibc",
-        "info",
+        "kernel_buf",
+        "ioctl",
         "user_buf"
       ],
       [
-        "(long)1",
         "-EINTR",
-        "Ring 3"
+        "int __user *",
+        "__x64_sys_my_custom"
       ],
       [
-        "SYSCALL_DEFINE2",
         "MY_IOC_MAGIC",
+        "SYSCALL_DEFINE2",
         "SA_RESTART"
       ]
     ]
@@ -616,19 +616,19 @@
     "explanation": "모든 시스템 콜이 SA_RESTART에 의해 자동 재시작되는 것은 아닙니다. read, write 등은 재시작 가능하지만, select, poll, nanosleep 등은 SA_RESTART와 관계없이 -EINTR을 반환할 수 있어 애플리케이션에서 직접 처리해야 합니다. 커널 내부적으로는 -ERESTARTSYS, -ERESTARTNOHAND 등의 에러 코드로 재시작 가능 여부를 구분하며, restart_syscall은 시그널 처리 후 커널이 시스템 콜을 재시작할 때 사용하는 메커니즘입니다.",
     "blankDistractors": [
       [
-        "-p",
         "(long)1",
-        "__x64_sys_my_custom"
+        "_IO",
+        "-p"
       ],
       [
+        "BPF",
         "MY_IOC_MAGIC",
-        "SYSCALL_DEFINE2",
-        "BPF"
+        "SYSCALL_DEFINE2"
       ],
       [
-        "rax",
-        "ioctl",
-        "syscall"
+        "sys_call_table",
+        "copy_from_user",
+        "info"
       ]
     ]
   },
@@ -655,13 +655,13 @@
     "blankDistractors": [
       [
         "rax",
-        "restart_syscall",
-        "user_buf"
+        "ioctl",
+        "seccomp"
       ],
       [
-        "Ring 3",
-        "Ring 0",
-        "__NR_my_custom"
+        "__NR_my_custom",
+        "int 0x80",
+        "Ring 3"
       ]
     ]
   },
@@ -688,19 +688,19 @@
     "explanation": "시스템 콜 테이블 파일(syscall_64.tbl)에 시스템 콜 번호, ABI 타입(common/64/x32), 이름, 핸들러 함수명을 등록합니다. 핸들러 이름은 __x64_sys_ 접두사 규칙을 따릅니다. 사용자 공간에서는 glibc의 syscall() 함수에 시스템 콜 번호와 인자를 전달하여 직접 호출할 수 있습니다. 이 방법은 glibc 래퍼가 없는 새로운 시스템 콜을 호출할 때 유용합니다.",
     "blankDistractors": [
       [
-        "_IOW",
-        "Ring 0",
-        "_IOR"
+        "Ring 3",
+        "_IO",
+        "-p"
       ],
       [
         "glibc",
-        "copy_from_user",
-        "copy_to_user"
+        "info",
+        "kernel_buf"
       ],
       [
-        "(long)1",
-        "-p",
-        "int 0x80"
+        "read, write, exit, sigreturn",
+        "Ring 3",
+        "-EINTR"
       ]
     ]
   }

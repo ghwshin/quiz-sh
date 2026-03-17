@@ -69,19 +69,19 @@
     "explanation": "repo 도구는 manifest.xml 파일을 기반으로 수백 개의 Git 저장소를 일괄적으로 관리합니다. repo init은 작업 디렉토리를 초기화하며, -u <manifest-url> 옵션으로 manifest 저장소의 URL을 지정합니다(예: repo init -u https://android.googlesource.com/platform/manifest). repo sync는 모든 프로젝트를 동기화하며, repo start/upload 등의 명령으로 브랜치 생성과 코드 리뷰 제출도 할 수 있습니다.",
     "blankDistractors": [
       [
-        "Ninja",
-        "lunch",
-        "cc_library_shared"
-      ],
-      [
-        "out/dist/",
-        "<product>-<variant>",
-        "ANDROID_SOCKET_<name>"
+        "source",
+        "cc_library_shared",
+        "BoardConfig.mk"
       ],
       [
         "<product>-<variant>",
         "out/dist/",
-        "<pid>"
+        "-s -S"
+      ],
+      [
+        "<product>-<variant>",
+        "out/dist/",
+        "memory map"
       ]
     ]
   },
@@ -108,9 +108,9 @@
     "explanation": "lunch 명령어는 envsetup.sh에 정의된 셸 함수로, 빌드 타겟을 선택하면 해당 제품의 설정 파일(device.mk, BoardConfig.mk 등)을 기반으로 빌드 환경이 구성됩니다. 인자 없이 실행하면 사용 가능한 타겟 목록이 표시됩니다.",
     "blankDistractors": [
       [
-        "aosp_oriole-userdebug",
-        "static_libs",
-        "vendor"
+        "device.mk",
+        "BoardConfig.mk",
+        "android_app"
       ],
       [
         "repo sync",
@@ -118,9 +118,9 @@
         "repo init"
       ],
       [
+        "DIST_DIR",
         "PRODUCT_PACKAGE_OVERLAYS",
-        "PRODUCT_PACKAGES",
-        "DIST_DIR"
+        "PRODUCT_PROPERTY_OVERRIDES"
       ]
     ]
   },
@@ -145,14 +145,14 @@
     "explanation": "'source' 또는 '.' 명령으로 envsetup.sh를 현재 셸에 로드합니다. lunch 명령에는 '<product>-<variant>' 형식의 빌드 타겟을 지정합니다. Pixel 6의 코드명은 oriole이며, AOSP 빌드에서는 aosp_ 접두사를 붙여 aosp_oriole-userdebug 형식으로 사용합니다. m 명령은 전체 시스템을 빌드하는 명령으로, -j 옵션으로 병렬 빌드 스레드 수를 지정합니다.",
     "blankDistractors": [
       [
-        "vendor",
-        "header_libs",
-        "android_app"
+        "java_library",
+        "repo",
+        "vendor"
       ],
       [
-        "lunch",
-        "shared_libs",
-        "androidmk"
+        "repo",
+        "Ninja",
+        "android_app"
       ]
     ]
   },
@@ -173,9 +173,9 @@
     "explanation": "cc_library_shared는 Android.bp에서 C/C++ 공유 라이브러리(.so)를 정의하는 모듈 타입입니다. name은 모듈 이름, srcs는 소스 파일 목록, shared_libs는 링크할 다른 공유 라이브러리, export_include_dirs는 이 라이브러리를 사용하는 다른 모듈에 공개할 헤더 파일 경로입니다. 참고로 cc_library를 사용하면 정적/공유 라이브러리가 모두 생성되지만, 이 코드에서는 명시적으로 공유 라이브러리만 정의하므로 cc_library_shared가 적합합니다.",
     "blankDistractors": [
       [
-        "vendor",
-        "dist",
-        "BoardConfig.mk"
+        "header_libs",
+        "android_app",
+        "androidmk"
       ]
     ]
   },
@@ -266,19 +266,19 @@
     "explanation": "Android.bp는 선언적 형식으로 변수 할당은 지원하지만 조건문(if/else)이나 제어 흐름(for/while)은 지원하지 않습니다. 이러한 제약은 빌드 파일의 파싱과 분석을 더 빠르고 안정적으로 만듭니다. 복잡한 조건부 로직이 필요한 경우에는 Go로 작성된 Soong 플러그인이나 soong_config_module_type을 활용할 수 있습니다.",
     "blankDistractors": [
       [
-        "우선순위",
+        "하드웨어",
         "리소스",
         "증분"
       ],
       [
-        "우선순위",
         "하드웨어",
-        "증분"
+        "리소스",
+        "우선순위"
       ],
       [
-        "source",
-        "repo",
-        "BoardConfig.mk"
+        "aosp_oriole-userdebug",
+        "java_library",
+        "vendor"
       ]
     ]
   },
@@ -304,19 +304,19 @@
     "explanation": "device.mk는 PRODUCT_PACKAGES를 통해 빌드에 포함할 앱과 라이브러리를 정의하고, BoardConfig.mk는 TARGET_ARCH, BOARD_*_PARTITION_SIZE 등으로 하드웨어 특성을 정의합니다. 두 파일은 보통 device/<vendor>/<device>/ 디렉토리에 함께 위치합니다.",
     "blankDistractors": [
       [
-        "vintf_fragments",
-        "srcs",
-        "androidmk"
+        "vendor",
+        "androidmk",
+        "aosp_oriole-userdebug"
       ],
       [
-        "repo",
-        "vintf_fragments",
-        "vendor"
+        "static_libs",
+        "source",
+        "my_cc_library"
       ],
       [
-        "리소스",
+        "절차적",
         "선언적",
-        "증분"
+        "우선순위"
       ]
     ]
   },
@@ -349,14 +349,14 @@
         "증분"
       ],
       [
-        "DIST_DIR",
+        "TARGET_KERNEL_CONFIG",
         "BOARD_SYSTEMIMAGE_PARTITION_SIZE",
         "PRODUCT_PROPERTY_OVERRIDES"
       ],
       [
-        "하드웨어",
         "선언적",
-        "증분"
+        "절차적",
+        "하드웨어"
       ]
     ]
   },
@@ -380,14 +380,14 @@
     "explanation": "java_library는 순수 Java 라이브러리 모듈을 정의하며, android_app은 Android 애플리케이션(APK) 모듈을 정의합니다. static_libs로 Java 라이브러리를 정적으로 포함할 수 있습니다. certificate: \"platform\"은 플랫폼 키로 서명하여 시스템 권한을 부여합니다.",
     "blankDistractors": [
       [
-        "aosp_oriole-userdebug",
-        "header_libs",
-        "my_cc_library"
+        "lunch",
+        "vendor",
+        "aosp_oriole-userdebug"
       ],
       [
-        "BoardConfig.mk",
-        "static_libs",
-        "cc_library_shared"
+        "device.mk",
+        "repo",
+        "vintf_fragments"
       ]
     ]
   },
@@ -413,13 +413,13 @@
     "blankDistractors": [
       [
         "TARGET_PRODUCT",
-        "DIST_DIR",
+        "TARGET_KERNEL_CONFIG",
         "BOARD_SYSTEMIMAGE_PARTITION_SIZE"
       ],
       [
-        "DIST_DIR",
+        "TARGET_KERNEL_CONFIG",
         "PRODUCT_PACKAGE_OVERLAYS",
-        "TARGET_PRODUCT"
+        "BOARD_SYSTEMIMAGE_PARTITION_SIZE"
       ]
     ]
   },
@@ -443,14 +443,14 @@
     "explanation": "soong_config_module_type은 Android.bp에서 조건부 빌드를 구현하는 방법입니다. 새로운 모듈 타입(my_cc_library)을 정의하고, soong_config_variables 블록 내에서 변수 값에 따라 srcs, cflags 등의 속성을 조건부로 설정할 수 있습니다. 변수 값은 vendor/<vendor>/BoardConfig.mk에서 SOONG_CONFIG_ 접두사로 설정합니다.",
     "blankDistractors": [
       [
-        "BoardConfig.mk",
-        "shared_libs",
-        "vendor"
+        "lunch",
+        "device.mk",
+        "vintf_fragments"
       ],
       [
-        "cc_library_shared",
-        "java_library",
-        "vintf_fragments"
+        "androidmk",
+        "source",
+        "aosp_oriole-userdebug"
       ]
     ]
   },
@@ -524,8 +524,8 @@
     "explanation": "dist 빌드는 각 모듈의 Android.bp나 Android.mk에서 dist 속성으로 지정된 파일들을 수집합니다. 일반 개발 빌드에서는 불필요하지만, 릴리스 빌드나 CI 시스템에서는 필수적인 기능입니다.",
     "blankDistractors": [
       [
-        "lunch",
-        "vendor",
+        "java_library",
+        "Ninja",
         "cc_library_shared"
       ],
       [
@@ -534,8 +534,8 @@
         "repo sync"
       ],
       [
-        "TARGET_PRODUCT",
-        "TARGET_KERNEL_CONFIG",
+        "PRODUCT_PACKAGES",
+        "BOARD_SYSTEMIMAGE_PARTITION_SIZE",
         "PRODUCT_PROPERTY_OVERRIDES"
       ]
     ]
@@ -562,19 +562,19 @@
     "explanation": "Ninja는 사람이 직접 작성하기보다 상위 빌드 시스템(Soong, CMake 등)이 생성하도록 설계되었습니다. 단순한 문법과 최소한의 기능만을 제공하여 빌드 실행 자체에 집중하며, 이를 통해 최대한의 성능을 달성합니다.",
     "blankDistractors": [
       [
-        "vendor",
         "srcs",
-        "my_cc_library"
+        "aosp_oriole-userdebug",
+        "device.mk"
       ],
       [
-        "/dev/binder",
-        "/dev/vndbinder",
+        "/apex",
+        "/dev/hwbinder",
         ".hal"
       ],
       [
-        "선언적",
-        "하드웨어",
-        "우선순위"
+        "리소스",
+        "절차적",
+        "선언적"
       ]
     ]
   },
@@ -599,19 +599,19 @@
     "explanation": "의존성 타입 선택은 바이너리 크기, 로딩 속도, 메모리 사용량, 업데이트 용이성에 영향을 미칩니다. Android 시스템에서는 liblog, libutils 등 공통 라이브러리는 shared_libs로, 모듈 고유 코드는 static_libs로 사용하는 것이 일반적입니다.",
     "blankDistractors": [
       [
-        "java_library",
-        "vintf_fragments",
-        "android_app"
-      ],
-      [
-        "vendor",
-        "my_cc_library",
-        "vintf_fragments"
-      ],
-      [
-        "my_cc_library",
+        "dist",
         "repo",
-        "dist"
+        "srcs"
+      ],
+      [
+        "java_library",
+        "android_app",
+        "aosp_oriole-userdebug"
+      ],
+      [
+        "device.mk",
+        "dist",
+        "srcs"
       ]
     ]
   },
@@ -636,14 +636,14 @@
     "explanation": "vendor: true(또는 proprietary: true)는 모듈을 vendor 파티션(/vendor/)에 설치하도록 지정합니다. HAL 서비스는 vendor 파티션에 위치해야 합니다. vintf_fragments는 VINTF(Vendor Interface) manifest 조각 파일을 지정하여, 이 HAL 서비스가 제공하는 인터페이스 정보를 시스템에 등록합니다. 이를 통해 framework가 해당 HAL 서비스를 검색하고 연결할 수 있습니다.",
     "blankDistractors": [
       [
-        "device.mk",
-        "header_libs",
-        "my_cc_library"
+        "lunch",
+        "static_libs",
+        "cc_library_shared"
       ],
       [
-        "lunch",
-        "java_library",
-        "android_app"
+        "androidmk",
+        "BoardConfig.mk",
+        "Ninja"
       ]
     ]
   },
@@ -667,9 +667,9 @@
     "explanation": "TARGET_KERNEL_CONFIG는 커널 빌드에 사용할 defconfig 파일을 지정합니다. BOARD_SYSTEMIMAGE_PARTITION_SIZE는 system 파티션의 크기를 바이트 단위로 정의합니다(예: 2147483648 = 2GB). 이러한 설정들은 빌드 시 파티션 이미지 생성에 사용되며, 설정된 크기를 초과하면 빌드 에러가 발생합니다. 디바이스의 실제 스토리지 레이아웃에 맞게 설정해야 합니다.",
     "blankDistractors": [
       [
-        "PRODUCT_PACKAGE_OVERLAYS",
         "DIST_DIR",
-        "PRODUCT_PROPERTY_OVERRIDES"
+        "PRODUCT_PACKAGE_OVERLAYS",
+        "TARGET_PRODUCT"
       ],
       [
         "PRODUCT_PACKAGE_OVERLAYS",

@@ -8,13 +8,40 @@
     "conversationMode": "objective",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "프로덕션 서버에서 java 프로세스가 갑자기 죽었어요. 재시작하면 잠시 동작하다 또 죽습니다." },
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "dmesg에서 이런 로그를 찾았습니다.", "code": "Out of memory: Killed process 3421 (java) total-vm:8192000kB, anon-rss:7340032kB\noom_reaper: reaped process 3421 (java), now anon-rss:0kB", "codeLanguage": "shell" },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "JVM segfault 아닌가요? 코어 덤프 떴는지 확인해볼게요." },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "커널 패닉이 발생한 것 같습니다. 서버를 재부팅하고 커널 업데이트를 권장합니다." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "프로덕션 서버에서 java 프로세스가 갑자기 죽었어요. 재시작하면 잠시 동작하다 또 죽습니다."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "dmesg에서 이런 로그를 찾았습니다.",
+        "code": "Out of memory: Killed process 3421 (java) total-vm:8192000kB, anon-rss:7340032kB\noom_reaper: reaped process 3421 (java), now anon-rss:0kB",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "JVM segfault 아닌가요? 코어 덤프 떴는지 확인해볼게요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "커널 패닉이 발생한 것 같습니다. 서버를 재부팅하고 커널 업데이트를 권장합니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "dmesg 로그를 자세히 읽어봐요. 'Out of memory'라는 키워드가 있고, 커널이 직접 프로세스를 종료한 거예요. segfault나 커널 패닉과는 다른 메커니즘이에요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "dmesg 로그를 자세히 읽어봐요. 'Out of memory'라는 키워드가 있고, 커널이 직접 프로세스를 종료한 거예요. segfault나 커널 패닉과는 다른 메커니즘이에요."
+      }
     ],
     "question": "dmesg 로그에서 확인된 현상의 원인은 무엇인가?",
     "options": [
@@ -35,13 +62,40 @@
     "conversationMode": "objective",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "새 빌드 서버에서 커스텀 커널 모듈을 올리려고 했는데 에러가 나요." },
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "에러 메시지입니다.", "code": "insmod: ERROR: could not insert module custom_driver.ko: Invalid module format", "codeLanguage": "shell" },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": ".ko 파일이 전송 중에 깨진 것 같아요. scp로 다시 복사해볼게요." },
-      { "speaker": "최팀장", "role": "팀장", "avatar": "🧑‍💼", "text": "파일 권한 문제 아냐? chmod로 실행 권한 줘봐." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "새 빌드 서버에서 커스텀 커널 모듈을 올리려고 했는데 에러가 나요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "에러 메시지입니다.",
+        "code": "insmod: ERROR: could not insert module custom_driver.ko: Invalid module format",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": ".ko 파일이 전송 중에 깨진 것 같아요. scp로 다시 복사해볼게요."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "파일 권한 문제 아냐? chmod로 실행 권한 줘봐."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "파일 손상이나 권한 문제일 수도 있지만, 이 에러는 보통 다른 원인이에요. modinfo로 모듈의 vermagic을 확인하고 uname -r 결과와 비교해보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "파일 손상이나 권한 문제일 수도 있지만, 이 에러는 보통 다른 원인이에요. modinfo로 모듈의 vermagic을 확인하고 uname -r 결과와 비교해보세요."
+      }
     ],
     "question": "'Invalid module format' 에러의 가장 흔한 원인은 무엇인가?",
     "options": [
@@ -62,13 +116,40 @@
     "conversationMode": "objective",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "방화벽에 포트 8080 허용 규칙을 추가했는데 외부에서 접속이 안 돼요." },
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "iptables 룰 목록입니다.", "code": "Chain INPUT (policy DROP)\nnum  target  prot  source    destination\n1    DROP    all   0.0.0.0/0  0.0.0.0/0\n2    ACCEPT  tcp   0.0.0.0/0  0.0.0.0/0  tcp dpt:22\n3    ACCEPT  tcp   0.0.0.0/0  0.0.0.0/0  tcp dpt:8080", "codeLanguage": "shell" },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "8080 ACCEPT 규칙이 있는데 왜 안 되는 거지? 커널 netfilter 모듈이 안 올라간 건가..." },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "OUTPUT chain에서 응답 패킷이 차단되는 것 같습니다. OUTPUT chain도 확인해보세요." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "방화벽에 포트 8080 허용 규칙을 추가했는데 외부에서 접속이 안 돼요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "iptables 룰 목록입니다.",
+        "code": "Chain INPUT (policy DROP)\nnum  target  prot  source    destination\n1    DROP    all   0.0.0.0/0  0.0.0.0/0\n2    ACCEPT  tcp   0.0.0.0/0  0.0.0.0/0  tcp dpt:22\n3    ACCEPT  tcp   0.0.0.0/0  0.0.0.0/0  tcp dpt:8080",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "8080 ACCEPT 규칙이 있는데 왜 안 되는 거지? 커널 netfilter 모듈이 안 올라간 건가..."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "OUTPUT chain에서 응답 패킷이 차단되는 것 같습니다. OUTPUT chain도 확인해보세요."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "iptables 규칙 목록의 번호 순서에 주목해봐요. iptables가 규칙을 어떤 순서로 평가하는지 생각해보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "iptables 규칙 목록의 번호 순서에 주목해봐요. iptables가 규칙을 어떤 순서로 평가하는지 생각해보세요."
+      }
     ],
     "question": "iptables에서 8080 포트 허용 규칙이 있음에도 접속이 안 되는 원인으로 가장 적절한 것은?",
     "options": [
@@ -89,13 +170,40 @@
     "conversationMode": "objective",
     "scenarioType": "code-review",
     "conversation": [
-      { "speaker": "민수", "role": "리뷰어", "avatar": "👀", "text": "디버깅 스크립트 리뷰 중인데, 프로세스의 시스템 콜을 추적하는 부분이 있어요." },
-      { "speaker": "민수", "role": "리뷰어", "avatar": "👀", "text": "여기 ltrace로 시스템 콜을 추적하는 코드가 있는데, 이게 맞나요?", "code": "ltrace -e open,read,write ./target_process 2>&1 | tee syscall.log", "codeLanguage": "shell" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "ltrace도 시스템 콜 보여주지 않나? 예전에 써봤는데 비슷한 것 같았어." },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "ltrace는 시스템 콜과 라이브러리 콜을 모두 추적할 수 있는 도구입니다. 코드가 올바릅니다." }
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "디버깅 스크립트 리뷰 중인데, 프로세스의 시스템 콜을 추적하는 부분이 있어요."
+      },
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "여기 ltrace로 시스템 콜을 추적하는 코드가 있는데, 이게 맞나요?",
+        "code": "ltrace -e open,read,write ./target_process 2>&1 | tee syscall.log",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "ltrace도 시스템 콜 보여주지 않나? 예전에 써봤는데 비슷한 것 같았어."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "ltrace는 시스템 콜과 라이브러리 콜을 모두 추적할 수 있는 도구입니다. 코드가 올바릅니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "ltrace와 strace의 역할 차이를 명확히 구분해봐요. 이름에 힌트가 있어요 — 'l'은 library, 's'는 system을 의미해요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "ltrace와 strace의 역할 차이를 명확히 구분해봐요. 이름에 힌트가 있어요 — 'l'은 library, 's'는 system을 의미해요."
+      }
     ],
     "question": "시스템 콜을 추적하기 위해 사용해야 하는 올바른 도구는?",
     "options": [
@@ -116,13 +224,40 @@
     "conversationMode": "objective",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "개발 서버가 부팅 중에 멈춰요. 화면에 에러 메시지가 나옵니다." },
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "화면 캡처입니다.", "code": "Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)", "codeLanguage": "shell" },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "커널 패닉이면 커널 이미지가 깨진 거 아닐까요? 다시 설치해봐야 할 것 같아요." },
-      { "speaker": "최팀장", "role": "팀장", "avatar": "🧑‍💼", "text": "SELinux가 부팅을 막는 건 아닌지 확인해봐. 예전에도 그런 적 있었어." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "개발 서버가 부팅 중에 멈춰요. 화면에 에러 메시지가 나옵니다."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "화면 캡처입니다.",
+        "code": "Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "커널 패닉이면 커널 이미지가 깨진 거 아닐까요? 다시 설치해봐야 할 것 같아요."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "SELinux가 부팅을 막는 건 아닌지 확인해봐. 예전에도 그런 적 있었어."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "에러 메시지를 정확히 읽어봐요. 'VFS: Unable to mount root fs'에서 VFS가 뭔지, root fs를 왜 마운트하지 못하는지 생각해보세요. GRUB 설정이나 initramfs 쪽을 살펴보면 단서가 있을 거예요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "에러 메시지를 정확히 읽어봐요. 'VFS: Unable to mount root fs'에서 VFS가 뭔지, root fs를 왜 마운트하지 못하는지 생각해보세요. GRUB 설정이나 initramfs 쪽을 살펴보면 단서가 있을 거예요."
+      }
     ],
     "question": "'VFS: Unable to mount root fs' 커널 패닉의 원인으로 가장 적절한 것은?",
     "options": [
@@ -143,13 +278,40 @@
     "conversationMode": "objective",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "Docker 컨테이너 안에서 ps aux를 실행했더니 호스트의 모든 프로세스가 보여요. 격리가 안 되는 것 같습니다." },
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "컨테이너 내부에서 실행한 결과입니다.", "code": "$ ps aux | wc -l\n347", "codeLanguage": "shell" },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "Docker가 root로 실행되어서 그런 거 아닌가요? 일반 유저로 실행하면 격리될 것 같아요." },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "seccomp 프로파일이 비활성화되어 시스템 콜 필터링이 안 되는 것 같습니다." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "Docker 컨테이너 안에서 ps aux를 실행했더니 호스트의 모든 프로세스가 보여요. 격리가 안 되는 것 같습니다."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "컨테이너 내부에서 실행한 결과입니다.",
+        "code": "$ ps aux | wc -l\n347",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "Docker가 root로 실행되어서 그런 거 아닌가요? 일반 유저로 실행하면 격리될 것 같아요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "seccomp 프로파일이 비활성화되어 시스템 콜 필터링이 안 되는 것 같습니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "컨테이너의 프로세스 격리는 특정 namespace가 담당해요. 컨테이너가 실행될 때 어떤 옵션으로 namespace를 공유했는지 docker inspect로 확인해보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "컨테이너의 프로세스 격리는 특정 namespace가 담당해요. 컨테이너가 실행될 때 어떤 옵션으로 namespace를 공유했는지 docker inspect로 확인해보세요."
+      }
     ],
     "question": "컨테이너에서 호스트의 프로세스가 보이는 원인은 무엇인가?",
     "options": [
@@ -170,13 +332,38 @@
     "conversationMode": "objective",
     "scenarioType": "design-discussion",
     "conversation": [
-      { "speaker": "수진", "role": "PM", "avatar": "📋", "text": "DB 서버의 응답 시간이 느려서 고객 불만이 들어오고 있어요. 하드웨어 교체를 검토해야 할까요?" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "iostat을 봤는데 await가 200ms 넘어요. 디스크가 SSD인데 이상하네요." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "SSD가 수명 다 된 거 아닐까요? SMART 정보를 확인해봐야 할 것 같아요." },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "SSD의 TRIM이 비활성화되어 쓰기 증폭이 발생한 것 같습니다. fstrim을 실행하면 해결됩니다." }
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "DB 서버의 응답 시간이 느려서 고객 불만이 들어오고 있어요. 하드웨어 교체를 검토해야 할까요?"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "iostat을 봤는데 await가 200ms 넘어요. 디스크가 SSD인데 이상하네요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "SSD가 수명 다 된 거 아닐까요? SMART 정보를 확인해봐야 할 것 같아요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "SSD의 TRIM이 비활성화되어 쓰기 증폭이 발생한 것 같습니다. fstrim을 실행하면 해결됩니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "하드웨어 교체 전에 소프트웨어 설정부터 확인해봐요. SSD에 HDD용 설정이 남아있을 수 있어요. /sys/block/ 아래에서 현재 I/O 스케줄러를 확인해보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "하드웨어 교체 전에 소프트웨어 설정부터 확인해봐요. SSD에 HDD용 설정이 남아있을 수 있어요. /sys/block/ 아래에서 현재 I/O 스케줄러를 확인해보세요."
+      }
     ],
     "question": "SSD 기반 서버에서 I/O 성능 문제를 진단할 때 가장 먼저 확인해야 할 것은?",
     "options": [
@@ -197,12 +384,34 @@
     "conversationMode": "objective",
     "scenarioType": "code-review",
     "conversation": [
-      { "speaker": "민수", "role": "리뷰어", "avatar": "👀", "text": "디바이스 드라이버 코드 리뷰인데요, 인터럽트 핸들러 부분이 좀 이상해요.", "code": "static irqreturn_t my_handler(int irq, void *dev_id)\n{\n    msleep(100);\n    process_data();\n    return IRQ_HANDLED;\n}", "codeLanguage": "c" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "100ms 정도면 짧은데, 별 문제 없지 않나? 동작은 하는 것 같은데." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "혹시 IRQ_HANDLED 대신 IRQ_NONE을 반환해야 하는 건 아닌가요?" }
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "디바이스 드라이버 코드 리뷰인데요, 인터럽트 핸들러 부분이 좀 이상해요.",
+        "code": "static irqreturn_t my_handler(int irq, void *dev_id)\n{\n    msleep(100);\n    process_data();\n    return IRQ_HANDLED;\n}",
+        "codeLanguage": "c"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "100ms 정도면 짧은데, 별 문제 없지 않나? 동작은 하는 것 같은데."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "혹시 IRQ_HANDLED 대신 IRQ_NONE을 반환해야 하는 건 아닌가요?"
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "인터럽트 핸들러가 실행되는 컨텍스트를 생각해봐요. 이 컨텍스트에서 호출 가능한 함수에 제약이 있어요. msleep이 내부적으로 뭘 하는지 생각해보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "인터럽트 핸들러가 실행되는 컨텍스트를 생각해봐요. 이 컨텍스트에서 호출 가능한 함수에 제약이 있어요. msleep이 내부적으로 뭘 하는지 생각해보세요."
+      }
     ],
     "question": "이 인터럽트 핸들러 코드의 문제점은 무엇인가?",
     "options": [
@@ -223,13 +432,38 @@
     "conversationMode": "objective",
     "scenarioType": "design-discussion",
     "conversation": [
-      { "speaker": "수진", "role": "PM", "avatar": "📋", "text": "실시간 데이터 처리 서비스에서 특정 코어를 전용으로 할당해달라는 요구사항이 들어왔어요." },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "nice 값을 -20으로 올리면 우선순위가 최대니까 사실상 전용으로 쓰는 거 아닌가?" },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "nice -n -20 ./my_process로 실행하면 CPU 0번에서 독점적으로 실행됩니다." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "cgroup으로 CPU를 제한하면 되나요?" }
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "실시간 데이터 처리 서비스에서 특정 코어를 전용으로 할당해달라는 요구사항이 들어왔어요."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "nice 값을 -20으로 올리면 우선순위가 최대니까 사실상 전용으로 쓰는 거 아닌가?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "nice -n -20 ./my_process로 실행하면 CPU 0번에서 독점적으로 실행됩니다."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "cgroup으로 CPU를 제한하면 되나요?"
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "우선순위(nice)와 CPU 고정(pinning)은 다른 개념이에요. 프로세스를 특정 코어에 바인딩하는 전용 도구가 있어요. sched_setaffinity 시스템 콜의 사용자 공간 래퍼를 찾아보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "우선순위(nice)와 CPU 고정(pinning)은 다른 개념이에요. 프로세스를 특정 코어에 바인딩하는 전용 도구가 있어요. sched_setaffinity 시스템 콜의 사용자 공간 래퍼를 찾아보세요."
+      }
     ],
     "question": "프로세스를 특정 CPU 코어에 고정(pin)하려면 어떤 도구를 사용해야 하는가?",
     "options": [
@@ -250,12 +484,34 @@
     "conversationMode": "objective",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "스테이징 서버에서 일부 파일이 갑자기 사라졌어요. 누가 삭제한 건 아닌 것 같고, dmesg에 ext4 에러 로그가 보입니다." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "파일시스템이 깨진 것 같아요. 바로 fsck 돌려볼게요!", "code": "sudo fsck /dev/sda1", "codeLanguage": "shell" },
-      { "speaker": "최팀장", "role": "팀장", "avatar": "🧑‍💼", "text": "빨리 돌려. 고객 데이터가 더 날아가기 전에 서둘러야지." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "스테이징 서버에서 일부 파일이 갑자기 사라졌어요. 누가 삭제한 건 아닌 것 같고, dmesg에 ext4 에러 로그가 보입니다."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "파일시스템이 깨진 것 같아요. 바로 fsck 돌려볼게요!",
+        "code": "sudo fsck /dev/sda1",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "빨리 돌려. 고객 데이터가 더 날아가기 전에 서둘러야지."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "잠깐! fsck를 실행하기 전에 반드시 확인해야 할 게 있어요. 해당 파일시스템이 지금 어떤 상태로 마운트되어 있는지 먼저 확인하세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "잠깐! fsck를 실행하기 전에 반드시 확인해야 할 게 있어요. 해당 파일시스템이 지금 어떤 상태로 마운트되어 있는지 먼저 확인하세요."
+      }
     ],
     "question": "마운트된 파일시스템에 fsck를 실행하면 어떤 문제가 발생할 수 있는가?",
     "options": [
@@ -276,13 +532,38 @@
     "conversationMode": "objective",
     "scenarioType": "design-discussion",
     "conversation": [
-      { "speaker": "수진", "role": "PM", "avatar": "📋", "text": "로봇 제어 서버에 실시간 성능이 필요하다고 하는데, CONFIG_PREEMPT_RT를 적용하면 된다고 들었어요. 전체 서버에 적용해도 되나요?" },
-      { "speaker": "최팀장", "role": "팀장", "avatar": "🧑‍💼", "text": "실시간이니까 성능이 더 좋아지는 거잖아. 전체 적용하자." },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "근데 웹 서버도 같이 돌아가는 서버인데, 웹 서버 성능에는 영향 없을까?" },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "PREEMPT_RT는 모든 워크로드에서 성능을 향상시키므로 전체 적용을 권장합니다." }
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "로봇 제어 서버에 실시간 성능이 필요하다고 하는데, CONFIG_PREEMPT_RT를 적용하면 된다고 들었어요. 전체 서버에 적용해도 되나요?"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "실시간이니까 성능이 더 좋아지는 거잖아. 전체 적용하자."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "근데 웹 서버도 같이 돌아가는 서버인데, 웹 서버 성능에는 영향 없을까?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "PREEMPT_RT는 모든 워크로드에서 성능을 향상시키므로 전체 적용을 권장합니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "실시간(real-time)이라는 말의 정확한 의미를 생각해봐요. '빠르다'는 뜻이 아니에요. throughput과 latency의 트레이드오프를 고려해보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "실시간(real-time)이라는 말의 정확한 의미를 생각해봐요. '빠르다'는 뜻이 아니에요. throughput과 latency의 트레이드오프를 고려해보세요."
+      }
     ],
     "question": "CONFIG_PREEMPT_RT가 범용 서버에서 성능 저하를 일으킬 수 있는 이유는?",
     "options": [
@@ -303,13 +584,40 @@
     "conversationMode": "objective",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "모니터링 도구에 CAP_NET_RAW capability를 부여했는데 raw socket 생성이 실패해요." },
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "audit 로그에 이런 메시지가 있습니다.", "code": "type=AVC msg=audit(1678901234.567:890): avc:  denied  { create } for  pid=4521 comm=\"monitor\" scontext=system_u:system_r:monitor_t:s0 tcontext=system_u:system_r:monitor_t:s0 tclass=rawip_socket permissive=0", "codeLanguage": "shell" },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "CAP_NET_RAW가 아니라 CAP_NET_ADMIN이 필요한 건 아닐까요?" },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "커널에서 raw socket 지원이 비활성화된 것 같습니다. CONFIG_PACKET 옵션을 확인해보세요." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "모니터링 도구에 CAP_NET_RAW capability를 부여했는데 raw socket 생성이 실패해요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "audit 로그에 이런 메시지가 있습니다.",
+        "code": "type=AVC msg=audit(1678901234.567:890): avc:  denied  { create } for  pid=4521 comm=\"monitor\" scontext=system_u:system_r:monitor_t:s0 tcontext=system_u:system_r:monitor_t:s0 tclass=rawip_socket permissive=0",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "CAP_NET_RAW가 아니라 CAP_NET_ADMIN이 필요한 건 아닐까요?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "커널에서 raw socket 지원이 비활성화된 것 같습니다. CONFIG_PACKET 옵션을 확인해보세요."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "audit 로그의 type=AVC 부분을 주목해봐요. 이건 어떤 보안 시스템의 로그인지, DAC와 MAC의 관계를 생각해보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "audit 로그의 type=AVC 부분을 주목해봐요. 이건 어떤 보안 시스템의 로그인지, DAC와 MAC의 관계를 생각해보세요."
+      }
     ],
     "question": "capability를 부여했음에도 raw socket을 열 수 없는 이유는?",
     "options": [
@@ -330,13 +638,40 @@
     "conversationMode": "objective",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "로그 수집 서버에서 파일 생성이 실패하면서 ENOSPC 에러가 나요. 근데 df로 보면 디스크 여유 공간이 40%나 남아있어요." },
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "에러 로그입니다.", "code": "touch: cannot touch '/var/log/app/new.log': No space left on device\n$ df -h /var/log\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda2       100G   60G   40G  60% /var/log", "codeLanguage": "shell" },
-      { "speaker": "최팀장", "role": "팀장", "avatar": "🧑‍💼", "text": "40GB나 남았는데 No space? 디스크 펌웨어 버그 아냐? 벤더한테 문의해." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "파일시스템 캐시가 꽉 찬 건 아닐까요? sync 명령어 한번 돌려볼게요." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "로그 수집 서버에서 파일 생성이 실패하면서 ENOSPC 에러가 나요. 근데 df로 보면 디스크 여유 공간이 40%나 남아있어요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "에러 로그입니다.",
+        "code": "touch: cannot touch '/var/log/app/new.log': No space left on device\n$ df -h /var/log\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda2       100G   60G   40G  60% /var/log",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "40GB나 남았는데 No space? 디스크 펌웨어 버그 아냐? 벤더한테 문의해."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "파일시스템 캐시가 꽉 찬 건 아닐까요? sync 명령어 한번 돌려볼게요."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "df -h 말고 다른 옵션으로 확인해야 할 게 있어요. 파일시스템에서 파일 하나를 저장하려면 블록 공간 외에 다른 자원도 필요하거든요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "df -h 말고 다른 옵션으로 확인해야 할 게 있어요. 파일시스템에서 파일 하나를 저장하려면 블록 공간 외에 다른 자원도 필요하거든요."
+      }
     ],
     "question": "디스크 공간이 남아있는데 ENOSPC(No space left on device)가 발생할 수 있는 원인은?",
     "options": [
@@ -357,13 +692,40 @@
     "conversationMode": "objective",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "프로덕션에서 커널 패닉이 발생했어요. kdump로 크래시 덤프를 수집했습니다." },
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "call trace 일부입니다.", "code": "BUG: unable to handle page fault for address: ffff888123456000\nCall Trace:\n ext4_readdir+0x1a3/0x2b0\n iterate_dir+0x7a/0x1c0\n __x64_sys_getdents64+0x6d/0x120", "codeLanguage": "shell" },
-      { "speaker": "최팀장", "role": "팀장", "avatar": "🧑‍💼", "text": "메모리 에러니까 RAM 불량이야. 서버실에 연락해서 메모리 모듈 교체해." },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "사용자 프로세스가 잘못된 메모리 주소에 접근한 것 같습니다. 해당 프로세스의 코드를 점검하세요." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "프로덕션에서 커널 패닉이 발생했어요. kdump로 크래시 덤프를 수집했습니다."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "call trace 일부입니다.",
+        "code": "BUG: unable to handle page fault for address: ffff888123456000\nCall Trace:\n ext4_readdir+0x1a3/0x2b0\n iterate_dir+0x7a/0x1c0\n __x64_sys_getdents64+0x6d/0x120",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "메모리 에러니까 RAM 불량이야. 서버실에 연락해서 메모리 모듈 교체해."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "사용자 프로세스가 잘못된 메모리 주소에 접근한 것 같습니다. 해당 프로세스의 코드를 점검하세요."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "주소가 ffff888...로 시작하는데, 이건 사용자 공간 주소가 아니에요. 그리고 call trace에 나오는 함수 이름들을 보면 어디서 문제가 발생했는지 힌트가 있어요. 커널 버전과 관련 CVE를 확인해보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "주소가 ffff888...로 시작하는데, 이건 사용자 공간 주소가 아니에요. 그리고 call trace에 나오는 함수 이름들을 보면 어디서 문제가 발생했는지 힌트가 있어요. 커널 버전과 관련 CVE를 확인해보세요."
+      }
     ],
     "question": "커널 주소 공간에서 발생한 page fault의 가장 가능성 높은 원인은?",
     "options": [
@@ -384,13 +746,38 @@
     "conversationMode": "objective",
     "scenarioType": "design-discussion",
     "conversation": [
-      { "speaker": "수진", "role": "PM", "avatar": "📋", "text": "컨테이너 메모리 제한을 설정했는데 OOM으로 죽지는 않고 극도로 느려진다는 보고가 있어요. 원인 파악 부탁드려요." },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "memory.max를 너무 높게 설정해서 OOM이 안 뜨는 거 아닐까? 값을 더 낮춰보면 어때?" },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "swap이 활성화되어 있으면 메모리가 부족해도 OOM이 안 뜬다고 들었어요." },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "cgroup v2에서는 OOM Killer가 기본적으로 비활성화되어 있습니다. memory.oom.group을 설정해야 합니다." }
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "컨테이너 메모리 제한을 설정했는데 OOM으로 죽지는 않고 극도로 느려진다는 보고가 있어요. 원인 파악 부탁드려요."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "memory.max를 너무 높게 설정해서 OOM이 안 뜨는 거 아닐까? 값을 더 낮춰보면 어때?"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "swap이 활성화되어 있으면 메모리가 부족해도 OOM이 안 뜬다고 들었어요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "cgroup v2에서는 OOM Killer가 기본적으로 비활성화되어 있습니다. memory.oom.group을 설정해야 합니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "cgroup v2의 메모리 제한은 한 가지가 아니에요. memory.max와 memory.high 두 가지 임계값이 있고, 각각 다르게 동작해요. 현재 설정값을 확인해보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "cgroup v2의 메모리 제한은 한 가지가 아니에요. memory.max와 memory.high 두 가지 임계값이 있고, 각각 다르게 동작해요. 현재 설정값을 확인해보세요."
+      }
     ],
     "question": "cgroup v2에서 컨테이너가 OOM으로 죽지 않고 느려지는 원인은?",
     "options": [
@@ -411,16 +798,57 @@
     "conversationMode": "fill-blank",
     "scenarioType": "code-review",
     "conversation": [
-      { "speaker": "민수", "role": "리뷰어", "avatar": "👀", "text": "커널 모듈 코드 리뷰인데요, insmod 하면 라이선스 경고가 나온다고 해요.", "code": "static int __init hello_init(void)\n{\n    printk(KERN_INFO \"Hello, kernel!\\n\");\n    return 0;\n}\nmodule_init(hello_init);", "codeLanguage": "c" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "라이선스 경고 정도는 무시해도 동작은 하잖아? 그냥 넘어가면 안 되나?" },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "소스에 ___ 매크로를 추가해야 해요. 보통 ___로 설정합니다." }
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "커널 모듈 코드 리뷰인데요, insmod 하면 라이선스 경고가 나온다고 해요.",
+        "code": "static int __init hello_init(void)\n{\n    printk(KERN_INFO \"Hello, kernel!\\n\");\n    return 0;\n}\nmodule_init(hello_init);",
+        "codeLanguage": "c"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "라이선스 경고 정도는 무시해도 동작은 하잖아? 그냥 넘어가면 안 되나?"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "소스에 ___ 매크로를 추가해야 해요. 보통 ___로 설정합니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "경고를 무시하면 EXPORT_SYMBOL_GPL로 내보낸 커널 심볼을 사용할 수 없어요. 커널 모듈에 필수적인 매크로가 빠져있는 거예요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "경고를 무시하면 EXPORT_SYMBOL_GPL로 내보낸 커널 심볼을 사용할 수 없어요. 커널 모듈에 필수적인 매크로가 빠져있는 거예요."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["MODULE_LICENSE"], ["GPL", "GPL v2"]],
-    "blankDistractors": [["MODULE_AUTHOR", "MODULE_DESCRIPTION"], ["MIT", "Apache-2.0"]],
+    "blankAnswers": [
+      [
+        "MODULE_LICENSE"
+      ],
+      [
+        "GPL",
+        "GPL v2"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "DKMS",
+        "IPC",
+        "SEEK_SET"
+      ],
+      [
+        "EL1",
+        "LRU",
+        "DCZID_EL0"
+      ]
+    ],
     "explanation": "커널 모듈은 MODULE_LICENSE() 매크로로 라이선스를 명시해야 합니다. GPL이 아닌 라이선스를 사용하면 커널 심볼 중 EXPORT_SYMBOL_GPL로 내보낸 심볼을 사용할 수 없고, 'tainted kernel' 경고가 발생합니다."
   },
   {
@@ -432,16 +860,54 @@
     "conversationMode": "fill-blank",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "서버에 문제가 생긴 것 같은데, 로그를 어떻게 확인해야 하는지 모르겠어요." },
-      { "speaker": "최팀장", "role": "팀장", "avatar": "🧑‍💼", "text": "그냥 /var/log 폴더에 다 있을 텐데 열어봐." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "커널 메시지는 ___ 명령어로 확인하실 수 있고, 시스템 전체 로그는 ___로 확인 가능합니다." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "서버에 문제가 생긴 것 같은데, 로그를 어떻게 확인해야 하는지 모르겠어요."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "그냥 /var/log 폴더에 다 있을 텐데 열어봐."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "커널 메시지는 ___ 명령어로 확인하실 수 있고, 시스템 전체 로그는 ___로 확인 가능합니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "/var/log에 파일이 있긴 하지만, 커널 레벨 메시지와 시스템 전체 로그를 보는 전용 명령어가 각각 있어요. systemd 기반 시스템이면 더 편리한 도구가 있고요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "/var/log에 파일이 있긴 하지만, 커널 레벨 메시지와 시스템 전체 로그를 보는 전용 명령어가 각각 있어요. systemd 기반 시스템이면 더 편리한 도구가 있고요."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["dmesg"], ["journalctl"]],
-    "blankDistractors": [["syslog", "printk"], ["systemctl", "logrotate"]],
+    "blankAnswers": [
+      [
+        "dmesg"
+      ],
+      [
+        "journalctl"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "oom_score_adj",
+        "net.core.rmem_max",
+        "insmod"
+      ],
+      [
+        "add_timer",
+        "ftrace",
+        "cgroup"
+      ]
+    ],
     "explanation": "dmesg는 커널 링 버퍼의 메시지를 출력하는 명령어이고, journalctl은 systemd 기반 시스템에서 전체 시스템 로그를 조회하는 명령어입니다. dmesg는 커널 레벨 메시지만 보여주고, journalctl은 서비스 로그를 포함한 모든 로그를 보여줍니다."
   },
   {
@@ -453,16 +919,64 @@
     "conversationMode": "fill-blank",
     "scenarioType": "design-discussion",
     "conversation": [
-      { "speaker": "수진", "role": "PM", "avatar": "📋", "text": "신입 교육용으로 커널 모듈 관리 가이드를 만들어야 해요. 기본 명령어 정리 좀 부탁드려요." },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "lsblk 명령어로 커널 모듈을 확인할 수 있습니다!" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "아니야, 현재 로드된 모듈은 ___로 확인하면 돼. 모듈을 올리려면 ___, 내리려면 ___를 사용해." }
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "신입 교육용으로 커널 모듈 관리 가이드를 만들어야 해요. 기본 명령어 정리 좀 부탁드려요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "lsblk 명령어로 커널 모듈을 확인할 수 있습니다!"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "아니야, 현재 로드된 모듈은 ___로 확인하면 돼. 모듈을 올리려면 ___, 내리려면 ___를 사용해."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "lsblk는 블록 디바이스 목록이에요. 커널 모듈 관련 명령어는 따로 있어요. ls, ins, rm 뒤에 mod가 붙는 패턴이에요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "lsblk는 블록 디바이스 목록이에요. 커널 모듈 관련 명령어는 따로 있어요. ls, ins, rm 뒤에 mod가 붙는 패턴이에요."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["lsmod"], ["insmod", "modprobe"], ["rmmod", "modprobe -r"]],
-    "blankDistractors": [["lspci", "lsblk"], ["loadmod", "modload"], ["unmod", "delmod"]],
+    "blankAnswers": [
+      [
+        "lsmod"
+      ],
+      [
+        "insmod",
+        "modprobe"
+      ],
+      [
+        "rmmod",
+        "modprobe -r"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "function",
+        "net.core.rmem_max",
+        "make"
+      ],
+      [
+        "make",
+        "ftrace",
+        "dma_alloc_coherent"
+      ],
+      [
+        "journalctl",
+        "cgroup",
+        "function"
+      ]
+    ],
     "explanation": "lsmod는 현재 로드된 커널 모듈 목록을 보여주며, /proc/modules를 읽기 쉽게 포맷합니다. insmod는 모듈을 직접 로드하고, modprobe는 의존성을 자동으로 처리합니다. rmmod는 모듈을 언로드합니다."
   },
   {
@@ -474,16 +988,55 @@
     "conversationMode": "fill-blank",
     "scenarioType": "design-discussion",
     "conversation": [
-      { "speaker": "수진", "role": "PM", "avatar": "📋", "text": "대용량 파일 전송 서비스에서 TCP 성능이 부족하다는 피드백이 있어요. 네트워크 튜닝이 필요한가요?" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "TCP 수신 버퍼를 늘려보면 좋을 것 같아. ___을 사용해서 커널 파라미터를 변경할 수 있어. TCP 수신 버퍼는 ___ 파라미터로 설정하면 돼." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "ethtool로 네트워크 카드 설정을 바꾸면 되는 거 아닌가요?" }
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "대용량 파일 전송 서비스에서 TCP 성능이 부족하다는 피드백이 있어요. 네트워크 튜닝이 필요한가요?"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "TCP 수신 버퍼를 늘려보면 좋을 것 같아. ___을 사용해서 커널 파라미터를 변경할 수 있어. TCP 수신 버퍼는 ___ 파라미터로 설정하면 돼."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "ethtool로 네트워크 카드 설정을 바꾸면 되는 거 아닌가요?"
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "ethtool은 NIC 하드웨어 설정이에요. TCP 버퍼는 커널 네트워크 스택 파라미터로, /proc/sys/ 아래에서 관리되는 값이에요. 이걸 변경하는 전용 도구가 있어요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "ethtool은 NIC 하드웨어 설정이에요. TCP 버퍼는 커널 네트워크 스택 파라미터로, /proc/sys/ 아래에서 관리되는 값이에요. 이걸 변경하는 전용 도구가 있어요."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["sysctl"], ["net.core.rmem_max", "net.ipv4.tcp_rmem"]],
-    "blankDistractors": [["systool", "ethtool"], ["net.core.wmem_max", "net.ipv4.ip_forward"]],
+    "blankAnswers": [
+      [
+        "sysctl"
+      ],
+      [
+        "net.core.rmem_max",
+        "net.ipv4.tcp_rmem"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "cpu.max",
+        "rmmod",
+        "function"
+      ],
+      [
+        "add_timer",
+        "journalctl",
+        "dma_alloc_coherent"
+      ]
+    ],
     "explanation": "sysctl은 런타임에 커널 파라미터를 조회하고 변경하는 도구입니다. net.core.rmem_max는 소켓 수신 버퍼의 최대값을, net.ipv4.tcp_rmem은 TCP 수신 버퍼의 최소/기본/최대값을 설정합니다. 영구 적용하려면 /etc/sysctl.conf에 기록합니다."
   },
   {
@@ -495,16 +1048,54 @@
     "conversationMode": "fill-blank",
     "scenarioType": "design-discussion",
     "conversation": [
-      { "speaker": "수진", "role": "PM", "avatar": "📋", "text": "특정 하드웨어 드라이버를 포함한 커스텀 커널이 필요하다고 합니다. 빌드 절차를 알려주세요." },
-      { "speaker": "최팀장", "role": "팀장", "avatar": "🧑‍💼", "text": "그냥 패키지 매니저로 커널 설치하면 안 돼?" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "커스텀 빌드가 필요한 상황이에요. 먼저 ___ 명령으로 ncurses 기반 설정 화면을 띄워요. 설정 완료 후 ___로 빌드하면 됩니다." }
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "특정 하드웨어 드라이버를 포함한 커스텀 커널이 필요하다고 합니다. 빌드 절차를 알려주세요."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "그냥 패키지 매니저로 커널 설치하면 안 돼?"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "커스텀 빌드가 필요한 상황이에요. 먼저 ___ 명령으로 ncurses 기반 설정 화면을 띄워요. 설정 완료 후 ___로 빌드하면 됩니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "커널 소스 디렉토리에서 설정 파일(.config)을 편집하는 도구가 여러 가지인데, 텍스트 터미널에서 가장 많이 쓰는 건 ncurses 기반 UI예요. 빌드는 표준 빌드 시스템으로 하면 돼요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "커널 소스 디렉토리에서 설정 파일(.config)을 편집하는 도구가 여러 가지인데, 텍스트 터미널에서 가장 많이 쓰는 건 ncurses 기반 UI예요. 빌드는 표준 빌드 시스템으로 하면 돼요."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["make menuconfig"], ["make"]],
-    "blankDistractors": [["make config", "make defconfig"], ["gcc", "cmake"]],
+    "blankAnswers": [
+      [
+        "make menuconfig"
+      ],
+      [
+        "make"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "kernel timer",
+        "struct inode",
+        "__ATTR"
+      ],
+      [
+        "lsmod",
+        "cgroup",
+        "cpu.max"
+      ]
+    ],
     "explanation": "make menuconfig는 ncurses 기반의 텍스트 UI로 커널 설정(.config)을 편집하는 명령입니다. 설정 후 make로 커널을 컴파일하며, -j$(nproc) 옵션으로 모든 CPU 코어를 활용하여 병렬 빌드할 수 있습니다."
   },
   {
@@ -516,16 +1107,56 @@
     "conversationMode": "fill-blank",
     "scenarioType": "design-discussion",
     "conversation": [
-      { "speaker": "수진", "role": "PM", "avatar": "📋", "text": "멀티테넌트 환경에서 컨테이너별로 CPU 사용량을 제한해야 한다는 요구사항이에요." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "ulimit으로 프로세스 자원을 제한하면 되나요?" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "ulimit은 개별 프로세스 제한이야. 컨테이너 전체를 제한하려면 ___를 이용해야 해. CPU 시간은 ___ 파일에 할당량을 설정하면 돼." }
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "멀티테넌트 환경에서 컨테이너별로 CPU 사용량을 제한해야 한다는 요구사항이에요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "ulimit으로 프로세스 자원을 제한하면 되나요?"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "ulimit은 개별 프로세스 제한이야. 컨테이너 전체를 제한하려면 ___를 이용해야 해. CPU 시간은 ___ 파일에 할당량을 설정하면 돼."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "커널의 자원 제한 기능은 프로세스 그룹 단위로 동작해요. /sys/fs/ 아래에 마운트되는 가상 파일시스템으로 관리되고요. v2에서는 CPU 할당량 파일이 하나로 통합되었어요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "커널의 자원 제한 기능은 프로세스 그룹 단위로 동작해요. /sys/fs/ 아래에 마운트되는 가상 파일시스템으로 관리되고요. v2에서는 CPU 할당량 파일이 하나로 통합되었어요."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["cgroup", "cgroups", "control group"], ["cpu.max"]],
-    "blankDistractors": [["namespace", "ulimit"], ["cpu.shares", "cpu.weight"]],
+    "blankAnswers": [
+      [
+        "cgroup",
+        "cgroups",
+        "control group"
+      ],
+      [
+        "cpu.max"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "sysctl",
+        "rmmod",
+        "add_timer"
+      ],
+      [
+        "lsmod",
+        "add_timer",
+        "net.core.rmem_max"
+      ]
+    ],
     "explanation": "cgroup(Control Group)은 프로세스 그룹의 자원 사용을 제한하는 커널 기능입니다. cgroup v2에서 cpu.max 파일에 'quota period' 형식으로 값을 쓰면 CPU 시간을 제한할 수 있습니다. 100000 100000은 매 100ms 주기마다 최대 100ms의 CPU 시간을 사용할 수 있음(1 코어 100%)을 의미합니다."
   },
   {
@@ -537,16 +1168,57 @@
     "conversationMode": "fill-blank",
     "scenarioType": "code-review",
     "conversation": [
-      { "speaker": "민수", "role": "리뷰어", "avatar": "👀", "text": "성능 분석 스크립트 리뷰인데, 커널 내부 함수 호출을 추적하는 부분이 strace로 되어 있어요. 이게 맞나요?", "code": "strace -e trace=all -p $KERNEL_PID 2>&1 | tee trace.log", "codeLanguage": "shell" },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "strace로는 안 되나요? 시스템 콜 추적하는 거잖아요." },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "strace는 사용자 공간에서 시스템 콜만 볼 수 있어. 커널 내부 함수를 추적하려면 ___를 사용해야 해. ___ tracer를 활성화하면 커널 함수 호출 흐름을 볼 수 있어." }
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "성능 분석 스크립트 리뷰인데, 커널 내부 함수 호출을 추적하는 부분이 strace로 되어 있어요. 이게 맞나요?",
+        "code": "strace -e trace=all -p $KERNEL_PID 2>&1 | tee trace.log",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "strace로는 안 되나요? 시스템 콜 추적하는 거잖아요."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "strace는 사용자 공간에서 시스템 콜만 볼 수 있어. 커널 내부 함수를 추적하려면 ___를 사용해야 해. ___ tracer를 활성화하면 커널 함수 호출 흐름을 볼 수 있어."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "커널에 내장된 트레이싱 프레임워크가 있어요. /sys/kernel/debug/tracing/ 디렉토리를 통해 제어하고, 여러 가지 tracer 중에서 선택할 수 있어요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "커널에 내장된 트레이싱 프레임워크가 있어요. /sys/kernel/debug/tracing/ 디렉토리를 통해 제어하고, 여러 가지 tracer 중에서 선택할 수 있어요."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["ftrace"], ["function", "function_graph"]],
-    "blankDistractors": [["perf", "bpftrace"], ["syscall", "event"]],
+    "blankAnswers": [
+      [
+        "ftrace"
+      ],
+      [
+        "function",
+        "function_graph"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "sysctl",
+        "rmmod",
+        "journalctl"
+      ],
+      [
+        "rmmod",
+        "make",
+        "add_timer"
+      ]
+    ],
     "explanation": "ftrace는 커널에 내장된 트레이싱 프레임워크로 /sys/kernel/debug/tracing/ 디렉토리를 통해 제어합니다. function tracer는 커널 함수 호출을 기록하고, function_graph tracer는 함수의 진입과 반환을 트리 형태로 보여줍니다."
   },
   {
@@ -558,16 +1230,63 @@
     "conversationMode": "fill-blank",
     "scenarioType": "bug-report",
     "conversation": [
-      { "speaker": "환영", "role": "QA", "avatar": "🔍", "text": "OOM Killer가 중요한 DB 프로세스를 죽여요. 덜 중요한 배치 프로세스 대신 DB가 죽는 이유를 모르겠어요." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "메모리를 제일 많이 쓰는 프로세스가 먼저 죽는 거 아닌가요?" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "맞아, 커널이 각 프로세스의 ___를 계산해서 가장 높은 프로세스를 종료해. 이 값은 /proc/PID/___ 파일에서 확인할 수 있고, 수동으로 조정하려면 /proc/PID/___ 파일에 값을 쓰면 돼." }
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "OOM Killer가 중요한 DB 프로세스를 죽여요. 덜 중요한 배치 프로세스 대신 DB가 죽는 이유를 모르겠어요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "메모리를 제일 많이 쓰는 프로세스가 먼저 죽는 거 아닌가요?"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "맞아, 커널이 각 프로세스의 ___를 계산해서 가장 높은 프로세스를 종료해. 이 값은 /proc/PID/___ 파일에서 확인할 수 있고, 수동으로 조정하려면 /proc/PID/___ 파일에 값을 쓰면 돼."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "OOM Killer의 프로세스 선택 기준은 /proc 아래에서 확인할 수 있어요. 점수를 확인하는 파일과 수동으로 조정하는 파일이 따로 있어요. -1000으로 설정하면 OOM 대상에서 제외됩니다." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "OOM Killer의 프로세스 선택 기준은 /proc 아래에서 확인할 수 있어요. 점수를 확인하는 파일과 수동으로 조정하는 파일이 따로 있어요. -1000으로 설정하면 OOM 대상에서 제외됩니다."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["oom_score"], ["oom_score"], ["oom_score_adj", "oom_adj"]],
-    "blankDistractors": [["oom_priority", "oom_weight"], ["oom_rank", "oom_level"], ["oom_protect", "oom_limit"]],
+    "blankAnswers": [
+      [
+        "oom_score"
+      ],
+      [
+        "oom_score"
+      ],
+      [
+        "oom_score_adj",
+        "oom_adj"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "journalctl",
+        "dmesg",
+        "dma_free_coherent"
+      ],
+      [
+        "add_timer",
+        "dma_free_coherent",
+        "net.core.rmem_max"
+      ],
+      [
+        "make",
+        "rmmod",
+        "sysctl"
+      ]
+    ],
     "explanation": "OOM Killer는 각 프로세스의 oom_score(메모리 사용량, 실행 시간 등 기반)를 계산하여 가장 높은 점수의 프로세스를 종료합니다. /proc/PID/oom_score에서 현재 값을 확인하고, /proc/PID/oom_score_adj(-1000~1000)로 수동 조정이 가능합니다. -1000으로 설정하면 OOM Killer에서 제외됩니다."
   },
   {
@@ -579,16 +1298,56 @@
     "conversationMode": "fill-blank",
     "scenarioType": "code-review",
     "conversation": [
-      { "speaker": "민수", "role": "리뷰어", "avatar": "👀", "text": "디바이스 드라이버에서 DMA 버퍼를 kmalloc으로 할당하고 있는데, 이게 맞나요?", "code": "void *buf = kmalloc(size, GFP_KERNEL);\ndma_addr_t dma_handle = virt_to_phys(buf);", "codeLanguage": "c" },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "virt_to_phys가 항상 DMA에 유효한 주소를 반환하진 않지 않나? IOMMU 환경에서 문제될 수 있을 것 같은데." },
-      { "speaker": "박신입", "role": "신입", "avatar": "🧑‍💻", "text": "DMA 일관성 매핑에는 ___ 함수를 사용해야 해요. 사용 후에는 반드시 ___로 해제해야 합니다." }
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "디바이스 드라이버에서 DMA 버퍼를 kmalloc으로 할당하고 있는데, 이게 맞나요?",
+        "code": "void *buf = kmalloc(size, GFP_KERNEL);\ndma_addr_t dma_handle = virt_to_phys(buf);",
+        "codeLanguage": "c"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "virt_to_phys가 항상 DMA에 유효한 주소를 반환하진 않지 않나? IOMMU 환경에서 문제될 수 있을 것 같은데."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "DMA 일관성 매핑에는 ___ 함수를 사용해야 해요. 사용 후에는 반드시 ___로 해제해야 합니다."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "DMA 버퍼 할당에는 전용 API가 있어요. CPU와 디바이스 간 캐시 일관성을 자동으로 보장해주고, IOMMU 매핑도 처리해줘요. dma_ 접두사로 시작하는 함수를 찾아보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "DMA 버퍼 할당에는 전용 API가 있어요. CPU와 디바이스 간 캐시 일관성을 자동으로 보장해주고, IOMMU 매핑도 처리해줘요. dma_ 접두사로 시작하는 함수를 찾아보세요."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["dma_alloc_coherent"], ["dma_free_coherent"]],
-    "blankDistractors": [["kmalloc", "vmalloc"], ["kfree", "vfree"]],
+    "blankAnswers": [
+      [
+        "dma_alloc_coherent"
+      ],
+      [
+        "dma_free_coherent"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "oom_score",
+        "cpu.max",
+        "function"
+      ],
+      [
+        "net.core.rmem_max",
+        "cgroup",
+        "dmesg"
+      ]
+    ],
     "explanation": "dma_alloc_coherent()는 DMA에 적합한 일관성(coherent) 메모리를 할당하며, CPU와 디바이스가 동시에 접근해도 캐시 일관성 문제가 없습니다. 사용 후 dma_free_coherent()로 해제해야 합니다. kmalloc/vmalloc은 일반 커널 메모리 할당이며 DMA 일관성을 보장하지 않습니다."
   },
   {
@@ -600,16 +1359,58 @@
     "conversationMode": "fill-blank",
     "scenarioType": "code-review",
     "conversation": [
-      { "speaker": "민수", "role": "리뷰어", "avatar": "👀", "text": "커널 모듈에서 주기적 작업을 while 루프와 msleep으로 구현했는데 이게 맞나요?", "code": "static int my_thread(void *data)\n{\n    while (!kthread_should_stop()) {\n        msleep(1000);\n        do_periodic_work();\n    }\n    return 0;\n}", "codeLanguage": "c" },
-      { "speaker": "Copilot", "role": "AI", "avatar": "🤖", "text": "코드가 올바릅니다. kthread와 msleep 조합은 커널에서 주기적 작업을 수행하는 표준 방법입니다." },
-      { "speaker": "지훈", "role": "동료", "avatar": "💬", "text": "kthread도 방법이긴 한데, 단순 주기 작업이면 ___를 사용하는 게 더 효율적이야. 초기화 시 ___로 타이머를 시작하고 콜백에서 다시 mod_timer로 갱신하면 돼." }
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "커널 모듈에서 주기적 작업을 while 루프와 msleep으로 구현했는데 이게 맞나요?",
+        "code": "static int my_thread(void *data)\n{\n    while (!kthread_should_stop()) {\n        msleep(1000);\n        do_periodic_work();\n    }\n    return 0;\n}",
+        "codeLanguage": "c"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "코드가 올바릅니다. kthread와 msleep 조합은 커널에서 주기적 작업을 수행하는 표준 방법입니다."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "kthread도 방법이긴 한데, 단순 주기 작업이면 ___를 사용하는 게 더 효율적이야. 초기화 시 ___로 타이머를 시작하고 콜백에서 다시 mod_timer로 갱신하면 돼."
+      }
     ],
     "seniorHint": [
-      { "speaker": "이시니어", "role": "시니어", "avatar": "👩‍💻", "text": "kthread + msleep은 커널 스레드 하나를 계속 점유해요. 단순 주기 작업이라면 소프트 인터럽트 컨텍스트에서 동작하는 더 가벼운 메커니즘이 있어요. struct timer_list를 찾아보세요." }
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "kthread + msleep은 커널 스레드 하나를 계속 점유해요. 단순 주기 작업이라면 소프트 인터럽트 컨텍스트에서 동작하는 더 가벼운 메커니즘이 있어요. struct timer_list를 찾아보세요."
+      }
     ],
     "question": "대화의 빈칸을 채우시오.",
-    "blankAnswers": [["kernel timer", "timer_list"], ["add_timer", "mod_timer"]],
-    "blankDistractors": [["workqueue", "kthread"], ["schedule_work", "queue_work"]],
+    "blankAnswers": [
+      [
+        "kernel timer",
+        "timer_list"
+      ],
+      [
+        "add_timer",
+        "mod_timer"
+      ]
+    ],
+    "blankDistractors": [
+      [
+        "make menuconfig",
+        "-EINTR",
+        "_IOW"
+      ],
+      [
+        "cpu.max",
+        "function",
+        "dmesg"
+      ]
+    ],
     "explanation": "커널 타이머(struct timer_list)는 지정된 시간 후에 콜백 함수를 실행하는 메커니즘입니다. timer_setup()으로 초기화하고 add_timer()나 mod_timer()로 시작합니다. while+msleep 방식은 커널 스레드를 점유하여 비효율적이며, 타이머는 소프트 인터럽트 컨텍스트에서 효율적으로 동작합니다."
   }
 ]

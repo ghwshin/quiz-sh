@@ -68,19 +68,19 @@
     "explanation": "HIDL은 HAL 전용으로 설계되어 hwbinder를 사용하고, AIDL은 원래 binder를 사용하는 범용 IPC 인터페이스 언어입니다. Stable AIDL의 HAL 지원은 Android 10에서 도입되기 시작했으며, Android 11에서 본격적으로 강화되어 새로운 HAL은 모두 AIDL로 작성하도록 권장됩니다. HIDL은 Android 13부터 deprecated 되었습니다.",
     "blankDistractors": [
       [
-        "/apex",
-        "/dev/socket/<name>",
-        "/dev/binder"
-      ],
-      [
+        "/data/data/",
         "/dev",
-        ".ninja",
-        "/data/data/"
+        "/dev/socket/<name>"
       ],
       [
-        "@VintfStability",
+        "/dev/socket/<name>",
+        "/dev/hwbinder",
+        "/data/anr/traces.txt"
+      ],
+      [
         "compatibility matrix",
-        "device manifest"
+        "device manifest",
+        "@VintfStability"
       ]
     ]
   },
@@ -107,19 +107,19 @@
     "explanation": "VNDK는 /system 파티션에 위치하며 벤더 프로세스에서 접근 가능한 공유 라이브러리 세트입니다. 시스템과 벤더 간의 ABI 안정성을 유지하여, 시스템 이미지만 업데이트해도 벤더 HAL 바이너리가 정상 동작하도록 합니다. VNDK-SP는 Same-Process HAL이 사용할 수 있는 VNDK 라이브러리 하위 집합입니다.",
     "blankDistractors": [
       [
-        "CTS",
         "VTS",
-        "X7"
+        "CTS",
+        "UID"
       ],
       [
-        "재컴파일",
-        "키",
-        "단일 구현"
+        "공개 키",
+        "멀티스레드",
+        "호환성"
       ],
       [
-        "IBase",
-        "extends",
-        "SensorConfig"
+        "BpHwFoo",
+        "hal_hwservice_type",
+        "hidl_death_recipient"
       ]
     ]
   },
@@ -145,14 +145,14 @@
     "explanation": "모든 HIDL 인터페이스는 android.hidl.base@1.0::IBase를 직접 또는 간접적으로 상속합니다. IBase는 ping(), interfaceDescriptor(), notifySyspropsChanged() 등의 기본 메서드를 제공합니다. package 선언에서 @1.0은 메이저.마이너 버전을 의미합니다.",
     "blankDistractors": [
       [
-        "VintfObject",
-        "BnHwFoo",
-        "hidl-gen"
+        "extends",
+        "hidl_death_recipient",
+        "default"
       ],
       [
-        "aidl",
-        "VintfObject",
-        "getService"
+        "void",
+        "hidl_death_recipient",
+        "linkToDeath"
       ]
     ]
   },
@@ -176,14 +176,14 @@
     "explanation": "AIDL 인터페이스는 interface 키워드로 정의합니다. @VintfStability 어노테이션은 이 인터페이스가 VINTF(Vendor Interface)의 일부로 안정성이 보장됨을 나타냅니다. 반환 값이 없는 메서드는 void를 사용합니다.",
     "blankDistractors": [
       [
-        "default",
-        "serviceDied",
-        "extends"
+        "VintfObject",
+        "extends",
+        "default"
       ],
       [
+        "structured",
         "hidl_death_recipient",
-        "SensorConfig",
-        "extends"
+        "VintfObject"
       ]
     ]
   },
@@ -276,19 +276,19 @@
     "explanation": "device manifest는 벤더가 제공하는 HAL을 나열하고, framework compatibility matrix(FCM)는 프레임워크가 필요로 하는 HAL을 나열합니다. 반대로 framework manifest와 device compatibility matrix도 존재합니다. 이 네 파일이 상호 검증되어 시스템과 벤더 간의 호환성을 보장합니다.",
     "blankDistractors": [
       [
-        "@VintfStability",
         "Stable AIDL",
-        "binder/binder_transaction"
+        "@VintfStability",
+        "hardware/interfaces"
       ],
       [
         "Stable AIDL",
         "@VintfStability",
-        "Secure Monitor"
+        "onrestart restart audioserver"
       ],
       [
-        "Treble",
-        "registerAsService",
-        "parcelable"
+        "nullptr",
+        "extends",
+        "aidl"
       ]
     ]
   },
@@ -314,19 +314,19 @@
     "explanation": "기존 AIDL에서는 parcelable을 Java 코드에서 Parcelable 인터페이스를 구현해야 했지만, Stable AIDL(structured parcelable)에서는 .aidl 파일 내에 필드를 직접 정의합니다. 이를 통해 C++/Java/Rust 등 다양한 언어의 바인딩 코드가 자동 생성되며 ABI 안정성이 보장됩니다.",
     "blankDistractors": [
       [
-        "ICameraProvider",
-        "serviceDied",
-        "IBase"
+        "hwbinder",
+        "linkToDeath",
+        "BpHwFoo"
       ],
       [
         ".hal",
-        "/data/anr/traces.txt",
-        "/dev/socket/<name>"
+        "/dev/vndbinder",
+        "/dev/binder"
       ],
       [
-        "aidl",
-        "hal_hwservice_type",
-        "ICameraProvider"
+        "VintfObject",
+        "nullptr",
+        "default"
       ]
     ]
   },
@@ -355,18 +355,18 @@
     "blankDistractors": [
       [
         "VNDK",
-        "DEX",
-        "AIDL"
+        "HIDL",
+        "CROSS_COMPILE"
       ],
       [
         "VNDK",
-        "LLNDK",
-        "CDEX"
+        "NEON",
+        "LIFO"
       ],
       [
-        "VintfObject",
+        "hidl_death_recipient",
         "void",
-        "SensorConfig"
+        "registerAsService"
       ]
     ]
   },
@@ -390,14 +390,14 @@
     "explanation": "HIDL HAL 서비스는 registerAsService() 메서드를 호출하여 hwservicemanager에 등록합니다. 인자로 인스턴스 이름(보통 \"default\")을 전달합니다. configureRpcThreadpool()로 스레드 풀을 설정하고, joinRpcThreadpool()로 메인 스레드가 종료되지 않도록 합니다.",
     "blankDistractors": [
       [
-        "BpHwFoo",
-        "aidl",
-        "nullptr"
+        "hal_hwservice_type",
+        "hwbinder",
+        "hidl_death_recipient"
       ],
       [
-        "IBase",
         "extends",
-        "BpHwFoo"
+        "nullptr",
+        "hidl_death_recipient"
       ]
     ]
   },
@@ -421,14 +421,14 @@
     "explanation": "HIDL HAL 클라이언트는 IInterface::getService()를 호출하여 hwservicemanager에서 서비스를 검색합니다. 서비스를 찾지 못하면 nullptr을 반환합니다. 카메라 HAL에서는 ICameraProvider를 통해 카메라 디바이스 목록을 조회하고 개별 디바이스에 접근합니다. HIDL에서 복수의 반환 값이 있는 경우 콜백 람다를 사용하여 결과를 받습니다.",
     "blankDistractors": [
       [
-        "void",
-        "hwbinder",
-        "getExtendedStatus"
+        "hidl-gen",
+        "interface",
+        "linkToDeath"
       ],
       [
-        "IBase",
-        "default",
-        "BnHwFoo"
+        "extends",
+        "hal_hwservice_type",
+        "serviceDied"
       ]
     ]
   },
@@ -452,14 +452,14 @@
     "explanation": "device manifest.xml에서 각 HAL의 transport(hwbinder 또는 passthrough), 버전, 인터페이스 이름, 인스턴스 이름을 선언합니다. hwbinder는 Binderized 모드를 의미하며, 인터페이스 이름은 HIDL에서 정의한 인터페이스 클래스명(예: ICameraProvider)을 사용합니다.",
     "blankDistractors": [
       [
-        "structured",
-        "IBase",
-        "serviceDied"
+        "VintfObject",
+        "serviceDied",
+        "getExtendedStatus"
       ],
       [
-        "default",
-        "getExtendedStatus",
-        "extends"
+        "nullptr",
+        "hidl_death_recipient",
+        "registerAsService"
       ]
     ]
   },
@@ -537,18 +537,18 @@
     "blankDistractors": [
       [
         "linkToDeath",
-        "hidl_death_recipient",
-        "IBase"
-      ],
-      [
-        "void",
-        "Treble",
+        "VintfObject",
         "aidl"
       ],
       [
-        "extends",
+        "registerAsService",
+        "interface",
+        "hwbinder"
+      ],
+      [
         "Treble",
-        "aidl"
+        "SensorConfig",
+        "linkToDeath"
       ]
     ]
   },
@@ -573,19 +573,19 @@
     "explanation": "Binderized HAL은 별도 프로세스이므로 크래시 가능성이 있습니다. linkToDeath()는 커널 Binder 드라이버의 death notification 기능을 활용하여, 서비스 프로세스 종료 시 클라이언트에 콜백을 전달합니다. unlinkToDeath()로 등록을 해제할 수 있으며, 이 메커니즘은 시스템 안정성에 필수적입니다.",
     "blankDistractors": [
       [
-        "interface",
-        "nullptr",
+        "SensorConfig",
+        "aidl",
         "BpHwFoo"
       ],
       [
-        "nullptr",
-        "SensorConfig",
-        "VintfObject"
+        "IBase",
+        "ICameraProvider",
+        "hal_hwservice_type"
       ],
       [
-        "parcelable",
-        "extends",
-        "nullptr"
+        "getService",
+        "IBase",
+        "parcelable"
       ]
     ]
   },
@@ -609,14 +609,14 @@
     "explanation": "Stable AIDL에서 structured parcelable은 parcelable 키워드로 정의하며, 필드를 직접 .aidl 파일에 선언합니다. 인터페이스 메서드에서 parcelable 타입을 매개변수로 사용할 때 in, out, inout 방향 지시자를 지정합니다. in은 클라이언트→서버 방향의 입력 전용을 의미합니다.",
     "blankDistractors": [
       [
-        "registerAsService",
-        "Treble",
-        "BpHwFoo"
+        "extends",
+        "hwbinder",
+        "void"
       ],
       [
-        "VintfObject",
+        "registerAsService",
         "extends",
-        "getExtendedStatus"
+        "VintfObject"
       ]
     ]
   },
@@ -640,14 +640,14 @@
     "explanation": "HIDL 마이너 버전 업그레이드에서는 extends 키워드로 이전 버전의 인터페이스를 상속합니다. 새로운 메서드만 추가할 수 있으며, 기존 @1.0의 메서드는 변경할 수 없습니다. generates 키워드로 반환 값을 정의하며, 복수의 값을 반환할 수 있는 것이 HIDL의 특징입니다.",
     "blankDistractors": [
       [
-        "VintfObject",
-        "ICameraProvider",
-        "linkToDeath"
+        "IBase",
+        "hidl_death_recipient",
+        "serviceDied"
       ],
       [
-        "hwbinder",
-        "IBase",
-        "hidl_death_recipient"
+        "serviceDied",
+        "ICameraProvider",
+        "interface"
       ]
     ]
   },
@@ -672,19 +672,19 @@
     "explanation": "Google은 Android 11부터 새 HAL을 AIDL로 작성하도록 권장하고, HIDL은 deprecated 상태입니다. AIDL HAL에서는 manifest의 hal format이 \"aidl\"로 변경되며, HIDL에서 사용하던 <transport> 요소는 AIDL HAL에서는 불필요합니다(기본적으로 /dev/binder를 사용). SELinux 정책도 hal_hwservice_type에서 hal_service_type으로 변경해야 합니다. 마이그레이션 시 빌드 시스템(Android.bp), VINTF manifest, SELinux 정책, 테스트(VTS) 등 전반적인 변경이 필요합니다.",
     "blankDistractors": [
       [
-        "compatibility matrix",
         "device manifest",
+        "compatibility matrix",
         "Stable AIDL"
       ],
       [
-        "nullptr",
-        "void",
-        "default"
+        "getService",
+        "IBase",
+        "registerAsService"
       ],
       [
-        "structured",
-        "parcelable",
-        "BpHwFoo"
+        "getService",
+        "registerAsService",
+        "extends"
       ]
     ]
   }

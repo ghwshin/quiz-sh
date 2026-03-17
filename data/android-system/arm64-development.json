@@ -1,0 +1,535 @@
+[
+  {
+    "id": "ev-001",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "임베디드 Linux에서 ARM64 타겟을 위한 크로스 컴파일 시 사용하는 GCC 툴체인의 이름은?",
+    "options": [
+      "arm-linux-gnueabi-gcc",
+      "aarch64-linux-gnu-gcc",
+      "x86_64-linux-gnu-gcc",
+      "arm-none-eabi-gcc"
+    ],
+    "answer": 1,
+    "explanation": "ARM64(AArch64) 타겟을 위한 임베디드 Linux 크로스 컴파일러는 aarch64-linux-gnu-gcc입니다. arm-linux-gnueabi-gcc는 32비트 ARM(AArch32)용이고, x86_64-linux-gnu-gcc는 x86-64 타겟용입니다. arm-none-eabi-gcc는 베어메탈(OS 없음) ARM 개발에 사용됩니다."
+  },
+  {
+    "id": "ev-002",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "QEMU의 ARM64 에뮬레이션 모드 중 전체 하드웨어(CPU, 메모리, 디바이스)를 에뮬레이션하는 모드는?",
+    "options": [
+      "유저모드 에뮬레이션(User Mode Emulation)",
+      "시스템 에뮬레이션(System Emulation)",
+      "KVM 가속 모드(KVM Acceleration)",
+      "반가상화(Paravirtualization)"
+    ],
+    "answer": 1,
+    "explanation": "QEMU의 시스템 에뮬레이션(qemu-system-aarch64)은 CPU, 메모리, 인터럽트 컨트롤러, UART 등 전체 하드웨어를 에뮬레이션하여 완전한 가상 머신 환경을 제공합니다. 유저모드 에뮬레이션(qemu-aarch64)은 개별 바이너리만 실행하며 시스콜을 호스트 OS로 변환하므로 전체 하드웨어를 에뮬레이션하지 않습니다."
+  },
+  {
+    "id": "ev-003",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "ARM64(AArch64) 명령어 셋 아키텍처(ISA)의 기본 설계 원칙으로 올바른 것은?",
+    "options": [
+      "CISC(Complex Instruction Set Computer) 방식으로 복잡한 메모리-레지스터 연산을 지원한다",
+      "Load-Store 아키텍처로 ALU 연산은 레지스터에서만 수행되며, 메모리 접근은 Load/Store 명령으로만 이루어진다",
+      "스택 기반(Stack-based) 아키텍처로 모든 연산이 스택을 통해 수행된다",
+      "레지스터-메모리(Register-Memory) 아키텍처로 ALU 연산 시 피연산자로 메모리 주소를 직접 사용할 수 있다"
+    ],
+    "answer": 1,
+    "explanation": "ARM64(A64 ISA)는 RISC 기반의 Load-Store 아키텍처입니다. 모든 ALU 연산(ADD, SUB, AND 등)은 레지스터 간에만 수행되고, 메모리와 레지스터 간 데이터 이동은 LDR(Load), STR(Store) 명령을 통해서만 이루어집니다. 이는 파이프라인 효율성과 명령어 실행의 예측 가능성을 높여줍니다."
+  },
+  {
+    "id": "ev-004",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "ARM64 아키텍처의 범용 레지스터 체계에 대한 설명으로 올바른 것은?",
+    "options": [
+      "16개의 범용 레지스터(X0~X15)와 SP, PC를 포함하여 총 18개이다",
+      "31개의 범용 레지스터(X0~X30)가 있으며, SP와 PC는 별도의 특수 레지스터이다",
+      "32개의 범용 레지스터(X0~X31)가 있으며, X31이 스택 포인터를 겸한다",
+      "64개의 범용 레지스터가 있으며, 절반은 정수용, 절반은 부동소수점용이다"
+    ],
+    "answer": 1,
+    "explanation": "ARM64에는 31개의 64비트 범용 레지스터(X0~X30)가 있습니다. SP(Stack Pointer)는 범용 레지스터와 별도로 존재하며, PC(Program Counter)도 직접 읽거나 쓸 수 없는 특수 레지스터입니다. PSTATE는 조건 플래그(N, Z, C, V)와 프로세서 상태 정보를 담고 있습니다. 32비트 접근 시에는 W0~W30으로 하위 32비트를 참조합니다."
+  },
+  {
+    "id": "ev-005",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Qualcomm Snapdragon SoC의 이종 처리 구조에 대한 설명으로 올바른 것은?",
+    "options": [
+      "CPU만으로 구성되며 GPU와 DSP는 외장 칩으로 연결된다",
+      "커스텀 CPU 코어, Adreno GPU, Hexagon DSP 등 다양한 프로세싱 유닛이 단일 칩에 통합된 이종 아키텍처이다",
+      "CPU와 GPU는 동일한 명령어 셋을 사용하여 동일한 바이너리를 실행할 수 있다",
+      "모든 연산은 Hexagon DSP에서 수행되며 CPU는 태스크 스케줄링만 담당한다"
+    ],
+    "answer": 1,
+    "explanation": "Qualcomm Snapdragon은 대표적인 이종(heterogeneous) SoC로, 커스텀 CPU 코어(Kryo, Oryon 등 세대별 자체 설계), Adreno GPU(그래픽/GPGPU), Hexagon DSP(오디오/센서/AI 추론), Spectra ISP(카메라), X-series 모뎀 등을 단일 다이에 통합합니다. 각 프로세싱 유닛은 해당 워크로드에 최적화된 아키텍처를 가지고 있어 전력 효율과 성능을 동시에 달성합니다."
+  },
+  {
+    "id": "ev-006",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ARM64 CPU의 PMU(Performance Monitoring Unit)에 대한 설명으로 올바른 것은?",
+    "options": [
+      "PMU는 소프트웨어로 구현된 성능 프로파일링 도구로, 커널 모듈로 로드해야 사용할 수 있다",
+      "PMU는 CPU 사이클, 캐시 미스, 분기 예측 실패 등 하드웨어 이벤트를 카운팅하는 전용 하드웨어 유닛이다",
+      "PMU 카운터는 사용자 공간에서는 접근할 수 없으며, 오직 EL3에서만 읽을 수 있다",
+      "PMU는 ARM64에서 제거되었으며, 대신 소프트웨어 기반 perf_event만 지원된다"
+    ],
+    "answer": 1,
+    "explanation": "ARM64 PMU는 CPU 내에 하드웨어로 구현된 성능 모니터링 유닛으로, PMCCNTR_EL0(사이클 카운터)와 최대 31개의 이벤트 카운터(PMEVCNTR<n>_EL0)를 제공합니다. CPU 사이클, L1/L2 캐시 미스, TLB 미스, 분기 예측 실패 등의 하드웨어 이벤트를 정밀하게 카운팅할 수 있으며, Linux의 perf_event 서브시스템이 이를 활용합니다."
+  },
+  {
+    "id": "ev-007",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ARM64 커널 디버깅에서 JTAG 디버거와 KGDB의 차이점으로 올바른 것은?",
+    "options": [
+      "JTAG는 소프트웨어 기반이며 KGDB는 하드웨어 기반이다",
+      "JTAG는 하드웨어 기반 디버거로 별도의 프로브가 필요하고, KGDB는 시리얼 연결을 통한 소프트웨어 디버거로 특별한 하드웨어 없이 사용할 수 있다",
+      "JTAG와 KGDB 모두 소프트웨어 디버거로 동일한 메커니즘을 사용한다",
+      "KGDB는 하드웨어 프로브가 필요하고 JTAG는 네트워크 연결만으로 동작한다"
+    ],
+    "answer": 1,
+    "explanation": "JTAG(Joint Test Action Group) 디버거는 CPU의 디버그 포트에 물리적 프로브(예: Lauterbach TRACE32, ARM DSTREAM)를 연결하여 CPU 상태를 직접 관찰하고 제어합니다. 커널 패닉 시에도 동작하며 하드웨어 브레이크포인트/워치포인트를 사용합니다. KGDB는 커널에 내장된 소프트웨어 디버거로 시리얼/USB 연결을 통해 GDB 원격 프로토콜로 디버깅하며, 별도 하드웨어 프로브 없이 사용 가능하지만 커널이 실행 중이어야 합니다."
+  },
+  {
+    "id": "ev-008",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Android 커널 빌드에서 Clang 컴파일러 의무화와 관련하여 올바른 설명은?",
+    "options": [
+      "Android 커널은 여전히 GCC와 Clang 모두를 공식 지원하며 선택적으로 사용할 수 있다",
+      "Android 커널 빌드에 Clang이 의무화되었으며, LTO(Link Time Optimization)와 CFI(Control Flow Integrity) 같은 보안/최적화 기능을 지원한다",
+      "Clang은 사용자 공간 빌드에만 적용되며 커널은 반드시 GCC로 빌드해야 한다",
+      "Clang 의무화는 ARM64에만 해당하며 x86 Android 커널은 GCC를 사용한다"
+    ],
+    "answer": 1,
+    "explanation": "Google은 Android 커널 빌드에서 GCC 지원을 공식적으로 중단하고 Clang을 유일한 커널 컴파일러로 의무화했습니다. Clang은 LTO(Link Time Optimization)를 통한 크로스 모듈 최적화, CFI(Control Flow Integrity)를 통한 간접 호출 보호, Shadow Call Stack 등의 보안 기능을 네이티브로 지원합니다. 이러한 기능들은 GCC에서는 완전히 지원되지 않거나 구현이 다릅니다."
+  },
+  {
+    "id": "ev-009",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "ARM64에서 ftrace의 동적 함수 추적 메커니즘에 대한 설명으로 올바른 것은?",
+    "options": [
+      "컴파일 시 모든 함수 호출에 ftrace 추적 코드가 삽입되어 항상 실행된다",
+      "컴파일러가 함수 진입부에 NOP 명령을 삽입하고, 추적 활성화 시 이를 BL(Branch with Link) 명령으로 동적 패칭한다",
+      "ftrace는 소프트웨어 인터럽트를 사용하여 함수 진입 시마다 트랩을 발생시킨다",
+      "ARM64에서는 하드웨어 트레이스 유닛(ETM)만 사용할 수 있으며, 소프트웨어 기반 ftrace는 지원되지 않는다"
+    ],
+    "answer": 1,
+    "explanation": "ARM64에서 ftrace는 컴파일 시 -pg 옵션과 -fpatchable-function-entry를 사용하여 각 함수의 진입부에 NOP 명령을 삽입합니다. 추적이 비활성화된 상태에서는 NOP이므로 성능 오버헤드가 거의 없습니다. 추적을 활성화하면 커널의 text_poke 메커니즘이 NOP을 BL(Branch with Link) 명령으로 동적으로 패칭하여 ftrace 트램폴린으로 분기시킵니다. AARCH64_INSN_SIZE(4바이트) 단위로 원자적 패칭이 가능합니다."
+  },
+  {
+    "id": "ev-010",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "모바일 SoC 비교에서 Qualcomm Snapdragon, MediaTek Dimensity, Samsung Exynos의 아키텍처 차이로 올바른 것은?",
+    "options": [
+      "세 업체 모두 동일한 ARM Cortex 코어를 그대로 사용하며 차이가 없다",
+      "Qualcomm은 자체 설계 CPU 코어와 Adreno GPU를 사용하고, MediaTek은 주로 ARM 레퍼런스 코어와 Mali GPU를, Samsung은 세대에 따라 자체 설계 또는 ARM 레퍼런스 코어를 채택한다",
+      "MediaTek만 5G 모뎀을 내장하며 Qualcomm과 Samsung은 외장 모뎀을 사용한다",
+      "Samsung Exynos만 ARM big.LITTLE 구조를 사용하고 나머지는 동종 코어 구성이다"
+    ],
+    "answer": 1,
+    "explanation": "Qualcomm Snapdragon은 커스텀 CPU 코어(Kryo, Oryon 등 ARM 아키텍처 라이선스를 받아 자체 설계한 코어)와 독자적인 Adreno GPU를 사용합니다. MediaTek Dimensity는 주로 ARM 레퍼런스 코어(Cortex-A/X 시리즈)와 ARM Mali/Immortalis GPU를 채택합니다. Samsung Exynos는 최근 세대에서 ARM 레퍼런스 코어를 사용하며, GPU는 세대에 따라 Mali, Xclipse(AMD RDNA 기반) 등의 GPU를 탑재합니다. 세 업체 모두 5G 모뎀을 SoC에 통합하고 있으며, big.LITTLE/DynamIQ 구조를 공통으로 사용합니다."
+  },
+  {
+    "id": "ev-011",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "ARM64 아키텍처에서 현재 스택의 최상단 주소를 가리키는 전용 레지스터는 ___이다.",
+    "blankAnswers": [
+      [
+        "SP",
+        "sp"
+      ]
+    ],
+    "explanation": "ARM64에서 SP(Stack Pointer)는 현재 스택의 최상단 주소를 가리키는 전용 레지스터입니다. SP는 범용 레지스터(X0~X30)와는 별도로 존재하며, 16바이트 정렬이 강제됩니다. 각 Exception Level(EL0~EL3)마다 독립적인 SP를 가질 수 있으며, SPSel 비트를 통해 EL0의 SP_EL0 또는 해당 EL의 SP_ELx 중 어느 것을 사용할지 선택합니다.",
+    "blankDistractors": [
+      [
+        "NEON",
+        "CROSS_COMPILE",
+        "ARCH"
+      ]
+    ]
+  },
+  {
+    "id": "ev-012",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "QEMU에서 ARM64 가상 머신을 실행할 때 범용적으로 사용되는 머신 타입은 ___이다.",
+    "blankAnswers": [
+      [
+        "virt"
+      ]
+    ],
+    "explanation": "QEMU에서 ARM64용 범용 가상 머신 타입은 'virt'입니다. virt 머신은 실제 하드웨어 보드를 모델링하지 않고, virtio 디바이스, PL011 UART, GICv2/v3 인터럽트 컨트롤러 등 가상화에 최적화된 디바이스들로 구성됩니다. 실제 보드 에뮬레이션(예: raspi3b)과 달리 유연하게 CPU, 메모리, 디바이스를 설정할 수 있어 커널 개발과 테스트에 널리 사용됩니다.",
+    "blankDistractors": [
+      [
+        "aarch64-linux-gnu-objdump",
+        "arm64",
+        "ldp"
+      ]
+    ]
+  },
+  {
+    "id": "ev-013",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Android NDK에서 ARM64 타겟을 위한 Clang 컴파일러의 타겟 트리플 접두어는 ___이다.",
+    "blankAnswers": [
+      [
+        "aarch64-linux-android"
+      ]
+    ],
+    "explanation": "Android NDK는 Clang 기반 툴체인을 사용하며, ARM64 타겟의 트리플 접두어는 aarch64-linux-android입니다. 실제 컴파일러 바이너리명은 aarch64-linux-android<API-level>-clang 형식입니다. 기존 GCC 기반의 aarch64-linux-android-gcc는 NDK r18부터 제거되었으며, 모든 Android 네이티브 빌드는 Clang으로 전환되었습니다.",
+    "blankDistractors": [
+      [
+        "merge_config.sh",
+        "ldp",
+        "virt"
+      ]
+    ]
+  },
+  {
+    "id": "ev-014",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Android NDK에서 ARM64용 ABI 이름은 ___이며, 이 ABI에서 ___는 필수 확장 기능이다.",
+    "blankAnswers": [
+      [
+        "arm64-v8a"
+      ],
+      [
+        "NEON",
+        "neon",
+        "Advanced SIMD"
+      ]
+    ],
+    "explanation": "Android NDK에서 ARM64용 ABI 이름은 arm64-v8a입니다. ARMv8-A 아키텍처에서 Advanced SIMD(NEON)는 선택이 아닌 필수 확장 기능으로, 모든 ARM64 프로세서가 128비트 SIMD 연산을 지원합니다. 32비트 ARM(armeabi-v7a)에서는 NEON이 선택적이었으나, 64비트 전환과 함께 필수가 되어 개발자가 별도의 NEON 지원 여부 확인 없이 SIMD 최적화를 적용할 수 있습니다.",
+    "blankDistractors": [
+      [
+        "virt",
+        "d.l",
+        "ldr"
+      ],
+      [
+        "ARCH",
+        "SP",
+        "CROSS_COMPILE"
+      ]
+    ]
+  },
+  {
+    "id": "ev-015",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Linux 커널을 ARM64용으로 크로스 컴파일할 때 Makefile에 전달하는 ARCH 변수의 값은 ___이다.",
+    "blankAnswers": [
+      [
+        "arm64"
+      ]
+    ],
+    "explanation": "Linux 커널 빌드 시스템에서 ARM64 아키텍처를 지정하는 ARCH 변수값은 'arm64'입니다. 이 값은 arch/arm64/ 디렉토리의 Kconfig, Makefile, 링커 스크립트 등을 선택합니다. CROSS_COMPILE 변수와 함께 'make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- defconfig' 형태로 사용됩니다. 참고로 하드웨어 아키텍처명은 'aarch64'이지만 커널에서는 'arm64'를 사용합니다.",
+    "blankDistractors": [
+      [
+        "aarch64-linux-android",
+        "d.l",
+        "ldp"
+      ]
+    ]
+  },
+  {
+    "id": "ev-016",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "ARM64 크로스 컴파일 환경에서 바이너리를 디스어셈블하는 데 사용하는 도구의 전체 이름은 ___이다.",
+    "blankAnswers": [
+      [
+        "aarch64-linux-gnu-objdump"
+      ]
+    ],
+    "explanation": "aarch64-linux-gnu-objdump는 ARM64 크로스 컴파일 툴체인에 포함된 바이너리 분석 도구입니다. -d 옵션으로 코드 섹션을 디스어셈블하고, -S 옵션으로 소스 코드와 함께 표시할 수 있습니다. 같은 툴체인의 다른 도구로는 aarch64-linux-gnu-readelf(ELF 헤더 분석), aarch64-linux-gnu-nm(심볼 목록), aarch64-linux-gnu-addr2line(주소→소스 매핑) 등이 있습니다.",
+    "blankDistractors": [
+      [
+        "ldr",
+        "virt",
+        "ldp"
+      ]
+    ]
+  },
+  {
+    "id": "ev-017",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Lauterbach TRACE32에서 현재 PC 위치의 코드를 디스어셈블하여 표시하는 명령은 ___이다.",
+    "blankAnswers": [
+      [
+        "d.l",
+        "D.L",
+        "Data.List",
+        "data.list"
+      ]
+    ],
+    "explanation": "Lauterbach TRACE32에서 Data.List(약어 D.L) 명령은 지정된 주소 또는 현재 PC 위치의 코드를 디스어셈블하여 표시합니다. TRACE32는 JTAG/SWD 인터페이스를 통해 ARM64 프로세서에 연결되며, 비침습적 디버깅을 제공합니다. 주요 명령으로는 d.dump(메모리 덤프), v.value(변수 값 확인), b.set(브레이크포인트 설정) 등이 있습니다.",
+    "blankDistractors": [
+      [
+        "aarch64-linux-gnu-objdump",
+        "ldr",
+        "arm64"
+      ]
+    ]
+  },
+  {
+    "id": "ev-018",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Android 커널 빌드에서 여러 config 프래그먼트를 기본 defconfig에 병합하는 스크립트는 ___이다.",
+    "blankAnswers": [
+      [
+        "merge_config.sh"
+      ]
+    ],
+    "explanation": "merge_config.sh는 Linux 커널 소스의 scripts/kconfig/ 디렉토리에 위치한 스크립트로, 여러 개의 config 프래그먼트 파일을 기본 .config에 순서대로 병합합니다. Android 커널 빌드에서는 GKI(Generic Kernel Image) defconfig 위에 벤더별, 디바이스별 config 프래그먼트를 겹쳐 쌓는 방식으로 최종 커널 설정을 구성합니다. 'scripts/kconfig/merge_config.sh .config fragment1.config fragment2.config' 형태로 사용합니다.",
+    "blankDistractors": [
+      [
+        "arm64-v8a",
+        "ldp",
+        "d.l"
+      ]
+    ]
+  },
+  {
+    "id": "ev-019",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "QEMU로 ARM64 Linux 커널을 에뮬레이션하는 명령을 완성하시오.",
+    "codeTemplate": "qemu-system-aarch64 \\\n    -M ___ \\\n    -cpu cortex-a72 \\\n    -nographic \\\n    -kernel Image",
+    "codeLanguage": "shell",
+    "blankAnswers": [
+      [
+        "virt"
+      ]
+    ],
+    "explanation": "QEMU에서 ARM64 가상 머신을 실행할 때 -M(machine) 옵션으로 'virt' 머신 타입을 지정합니다. virt는 실제 하드웨어를 모방하지 않는 범용 가상 플랫폼으로, GIC(Generic Interrupt Controller), PL011 UART, virtio 디바이스 등을 포함합니다. -cpu cortex-a72로 CPU 모델을 지정하고, -nographic으로 텍스트 콘솔 출력을, -kernel로 부팅할 커널 이미지를 지정합니다.",
+    "blankDistractors": [
+      [
+        "merge_config.sh",
+        "arm64-v8a",
+        "ldr"
+      ]
+    ]
+  },
+  {
+    "id": "ev-020",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Linux 커널을 ARM64용으로 크로스 컴파일하는 make 명령을 완성하시오.",
+    "codeTemplate": "make ___=arm64 \\\n    ___=aarch64-linux-gnu- \\\n    defconfig",
+    "codeLanguage": "shell",
+    "blankAnswers": [
+      [
+        "ARCH"
+      ],
+      [
+        "CROSS_COMPILE"
+      ]
+    ],
+    "explanation": "Linux 커널 크로스 컴파일에는 두 가지 핵심 변수가 필요합니다. ARCH=arm64는 타겟 아키텍처를 지정하여 arch/arm64/ 디렉토리의 설정과 소스를 사용하게 합니다. CROSS_COMPILE=aarch64-linux-gnu-는 크로스 컴파일러의 접두어를 지정하여, gcc → aarch64-linux-gnu-gcc, ld → aarch64-linux-gnu-ld 등으로 도구를 매핑합니다. defconfig 타겟은 해당 아키텍처의 기본 커널 설정을 생성합니다.",
+    "blankDistractors": [
+      [
+        "NEON",
+        "SP",
+        "X7"
+      ],
+      [
+        "SP",
+        "NEON",
+        "TARGET_PRODUCT"
+      ]
+    ]
+  },
+  {
+    "id": "ev-021",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "ARM64에서 x1 레지스터가 가리키는 메모리 주소에서 8바이트 값을 x0에 로드하는 명령을 완성하시오.",
+    "codeTemplate": "___ x0, [x1]",
+    "codeLanguage": "asm",
+    "blankAnswers": [
+      [
+        "ldr",
+        "LDR"
+      ]
+    ],
+    "explanation": "LDR(Load Register) 명령은 ARM64 Load-Store 아키텍처의 핵심 명령어로, 메모리에서 레지스터로 데이터를 로드합니다. 'ldr x0, [x1]'은 x1 레지스터에 저장된 주소의 메모리에서 8바이트(64비트)를 읽어 x0에 저장합니다. 32비트 로드는 'ldr w0, [x1]'(W 레지스터 사용), 바이트/하프워드 로드는 ldrb/ldrh를 사용합니다.",
+    "blankDistractors": [
+      [
+        "stp",
+        "ldp",
+        "arm64"
+      ]
+    ]
+  },
+  {
+    "id": "ev-022",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Android NDK CMake에서 ARM64 네이티브 라이브러리를 빌드하기 위한 ABI 설정을 완성하시오.",
+    "codeTemplate": "cmake \\\n    -DCMAKE_TOOLCHAIN_FILE=$NDK/build/cmake/android.toolchain.cmake \\\n    -DANDROID_ABI=___ \\\n    -DANDROID_PLATFORM=android-21 \\\n    ..",
+    "codeLanguage": "cmake",
+    "blankAnswers": [
+      [
+        "arm64-v8a"
+      ]
+    ],
+    "explanation": "Android NDK에서 CMake로 네이티브 코드를 빌드할 때 ANDROID_ABI 변수로 타겟 ABI를 지정합니다. ARM64용 ABI 이름은 'arm64-v8a'로, ARMv8-A 64비트 아키텍처를 의미합니다. CMAKE_TOOLCHAIN_FILE은 NDK의 CMake 툴체인 파일을 지정하고, ANDROID_PLATFORM은 최소 API 레벨을 설정합니다. 다른 ABI로는 armeabi-v7a(32비트 ARM), x86_64 등이 있습니다.",
+    "blankDistractors": [
+      [
+        "ldp",
+        "virt",
+        "arm64"
+      ]
+    ]
+  },
+  {
+    "id": "ev-023",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "QEMU에서 ARM64 커널을 GDB 디버깅 모드로 실행하고, GDB에서 연결하는 명령을 완성하시오.",
+    "codeTemplate": "# Terminal 1: QEMU with debug\nqemu-system-aarch64 -M virt -cpu cortex-a72 -kernel Image ___\n\n# Terminal 2: GDB\naarch64-linux-gnu-gdb vmlinux\n(gdb) ___",
+    "codeLanguage": "shell",
+    "blankAnswers": [
+      [
+        "-s -S",
+        "-S -s"
+      ],
+      [
+        "target remote :1234",
+        "target remote localhost:1234"
+      ]
+    ],
+    "explanation": "QEMU의 -s 옵션은 GDB 서버를 기본 포트 1234에서 시작하고, -S 옵션은 CPU를 시작 시 정지 상태로 유지합니다. 이 두 옵션을 함께 사용하면 GDB가 연결되어 continue 명령을 보낼 때까지 커널이 실행되지 않습니다. GDB에서 'target remote :1234' 명령으로 QEMU의 GDB 서버에 연결한 후 브레이크포인트 설정, 스텝 실행 등의 디버깅이 가능합니다. vmlinux는 디버그 심볼이 포함된 커널 ELF 파일입니다.",
+    "blankDistractors": [
+      [
+        "arm_spe//",
+        "composite disk",
+        "ANDROID_SOCKET_<name>"
+      ],
+      [
+        "arm_spe//",
+        "HAL interface",
+        "OpenGL ES"
+      ]
+    ]
+  },
+  {
+    "id": "ev-024",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "ARM SPE(Statistical Profiling Extension)를 사용하여 CPU 이벤트를 샘플링하는 perf 명령을 완성하시오.",
+    "codeTemplate": "perf record -e ___ -- ./workload\nperf report --stdio",
+    "codeLanguage": "shell",
+    "blankAnswers": [
+      [
+        "arm_spe//",
+        "arm_spe_0//"
+      ]
+    ],
+    "explanation": "ARM SPE(Statistical Profiling Extension)는 ARMv8.2-A에서 도입된 하드웨어 프로파일링 기능으로, CPU가 통계적으로 명령어를 샘플링하여 실행 정보(캐시 미스, TLB 미스, 분기 예측 등)를 기록합니다. perf의 -e arm_spe// 이벤트를 사용하여 SPE 데이터를 수집합니다. 시스템에 따라 arm_spe// 또는 arm_spe_0// 형태로 노출됩니다. 기존 PMU 카운터와 달리 SPE는 명령어별로 마이크로아키텍처 이벤트를 기록하므로 더 정밀한 성능 분석이 가능합니다.",
+    "blankDistractors": [
+      [
+        "-s -S",
+        "target remote :1234",
+        "memory map"
+      ]
+    ]
+  },
+  {
+    "id": "ev-025",
+    "category": "android-system",
+    "subcategory": "arm64-development",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "ARM64에서 함수의 프롤로그와 에필로그를 작성하여 x29(FP)와 x30(LR)을 저장/복원하는 코드를 완성하시오.",
+    "codeTemplate": "my_function:\n    // prologue\n    ___ x29, x30, [sp, #-16]!\n    mov x29, sp\n\n    // function body\n    // ...\n\n    // epilogue\n    ___ x29, x30, [sp], #16\n    ret",
+    "codeLanguage": "asm",
+    "blankAnswers": [
+      [
+        "stp",
+        "STP"
+      ],
+      [
+        "ldp",
+        "LDP"
+      ]
+    ],
+    "explanation": "ARM64 함수 프롤로그에서 STP(Store Pair) 명령은 x29(Frame Pointer)와 x30(Link Register)를 스택에 저장합니다. '[sp, #-16]!'은 pre-index 모드로 SP를 먼저 16바이트 감소시킨 후 해당 주소에 저장합니다. 에필로그에서 LDP(Load Pair) 명령은 스택에서 x29, x30을 복원하며, '[sp], #16'은 post-index 모드로 로드 후 SP를 16바이트 증가시킵니다. 이는 AAPCS64 호출 규약의 표준 프롤로그/에필로그 패턴입니다.",
+    "blankDistractors": [
+      [
+        "ldr",
+        "merge_config.sh",
+        "d.l"
+      ],
+      [
+        "aarch64-linux-android",
+        "aarch64-linux-gnu-objdump",
+        "arm64-v8a"
+      ]
+    ]
+  }
+]

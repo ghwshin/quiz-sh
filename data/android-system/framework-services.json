@@ -87,19 +87,19 @@
     "explanation": "SystemServer.main()이 호출되면 내부적으로 run() 메서드에서 startBootstrapServices(), startCoreServices(), startOtherServices() 순서로 서비스를 시작합니다. 서비스 간 의존성 때문에 이 순서가 중요합니다.",
     "blankDistractors": [
       [
-        "dex2oat",
+        "EventHub",
+        "release",
+        "oom_score_adj"
+      ],
+      [
         "InputManagerService",
-        "PowerManager"
+        "activity",
+        "getService"
       ],
       [
         "lmkd",
-        "package",
-        "release"
-      ],
-      [
-        "ServiceManager",
-        "lmkd",
-        "Z-order"
+        "PowerManager",
+        "AndroidManifest.xml"
       ]
     ]
   },
@@ -124,19 +124,19 @@
     "explanation": "ServiceManager는 네이티브 프로세스로서 Binder의 context manager 역할을 합니다. 모든 시스템 서비스는 ServiceManager에 등록되어야 다른 프로세스에서 접근할 수 있으며, 항상 handle 0번을 가집니다.",
     "blankDistractors": [
       [
-        "Core",
-        "PowerManagerService",
+        "Z-order",
+        "release",
         "EventHub"
       ],
       [
-        "InputReader",
-        "ActivityThread",
-        "activity"
+        "lmkd",
+        "release",
+        "oom_score_adj"
       ],
       [
-        "InputManagerService",
-        "Zygote",
-        "PowerManager"
+        "service",
+        "list",
+        "dumpsys"
       ]
     ]
   },
@@ -160,14 +160,14 @@
     "explanation": "'service list' 명령어는 ServiceManager에 등록된 모든 Binder 서비스의 목록을 출력합니다. 각 서비스의 이름과 인터페이스 정보를 확인할 수 있으며, 디버깅 시 서비스 존재 여부를 확인하는 데 유용합니다.",
     "blankDistractors": [
       [
-        "InputManagerService",
-        "ServiceManager",
-        "WakeLock"
+        "lmkd",
+        "Core",
+        "init"
       ],
       [
-        "package",
-        "release",
-        "Z-order"
+        "InputReader",
+        "EventHub",
+        "getService"
       ]
     ]
   },
@@ -191,14 +191,14 @@
     "explanation": "'dumpsys activity activities'는 AMS가 관리하는 현재 Activity 스택과 Task 정보를 출력합니다. 이를 통해 foreground Activity, back stack 상태, Task affinity 등을 확인할 수 있습니다.",
     "blankDistractors": [
       [
-        "dex2oat",
+        "ServiceManager",
         "AndroidManifest.xml",
-        "InputManagerService"
+        "Zygote"
       ],
       [
-        "AndroidManifest.xml",
-        "Z-order",
-        "Core"
+        "dex2oat",
+        "InputDispatcher",
+        "EventHub"
       ]
     ]
   },
@@ -288,19 +288,19 @@
     "explanation": "WMS는 Android 그래픽 스택에서 정책(Policy) 레이어 역할을 합니다. Window의 논리적 배치를 결정하고, 실제 렌더링은 각 앱 프로세스와 SurfaceFlinger가 담당합니다. InputManagerService와 긴밀하게 연동하여 입력 이벤트를 적절한 Window에 전달합니다.",
     "blankDistractors": [
       [
-        "startBootstrapServices",
-        "list",
+        "oom_score_adj",
+        "ActivityThread",
+        "service"
+      ],
+      [
+        "startCoreServices",
+        "oom_score_adj",
         "addService"
       ],
       [
-        "service",
-        "init",
-        "Core"
-      ],
-      [
-        "PowerManagerService",
-        "Bootstrap",
-        "startCoreServices"
+        "InputDispatcher",
+        "oom_score_adj",
+        "AndroidManifest.xml"
       ]
     ]
   },
@@ -329,19 +329,19 @@
     "explanation": "WakeLock은 반드시 try-finally 패턴이나 타임아웃과 함께 사용하여 확실히 해제되도록 해야 합니다. Android에서는 WakeLock 남용을 방지하기 위해 JobScheduler, WorkManager 등의 대안을 권장합니다.",
     "blankDistractors": [
       [
-        "lmkd",
-        "Core",
-        "Zygote"
-      ],
-      [
-        "startBootstrapServices",
-        "InputDispatcher",
-        "activity"
-      ],
-      [
-        "addService",
-        "activity",
+        "ActivityThread",
+        "init",
         "service"
+      ],
+      [
+        "lmkd",
+        "package",
+        "Bootstrap"
+      ],
+      [
+        "SurfaceFlinger",
+        "Core",
+        "InputReader"
       ]
     ]
   },
@@ -366,19 +366,19 @@
     "explanation": "IMS는 네이티브 C++ 코드(InputReader, InputDispatcher)와 Java Framework 코드(InputManagerService)로 구성됩니다. EventHub는 Linux의 evdev 인터페이스를 통해 하드웨어 이벤트를 읽으며, WMS에 의해 결정된 Window 레이아웃 정보를 기반으로 이벤트를 올바른 Window에 전달합니다.",
     "blankDistractors": [
       [
-        "activity",
-        "Bootstrap",
-        "PowerManagerService"
-      ],
-      [
-        "ServiceManager",
         "ActivityThread",
-        "list"
+        "Zygote",
+        "activity"
       ],
       [
-        "service",
+        "addService",
+        "Bootstrap",
+        "AndroidManifest.xml"
+      ],
+      [
         "package",
-        "PowerManagerService"
+        "dex2oat",
+        "lmkd"
       ]
     ]
   },
@@ -402,14 +402,14 @@
     "explanation": "ServiceManager.addService()로 Binder 서비스를 이름과 함께 등록하고, ServiceManager.getService()로 이름을 사용하여 해당 서비스의 IBinder 핸들을 얻습니다. 이 패턴은 Android의 모든 시스템 서비스가 따르는 기본 등록/조회 메커니즘입니다.",
     "blankDistractors": [
       [
-        "init",
-        "Bootstrap",
-        "dumpsys"
+        "lmkd",
+        "ActivityThread",
+        "Core"
       ],
       [
-        "startCoreServices",
-        "Core",
-        "Bootstrap"
+        "Bootstrap",
+        "ActivityThread",
+        "InputDispatcher"
       ]
     ]
   },
@@ -434,13 +434,13 @@
     "blankDistractors": [
       [
         "LMK",
-        "CTS",
-        "DIST_DIR"
+        "TARGET_KERNEL_CONFIG",
+        "BLOCKED"
       ],
       [
-        "Core",
-        "activity",
-        "ActivityThread"
+        "EventHub",
+        "Z-order",
+        "startBootstrapServices"
       ]
     ]
   },
@@ -464,14 +464,14 @@
     "explanation": "'dumpsys package packages <패키지명>'은 PMS에 등록된 특정 패키지의 상세 정보를 출력합니다. 버전 코드, 설치 경로, 퍼미션, IntentFilter, 서명 정보 등을 확인할 수 있어 앱 디버깅에 매우 유용합니다.",
     "blankDistractors": [
       [
-        "attach",
-        "Zygote",
-        "AndroidManifest.xml"
+        "getService",
+        "InputManagerService",
+        "InputDispatcher"
       ],
       [
-        "InputDispatcher",
-        "EventHub",
-        "ActivityThread"
+        "AndroidManifest.xml",
+        "Bootstrap",
+        "oom_score_adj"
       ]
     ]
   },
@@ -531,18 +531,18 @@
     "blankDistractors": [
       [
         "POWER_SERVICE",
-        "PRODUCT_PACKAGES",
-        "X7"
+        "NATIVE",
+        "APEX"
       ],
       [
-        "WakeLock",
-        "dex2oat",
-        "EventHub"
+        "InputReader",
+        "ActivityThread",
+        "ServiceManager"
       ],
       [
-        "PowerManagerService",
-        "Core",
-        "activity"
+        "list",
+        "init",
+        "Core"
       ]
     ]
   },
@@ -569,19 +569,19 @@
     "explanation": "system_server는 Android의 핵심 프로세스이므로 종료 시 전체 사용자 공간이 재시작됩니다. Watchdog가 system_server의 hang을 감지하여 의도적으로 종료시키는 경우도 있습니다. 커널은 재부팅되지 않으므로 하드웨어 리셋보다는 빠르게 복구됩니다.",
     "blankDistractors": [
       [
-        "PowerManagerService",
-        "startBootstrapServices",
-        "InputManagerService"
+        "AndroidManifest.xml",
+        "release",
+        "InputReader"
       ],
       [
-        "startCoreServices",
-        "package",
-        "getService"
+        "PowerManagerService",
+        "release",
+        "startBootstrapServices"
       ],
       [
         "서명",
-        "도메인",
-        "선언적"
+        "멀티스레드",
+        "벤더"
       ]
     ]
   },
@@ -613,23 +613,23 @@
     "blankDistractors": [
       [
         "소프트 리부팅",
-        "타입 안전성",
-        "녹색"
+        "증분",
+        "버전 관리"
       ],
       [
-        "PowerManager",
-        "PowerManagerService",
-        "service"
-      ],
-      [
-        "Core",
         "EventHub",
-        "package"
+        "activity",
+        "getService"
       ],
       [
-        "/data/anr/traces.txt",
-        "/dev",
-        ".aidl"
+        "Bootstrap",
+        "ActivityThread",
+        "Zygote"
+      ],
+      [
+        ".hal",
+        "/dev/binder",
+        "/dev"
       ]
     ]
   },
@@ -653,14 +653,14 @@
     "explanation": "SystemServer의 run() 메서드는 startBootstrapServices(), startCoreServices(), startOtherServices() 순서로 서비스를 시작합니다. Bootstrap 서비스에는 AMS, PMS 등 다른 서비스의 기반이 되는 핵심 서비스가 포함되고, Core 서비스는 BatteryService 등, Other 서비스에는 WMS, IMS 등이 포함됩니다.",
     "blankDistractors": [
       [
-        "Z-order",
-        "package",
-        "getService"
+        "InputReader",
+        "list",
+        "WakeLock"
       ],
       [
-        "oom_score_adj",
-        "service",
-        "attach"
+        "activity",
+        "AndroidManifest.xml",
+        "InputManagerService"
       ]
     ]
   },
@@ -684,14 +684,14 @@
     "explanation": "AMS가 새 앱을 시작하면 Zygote에 fork를 요청하고, 새 프로세스에서 ActivityThread.main()이 실행됩니다. ActivityThread는 앱 프로세스의 메인 스레드를 관리하며, attach() 메서드를 통해 AMS에 자신을 등록합니다. 이후 Looper.loop()으로 메시지 루프에 진입하여 AMS로부터의 생명주기 콜백을 처리합니다.",
     "blankDistractors": [
       [
-        "ServiceManager",
-        "Bootstrap",
-        "list"
+        "package",
+        "WakeLock",
+        "SurfaceFlinger"
       ],
       [
-        "dumpsys",
-        "release",
-        "WakeLock"
+        "service",
+        "oom_score_adj",
+        "AndroidManifest.xml"
       ]
     ]
   }

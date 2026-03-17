@@ -49,14 +49,14 @@
     "explanation": "sysfs는 커널 객체(디바이스, 드라이버, 버스 등)의 정보를 /sys 디렉토리에 파일 시스템 형태로 노출합니다. udev는 커널로부터 uevent를 수신하고 sysfs 정보를 참조하여 /dev 디렉토리에 디바이스 파일을 동적으로 생성하거나 제거합니다.",
     "blankDistractors": [
       [
-        "copy_from_user",
-        "bus",
-        "complete"
+        "request_irq",
+        "usb_submit_urb",
+        "bus"
       ],
       [
-        "store",
-        "alloc_chrdev_region",
-        "idVendor"
+        "usb_bulk_msg",
+        "cdev_add",
+        "alloc_chrdev_region"
       ]
     ]
   },
@@ -84,19 +84,19 @@
     "explanation": "Linux의 device model은 bus_type, device, device_driver 구조체로 구성됩니다. bus의 match() 콜백이 device와 driver의 호환성을 판단하고, 매칭에 성공하면 driver의 probe() 함수가 호출되어 디바이스 초기화가 수행됩니다.",
     "blankDistractors": [
       [
-        "my_of_match",
-        "copy_from_user",
-        "fallback"
-      ],
-      [
-        "complete",
-        "udev",
-        "store"
-      ],
-      [
-        "my_of_match",
-        "fallback",
+        "show",
+        "compatible",
         "idVendor"
+      ],
+      [
+        "compatible",
+        "store",
+        "class_create"
+      ],
+      [
+        "usb_interface",
+        "udev",
+        "dma_free_coherent"
       ]
     ]
   },
@@ -136,14 +136,14 @@
     "explanation": "alloc_chrdev_region()은 사용 가능한 major number를 커널에서 동적으로 할당받는 함수입니다. cdev_add()는 초기화된 cdev 구조체를 커널에 등록하여 해당 디바이스 번호에 대한 요청을 처리할 수 있게 합니다. 첫 번째 인자는 dev_t 포인터, cdev 포인터 형태로 전달됩니다.",
     "blankDistractors": [
       [
-        "probe",
-        "sysfs",
-        "usb_alloc_urb"
+        "idVendor",
+        "platform_get_resource",
+        "dma_alloc_coherent"
       ],
       [
-        "usb_interface",
-        "show",
-        "dma_free_coherent"
+        "udev",
+        "probe",
+        "copy_from_user"
       ]
     ]
   },
@@ -183,14 +183,14 @@
     "explanation": "class_create()는 /sys/class/ 아래에 새 디바이스 클래스 디렉토리를 생성합니다. 이후 device_create()로 해당 클래스에 디바이스를 등록하면 udev/systemd-udevd가 uevent를 받아 /dev 노드를 자동으로 만들어줍니다. 이를 통해 mknod를 수동으로 실행할 필요가 없어집니다.",
     "blankDistractors": [
       [
-        "match",
-        "copy_to_user",
-        "show"
+        "dma_free_coherent",
+        "sysfs",
+        "usb_interface"
       ],
       [
-        "my_of_match",
-        "store",
-        "copy_to_user"
+        "probe",
+        "copy_from_user",
+        "usb_bulk_msg"
       ]
     ]
   },
@@ -215,14 +215,14 @@
     "explanation": "MODULE_DEVICE_TABLE(of, my_of_match)는 모듈 로딩 시 자동 매칭을 위한 디바이스 테이블을 등록하는 매크로입니다. of_match_table에는 of_device_id 배열의 이름을 지정합니다. of_match_ptr() 매크로를 사용하면 CONFIG_OF가 비활성화된 경우 NULL을 반환하여 컴파일 경고를 방지합니다.",
     "blankDistractors": [
       [
-        "MODULE_LICENSE(\"GPL\")",
+        "CPU_SET(0, &mask)",
         "WIFEXITED(status)",
-        "CPU_SET(0, &mask)"
+        "MODULE_LICENSE(\"GPL\")"
       ],
       [
-        "copy_from_user",
         "usb_bulk_msg",
-        "complete"
+        "usb_alloc_urb",
+        "class_create"
       ]
     ]
   },
@@ -265,19 +265,19 @@
     "explanation": "probe()는 드라이버의 진입점으로, 디바이스가 존재하고 드라이버와 매칭되었을 때 커널에 의해 호출됩니다. platform_get_resource()로 메모리/IRQ 리소스를 얻고, devm_ioremap_resource()로 I/O 매핑을 하며, devm_request_irq()로 인터럽트를 등록하는 것이 일반적인 패턴입니다.",
     "blankDistractors": [
       [
-        "class_create",
-        "alloc_chrdev_region",
-        "request_irq"
-      ],
-      [
-        "class_create",
-        "store",
+        "bus",
+        "match",
         "dma_alloc_coherent"
       ],
       [
-        "dma_free_coherent",
-        "match",
+        "store",
+        "class_create",
         "usb_submit_urb"
+      ],
+      [
+        "idVendor",
+        "cdev_add",
+        "copy_to_user"
       ]
     ]
   },
@@ -301,14 +301,14 @@
     "explanation": "copy_from_user()는 user space에서 kernel space로 데이터를 안전하게 복사합니다 (_IOW에 대응). copy_to_user()는 kernel space에서 user space로 데이터를 복사합니다 (_IOR에 대응). 두 함수 모두 성공 시 0을 반환하고, 복사하지 못한 바이트 수를 반환하므로 반환값이 0이 아니면 -EFAULT를 반환해야 합니다.",
     "blankDistractors": [
       [
-        "usb_interface",
         "platform_get_resource",
-        "cdev_add"
+        "usb_device_id",
+        "dma_free_coherent"
       ],
       [
-        "sysfs",
-        "cdev_add",
-        "request_irq"
+        "udev",
+        "show",
+        "platform_get_resource"
       ]
     ]
   },
@@ -351,19 +351,19 @@
     "explanation": "예를 들어 compatible = \"samsung,exynos4210-uart\", \"samsung,exynos-uart\"에서 첫 번째는 특정 SoC의 UART, 두 번째는 Exynos 계열 공통 UART를 의미합니다. 커널은 가장 구체적인 드라이버부터 검색하고, 없으면 더 일반적인 드라이버로 fallback합니다.",
     "blankDistractors": [
       [
-        "bus",
+        "show",
+        "alloc_chrdev_region",
+        "usb_device_id"
+      ],
+      [
+        "락",
+        "비동기",
+        "낮기"
+      ],
+      [
+        "copy_to_user",
         "probe",
-        "alloc_chrdev_region"
-      ],
-      [
-        "nice 값",
-        "장치",
-        "공유 메모리"
-      ],
-      [
-        "usb_alloc_urb",
-        "usb_bulk_msg",
-        "copy_to_user"
+        "bus"
       ]
     ]
   },
@@ -407,17 +407,17 @@
       [
         "IRQ_HANDLED",
         "IRQ_NONE",
-        "DTC"
+        "CLONE_FILES"
       ],
       [
-        "copy_to_user",
-        "usb_bulk_msg",
-        "bus"
+        "sysfs",
+        "device_create",
+        "udev"
       ],
       [
-        "my_of_match",
         "alloc_chrdev_region",
-        "usb_interface"
+        "dma_free_coherent",
+        "probe"
       ]
     ]
   },
@@ -445,18 +445,18 @@
     "blankDistractors": [
       [
         "DEVICE_ATTR",
-        "CLONE_VM",
-        "GRUB"
+        "NF_ACCEPT",
+        "AF_INET"
       ],
       [
         "DEVICE_ATTR",
-        "DKMS",
-        "STRTAB_STE_0_CFG_S1_TRANS"
+        "GICR",
+        "MAC"
       ],
       [
-        "copy_from_user",
-        "class_create",
-        "usb_device_id"
+        "idVendor",
+        "platform_get_resource",
+        "store"
       ]
     ]
   },
@@ -498,14 +498,14 @@
     "explanation": "pci_enable_device()는 PCI 디바이스를 활성화하여 I/O 및 메모리 리소스에 접근할 수 있게 합니다. 이후 pci_request_regions()로 BAR(Base Address Register) 리소스를 예약하고, pci_ioremap_bar() 또는 pci_iomap()으로 PCI BAR 영역을 커널 가상 주소 공간에 매핑합니다.",
     "blankDistractors": [
       [
-        "pipe(fd)",
-        "rcu_read_unlock()",
-        "getpid()"
+        "rcu_read_lock()",
+        "getpid()",
+        "fork()"
       ],
       [
-        "pipe(fd)",
-        "fork()",
-        "synchronize_rcu()"
+        "chdir(\"/\")",
+        "synchronize_rcu()",
+        "smp_wmb()"
       ]
     ]
   },
@@ -532,19 +532,19 @@
     "explanation": "URB의 생명주기: 1) usb_alloc_urb()로 할당, 2) usb_fill_bulk_urb() 등으로 초기화 (endpoint, 버퍼, 콜백 설정), 3) usb_submit_urb()로 제출, 4) 비동기적으로 전송 완료 후 complete 콜백 호출, 5) usb_free_urb()로 해제. URB는 interrupt, bulk, control, isochronous 전송 타입을 모두 지원합니다.",
     "blankDistractors": [
       [
-        "udev",
-        "idVendor",
-        "compatible"
+        "request_irq",
+        "store",
+        "udev"
       ],
       [
-        "usb_bulk_msg",
-        "fallback",
-        "dma_alloc_coherent"
+        "probe",
+        "copy_to_user",
+        "idVendor"
       ],
       [
-        "usb_device_id",
-        "device_create",
-        "bus"
+        "match",
+        "show",
+        "dma_free_coherent"
       ]
     ]
   },
@@ -584,14 +584,14 @@
     "explanation": "dma_alloc_coherent()는 CPU와 디바이스 간 캐시 일관성이 보장되는 DMA 버퍼를 할당합니다. 반환값은 CPU가 사용하는 가상 주소이고, dma_handle에는 디바이스가 사용하는 DMA(버스) 주소가 저장됩니다. 사용 완료 후 dma_free_coherent()로 해제해야 합니다. 이 매핑은 할당 해제 시까지 유효합니다.",
     "blankDistractors": [
       [
-        "udev",
-        "usb_interface",
-        "sysfs"
+        "cdev_add",
+        "platform_get_resource",
+        "usb_interface"
       ],
       [
-        "usb_submit_urb",
         "usb_device_id",
-        "usb_alloc_urb"
+        "show",
+        "udev"
       ]
     ]
   },
@@ -616,19 +616,19 @@
     "explanation": "USB 매칭은 interface 레벨에서 수행됩니다. usb_device_id의 match_flags 필드가 어떤 필드로 매칭할지 결정합니다. USB_DEVICE() 매크로는 vendor/product ID로 매칭하고, USB_INTERFACE_INFO()는 class/subclass/protocol로 매칭합니다. 하나의 USB 디바이스가 여러 interface를 가질 수 있어, 각 interface마다 다른 드라이버가 바인딩될 수 있습니다.",
     "blankDistractors": [
       [
-        "match",
+        "udev",
         "fallback",
-        "usb_submit_urb"
+        "class_create"
+      ],
+      [
+        "device_create",
+        "show",
+        "compatible"
       ],
       [
         "copy_from_user",
-        "fallback",
-        "my_of_match"
-      ],
-      [
-        "compatible",
-        "show",
-        "cdev_add"
+        "cdev_add",
+        "class_create"
       ]
     ]
   },
@@ -668,14 +668,14 @@
     "explanation": "usb_bulk_msg()는 동기식 USB bulk 전송 함수로, 전송이 완료되거나 타임아웃될 때까지 블로킹됩니다. 마지막 인자(5000)는 밀리초 단위 타임아웃입니다. 전송된 데이터를 user space로 복사하기 위해 copy_to_user()를 사용합니다. 비동기 전송이 필요한 경우 URB를 직접 사용해야 합니다.",
     "blankDistractors": [
       [
-        "probe",
-        "usb_device_id",
-        "complete"
+        "store",
+        "alloc_chrdev_region",
+        "copy_from_user"
       ],
       [
-        "dma_alloc_coherent",
-        "copy_from_user",
-        "platform_get_resource"
+        "dma_free_coherent",
+        "class_create",
+        "show"
       ]
     ]
   }

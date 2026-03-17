@@ -182,19 +182,19 @@
     "explanation": "bugreport은 dumpsys(모든 시스템 서비스 상태), logcat(main/system/events/crash 등 전체 버퍼), dmesg(커널 로그), /proc 정보, 네트워크 상태 등 디바이스의 종합적인 진단 정보를 ZIP 파일로 수집합니다. 문제 발생 직후 bugreport을 수집해두면 나중에 오프라인으로 상세 분석이 가능합니다.",
     "blankDistractors": [
       [
-        "meminfo",
-        "SurfaceFlinger",
-        "atrace"
+        "stats",
+        "sys_stats",
+        "ActivityManager"
       ],
       [
-        "시스템 서비스",
-        "디스크립터",
-        "키"
+        "리소스",
+        "무단 변경",
+        "메모리"
       ],
       [
-        "system",
-        "crash",
-        "top"
+        "package",
+        "ftrace",
+        "SurfaceFlinger"
       ]
     ]
   },
@@ -220,19 +220,19 @@
     "explanation": "dumpsys는 서비스 이름을 인자로 받아 해당 서비스의 상태를 출력합니다. dumpsys activity는 ActivityTaskManagerService의 상태를, dumpsys meminfo는 각 프로세스의 PSS/RSS/Private 메모리를, dumpsys package는 PackageManagerService의 앱 설치 정보를 보여줍니다. dumpsys window는 WindowManagerService의 윈도우 상태를 확인할 때 사용합니다.",
     "blankDistractors": [
       [
-        "SurfaceFlinger",
-        "top",
-        "power"
+        "processes",
+        "dmesg",
+        "logcat"
       ],
       [
-        "oom_score_adj",
-        "system",
-        "tombstone"
+        "crash",
+        "dmesg",
+        "stats"
       ],
       [
-        "power",
-        "stats",
-        "record"
+        "sched",
+        "report",
+        "true"
       ]
     ]
   },
@@ -264,18 +264,18 @@
     "blankDistractors": [
       [
         ".ninja",
-        "/apex",
-        ".aidl"
+        "/dev/hwbinder",
+        "/dev/binder"
       ],
       [
         "PSI",
-        "LIFO",
-        "MAC"
+        "ARCH",
+        "X7"
       ],
       [
         "PSI",
-        "VNDK",
-        "VTS"
+        "ABI",
+        "BOARD_SYSTEMIMAGE_PARTITION_SIZE"
       ]
     ]
   },
@@ -301,19 +301,19 @@
     "explanation": "최신 Android에서는 Binder 디버그 정보가 /dev/binderfs/binder_logs/ 또는 /sys/kernel/debug/binder/ 경로에 위치합니다(기존 /proc/binder/는 deprecated). stats 파일에서 프로세스별 Binder 노드, 참조, 트랜잭션 통계를 확인하고, transactions 파일에서 현재 진행 중인 트랜잭션의 상세 정보를 확인할 수 있습니다. Binder 스레드 풀의 기본 최대 크기는 15개(+메인 Binder 스레드 1개)이며, 모든 스레드가 사용 중이면 후속 호출이 블로킹됩니다.",
     "blankDistractors": [
       [
+        "logcat",
         "ActivityManager",
-        "record",
-        "package"
+        "dumpsys"
       ],
       [
-        "SurfaceFlinger",
-        "true",
-        "package"
+        "processes",
+        "record",
+        "report"
       ],
       [
         "10",
         "0x1234",
-        "0"
+        "1"
       ]
     ]
   },
@@ -341,19 +341,19 @@
     "explanation": "Perfetto의 linux.ftrace 데이터 소스 내에서 ftrace_events로 커널 이벤트 그룹을 지정하고, atrace_categories로 Android 트레이스 카테고리를 지정합니다. sched 이벤트 그룹(sched_switch, sched_wakeup)은 프로세스 스케줄링을, power 이벤트 그룹(cpu_frequency, cpu_idle)은 전력 상태 변화를 추적합니다. atrace 카테고리(am, view, gfx 등)는 Android의 Trace.beginSection()/endSection() 마커를 수집하여 앱과 프레임워크 수준의 성능을 분석합니다.",
     "blankDistractors": [
       [
-        "package",
-        "oom_score_adj",
-        "stats"
+        "dmesg",
+        "top",
+        "tombstone"
       ],
       [
-        "report",
-        "package",
-        "true"
+        "crash",
+        "dmesg",
+        "top"
       ],
       [
-        "ActivityManager",
-        "transactions",
-        "true"
+        "activity",
+        "top",
+        "report"
       ]
     ]
   },
@@ -383,19 +383,19 @@
     "explanation": "tombstone의 signal 필드는 크래시 원인이 된 시그널(SIGSEGV, SIGABRT, SIGBUS 등)과 폴트 주소를 제공합니다. Abort message는 __android_log_assert나 LOG_ALWAYS_FATAL 등으로 전달된 에러 메시지로, 크래시 원인을 직접적으로 알려줍니다. memory map 섹션은 모든 매핑된 영역의 주소 범위, 권한, 파일 경로를 보여주어 크래시 주소가 어느 라이브러리에 속하는지 파악할 수 있게 합니다.",
     "blankDistractors": [
       [
-        "processes",
-        "ActivityManager",
-        "record"
-      ],
-      [
-        "<pid>",
-        "--latency",
-        "binder/binder_transaction"
+        "activity",
+        "record",
+        "logcat"
       ],
       [
         "binder/binder_transaction",
+        "--latency",
+        "<pid>"
+      ],
+      [
+        "--latency",
         "<pid>",
-        "--latency"
+        "binder/binder_transaction"
       ]
     ]
   },
@@ -423,19 +423,19 @@
     "explanation": "LMKD(Low Memory Killer Daemon)는 각 프로세스의 oom_score_adj 값을 기준으로 종료 우선순위를 결정합니다. 빈 프로세스(900~999)가 가장 먼저, 포그라운드 프로세스(0)가 가장 나중에 종료됩니다. PSI(Pressure Stall Information)는 메모리 부족으로 인한 작업 지연 비율을 나타내며, LMKD는 이를 참고하여 사전 킬을 수행합니다.",
     "blankDistractors": [
       [
-        "transactions",
-        "package",
-        "tombstone"
-      ],
-      [
-        "NATIVE",
-        "BLOCKED",
-        "CDEX"
-      ],
-      [
-        "activity",
         "power",
-        "dumpsys"
+        "system",
+        "stats"
+      ],
+      [
+        "BLOCKED",
+        "NATIVE",
+        "LLNDK"
+      ],
+      [
+        "transactions",
+        "record",
+        "logcat"
       ]
     ]
   },
@@ -463,19 +463,19 @@
     "explanation": "네이티브 크래시는 debuggerd가 생성하는 tombstone 파일에서 시그널, 백트레이스, 레지스터 상태를 분석합니다. Java 예외는 logcat의 crash 버퍼에 자동으로 기록되는 스택 트레이스에서 원인을 파악합니다. 커널 패닉은 dmesg나 /proc/kmsg, 또는 pstore(persistent storage)에 저장된 마지막 커널 로그를 분석하여 진단합니다.",
     "blankDistractors": [
       [
-        "report",
         "sched",
-        "record"
+        "SurfaceFlinger",
+        "transactions"
       ],
       [
-        "record",
-        "package",
-        "system"
+        "meminfo",
+        "system",
+        "logcat"
       ],
       [
-        "sched",
-        "report",
-        "stats"
+        "ftrace",
+        "top",
+        "report"
       ]
     ]
   },
@@ -499,14 +499,14 @@
     "explanation": "logcat의 -b 옵션으로 특정 버퍼(main, system, events, crash, kernel)를 선택할 수 있습니다. 필터 표현식은 '태그:우선순위' 형식으로, V(Verbose), D(Debug), I(Info), W(Warning), E(Error), S(Silent) 레벨을 지정합니다. *:S는 나머지 모든 태그를 무시하는 필터입니다.",
     "blankDistractors": [
       [
-        "signal",
-        "dumpsys",
-        "top"
+        "sched",
+        "top",
+        "stats"
       ],
       [
-        "tombstone",
-        "true",
-        "record"
+        "power",
+        "package",
+        "oom_score_adj"
       ]
     ]
   },
@@ -530,14 +530,14 @@
     "explanation": "dumpsys SurfaceFlinger --latency는 각 레이어의 프레임 제출 타임스탬프를 출력하여 프레임 드롭과 지연을 분석할 수 있게 합니다. dumpsys -l은 현재 등록된 모든 시스템 서비스의 목록을 표시합니다. dumpsys SurfaceFlinger만 실행하면 전체 상태가 출력되어 현재 레이어 구성, VSync 타이밍 등을 확인할 수 있습니다.",
     "blankDistractors": [
       [
-        "processes",
-        "system",
-        "power"
+        "sched",
+        "record",
+        "processes"
       ],
       [
-        "<pid>",
         "memory map",
-        "binder/binder_transaction"
+        "<pid>",
+        "Abort message"
       ]
     ]
   },
@@ -561,14 +561,14 @@
     "explanation": "'dumpsys activity processes'는 실행 중인 모든 앱 프로세스의 목록과 oom_score_adj 값, LRU 리스트 등을 표시하여 LMKD의 종료 우선순위를 파악할 수 있습니다. 'dumpsys activity top'은 현재 포그라운드 액티비티의 상세 정보(View 계층, Fragment 상태 등)를 출력합니다. 참고로 'dumpsys activity activities'는 전체 액티비티 스택과 태스크 목록을 보여주며 용도가 다릅니다.",
     "blankDistractors": [
       [
-        "logcat",
-        "stats",
-        "oom_score_adj"
+        "ActivityManager",
+        "oom_score_adj",
+        "tombstone"
       ],
       [
-        "crash",
-        "ftrace",
-        "signal"
+        "dmesg",
+        "power",
+        "oom_score_adj"
       ]
     ]
   },
@@ -592,14 +592,14 @@
     "explanation": "Perfetto는 protobuf 기반의 설정 파일을 사용하여 트레이스를 구성합니다. -t 옵션으로 트레이스 시간을, -o 옵션으로 출력 파일 경로를 지정합니다. 설정을 텍스트 형식(pbtxt)으로 전달할 때는 -c - 또는 --txt 플래그를 사용할 수 있습니다. linux.ftrace 데이터 소스는 ftrace_events로 커널 이벤트를, atrace_categories로 Android 프레임워크의 트레이스 카테고리를 수집합니다. RING_BUFFER 정책은 버퍼가 가득 차면 오래된 데이터를 덮어씁니다.",
     "blankDistractors": [
       [
-        "0x1234",
         "15",
+        "0x1234",
         "0"
       ],
       [
-        "meminfo",
         "power",
-        "atrace"
+        "sys_stats",
+        "package"
       ]
     ]
   },
@@ -623,14 +623,14 @@
     "explanation": "simpleperf record는 지정된 프로세스의 CPU 샘플을 수집하여 perf.data 파일에 저장합니다. -g 옵션은 콜 그래프(call graph)를 수집하여 함수 호출 관계를 추적합니다. simpleperf report는 수집된 데이터를 분석하여 함수별 CPU 사용 비율을 보여주며, --sort 옵션으로 정렬 기준(프로세스, 라이브러리, 함수)을 지정합니다.",
     "blankDistractors": [
       [
-        "package",
-        "power",
-        "sched"
+        "atrace",
+        "tombstone",
+        "activity"
       ],
       [
-        "tombstone",
-        "true",
-        "stats"
+        "dmesg",
+        "sched",
+        "ftrace"
       ]
     ]
   },
@@ -663,14 +663,14 @@
     "explanation": "debuggerd -b <pid>는 대상 프로세스를 종료하지 않고 현재 스레드들의 백트레이스를 수집합니다. tombstone 파일에서 'signal' 섹션은 크래시 원인 시그널과 폴트 주소를 포함하며, grep -A 20으로 해당 섹션과 이후 백트레이스를 추출합니다. addr2line에는 실제 크래시 주소(예: 0x1234)를 전달해야 하며, -C 옵션으로 C++ 심볼을 demangling하고 -f 옵션으로 함수명을 출력합니다.",
     "blankDistractors": [
       [
-        "Abort message",
         "--latency",
-        "binder/binder_transaction"
+        "Abort message",
+        "memory map"
       ],
       [
-        "oom_score_adj",
-        "crash",
-        "atrace"
+        "tombstone",
+        "processes",
+        "report"
       ],
       [
         "15",
@@ -703,19 +703,19 @@
     "explanation": "binder/binder_transaction ftrace 이벤트는 Binder 트랜잭션의 시작과 완료를 추적하여 IPC 지연을 분석합니다. linux.sys_stats 데이터 소스는 /proc/meminfo, /proc/vmstat 등 시스템 메모리와 가상 메모리 통계를 주기적으로 수집하며, sys_stats_config 블록에서 meminfo_period_ms, vmstat_period_ms, stat_period_ms 등으로 수집 주기를 설정할 수 있습니다. linux.process_stats는 프로세스별 CPU, 메모리 사용량을 추적하며, scan_all_processes_on_start를 true로 설정하면 트레이스 시작 시 모든 프로세스 정보를 캡처합니다.",
     "blankDistractors": [
       [
-        "--latency",
-        "Abort message",
-        "memory map"
+        "<pid>",
+        "memory map",
+        "Abort message"
       ],
       [
-        "processes",
-        "tombstone",
-        "logcat"
+        "ActivityManager",
+        "package",
+        "report"
       ],
       [
-        "stats",
-        "dumpsys",
-        "logcat"
+        "system",
+        "activity",
+        "package"
       ]
     ]
   }

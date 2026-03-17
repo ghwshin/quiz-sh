@@ -75,24 +75,24 @@
     "explanation": "이 4대 컴포넌트는 Android 앱의 핵심 구성 요소입니다. Activity, Service, ContentProvider는 AndroidManifest.xml에 선언해야 하지만, BroadcastReceiver는 매니페스트에 선언하는 정적 등록 외에도 registerReceiver()를 사용한 동적 등록이 가능합니다. 각 컴포넌트는 독립적인 생명주기를 가지며, Intent를 통해 활성화될 수 있습니다(ContentProvider 제외, ContentResolver를 통해 접근).",
     "blankDistractors": [
       [
-        "stopSelf",
-        "onDestroyView",
-        "onCreate"
+        "onBind",
+        "onReceive",
+        "onStartCommand"
       ],
       [
-        "onCreate",
-        "onStartCommand",
-        "ViewModelProvider"
+        "ViewModelProvider",
+        "onAttach",
+        "Visible"
       ],
       [
-        "ContentResolver",
-        "onCreate",
-        "Task"
+        "registerReceiver",
+        "Task",
+        "onCreateView"
       ],
       [
-        "onDetach",
-        "Intent",
-        "startForegroundService"
+        "onAttach",
+        "Task",
+        "ContentResolver"
       ]
     ]
   },
@@ -121,18 +121,18 @@
     "blankDistractors": [
       [
         "암시적 브로드캐스트",
-        "선언적",
-        "링커 네임스페이스"
-      ],
-      [
-        "startActivity",
-        "Bundle",
-        "startService"
+        "기밀성",
+        "클러스터"
       ],
       [
         "BroadcastReceiver",
-        "onBind",
-        "startForeground"
+        "WorkManager",
+        "Visible"
+      ],
+      [
+        "Foreground",
+        "WorkManager",
+        "observe"
       ]
     ]
   },
@@ -156,14 +156,14 @@
     "explanation": "Intent 객체를 생성할 때 Context와 대상 Activity 클래스를 전달합니다. putExtra()로 데이터를 추가하고, startActivity()를 호출하여 새 Activity를 시작합니다. 이것은 가장 기본적인 명시적 Intent 사용 패턴입니다.",
     "blankDistractors": [
       [
-        "onCreateView",
-        "onReceive",
-        "ContentResolver"
+        "startForegroundService",
+        "Task",
+        "onAttach"
       ],
       [
-        "Activity",
-        "action",
-        "onBind"
+        "WorkManager",
+        "onReceive",
+        "startForeground"
       ]
     ]
   },
@@ -193,24 +193,24 @@
     "explanation": "AndroidManifest.xml에서 <activity> 태그로 Activity를 선언합니다. <intent-filter> 안에 MAIN action과 LAUNCHER category를 지정하면 해당 Activity가 앱의 진입점(런처에서 실행되는 첫 화면)이 됩니다.",
     "blankDistractors": [
       [
-        "registerReceiver",
-        "startService",
-        "JobScheduler"
+        "onCreate",
+        "Service",
+        "registerReceiver"
       ],
       [
-        "onCreateView",
-        "ContentResolver",
-        "onAttach"
+        "bindService",
+        "startForeground",
+        "onDetach"
       ],
       [
+        "ViewModelProvider",
         "startActivity",
-        "onDestroyView",
-        "BroadcastReceiver"
+        "ContentResolver"
       ],
       [
-        "Bundle",
-        "observe",
-        "onAttach"
+        "IntentFilter",
+        "Visible",
+        "ViewModel"
       ]
     ]
   },
@@ -234,14 +234,14 @@
     "explanation": "onCreate()는 Activity가 생성될 때 호출되는 필수 콜백입니다. savedInstanceState 매개변수는 Bundle? 타입으로, 이전에 onSaveInstanceState()에서 저장한 상태 데이터를 포함합니다. Activity가 처음 생성되면 null이 전달됩니다.",
     "blankDistractors": [
       [
-        "WorkManager",
-        "onReceive",
-        "Intent"
+        "onBind",
+        "Service",
+        "ContentResolver"
       ],
       [
-        "onReceive",
-        "startForegroundService",
-        "registerReceiver"
+        "Intent",
+        "Activity",
+        "action"
       ]
     ]
   },
@@ -337,29 +337,29 @@
     "explanation": "하나의 Service가 Started와 Bound 두 가지 방식을 동시에 지원할 수도 있습니다. 이 경우 모든 클라이언트가 바인딩을 해제하고 stopSelf()나 stopService()가 호출되어야 Service가 소멸됩니다.",
     "blankDistractors": [
       [
-        "JobScheduler",
-        "ContentProvider",
+        "onDestroyView",
+        "Foreground",
+        "onAttach"
+      ],
+      [
+        "Intent",
+        "IntentFilter",
         "onCreateView"
       ],
       [
-        "onAttach",
-        "JobScheduler",
-        "IntentFilter"
-      ],
-      [
-        "onDestroyView",
-        "Intent",
-        "Visible"
-      ],
-      [
-        "ViewModelProvider",
-        "startActivity",
-        "startForeground"
-      ],
-      [
-        "onAttach",
         "Service",
-        "WorkManager"
+        "Visible",
+        "Task"
+      ],
+      [
+        "observe",
+        "ContentProvider",
+        "Bundle"
+      ],
+      [
+        "ContentProvider",
+        "Bundle",
+        "ContentResolver"
       ]
     ]
   },
@@ -386,19 +386,19 @@
     "explanation": "Back Stack은 사용자의 탐색 경험을 관리하는 핵심 메커니즘입니다. 홈 버튼을 누르면 현재 Task 전체가 백그라운드로 이동하며, 앱을 다시 선택하면 Task가 포그라운드로 복원됩니다.",
     "blankDistractors": [
       [
-        "startService",
-        "onCreate",
-        "stopSelf"
+        "Foreground",
+        "onDetach",
+        "onCreate"
       ],
       [
         "content:// URI",
-        "--latency",
-        "Stable AIDL"
+        "--apex-only",
+        "Baseline Profile"
       ],
       [
         "START_STICKY",
-        "PRODUCT_PACKAGES",
-        "SMC_TYPE_FAST"
+        "VTS",
+        "JIT"
       ]
     ]
   },
@@ -426,19 +426,19 @@
     "explanation": "대표적인 예로 Android 시스템의 연락처(ContactsContract)나 미디어 파일(MediaStore)이 ContentProvider로 제공됩니다. Android 11 이상에서는 앱의 패키지 가시성 제한으로 인해 AndroidManifest.xml에 <queries> 선언이 필요할 수 있습니다.",
     "blankDistractors": [
       [
-        "Bundle",
-        "onCreate",
-        "onAttach"
+        "onDestroyView",
+        "BroadcastReceiver",
+        "IntentFilter"
       ],
       [
         "Back Stack",
-        "pause time",
-        "Concurrent Copying"
+        "Baseline Profile",
+        "compatibility matrix"
       ],
       [
-        "Task",
-        "stopSelf",
-        "bindService"
+        "onDestroyView",
+        "onDetach",
+        "action"
       ]
     ]
   },
@@ -462,14 +462,14 @@
     "explanation": "Bound Service는 Service 클래스를 상속하고, onBind() 메서드를 오버라이드하여 IBinder 객체를 반환해야 합니다. 클라이언트는 bindService()를 호출하고 ServiceConnection 콜백을 통해 IBinder를 받아 Service와 통신합니다.",
     "blankDistractors": [
       [
-        "WorkManager",
-        "observe",
-        "Activity"
+        "Activity",
+        "bindService",
+        "IntentFilter"
       ],
       [
-        "onDestroyView",
-        "BroadcastReceiver",
-        "ContentProvider"
+        "registerReceiver",
+        "onStartCommand",
+        "onDetach"
       ]
     ]
   },
@@ -496,19 +496,19 @@
     "explanation": "BroadcastReceiver를 동적으로 등록하려면 BroadcastReceiver를 상속하여 onReceive()를 구현하고, IntentFilter에 수신할 액션을 지정한 후 registerReceiver()로 등록합니다. 동적으로 등록한 리시버는 반드시 unregisterReceiver()로 해제해야 메모리 누수를 방지할 수 있습니다.",
     "blankDistractors": [
       [
-        "startForeground",
-        "action",
-        "onDestroyView"
+        "stopSelf",
+        "Service",
+        "Foreground"
       ],
       [
-        "startForeground",
-        "Intent",
-        "onAttach"
+        "onStartCommand",
+        "intent-filter",
+        "ContentProvider"
       ],
       [
-        "onCreateView",
-        "onBind",
-        "Bundle"
+        "startActivity",
+        "onDestroyView",
+        "startService"
       ]
     ]
   },
@@ -584,19 +584,19 @@
     "explanation": "Android 공식 문서에서는 프로세스를 Foreground, Visible, Service, Cached의 4단계로 분류합니다. Cached Process는 현재 활성 컴포넌트가 없는 프로세스로, LRU 리스트로 관리됩니다. 시스템은 메모리가 부족할 때 우선순위가 낮은 프로세스부터 종료(kill)합니다. Foreground Service를 사용하면 프로세스의 우선순위를 높여 시스템에 의한 종료를 방지할 수 있습니다.",
     "blankDistractors": [
       [
-        "ViewModelProvider",
-        "observe",
-        "ViewModel"
-      ],
-      [
-        "onCreateView",
         "intent-filter",
-        "IntentFilter"
+        "WorkManager",
+        "startService"
       ],
       [
-        "BroadcastReceiver",
-        "ViewModel",
-        "startForegroundService"
+        "onAttach",
+        "onDetach",
+        "ViewModelProvider"
+      ],
+      [
+        "startForeground",
+        "WorkManager",
+        "observe"
       ]
     ]
   },
@@ -624,24 +624,24 @@
     "explanation": "Activity가 소멸되면 포함된 Fragment도 함께 소멸됩니다. ViewPager 등에서 Fragment를 재사용할 때 onDestroyView()와 onCreateView()가 반복 호출될 수 있으므로, View 바인딩 참조를 onDestroyView()에서 null로 설정하여 메모리 누수를 방지해야 합니다.",
     "blankDistractors": [
       [
-        "onBind",
-        "registerReceiver",
-        "ContentProvider"
+        "ContentProvider",
+        "action",
+        "Service"
       ],
       [
-        "intent-filter",
-        "observe",
-        "onBind"
+        "ViewModel",
+        "onStartCommand",
+        "stopSelf"
       ],
       [
-        "Activity",
-        "intent-filter",
+        "Task",
+        "action",
+        "onStartCommand"
+      ],
+      [
+        "Service",
+        "startForeground",
         "startForegroundService"
-      ],
-      [
-        "ViewModelProvider",
-        "onCreate",
-        "Foreground"
       ]
     ]
   },
@@ -673,29 +673,29 @@
     "explanation": "이 제한은 배터리 수명과 시스템 성능을 개선하기 위해 도입되었습니다. WorkManager는 백그라운드 작업을 위한 권장 솔루션으로, 앱 프로세스가 종료되어도 작업을 보장하며 API 레벨에 따라 내부적으로 JobScheduler 또는 AlarmManager를 사용합니다.",
     "blankDistractors": [
       [
-        "onCreate",
-        "startService",
-        "Activity"
+        "ContentProvider",
+        "onCreateView",
+        "onDestroyView"
       ],
       [
-        "onDestroyView",
-        "ViewModel",
-        "Intent"
+        "startService",
+        "Visible",
+        "onDestroyView"
       ],
       [
         "클래스 이름",
-        "하드웨어",
-        "시스템 서비스"
+        "링커 네임스페이스",
+        "최소 권한"
       ],
       [
-        "ViewModel",
-        "onCreate",
-        "Visible"
+        "action",
+        "intent-filter",
+        "observe"
       ],
       [
-        "Foreground",
-        "onBind",
-        "Service"
+        "ViewModelProvider",
+        "observe",
+        "onBind"
       ]
     ]
   },
@@ -721,14 +721,14 @@
     "explanation": "startForeground()를 호출하여 Service를 Foreground 상태로 전환하고 알림을 표시합니다. onStartCommand()의 반환값은 Service가 시스템에 의해 종료된 후 재생성 동작을 결정합니다. START_STICKY는 Service를 재생성하고, START_NOT_STICKY는 재생성하지 않으며, START_REDELIVER_INTENT는 마지막 Intent와 함께 재생성합니다. 세 값 모두 유효한 반환값이므로 어떤 값이든 정답으로 인정됩니다.",
     "blankDistractors": [
       [
-        "onReceive",
-        "Visible",
-        "IntentFilter"
+        "observe",
+        "Intent",
+        "ViewModel"
       ],
       [
         "LIFO",
-        "PSI",
-        "LMK"
+        "JIT",
+        "TARGET_KERNEL_CONFIG"
       ]
     ]
   },
@@ -755,19 +755,19 @@
     "explanation": "ViewModel 클래스를 상속하여 UI 관련 데이터를 관리합니다. ViewModelProvider를 통해 ViewModel 인스턴스를 획득하면, 동일한 ViewModelStoreOwner(Activity/Fragment)에 대해 항상 같은 인스턴스가 반환됩니다. LiveData의 observe()를 사용하여 생명주기를 인식하는 방식으로 데이터 변경을 관찰합니다.",
     "blankDistractors": [
       [
-        "startForeground",
-        "Bundle",
-        "WorkManager"
-      ],
-      [
-        "registerReceiver",
+        "WorkManager",
         "onReceive",
-        "onStartCommand"
+        "onDetach"
       ],
       [
-        "JobScheduler",
-        "Bundle",
-        "onCreateView"
+        "stopSelf",
+        "intent-filter",
+        "Activity"
+      ],
+      [
+        "BroadcastReceiver",
+        "Service",
+        "onCreate"
       ]
     ]
   }

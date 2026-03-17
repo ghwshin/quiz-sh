@@ -70,18 +70,18 @@
     "blankDistractors": [
       [
         "DTC",
-        "ARM",
-        "DTB"
+        "DTB",
+        "ARM"
       ],
       [
         "/sbin/init",
-        ".dts",
+        "/proc/meminfo",
         "/proc/kallsyms"
       ],
       [
         "/sbin/init",
-        ".dts",
-        "/proc/kallsyms"
+        "/proc/kallsyms",
+        "/sys/block"
       ]
     ]
   },
@@ -104,14 +104,14 @@
     "explanation": "vmlinuz의 'z'는 압축(zlib/gzip)을 의미합니다. bzImage는 'big zImage'의 약자로, 기존 zImage의 512KB 크기 제한을 극복한 형식입니다. 부팅 시 커널은 자체 압축 해제 루틴을 실행하여 메모리에 풀린 커널 코드를 배치합니다.",
     "blankDistractors": [
       [
-        "execute_command",
-        "linux",
-        "bootargs"
+        "compatible",
+        "bootcmd",
+        "rootfs"
       ],
       [
-        "After",
-        "initrd",
-        "ro"
+        "execute_command",
+        "cr0",
+        "bootargs"
       ]
     ]
   },
@@ -135,14 +135,14 @@
     "explanation": "GRUB 2 설정에서 'linux' 명령은 커널 이미지를 로드하고 커널 커맨드라인 파라미터를 전달합니다. 'initrd' 명령은 초기 RAM 디스크 이미지를 로드합니다. 이 두 명령은 GRUB에서 Linux를 부팅하기 위한 핵심 명령입니다.",
     "blankDistractors": [
       [
-        "run_init_process",
-        "bzImage",
-        "panic"
+        "switch_root",
+        "ro",
+        "trap_init"
       ],
       [
-        "compatible",
-        "After",
-        "execute_command"
+        "execute_command",
+        "U-Boot",
+        "rootfs"
       ]
     ]
   },
@@ -184,19 +184,19 @@
     "explanation": "GPT는 UEFI 표준의 일부로, 기존 MBR의 한계를 극복하기 위해 설계되었습니다. MBR은 32비트 LBA 주소 지정으로 최대 2TB까지만 지원하지만, GPT는 64비트 LBA를 사용하여 이론적으로 9.4ZB까지 지원합니다.",
     "blankDistractors": [
       [
+        "init=",
         "kernel panic",
-        "root=",
-        "init="
+        "root="
       ],
       [
+        "0",
         "268435456",
-        "3",
-        "1019"
+        "2"
       ],
       [
         "장치",
-        "샘플",
-        "레지스터"
+        "공개 키",
+        "순환 의존성"
       ]
     ]
   },
@@ -269,19 +269,19 @@
     "explanation": "커널 커맨드라인 파라미터는 부트로더가 커널에 전달하는 설정값입니다. /proc/cmdline에서 확인할 수 있으며, 부팅 동작을 세밀하게 제어할 수 있습니다. init= 파라미터로 init 프로그램을 변경하면 시스템 복구 시 유용합니다.",
     "blankDistractors": [
       [
-        "2TB",
         "kernel panic",
-        "Ring 3"
+        "2TB",
+        "-p"
       ],
       [
-        "initrd",
-        "sched_init",
-        "trap_init"
+        "bootargs",
+        "trap_init",
+        "run_init_process"
       ],
       [
-        "2TB",
         "kernel panic",
-        "--json"
+        "2TB",
+        "__ATTR"
       ]
     ]
   },
@@ -310,18 +310,18 @@
     "blankDistractors": [
       [
         "GRUB",
-        "MY_IOC_MAGIC",
-        "CONFIG_MODULE_SIG_FORCE"
+        "THIS_MODULE",
+        "MAC"
       ],
       [
         "GRUB",
-        "CLONE_FILES",
-        "IRQ_NONE"
+        "DSB",
+        "GPL"
       ],
       [
         "GRUB",
-        "EXPORT_SYMBOL_GPL",
-        "NF_INET_PRE_ROUTING"
+        "GICR",
+        "DCZID_EL0"
       ]
     ]
   },
@@ -349,18 +349,18 @@
     "blankDistractors": [
       [
         "U-Boot",
-        "bootcmd",
-        "run_init_process"
-      ],
-      [
-        "After",
-        "U-Boot",
-        "vmlinuz"
-      ],
-      [
-        "in_pm32",
-        "cr0",
+        "ro",
         "bootcmd"
+      ],
+      [
+        "bzImage",
+        "U-Boot",
+        "ro"
+      ],
+      [
+        "vmlinuz",
+        "bootargs",
+        "U-Boot"
       ]
     ]
   },
@@ -384,14 +384,14 @@
     "explanation": "start_kernel()은 Linux 커널의 메인 초기화 함수입니다. trap_init()은 CPU 예외 및 인터럽트 핸들러를 설정하고, sched_init()은 프로세스 스케줄러를 초기화합니다. 마지막으로 rest_init()에서 kernel_init 스레드(PID 1)와 kthreadd 스레드(PID 2)를 생성합니다.",
     "blankDistractors": [
       [
-        "After",
-        "ro",
-        "bootcmd"
+        "cr0",
+        "linux",
+        "run_init_process"
       ],
       [
-        "compatible",
-        "initrd",
-        "cr0"
+        "bootcmd",
+        "in_pm32",
+        "Requires"
       ]
     ]
   },
@@ -416,14 +416,14 @@
     "explanation": "systemd 유닛 파일에서 After=는 유닛의 시작 순서를 지정합니다(network.target 이후에 시작). Requires= 또는 Wants=는 의존성을 정의합니다. Requires는 강한 의존성(의존 대상 실패 시 함께 중단), Wants는 약한 의존성(의존 대상 실패해도 계속 실행)입니다.",
     "blankDistractors": [
       [
-        "initramfs",
-        "execute_command",
-        "bootargs"
+        "bzImage",
+        "cr0",
+        "bootcmd"
       ],
       [
-        "rootfs",
-        "linux",
-        "compatible"
+        "cr0",
+        "initramfs",
+        "ro"
       ]
     ]
   },
@@ -448,14 +448,14 @@
     "explanation": "switch_root는 현재 루트 파일시스템(initramfs)에서 새로운 루트 파일시스템으로 전환하는 유틸리티입니다. initramfs의 내용을 삭제하고, 새로운 루트를 마운트한 후 지정된 init 프로그램(/sbin/init)을 실행합니다. 이전 방식인 pivot_root와 달리 switch_root는 initramfs 전용입니다.",
     "blankDistractors": [
       [
-        "cr0",
-        "linux",
-        "bzImage"
+        "rootfs",
+        "After",
+        "trap_init"
       ],
       [
-        "/boot/grub/grub.cfg",
         "/etc/default/grub",
-        "/proc/meminfo"
+        "/boot/grub/grub.cfg",
+        ".dts"
       ]
     ]
   },
@@ -479,14 +479,14 @@
     "explanation": "x86에서 보호 모드로 전환하려면 먼저 GDT를 설정한 후, CR0 레지스터의 PE(bit 0) 비트를 1로 설정합니다. 그 후 far jump를 수행하여 CPU의 명령어 파이프라인을 플러시하고 보호 모드 코드 세그먼트로 진입합니다. 이 과정은 arch/x86/boot/pmjump.S에 구현되어 있습니다.",
     "blankDistractors": [
       [
-        "compatible",
-        "bootargs",
-        "ro"
+        "rootfs",
+        "bootcmd",
+        "compatible"
       ],
       [
-        "ro",
-        "bootargs",
-        "After"
+        "bootcmd",
+        "execute_command",
+        "Requires"
       ]
     ]
   },
@@ -543,19 +543,19 @@
     "explanation": "U-Boot는 ARM, MIPS 등 임베디드 아키텍처에서 표준적인 부트로더입니다. GRUB과 달리 파일시스템 접근이 제한적이며, 메모리 주소를 직접 지정하여 커널과 DTB를 로드합니다. 네트워크 부팅(TFTP/NFS)도 지원하여 개발 환경에서 유용합니다.",
     "blankDistractors": [
       [
-        "trap_init",
-        "sched_init",
+        "initrd",
+        "panic",
         "Requires"
       ],
       [
-        "panic",
         "trap_init",
-        "ro"
+        "sched_init",
+        "compatible"
       ],
       [
-        "run_init_process",
-        "panic",
-        "switch_root"
+        "cr0",
+        "ro",
+        "After"
       ]
     ]
   },
@@ -581,19 +581,19 @@
     "explanation": "이 탐색 순서는 init/main.c의 kernel_init() 함수에 하드코딩되어 있습니다. 전체 탐색 순서는 /sbin/init → /etc/init → /bin/init → /bin/sh이며, /bin/sh는 최후의 폴백(fallback)으로 포함됩니다. 현대 시스템에서는 대부분 /sbin/init이 systemd에 대한 심볼릭 링크이므로 첫 번째 시도에서 성공합니다.",
     "blankDistractors": [
       [
-        "2TB",
-        "root=",
-        "Buddy System"
-      ],
-      [
-        "/boot/grub/grub.cfg",
-        "/etc/default/grub",
-        ".dts"
-      ],
-      [
         "root=",
         "2TB",
         "10.0.0.2/24"
+      ],
+      [
+        "/etc/default/grub",
+        "/boot/grub/grub.cfg",
+        "/proc/meminfo"
+      ],
+      [
+        "2TB",
+        "root=",
+        "linux/mm_types.h"
       ]
     ]
   },
@@ -620,19 +620,19 @@
     "explanation": "run_init_process()는 지정된 경로의 프로그램을 PID 1로 실행하는 함수입니다. execute_command는 커널 커맨드라인의 init= 파라미터 값을 저장하는 변수입니다. 모든 init 프로그램 실행이 실패하면 panic()을 호출하여 커널 패닉을 발생시킵니다.",
     "blankDistractors": [
       [
-        "initramfs",
+        "bootargs",
         "bzImage",
-        "vmlinuz"
+        "cr0"
       ],
       [
-        "Requires",
-        "After",
+        "initrd",
+        "linux",
         "rootfs"
       ],
       [
-        "Requires",
-        "bootcmd",
-        "in_pm32"
+        "bzImage",
+        "switch_root",
+        "ro"
       ]
     ]
   },
@@ -656,13 +656,13 @@
     "explanation": "Device Tree에서 'compatible' 속성은 가장 중요한 속성입니다. 루트 노드의 compatible은 보드/머신을 식별하고, 장치 노드의 compatible은 해당 장치에 맞는 커널 드라이버를 바인딩하는 데 사용됩니다. 커널은 compatible 문자열을 기반으로 of_match_table에서 일치하는 드라이버를 찾습니다.",
     "blankDistractors": [
       [
-        "in_pm32",
-        "run_init_process",
-        "bzImage"
+        "panic",
+        "bootcmd",
+        "vmlinuz"
       ],
       [
         "rootfs",
-        "bootargs",
+        "bzImage",
         "execute_command"
       ]
     ]

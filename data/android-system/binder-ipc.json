@@ -71,24 +71,24 @@
     "explanation": "Parcel은 Binder 트랜잭션의 데이터 단위이며, 커널의 Binder 드라이버가 이 데이터를 대상 프로세스의 주소 공간에 복사합니다. writeToParcel()은 Parcelable 인터페이스의 메서드이고, createFromParcel()은 Parcelable.Creator<T> 인터페이스의 메서드로 static CREATOR 필드에서 구현합니다. Serializable보다 Parcelable이 Android에서 성능이 우수한데, 이는 리플렉션을 사용하지 않고 직접 바이트 스트림으로 변환하기 때문입니다.",
     "blankDistractors": [
       [
-        "onBind",
-        "IBinder",
-        "onTransact"
-      ],
-      [
-        "Proxy",
-        "RemoteCallbackList",
-        "DeathRecipient"
-      ],
-      [
         "interface",
-        "addService",
+        "BinderProxy",
         "Proxy"
       ],
       [
-        "Messenger",
-        "IBinder",
-        "unregister"
+        "Handler",
+        "service",
+        "beginBroadcast"
+      ],
+      [
+        "addService",
+        "Handler",
+        "Messenger"
+      ],
+      [
+        "asInterface",
+        "readString",
+        "IBinder"
       ]
     ]
   },
@@ -113,19 +113,19 @@
     "explanation": "IBinder는 Android IPC의 핵심 인터페이스입니다. 로컬 프로세스에서는 Binder 객체가 직접 반환되지만, 원격 프로세스에서는 Binder 드라이버가 자동으로 BinderProxy 객체를 생성하여 투명한 원격 호출을 가능하게 합니다.",
     "blankDistractors": [
       [
-        "asInterface",
-        "beginBroadcast",
-        "readInt"
+        "RemoteCallbackList",
+        "unregister",
+        "Handler"
       ],
       [
-        "writeToParcel",
-        "Proxy",
-        "DeathRecipient"
-      ],
-      [
+        "binder_ref",
         "readString",
-        "service",
-        "linkToDeath"
+        "writeToParcel"
+      ],
+      [
+        "Proxy",
+        "interface",
+        "unregister"
       ]
     ]
   },
@@ -152,19 +152,19 @@
     "explanation": "Parcelable 인터페이스를 구현하려면 writeToParcel()에서 필드를 순서대로 쓰고, 생성자에서 같은 순서로 readString(), readInt() 등을 호출하여 읽어야 합니다. 읽기와 쓰기의 순서가 반드시 일치해야 합니다. 또한 public static final Parcelable.Creator<User> CREATOR 필드를 반드시 정의해야 하며, 이 CREATOR의 createFromParcel() 메서드가 Parcel로부터 객체를 복원합니다.",
     "blankDistractors": [
       [
+        "beginBroadcast",
+        "self",
+        "unregister"
+      ],
+      [
         "onBind",
         "transact",
-        "RemoteCallbackList"
-      ],
-      [
-        "Messenger",
-        "Stub",
-        "DeathRecipient"
-      ],
-      [
-        "binder_thread",
-        "DeathRecipient",
         "beginBroadcast"
+      ],
+      [
+        "Stub",
+        "onBind",
+        "binder_proc"
       ]
     ]
   },
@@ -185,9 +185,9 @@
     "explanation": "AIDL 파일에서는 interface 키워드를 사용하여 IPC 인터페이스를 정의합니다. 빌드 시스템은 이 정의를 기반으로 ICalculator.Stub(서버 측)과 ICalculator.Stub.Proxy(클라이언트 측) 클래스를 자동 생성합니다.",
     "blankDistractors": [
       [
-        "readInt",
-        "binder_thread",
-        "Stub"
+        "RemoteCallbackList",
+        "binderDied",
+        "binder_thread"
       ]
     ]
   },
@@ -214,19 +214,19 @@
     "explanation": "ServiceConnection의 onServiceConnected 콜백은 IBinder 객체를 전달받습니다. ICalculator.Stub.asInterface(service)를 호출하면, 같은 프로세스이면 Stub 객체를 직접 반환하고 다른 프로세스이면 Proxy 객체를 반환하여 투명하게 IPC를 처리합니다.",
     "blankDistractors": [
       [
-        "self",
-        "addService",
-        "readInt"
-      ],
-      [
-        "binderDied",
-        "BinderProxy",
-        "onBind"
-      ],
-      [
-        "self",
+        "Handler",
         "RemoteCallbackList",
-        "addService"
+        "self"
+      ],
+      [
+        "binder_ref",
+        "defaultServiceManager",
+        "Stub"
+      ],
+      [
+        "Proxy",
+        "binder_ref",
+        "linkToDeath"
       ]
     ]
   },
@@ -320,24 +320,24 @@
     "explanation": "Proxy-Stub 패턴은 원격 프로시저 호출(RPC)을 로컬 메서드 호출처럼 보이게 하는 투명성을 제공합니다. 클라이언트는 Proxy의 메서드를 호출하면 내부적으로 Binder 트랜잭션이 수행되어 서버의 Stub에서 실제 로직이 실행됩니다.",
     "blankDistractors": [
       [
-        "readString",
-        "binder_thread",
-        "BinderProxy"
+        "unregister",
+        "IBinder",
+        "interface"
       ],
       [
-        "binder_node",
-        "readString",
-        "readInt"
+        "interface",
+        "RemoteCallbackList",
+        "service"
       ],
       [
-        "binder_ref",
-        "readString",
-        "linkToDeath"
+        "service",
+        "binder_proc",
+        "interface"
       ],
       [
-        "register",
-        "Handler",
-        "defaultServiceManager"
+        "asInterface",
+        "addService",
+        "binder_proc"
       ]
     ]
   },
@@ -362,19 +362,19 @@
     "explanation": "death notification은 Binder 기반 서비스의 안정성을 위해 중요합니다. Binder 드라이버는 프로세스 종료 시 해당 프로세스가 소유한 모든 Binder 노드를 정리하고, 등록된 death recipient에게 알림을 보냅니다. unlinkToDeath()로 등록을 해제할 수 있습니다.",
     "blankDistractors": [
       [
-        "unregister",
-        "transact",
-        "readInt"
+        "binder_thread",
+        "service",
+        "addService"
       ],
       [
+        "binder_node",
         "defaultServiceManager",
-        "Stub",
-        "Parcelable"
+        "binder_ref"
       ],
       [
-        "beginBroadcast",
-        "Parcel",
-        "transact"
+        "Handler",
+        "Messenger",
+        "binder_thread"
       ]
     ]
   },
@@ -407,29 +407,29 @@
     "explanation": "Messenger는 단일 스레드 큐로 동작하므로 스레드 안전성 문제가 없지만, 동시 처리가 불가능합니다. AIDL은 Binder 스레드 풀에서 여러 요청을 동시에 처리할 수 있지만, 서버 측에서 스레드 안전성을 직접 보장해야 합니다.",
     "blankDistractors": [
       [
-        "asInterface",
-        "interface",
-        "binder_thread"
+        "binder_thread",
+        "RemoteCallbackList",
+        "binderDied"
       ],
       [
-        "interface",
-        "asInterface",
-        "addService"
+        "IBinder",
+        "binderDied",
+        "unregister"
       ],
       [
-        "주황색",
-        "클래스 이름",
-        "디스크립터"
+        "별도 프로세스",
+        "암시적 브로드캐스트",
+        "인터페이스"
       ],
       [
-        "NATIVE",
-        "PELT",
-        "X0"
+        "CTS",
+        "PRODUCT_PROPERTY_OVERRIDES",
+        "JIT"
       ],
       [
-        "FCM 레벨",
-        "클래스 이름",
-        "절차적"
+        "메모리",
+        "증분",
+        "공개 키"
       ]
     ]
   },
@@ -456,19 +456,19 @@
     "explanation": "AIDL 서비스를 구현하려면 ICalculator.Stub을 상속(익명 클래스)하여 인터페이스 메서드를 구현합니다. Service의 onBind()에서 이 Stub 객체를 IBinder로 반환하면, 바인딩하는 클라이언트에게 Binder 참조가 전달됩니다.",
     "blankDistractors": [
       [
-        "defaultServiceManager",
-        "beginBroadcast",
-        "binder_proc"
+        "binder_ref",
+        "onTransact",
+        "Parcelable"
       ],
       [
-        "beginBroadcast",
         "DeathRecipient",
-        "binder_ref"
+        "binderDied",
+        "binder_node"
       ],
       [
-        "IBinder",
-        "Messenger",
-        "transact"
+        "linkToDeath",
+        "binder_proc",
+        "interface"
       ]
     ]
   },
@@ -493,13 +493,13 @@
     "blankDistractors": [
       [
         "onBind",
-        "beginBroadcast",
-        "Handler"
+        "Proxy",
+        "BinderProxy"
       ],
       [
-        "service",
-        "Parcel",
-        "binder_ref"
+        "interface",
+        "Handler",
+        "writeToParcel"
       ]
     ]
   },
@@ -575,24 +575,24 @@
     "explanation": "이 네 구조체는 Binder 드라이버의 핵심입니다. binder_proc는 red-black 트리로 노드와 참조를 관리하고, binder_thread는 트랜잭션 스택을 유지합니다. 트랜잭션 시 송신자의 binder_ref가 수신자의 binder_node로 변환되어 올바른 서비스 객체에 전달됩니다.",
     "blankDistractors": [
       [
-        "service",
-        "Parcel",
-        "readString"
+        "createFromParcel",
+        "transact",
+        "asInterface"
       ],
       [
         "Parcel",
-        "Parcelable",
-        "RemoteCallbackList"
+        "beginBroadcast",
+        "addService"
       ],
       [
-        "unregister",
-        "beginBroadcast",
-        "service"
+        "IBinder",
+        "onBind",
+        "Handler"
       ],
       [
-        "beginBroadcast",
-        "addService",
-        "DeathRecipient"
+        "DeathRecipient",
+        "asInterface",
+        "Messenger"
       ]
     ]
   },
@@ -620,24 +620,24 @@
     "explanation": "RemoteCallbackList는 IBinder를 키로 사용하여 콜백의 중복 등록을 방지하고, beginBroadcast()/finishBroadcast() 패턴으로 스레드 안전한 콜백 순회를 제공합니다. 콜백 호출 중 발생하는 DeadObjectException도 내부적으로 처리합니다.",
     "blankDistractors": [
       [
-        "binder_proc",
-        "Parcelable",
-        "IBinder"
+        "DeathRecipient",
+        "Parcel",
+        "writeToParcel"
       ],
       [
-        "self",
+        "BinderProxy",
         "service",
-        "Parcelable"
-      ],
-      [
-        "onBind",
-        "binderDied",
-        "Stub"
+        "onBind"
       ],
       [
         "writeToParcel",
-        "readInt",
-        "Parcel"
+        "linkToDeath",
+        "IBinder"
+      ],
+      [
+        "Parcel",
+        "Messenger",
+        "readInt"
       ]
     ]
   },
@@ -663,18 +663,18 @@
     "blankDistractors": [
       [
         "/dev/socket/<name>",
-        "/apex",
-        "/data/anr/traces.txt"
+        ".aidl",
+        ".ninja"
       ],
       [
-        "/apex",
+        ".hal",
         "/dev/socket/<name>",
-        "/dev"
+        ".ninja"
       ],
       [
-        "/dev/socket/<name>",
-        "/data/data/",
-        "/dev"
+        ".aidl",
+        "/dev",
+        "/dev/socket/<name>"
       ]
     ]
   },
@@ -701,19 +701,19 @@
     "explanation": "Native Binder 서비스 등록 과정: ProcessState::self()로 프로세스의 Binder 상태를 초기화하고 /dev/binder를 열고 mmap합니다. defaultServiceManager()로 ServiceManager의 프록시를 얻고, addService()로 서비스를 이름과 함께 등록합니다. startThreadPool()과 joinThreadPool()로 Binder 스레드를 시작하여 트랜잭션을 수신합니다.",
     "blankDistractors": [
       [
-        "binder_ref",
-        "createFromParcel",
-        "transact"
-      ],
-      [
-        "transact",
-        "binder_thread",
-        "beginBroadcast"
-      ],
-      [
+        "binderDied",
         "binder_proc",
-        "Proxy",
-        "binderDied"
+        "Parcelable"
+      ],
+      [
+        "service",
+        "binder_thread",
+        "writeToParcel"
+      ],
+      [
+        "readString",
+        "IBinder",
+        "unregister"
       ]
     ]
   },
@@ -743,24 +743,24 @@
     "explanation": "RemoteCallbackList는 AIDL 콜백 관리를 위한 Android 유틸리티 클래스입니다. register()/unregister()로 콜백을 관리하고, beginBroadcast()/getBroadcastItem()/finishBroadcast() 패턴으로 등록된 모든 콜백에 안전하게 알림을 보냅니다. 클라이언트 프로세스가 종료되면 자동으로 콜백이 제거됩니다.",
     "blankDistractors": [
       [
+        "DeathRecipient",
+        "Handler",
+        "linkToDeath"
+      ],
+      [
+        "linkToDeath",
+        "asInterface",
+        "writeToParcel"
+      ],
+      [
+        "onBind",
+        "binder_node",
+        "writeToParcel"
+      ],
+      [
+        "onBind",
         "beginBroadcast",
-        "BinderProxy",
-        "asInterface"
-      ],
-      [
-        "binderDied",
-        "binder_thread",
-        "interface"
-      ],
-      [
-        "IBinder",
-        "writeToParcel",
-        "Parcel"
-      ],
-      [
-        "interface",
-        "service",
-        "DeathRecipient"
+        "addService"
       ]
     ]
   }

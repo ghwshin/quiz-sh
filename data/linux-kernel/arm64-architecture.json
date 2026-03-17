@@ -179,14 +179,14 @@
     "explanation": "ARM64는 가상 주소 공간을 상위와 하위로 분리하여 TTBR0_EL1은 사용자 공간(하위 주소), TTBR1_EL1은 커널 공간(상위 주소)의 페이지 테이블을 가리킵니다. 컨텍스트 스위칭 시 TTBR0_EL1만 변경하면 됩니다.",
     "blankDistractors": [
       [
-        "GICD_ISENABLER",
+        "GICR",
         "EL1",
-        "ZCR_EL1"
+        "GICD_ISENABLER"
       ],
       [
         "EL1",
-        "BTI",
-        "GICR"
+        "STE",
+        "EL2"
       ]
     ]
   },
@@ -208,14 +208,14 @@
     "explanation": "4KB granule에서 각 페이지 테이블 레벨은 9비트를 인덱싱합니다. 39비트 VA는 9×3+12=39로 3단계, 48비트 VA는 9×4+12=48로 4단계 페이지 테이블이 필요합니다. ARMv8.2-A LVA 확장에서는 특정 granule(예: 64KB)과 조합하여 52비트 VA도 지원할 수 있습니다.",
     "blankDistractors": [
       [
-        "128",
         "12",
+        "2",
         "32"
       ],
       [
-        "2",
         "12",
-        "1019"
+        "1019",
+        "32"
       ]
     ]
   },
@@ -237,14 +237,14 @@
     "explanation": "ARM64는 4개의 Exception Level을 정의합니다. EL0는 사용자 애플리케이션, EL1은 OS 커널, EL2는 하이퍼바이저, EL3는 Secure Monitor(ARM TrustZone)가 실행됩니다. 숫자가 높을수록 더 높은 특권을 가집니다.",
     "blankDistractors": [
       [
-        "TTBR0_EL1",
-        "GICD",
-        "ZCR_EL1"
+        "STE",
+        "STRTAB_STE_0_CFG_S1_TRANS",
+        "GICR"
       ],
       [
-        "STRTAB_STE_0_CFG_S1_TRANS",
-        "STE",
-        "GICR"
+        "BTI",
+        "GICD",
+        "GICD_ISENABLER"
       ]
     ]
   },
@@ -266,12 +266,12 @@
     "explanation": "GICv3에서 SPI는 INTID 32~1019 범위를 사용합니다. SGI는 0~15, PPI는 16~31 범위입니다. SPI는 여러 코어가 공유하는 주변장치 인터럽트로, GICD(Distributor)를 통해 특정 코어로 라우팅됩니다.",
     "blankDistractors": [
       [
-        "2",
-        "4",
-        "3"
+        "128",
+        "3",
+        "12"
       ],
       [
-        "128",
+        "3",
         "4",
         "12"
       ]
@@ -297,13 +297,13 @@
     "explanation": "GICv3에서 GICD(Distributor)는 SPI의 우선순위, 활성화 상태 및 라우팅을 관리합니다. GICR(Redistributor)는 각 CPU 코어에 연결되어 SGI와 PPI를 관리하고, LPI의 설정도 담당합니다.",
     "blankDistractors": [
       [
+        "BTI",
         "EL2",
-        "GICD_ISENABLER",
-        "STE"
+        "TTBR1_EL1"
       ],
       [
-        "EL2",
-        "EL1",
+        "STE",
+        "BTI",
         "GICD_ISENABLER"
       ]
     ]
@@ -328,13 +328,13 @@
     "blankDistractors": [
       [
         "BTI",
-        "GICD_ISENABLER",
-        "TTBR1_EL1"
+        "ZCR_EL1",
+        "EL2"
       ],
       [
-        "4",
-        "12",
-        "1019"
+        "1019",
+        "3",
+        "128"
       ]
     ]
   },
@@ -354,8 +354,8 @@
     "explanation": ".dts(Device Tree Source) 파일은 사람이 읽을 수 있는 텍스트 형식의 디바이스 트리 소스입니다. DTC(Device Tree Compiler)를 사용하여 .dtb(Device Tree Blob) 바이너리로 컴파일합니다. .dtsi는 여러 .dts에서 공유되는 인클루드 파일입니다.",
     "blankDistractors": [
       [
-        "/sbin/init",
         "/etc/default/grub",
+        "/boot/grub/grub.cfg",
         "/proc/kallsyms"
       ]
     ]
@@ -377,8 +377,8 @@
     "blankDistractors": [
       [
         "EL2",
-        "TTBR0_EL1",
-        "EL1"
+        "STE",
+        "STRTAB_STE_0_CFG_S1_TRANS"
       ]
     ]
   },
@@ -399,9 +399,9 @@
     "explanation": "CurrentEL 시스템 레지스터는 현재 Exception Level을 비트 [3:2]에 저장합니다. mrs 명령어로 읽은 후 2비트 오른쪽 시프트하고 0x3으로 마스킹하면 0(EL0)~3(EL3) 값을 얻을 수 있습니다.",
     "blankDistractors": [
       [
-        "el1_error",
+        "arm_smccc_smc",
         "el1_sync",
-        "arm_smccc_smc"
+        "el1_error"
       ]
     ]
   },
@@ -426,8 +426,8 @@
     "blankDistractors": [
       [
         "32",
-        "1019",
-        "4"
+        "128",
+        "1019"
       ],
       [
         "1019",
@@ -458,12 +458,12 @@
       [
         "CurrentEL",
         "arm_smccc_smc",
-        "spin_lock_irqsave"
+        "sys_call_table"
       ],
       [
         "arm_smccc_smc",
         "CurrentEL",
-        "block"
+        "insmod"
       ]
     ]
   },
@@ -485,9 +485,9 @@
     "explanation": "GICD_ISENABLER(Interrupt Set-Enable Register)에 해당 비트를 1로 쓰면 인터럽트가 활성화됩니다. 각 레지스터는 32개의 인터럽트를 제어하므로 intid/32로 레지스터 인덱스를, intid%32로 비트 위치를 계산합니다. 비활성화 시에는 GICD_ICENABLER를 사용합니다.",
     "blankDistractors": [
       [
-        "GICD",
-        "TTBR1_EL1",
-        "EL2"
+        "STRTAB_STE_0_CFG_S1_TRANS",
+        "EL2",
+        "GICR"
       ]
     ]
   },
@@ -508,9 +508,9 @@
     "explanation": "ARM SMMU v3에서 STE(Stream Table Entry)의 Config 필드는 주소 변환 모드를 결정합니다. STRTAB_STE_0_CFG_S1_TRANS(값 1)은 Stage 1 변환을 활성화하며, Stage 1 Context Descriptor를 통해 VA→IPA 변환을 수행합니다. BYPASS는 변환 없이 통과, S2_TRANS는 Stage 2 변환만 수행합니다.",
     "blankDistractors": [
       [
-        "BTI",
-        "TTBR0_EL1",
-        "TTBR1_EL1"
+        "GICD",
+        "TTBR1_EL1",
+        "ZCR_EL1"
       ]
     ]
   },
@@ -532,8 +532,8 @@
     "blankDistractors": [
       [
         "el1_error",
-        "el1_sync",
-        "CurrentEL"
+        "CurrentEL",
+        "el1_sync"
       ]
     ]
   },
@@ -557,14 +557,14 @@
     "explanation": "ZCR_EL1(SVE Control Register)의 LEN 필드(비트 [3:0])는 벡터 길이를 결정합니다. 실제 벡터 길이는 (LEN + 1) × 128비트입니다. SVE는 128~2048비트까지 가변 벡터 길이를 지원하며, NEON의 고정 128비트 제한을 극복합니다. 바이트 단위로는 (LEN + 1) × 16입니다.",
     "blankDistractors": [
       [
+        "EL1",
         "STE",
-        "TTBR0_EL1",
-        "EL1"
+        "GICD_ISENABLER"
       ],
       [
-        "1019",
         "32",
-        "12"
+        "4",
+        "2"
       ]
     ]
   }

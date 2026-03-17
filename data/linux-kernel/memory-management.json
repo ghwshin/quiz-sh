@@ -63,8 +63,8 @@
     "explanation": "TLB(Translation Lookaside Buffer)는 MMU 내부에 위치한 고속 연관 캐시로, 가상 주소에서 물리 주소로의 매핑 정보를 저장합니다. TLB miss가 발생하면 페이지 테이블을 워킹하여 변환 정보를 가져오고, 이를 TLB에 캐싱합니다.",
     "blankDistractors": [
       [
-        "PROT_READ",
         "LRU",
+        "PROT_READ",
         "SIGKILL"
       ]
     ]
@@ -86,9 +86,9 @@
     "explanation": "Buddy System은 Linux 커널의 물리 페이지 할당기입니다. 메모리를 order 0(1 page)부터 order MAX_ORDER-1까지 2의 거듭제곱 크기로 관리하며, 할당 시 적절한 크기의 블록을 분할하고, 해제 시 인접한 buddy와 병합하여 외부 단편화를 최소화합니다.",
     "blankDistractors": [
       [
-        "anonymous page",
-        "Page Cache",
-        "page fault"
+        "struct page",
+        "Demand Paging",
+        "linux/mm_types.h"
       ]
     ]
   },
@@ -128,14 +128,14 @@
     "explanation": "kmalloc()은 커널에서 가장 일반적으로 사용되는 메모리 할당 함수로, 물리적으로 연속인 메모리를 할당합니다. GFP_KERNEL 플래그는 프로세스 컨텍스트에서 sleep이 가능한 일반적인 할당을 의미합니다. 사용이 끝난 메모리는 반드시 kfree()로 해제해야 합니다.",
     "blankDistractors": [
       [
-        "kmem_cache_alloc",
-        "vfree",
-        "kref_init"
+        "oom_score",
+        "alloc_pages",
+        "vfree"
       ],
       [
-        "kmem_cache_create",
+        "pmd_offset",
         "oom_score",
-        "alloc_pages"
+        "vfree"
       ]
     ]
   },
@@ -154,9 +154,9 @@
     "explanation": "/proc/meminfo는 커널이 제공하는 가상 파일로, 시스템의 메모리 사용 현황을 실시간으로 보여줍니다. cat /proc/meminfo 명령으로 확인할 수 있으며, free 명령어도 이 파일의 정보를 기반으로 출력합니다.",
     "blankDistractors": [
       [
-        ".dts",
-        "/etc/default/grub",
-        "/sbin/init"
+        "/boot/grub/grub.cfg",
+        "/sbin/init",
+        "/etc/default/grub"
       ]
     ]
   },
@@ -229,14 +229,14 @@
     "explanation": "Demand Paging(요구 페이징)은 메모리 효율성을 위해 프로세스가 실제로 페이지에 접근할 때까지 물리 메모리 할당을 지연합니다. malloc() 호출 시 가상 주소만 예약하고, 실제 접근 시 minor page fault를 통해 물리 페이지를 할당합니다. 이를 통해 실제 사용하지 않는 메모리에 대한 물리 페이지 낭비를 방지합니다.",
     "blankDistractors": [
       [
-        "linux/mm_types.h",
-        "OOM Killer",
-        "&dev->refcount"
+        "Page Cache",
+        "struct page",
+        "OOM Killer"
       ],
       [
-        "file-backed page",
         "linux/mm_types.h",
-        "struct page"
+        "file-backed page",
+        "Page Cache"
       ]
     ]
   },
@@ -260,14 +260,14 @@
     "explanation": "struct page는 <linux/mm_types.h>에 정의된 구조체로, 시스템의 각 물리 페이지 프레임을 관리합니다. 메모리를 절약하기 위해 union을 광범위하게 사용하며, 페이지의 상태(flags), 참조 카운트(_refcount), 매핑 정보 등을 추적합니다. mem_map 배열이나 NUMA 시스템의 노드별 배열로 관리됩니다.",
     "blankDistractors": [
       [
-        "anonymous page",
-        "Buddy System",
-        "page fault"
+        "&dev->refcount",
+        "Page Cache",
+        "OOM Killer"
       ],
       [
-        "page fault",
-        "Demand Paging",
-        "&dev->refcount"
+        "Buddy System",
+        "Page Cache",
+        "anonymous page"
       ]
     ]
   },
@@ -291,14 +291,14 @@
     "explanation": "mmap() 시스템 콜에서 세 번째 인자는 protection 플래그로, PROT_READ는 읽기 전용 매핑을 의미합니다. 마지막 인자는 파일 내 오프셋으로, 0은 파일의 시작부터 매핑함을 뜻합니다. MAP_PRIVATE는 쓰기 시 copy-on-write 방식으로 동작하는 private 매핑을 생성합니다.",
     "blankDistractors": [
       [
-        "TLB",
         "LRU",
-        "SIGKILL"
+        "SIGKILL",
+        "TLB"
       ],
       [
-        "3",
+        "2",
         "128",
-        "2"
+        "268435456"
       ]
     ]
   },
@@ -322,14 +322,14 @@
     "explanation": "kmem_cache_create()는 특정 크기의 객체를 위한 slab cache를 생성합니다. 인자로 캐시 이름, 객체 크기, 정렬, 플래그, 생성자 콜백을 받습니다. kmem_cache_alloc()은 생성된 캐시에서 객체를 할당합니다. 해제 시에는 kmem_cache_free()를, 캐시 자체를 제거할 때는 kmem_cache_destroy()를 사용합니다.",
     "blankDistractors": [
       [
-        "writeback",
-        "page_address",
-        "vmalloc"
+        "pmd_offset",
+        "oom_score",
+        "kfree"
       ],
       [
-        "writeback",
+        "kfree",
         "kref_init",
-        "oom_score"
+        "vmalloc"
       ]
     ]
   },
@@ -353,14 +353,14 @@
     "explanation": "vmalloc()은 가상 주소 공간에서 연속적인 메모리를 할당하지만, 물리적으로는 불연속적일 수 있습니다. 페이지 테이블 설정이 필요하므로 kmalloc()보다 오버헤드가 크지만, 큰 메모리 블록을 할당할 때 유용합니다. 해제 시에는 반드시 vfree()를 사용해야 합니다.",
     "blankDistractors": [
       [
-        "pmd_offset",
         "page_address",
-        "oom_score"
+        "kzalloc",
+        "kmem_cache_alloc"
       ],
       [
-        "page_address",
-        "kref_init",
-        "alloc_pages"
+        "pud_offset",
+        "pmd_offset",
+        "oom_score"
       ]
     ]
   },
@@ -384,14 +384,14 @@
     "explanation": "Page Cache는 Linux 커널의 핵심 캐싱 메커니즘으로, 파일 시스템의 데이터를 페이지 단위로 메모리에 캐싱합니다. address_space 구조체와 연동되며, radix tree(xarray)로 인덱싱됩니다. 메모리가 부족하면 LRU 기반으로 캐시 페이지를 회수합니다. /proc/meminfo의 Cached 항목에서 크기를 확인할 수 있습니다.",
     "blankDistractors": [
       [
-        "OOM Killer",
-        "file-backed page",
-        "page fault"
+        "&dev->refcount",
+        "linux/mm_types.h",
+        "anonymous page"
       ],
       [
-        "TLB",
+        "SIGKILL",
         "PROT_READ",
-        "SIGKILL"
+        "TLB"
       ]
     ]
   },
@@ -464,18 +464,18 @@
     "explanation": "OOM Killer는 out_of_memory() 함수에서 호출되며, select_bad_process()를 통해 종료할 프로세스를 선택합니다. 각 프로세스의 oom_score는 주로 RSS(Resident Set Size) 기반으로 계산되며, oom_score_adj(-1000~1000)로 가중치를 조정할 수 있습니다. init 프로세스(PID 1)와 커널 스레드는 기본적으로 보호됩니다.",
     "blankDistractors": [
       [
-        "page fault",
-        "Page Cache",
-        "struct page"
+        "Demand Paging",
+        "Buddy System",
+        "file-backed page"
       ],
       [
-        "pmd_offset",
-        "vmalloc",
-        "vfree"
+        "writeback",
+        "pud_offset",
+        "page_address"
       ],
       [
-        "LRU",
         "PROT_READ",
+        "LRU",
         "TLB"
       ]
     ]
@@ -504,19 +504,19 @@
     "explanation": "커널의 페이지 회수(page reclaim) 시 anonymous page는 swap 영역으로 내보내야 하므로 swap 공간이 필요합니다. file-backed page 중 clean page는 원본 파일에서 다시 읽을 수 있으므로 바로 해제 가능하고, dirty page는 먼저 파일에 writeback한 후 해제합니다. kswapd 데몬이 백그라운드에서 페이지 회수를 담당하며, LRU 리스트(active/inactive)를 기반으로 회수 대상을 선택합니다.",
     "blankDistractors": [
       [
-        "page fault",
-        "Page Cache",
-        "&dev->refcount"
+        "struct page",
+        "linux/mm_types.h",
+        "page fault"
       ],
       [
-        "&dev->refcount",
-        "linux/mm_types.h",
+        "struct page",
+        "page fault",
         "OOM Killer"
       ],
       [
-        "oom_score",
-        "kmalloc",
-        "kmem_cache_alloc"
+        "pud_offset",
+        "kref_init",
+        "vfree"
       ]
     ]
   },
@@ -540,14 +540,14 @@
     "explanation": "Linux 커널의 4단계 페이지 테이블 워킹은 PGD -> PUD -> PMD -> PTE 순으로 진행됩니다. pgd_offset()은 mm_struct와 가상 주소로 PGD 엔트리를 찾고, pud_offset()은 PGD 엔트리에서 PUD 엔트리를, pmd_offset()은 PUD 엔트리에서 PMD 엔트리를 찾습니다. 마지막으로 pte_offset_map()으로 PTE를 찾아 물리 페이지 프레임 번호를 얻습니다.",
     "blankDistractors": [
       [
-        "vfree",
-        "oom_score",
+        "kmem_cache_alloc",
+        "kzalloc",
         "kmalloc"
       ],
       [
-        "kmalloc",
+        "kfree",
         "vmalloc",
-        "kzalloc"
+        "vfree"
       ]
     ]
   },
@@ -572,13 +572,13 @@
     "blankDistractors": [
       [
         "pud_offset",
-        "vfree",
-        "kmem_cache_alloc"
+        "oom_score",
+        "kzalloc"
       ],
       [
-        "kmem_cache_create",
-        "kfree",
-        "kmalloc"
+        "kmem_cache_alloc",
+        "vmalloc",
+        "oom_score"
       ]
     ]
   },
@@ -605,19 +605,19 @@
     "explanation": "kzalloc()은 kmalloc()과 동일하지만 할당된 메모리를 0으로 초기화합니다. kref는 커널의 참조 카운트 메커니즘으로, kref_init()으로 초기화하면 참조 카운트가 1로 설정됩니다. kref_get()으로 증가, kref_put()으로 감소시키며, 참조 카운트가 0이 되면 release 콜백이 호출되어 리소스를 정리합니다.",
     "blankDistractors": [
       [
+        "kfree",
+        "kmem_cache_create",
+        "pmd_offset"
+      ],
+      [
         "page_address",
-        "oom_score",
-        "pud_offset"
-      ],
-      [
-        "alloc_pages",
         "pud_offset",
-        "kmem_cache_create"
+        "kmalloc"
       ],
       [
-        "struct page",
+        "Buddy System",
         "anonymous page",
-        "Buddy System"
+        "file-backed page"
       ]
     ]
   }

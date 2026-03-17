@@ -747,12 +747,24 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["dumpsys"],
-      ["dumpsys"]
+      [
+        "dumpsys"
+      ],
+      [
+        "dumpsys"
+      ]
     ],
     "blankDistractors": [
-      ["logcat", "dumpstate"],
-      ["getprop", "settings"]
+      [
+        "Concurrent",
+        "Zygote",
+        "Blueprint"
+      ],
+      [
+        "lmkd",
+        "target_type",
+        "Concurrent"
+      ]
     ],
     "explanation": "dumpsys는 Android 시스템 서비스의 상태 정보를 덤프하는 명령어입니다. dumpsys activity, dumpsys meminfo, dumpsys battery 등 다양한 서비스 정보를 확인할 수 있습니다."
   },
@@ -800,12 +812,25 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["lmkd", "Low Memory Killer"],
-      ["oom_score_adj"]
+      [
+        "lmkd",
+        "Low Memory Killer"
+      ],
+      [
+        "oom_score_adj"
+      ]
     ],
     "blankDistractors": [
-      ["OOM Killer", "init"],
-      ["priority", "nice value"]
+      [
+        "dumpsys",
+        "Ninja",
+        "init"
+      ],
+      [
+        "target_type",
+        "Blueprint",
+        "dumpsys"
+      ]
     ],
     "explanation": "lmkd(Low Memory Killer Daemon)는 메모리 부족 시 oom_score_adj 값이 높은 프로세스(덜 중요한 백그라운드 프로세스)부터 종료하여 시스템 메모리를 확보합니다. Linux의 OOM Killer와는 별도로 Android 전용으로 동작합니다."
   },
@@ -847,12 +872,25 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["Zygote", "zygote"],
-      ["init"]
+      [
+        "Zygote",
+        "zygote"
+      ],
+      [
+        "init"
+      ]
     ],
     "blankDistractors": [
-      ["system_server", "SystemServer"],
-      ["kernel", "bootloader"]
+      [
+        "Blueprint",
+        "target_type",
+        "oom_score_adj"
+      ],
+      [
+        "Concurrent",
+        "dumpsys",
+        "Blueprint"
+      ]
     ],
     "explanation": "Zygote는 Android의 모든 앱 프로세스의 부모 프로세스입니다. init 프로세스(PID 1)가 init.rc 스크립트에 따라 Zygote를 시작하며, Zygote는 fork()를 통해 앱 프로세스를 생성합니다."
   },
@@ -894,12 +932,26 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["하위 호환성", "backward compatibility", "ABI 호환성"],
-      ["Stable AIDL"]
+      [
+        "하위 호환성",
+        "backward compatibility",
+        "ABI 호환성"
+      ],
+      [
+        "Stable AIDL"
+      ]
     ],
     "blankDistractors": [
-      ["성능 최적화", "타입 안전성"],
-      ["HIDL", "gRPC"]
+      [
+        "대기",
+        "동시에",
+        "업데이트"
+      ],
+      [
+        "HAL interface",
+        "out/dist/",
+        "target remote :1234"
+      ]
     ],
     "explanation": "Stable AIDL은 ABI(Application Binary Interface) 하위 호환성을 보장하는 AIDL 확장입니다. 한번 정의한 메서드 시그니처를 변경할 수 없고, 새 메서드는 끝에만 추가해야 합니다. Android 11+에서는 HAL 인터페이스 정의 시 HIDL 대신 Stable AIDL을 사용하도록 권장합니다."
   },
@@ -943,12 +995,27 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["비동기", "asynchronous", "async"],
-      ["대기", "wait"]
+      [
+        "비동기",
+        "asynchronous",
+        "async"
+      ],
+      [
+        "대기",
+        "wait"
+      ]
     ],
     "blankDistractors": [
-      ["동기", "synchronous"],
-      ["수신", "확인"]
+      [
+        "하위 호환성",
+        "동시에",
+        "업데이트"
+      ],
+      [
+        "동시에",
+        "하위 호환성",
+        "업데이트"
+      ]
     ],
     "explanation": "AIDL의 oneway 키워드는 Binder 호출을 비동기(asynchronous)로 만듭니다. 호출자는 서버의 응답을 기다리지 않고 즉시 리턴하므로 데드락 방지와 성능 향상에 유용합니다. 특히 콜백 인터페이스에서는 oneway를 사용하는 것이 일반적입니다."
   },
@@ -992,12 +1059,28 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["source_type", "소스타입", "source_t"],
-      ["target_type", "타겟타입", "target_t"]
+      [
+        "source_type",
+        "소스타입",
+        "source_t"
+      ],
+      [
+        "target_type",
+        "타겟타입",
+        "target_t"
+      ]
     ],
     "blankDistractors": [
-      ["user_type", "subject_type"],
-      ["object_type", "domain_type"]
+      [
+        "lmkd",
+        "Blueprint",
+        "Concurrent"
+      ],
+      [
+        "oom_score_adj",
+        "Concurrent",
+        "init"
+      ]
     ],
     "explanation": "SELinux allow 규칙의 문법은 'allow source_type target_type:object_class { permissions };'입니다. source_type은 접근을 시도하는 주체(프로세스)의 보안 타입, target_type은 접근 대상(파일 등)의 보안 타입입니다."
   },
@@ -1045,12 +1128,24 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["5"],
-      ["10"]
+      [
+        "5"
+      ],
+      [
+        "10"
+      ]
     ],
     "blankDistractors": [
-      ["3", "8"],
-      ["15", "30"]
+      [
+        "0x1234",
+        "0",
+        "1"
+      ],
+      [
+        "15",
+        "1",
+        "0"
+      ]
     ],
     "explanation": "Android ANR 타임아웃: Activity의 입력 이벤트(키/터치) 처리는 5초, foreground BroadcastReceiver는 10초, background BroadcastReceiver는 60초입니다. Service는 전경 20초, 배경 200초입니다."
   },
@@ -1092,12 +1187,27 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["Blueprint", "JSON-like"],
-      ["Ninja", "ninja", ".ninja"]
+      [
+        "Blueprint",
+        "JSON-like"
+      ],
+      [
+        "Ninja",
+        "ninja",
+        ".ninja"
+      ]
     ],
     "blankDistractors": [
-      ["YAML", "XML"],
-      ["Make", "CMake"]
+      [
+        "dumpsys",
+        "target_type",
+        "init"
+      ],
+      [
+        "source_type",
+        "Concurrent",
+        "target_type"
+      ]
     ],
     "explanation": "Android.bp는 Blueprint 형식(JSON과 유사한 선언적 포맷)으로 작성됩니다. Soong 빌드 시스템이 이를 파싱하여 .ninja 파일을 생성하고, Ninja 빌드 도구가 실제 컴파일을 수행합니다."
   },
@@ -1139,12 +1249,28 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["Concurrent", "concurrent", "동시"],
-      ["동시에", "concurrently", "병렬"]
+      [
+        "Concurrent",
+        "concurrent",
+        "동시"
+      ],
+      [
+        "동시에",
+        "concurrently",
+        "병렬"
+      ]
     ],
     "blankDistractors": [
-      ["Stop-the-world", "Generational"],
-      ["순차적", "비동기"]
+      [
+        "Blueprint",
+        "dumpsys",
+        "source_type"
+      ],
+      [
+        "대기",
+        "하위 호환성",
+        "비동기"
+      ]
     ],
     "explanation": "ART의 Concurrent Copying GC는 대부분의 GC 작업을 앱 스레드와 동시에(concurrently) 수행합니다. 이를 통해 GC pause 시간을 수 밀리초 이내로 줄여 Dalvik의 stop-the-world GC 대비 크게 개선되었습니다."
   },
@@ -1186,12 +1312,27 @@
     ],
     "question": "대화의 빈칸을 채우시오.",
     "blankAnswers": [
-      ["HAL interface", "HIDL", "Stable AIDL"],
-      ["업데이트", "update"]
+      [
+        "HAL interface",
+        "HIDL",
+        "Stable AIDL"
+      ],
+      [
+        "업데이트",
+        "update"
+      ]
     ],
     "blankDistractors": [
-      ["Binder", "JNI"],
-      ["빌드", "컴파일"]
+      [
+        "--config-file /path/to/vm_config.json",
+        "device manifest",
+        "Back Stack"
+      ],
+      [
+        "동시에",
+        "비동기",
+        "하위 호환성"
+      ]
     ],
     "explanation": "Project Treble은 vendor(HAL) 파티션과 system(framework) 파티션을 HIDL/AIDL 인터페이스(VINTF)로 분리했습니다. 이를 통해 OEM이 vendor 파티션을 수정하지 않고도 system 파티션만 독립적으로 업데이트할 수 있게 되었습니다."
   }

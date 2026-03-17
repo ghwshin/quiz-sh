@@ -181,12 +181,12 @@
       [
         "PELT",
         "SMC_TYPE_FAST",
-        "OAT"
+        "VNDK"
       ],
       [
-        "SMC_TYPE_FAST",
         "PELT",
-        "AIDL"
+        "SMC_TYPE_FAST",
+        "PRODUCT_PROPERTY_OVERRIDES"
       ]
     ]
   },
@@ -208,8 +208,8 @@
     "blankDistractors": [
       [
         "하드웨어",
-        "공개 키",
-        "최소 권한"
+        "소프트 리부팅",
+        "단일 구현"
       ]
     ]
   },
@@ -232,8 +232,8 @@
     "blankDistractors": [
       [
         "Secure Monitor",
-        "ANDROID_SOCKET_<name>",
-        "Abort message"
+        "\"default\"",
+        "OpenGL ES"
       ]
     ]
   },
@@ -254,8 +254,8 @@
     "explanation": "PELT(Per-Entity Load Tracking)는 CFS 스케줄러에서 각 스케줄링 엔티티(태스크, cgroup 등)의 utilization과 load를 기하급수적 감쇠 평균으로 추적합니다. schedutil governor는 이 PELT utilization 값을 직접 참조하여 필요한 CPU 주파수를 계산하므로, 별도의 폴링 오버헤드 없이 정확한 주파수 결정이 가능합니다.",
     "blankDistractors": [
       [
-        "X0",
         "SMC_TYPE_FAST",
+        "X0",
         "X7"
       ]
     ]
@@ -277,8 +277,8 @@
     "blankDistractors": [
       [
         "클러스터",
-        "FCM 레벨",
-        "클래스 이름"
+        "클래스 이름",
+        "키"
       ]
     ]
   },
@@ -301,8 +301,8 @@
     "blankDistractors": [
       [
         "Energy Model",
-        "OpenGL ES",
-        "Back Stack"
+        "Back Stack",
+        "linker namespace"
       ]
     ]
   },
@@ -325,7 +325,7 @@
       [
         "unpack_bootimg",
         "capacity-dmips-mhz",
-        "stp"
+        "scaling_cur_freq"
       ]
     ]
   },
@@ -346,9 +346,9 @@
     "explanation": "CPUFreq 프레임워크는 /sys/devices/system/cpu/cpu*/cpufreq/ 디렉토리를 통해 sysfs 인터페이스를 제공합니다. scaling_governor 파일을 읽으면 현재 활성 governor(예: schedutil, performance, powersave 등)를 확인할 수 있고, 쓰기를 통해 governor를 변경할 수도 있습니다.",
     "blankDistractors": [
       [
-        "em_dev_register_perf_domain",
+        "stp",
         "capacity-dmips-mhz",
-        "fastboot"
+        "scaling_cur_freq"
       ]
     ]
   },
@@ -370,9 +370,9 @@
     "explanation": "STP(Store Pair) 명령어는 두 개의 레지스터를 메모리에 동시에 저장합니다. 'stp x29, x30, [sp, #-16]!'은 스택 포인터를 16바이트 감소시키면서 Frame Pointer(X29)와 Link Register(X30)를 저장하는 pre-index 방식입니다. 이는 AAPCS64의 표준 함수 프롤로그 패턴입니다.",
     "blankDistractors": [
       [
+        "fastboot",
         "em_dev_register_perf_domain",
-        "getprop",
-        "scaling_governor"
+        "unpack_bootimg"
       ]
     ]
   },
@@ -393,9 +393,9 @@
     "explanation": "Device Tree에서 capacity-dmips-mhz 속성은 CPU 코어의 상대적 성능을 DMIPS/MHz 단위로 정의합니다. 가장 성능이 높은 빅 코어에 높은 값을 부여하고 리틀 코어에는 상대적으로 낮은 값(예: 485)을 설정합니다. EAS는 이 값을 참조하여 각 CPU의 capacity를 결정하고 태스크 배치를 최적화합니다.",
     "blankDistractors": [
       [
+        "unpack_bootimg",
         "scaling_cur_freq",
-        "stp",
-        "unpack_bootimg"
+        "em_dev_register_perf_domain"
       ]
     ]
   },
@@ -417,9 +417,9 @@
     "explanation": "em_dev_register_perf_domain() 함수는 CPUFreq 드라이버에서 Energy Model의 performance domain을 커널에 등록합니다. 이 함수는 디바이스 포인터, OPP 수, 콜백 함수(각 OPP의 전력 소비량 제공), CPU 마스크, 전력 단위(milliwatts 여부)를 인자로 받습니다. 등록된 EM은 EAS가 에너지 최적화 스케줄링에 활용합니다.",
     "blankDistractors": [
       [
-        "scaling_governor",
+        "capacity-dmips-mhz",
         "getprop",
-        "stp"
+        "scaling_cur_freq"
       ]
     ]
   },
@@ -441,9 +441,9 @@
     "explanation": "Android에서 getprop 명령으로 시스템 속성을 조회할 수 있습니다. ro.hardware.vulkan 속성은 Vulkan HAL 구현체의 이름을 지정하며, 시스템은 이 값을 기반으로 vulkan.<value>.so 라이브러리를 로드합니다. 실제 값은 벤더/플랫폼에 따라 다르며 보드 설정 파일에서 정의됩니다.",
     "blankDistractors": [
       [
-        "stp",
         "em_dev_register_perf_domain",
-        "scaling_cur_freq"
+        "fastboot",
+        "scaling_governor"
       ]
     ]
   },
@@ -465,9 +465,9 @@
     "explanation": "DECLARE_RT_SVC 매크로는 ATF에서 런타임 서비스를 등록합니다. SMC 타입으로 SMC_TYPE_FAST(빠른 호출, 선점 불가)와 SMC_TYPE_YIELD(양보 호출, 선점 가능)를 지정할 수 있습니다. TEE OS와의 통신에는 주로 SMC_TYPE_FAST가 사용되며, 긴 작업에는 SMC_TYPE_YIELD가 사용됩니다.",
     "blankDistractors": [
       [
-        "PELT",
         "X0",
-        "X7"
+        "X7",
+        "PELT"
       ]
     ]
   },
@@ -489,9 +489,9 @@
     "explanation": "unpack_bootimg는 Android 소스 트리(system/tools/mkbootimg)에 포함된 도구로, boot.img를 파싱하여 헤더 정보, 커널(kernel), ramdisk 등을 분리 추출합니다. Android 빌드 환경에서 PATH에 포함되어 직접 실행할 수 있으며, boot image header v3/v4 형식을 지원합니다.",
     "blankDistractors": [
       [
-        "em_dev_register_perf_domain",
-        "stp",
-        "capacity-dmips-mhz"
+        "capacity-dmips-mhz",
+        "getprop",
+        "scaling_cur_freq"
       ]
     ]
   },
@@ -513,8 +513,8 @@
     "blankDistractors": [
       [
         "em_dev_register_perf_domain",
-        "fastboot",
-        "getprop"
+        "stp",
+        "capacity-dmips-mhz"
       ]
     ]
   }

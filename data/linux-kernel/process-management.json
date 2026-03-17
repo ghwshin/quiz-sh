@@ -63,9 +63,9 @@
     "explanation": "task_struct는 <linux/sched.h>에 정의되어 있으며, 커널이 프로세스를 관리하기 위해 필요한 모든 메타데이터를 담고 있는 구조체입니다. 각 프로세스마다 하나의 task_struct 인스턴스가 할당됩니다.",
     "blankDistractors": [
       [
-        "waitpid",
-        "fork",
-        "execl"
+        "status",
+        "vector",
+        "getpid"
       ]
     ]
   },
@@ -89,14 +89,14 @@
     "explanation": "getpid()는 호출한 프로세스 자신의 프로세스 ID를 반환하며, getppid()는 호출한 프로세스의 부모 프로세스 ID를 반환합니다. 이 두 함수는 항상 성공하며 에러를 반환하지 않습니다.",
     "blankDistractors": [
       [
-        "init",
-        "execl",
-        "fork"
+        "waitpid",
+        "execve",
+        "setsid"
       ],
       [
-        "task_struct",
-        "waitpid",
-        "vector"
+        "wait",
+        "fork",
+        "setsid"
       ]
     ]
   },
@@ -120,14 +120,14 @@
     "explanation": "fork()는 새로운 프로세스를 생성합니다. 자식 프로세스에서는 0을 반환하고, 부모 프로세스에서는 자식의 PID를 반환합니다. 이 반환값을 통해 부모와 자식 프로세스를 구분할 수 있습니다.",
     "blankDistractors": [
       [
-        "getpid()",
         "chdir(\"/\")",
-        "pci_ioremap_bar(pdev, 0)"
+        "getpid()",
+        "rcu_read_lock()"
       ],
       [
-        "-1",
         "1",
-        "268435456"
+        "-1",
+        "1019"
       ]
     ]
   },
@@ -151,14 +151,14 @@
     "explanation": "execl()은 exec 계열 함수 중 하나로, 현재 프로세스 이미지를 새로운 프로그램으로 교체합니다. wait()은 자식 프로세스가 종료될 때까지 부모 프로세스를 대기시킵니다. fork()와 exec()의 조합은 Unix에서 새로운 프로그램을 실행하는 기본 패턴입니다.",
     "blankDistractors": [
       [
-        "setsid",
         "getpid",
-        "fork"
+        "waitpid",
+        "vector"
       ],
       [
-        "execve",
-        "init",
-        "task_struct"
+        "task_struct",
+        "getppid",
+        "setsid"
       ]
     ]
   },
@@ -250,19 +250,19 @@
     "explanation": "부모 프로세스가 먼저 종료되면, 그 자식 프로세스들은 고아 프로세스가 됩니다. 커널의 forget_original_parent() 함수가 호출되어 고아 프로세스의 부모를 init 프로세스(PID 1)로 변경합니다. 단, prctl(PR_SET_CHILD_SUBREAPER)로 subreaper를 설정한 프로세스가 있으면 init 대신 해당 subreaper가 새 부모가 됩니다.",
     "blankDistractors": [
       [
-        "인터럽트 폭주",
-        "디렉토리 엔트리",
-        "인터럽트"
+        "폴링",
+        "인터럽트",
+        "장치"
       ],
       [
+        "wait",
         "fork",
-        "execl",
-        "task_struct"
+        "waitpid"
       ],
       [
         "-1",
         "0",
-        "128"
+        "12"
       ]
     ]
   },
@@ -290,19 +290,19 @@
     "explanation": "프로세스 그룹은 파이프라인으로 연결된 명령어들을 하나의 단위로 관리하거나 job control에 사용됩니다. 세션은 setsid()로 생성하며, 데몬 프로세스를 만들 때 새 세션을 생성하여 제어 터미널로부터 분리합니다.",
     "blankDistractors": [
       [
-        "TASK_INTERRUPTIBLE",
-        "PATH",
-        "CLONE_FILES"
+        "CLONE_THREAD",
+        "CLONE_FILES",
+        "TASK_STOPPED"
       ],
       [
-        "EXIT_ZOMBIE",
         "CLONE_VM",
-        "CLONE_FILES"
+        "TASK_STOPPED",
+        "TASK_INTERRUPTIBLE"
       ],
       [
-        "status",
-        "fork",
-        "wait"
+        "execve",
+        "wait",
+        "execl"
       ]
     ]
   },
@@ -330,19 +330,19 @@
     "explanation": "데몬 프로세스는 터미널과 분리되어 백그라운드에서 실행되는 프로세스입니다. 세 단계로 생성됩니다: 1) fork()로 자식을 생성한 뒤 부모를 종료하고, 2) setsid()로 새 세션을 만들어 제어 터미널로부터 분리하며, 3) chdir(\"/\")로 작업 디렉토리를 루트로 변경하여 파일시스템 언마운트를 방해하지 않도록 합니다. 실제로는 제어 터미널 재획득 방지를 위해 두 번의 fork를 수행하기도 합니다.",
     "blankDistractors": [
       [
-        "execl",
-        "status",
-        "task_struct"
+        "vector",
+        "getppid",
+        "execl"
       ],
       [
         "waitpid",
-        "wait",
-        "execve"
+        "vector",
+        "status"
       ],
       [
         "getpid()",
         "pci_enable_device(pdev)",
-        "pci_ioremap_bar(pdev, 0)"
+        "smp_rmb()"
       ]
     ]
   },
@@ -366,9 +366,9 @@
     "explanation": "waitpid()는 특정 PID의 자식 프로세스를 기다릴 수 있으며, wait()보다 유연합니다. WIFEXITED(status) 매크로는 자식이 정상적으로 종료(exit() 호출)했는지 확인하고, WEXITSTATUS(status)는 실제 종료 코드를 추출합니다.",
     "blankDistractors": [
       [
-        "fork",
-        "vector",
-        "execl"
+        "wait",
+        "init",
+        "status"
       ],
       [
         "MODULE_DEVICE_TABLE(of, my_of_match)",
@@ -397,14 +397,14 @@
     "explanation": "waitpid(-1, NULL, WNOHANG)는 종료된 모든 자식 프로세스(PID -1)의 상태를 비블로킹(WNOHANG)으로 수거합니다. while 루프를 사용하는 이유는 여러 자식이 동시에 종료될 수 있기 때문입니다. 이 패턴은 서버 프로그램에서 좀비 프로세스 축적을 방지하는 표준적인 방법입니다.",
     "blankDistractors": [
       [
-        "execl",
-        "fork",
-        "setsid"
+        "wait",
+        "init",
+        "vector"
       ],
       [
-        "1",
         "0",
-        "4"
+        "1",
+        "2"
       ]
     ]
   },
@@ -431,13 +431,13 @@
     "blankDistractors": [
       [
         "page cache",
-        "--decode",
-        "--json"
+        "10.0.0.2/24",
+        "--decode"
       ],
       [
-        "1",
         "-1",
-        "4"
+        "1",
+        "1019"
       ]
     ]
   },
@@ -510,19 +510,19 @@
     "explanation": "clone()의 플래그들은 새로 생성되는 프로세스(또는 스레드)가 부모와 어떤 자원을 공유할지 결정합니다. 모든 CLONE 플래그를 설정하면 스레드처럼 동작하고, 아무것도 설정하지 않으면 fork()와 유사하게 동작합니다.",
     "blankDistractors": [
       [
-        "TASK_INTERRUPTIBLE",
-        "EXIT_ZOMBIE",
-        "PGID"
+        "PATH",
+        "PGID",
+        "SID"
       ],
       [
-        "EXIT_ZOMBIE",
-        "SID",
+        "PATH",
+        "PGID",
         "TASK_INTERRUPTIBLE"
       ],
       [
         "EXIT_ZOMBIE",
-        "SID",
-        "TASK_INTERRUPTIBLE"
+        "PGID",
+        "SID"
       ]
     ]
   },
@@ -548,18 +548,18 @@
     "blankDistractors": [
       [
         "CLONE_FILES",
-        "CLONE_THREAD",
-        "CLONE_VM"
+        "PATH",
+        "SID"
       ],
       [
+        "CLONE_FILES",
         "CLONE_THREAD",
-        "SID",
         "PGID"
       ],
       [
-        "CLONE_VM",
         "SID",
-        "PATH"
+        "PGID",
+        "CLONE_VM"
       ]
     ]
   },
@@ -587,18 +587,18 @@
     "blankDistractors": [
       [
         "getppid",
-        "execl",
-        "setsid"
+        "fork",
+        "getpid"
       ],
       [
-        "CLONE_FILES",
-        "SID",
+        "EXIT_ZOMBIE",
+        "PGID",
         "TASK_STOPPED"
       ],
       [
-        "wait",
-        "status",
-        "getppid"
+        "init",
+        "setsid",
+        "status"
       ]
     ]
   },
@@ -622,14 +622,14 @@
     "explanation": "clone()에 CLONE_VM 플래그를 전달하면 부모와 자식이 동일한 가상 메모리 공간을 공유하게 됩니다. CLONE_THREAD는 같은 스레드 그룹에 속하게 하고, CLONE_SIGHAND는 시그널 핸들러를 공유합니다. CLONE_FILES는 파일 디스크립터 테이블을 공유합니다. 이 조합은 POSIX 스레드(pthread)의 내부 구현과 유사합니다.",
     "blankDistractors": [
       [
-        "SID",
-        "TASK_STOPPED",
-        "PGID"
+        "CLONE_THREAD",
+        "PGID",
+        "EXIT_ZOMBIE"
       ],
       [
-        "TASK_STOPPED",
-        "SID",
-        "TASK_INTERRUPTIBLE"
+        "PATH",
+        "PGID",
+        "EXIT_ZOMBIE"
       ]
     ]
   },
@@ -653,9 +653,9 @@
     "explanation": "/proc/[PID]/status 파일은 프로세스의 상태 정보를 \"키: 값\" 형식으로 제공합니다. getpid()로 현재 프로세스의 PID를 얻어 경로를 구성하고, 파일을 읽어 원하는 정보를 파싱합니다. Name은 프로세스 이름, State는 현재 상태, Pid는 프로세스 ID, PPid는 부모 프로세스 ID를 나타냅니다.",
     "blankDistractors": [
       [
-        "getpid",
-        "wait",
-        "execve"
+        "getppid",
+        "fork",
+        "vector"
       ],
       [
         "chdir(\"/\")",

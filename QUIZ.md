@@ -6,7 +6,7 @@
 
 ```
 data/
-├── linux-kernel/          # 16개 서브카테고리
+├── linux-kernel/          # 18개 서브카테고리
 │   ├── process-management.json
 │   ├── memory-management.json
 │   ├── filesystem.json
@@ -21,9 +21,11 @@ data/
 │   ├── containers-isolation.json
 │   ├── block-storage-io.json
 │   ├── arm64-architecture.json
+│   ├── arm64-cache-memory.json
+│   ├── arm64-virtualization-power.json
 │   ├── dev-conversation.json
 │   └── terminal-lab.json
-└── android-system/        # 16개 서브카테고리
+└── android-system/        # 17개 서브카테고리
     ├── system-architecture.json
     ├── activity-service.json
     ├── binder-ipc.json
@@ -38,6 +40,7 @@ data/
     ├── platform-debugging-performance.json
     ├── platform-modularity-virtualization.json
     ├── arm64-platform.json
+    ├── arm64-development.json
     ├── dev-conversation.json
     └── terminal-lab.json
 ```
@@ -329,7 +332,10 @@ data/
 | android-system | platform-debugging-performance | `dp-` |
 | android-system | platform-modularity-virtualization | `mv-` |
 | linux-kernel | arm64-architecture | `aa-` |
+| linux-kernel | arm64-cache-memory | `ac-` |
+| linux-kernel | arm64-virtualization-power | `vp-` |
 | android-system | arm64-platform | `ap-` |
+| android-system | arm64-development | `ev-` |
 | linux-kernel | dev-conversation | `dc-` |
 | android-system | dev-conversation | `ad-` |
 | linux-kernel | terminal-lab | `lk-tl-` |

@@ -72,18 +72,18 @@
     "blankDistractors": [
       [
         "Baseline Profile",
-        "Cloud Profile",
-        "Method Inlining"
+        "Class Loader Context",
+        "Cloud Profile"
       ],
       [
-        "Cloud Profile",
-        "Boot Class Path",
-        "Baseline Profile"
+        "Method Inlining",
+        "Class Loader Context",
+        "Play Store"
       ],
       [
-        "speed-profile",
-        "Zygote",
-        "dexopt"
+        "speed",
+        "header-only",
+        "boot.oat"
       ]
     ]
   },
@@ -108,19 +108,19 @@
     "explanation": "dex2oat는 DEX 바이트코드를 타겟 디바이스의 아키텍처(ARM, ARM64, x86 등)에 맞는 네이티브 코드로 컴파일합니다. 입력으로는 DEX 파일 외에도 APK나 JAR 파일(내부에 DEX를 포함)을 직접 받을 수 있습니다. 컴파일 수준(speed, speed-profile, verify 등)을 지정할 수 있으며, 프로파일 정보를 활용한 profile-guided compilation도 지원합니다.",
     "blankDistractors": [
       [
-        "boot.oat",
-        "hot",
+        "forkAndSpecialize",
+        "heapsize",
         "jit"
       ],
       [
+        "GC",
         "AOT",
-        "SIGUSR1",
-        "VDEX"
+        "CDEX"
       ],
       [
-        "VDEX",
+        "AOT",
         "GC",
-        "SIGUSR1"
+        "VDEX"
       ]
     ]
   },
@@ -144,14 +144,14 @@
     "explanation": "dumpsys package에서 dexopt 관련 정보를 grep하면 앱의 컴파일 상태(status, reason, compiler-filter 등)를 확인할 수 있습니다. 'cmd package compile' 명령으로 컴파일 모드를 지정하여 강제 컴파일할 수 있으며, -m speed는 전체 메서드를 AOT 컴파일하는 가장 적극적인 모드입니다.",
     "blankDistractors": [
       [
-        "speed-profile",
-        "heapsize",
-        "oatdump"
+        "verify",
+        "compaction",
+        "heapsize"
       ],
       [
         "hot",
-        "compaction",
-        "speed-profile"
+        "VerifyError",
+        "dex2oat"
       ]
     ]
   },
@@ -175,14 +175,14 @@
     "explanation": "Zygote는 Android 시스템의 모든 앱 프로세스의 부모 프로세스입니다. Zygote.forkAndSpecialize()를 호출하여 Linux fork() 시스템 콜을 통해 새 프로세스를 생성합니다. fork로 생성된 자식 프로세스는 Zygote가 미리 로드한 클래스와 리소스를 공유(Copy-On-Write)하여 앱 시작 시간을 단축합니다.",
     "blankDistractors": [
       [
-        "dex2oat",
-        "speed-profile",
-        "hot"
+        "gctype",
+        "jit",
+        "speed-profile"
       ],
       [
-        "header-only",
-        "hot",
-        "VerifyError"
+        "verify",
+        "dexopt",
+        "boot.oat"
       ]
     ]
   },
@@ -273,18 +273,18 @@
     "blankDistractors": [
       [
         "speed-profile",
-        "VerifyError",
-        "hot"
+        "dex2oat",
+        "verify"
       ],
       [
-        "header-only",
-        "speed-profile",
-        "dex2oat"
+        "oatdump",
+        "heapsize",
+        "compaction"
       ],
       [
-        "header-only",
-        "hot",
-        "oatdump"
+        "dexopt",
+        "speed",
+        "VerifyError"
       ]
     ]
   },
@@ -311,19 +311,19 @@
     "explanation": "Method Inlining은 ART의 주요 최적화 기법 중 하나로, 특히 getter/setter 같은 작은 메서드에 효과적입니다. JIT 컴파일 시 프로파일 정보를 활용하여 다형적(polymorphic) 호출도 인라이닝할 수 있으며, 인라이닝 후 추가적인 상수 전파, 죽은 코드 제거 등의 최적화가 가능해집니다.",
     "blankDistractors": [
       [
+        "pause time",
         "Class Loader Context",
-        "Boot Class Path",
-        "Cloud Profile"
+        "Baseline Profile"
       ],
       [
-        "oatdump",
-        "compaction",
-        "Zygote"
+        "jit",
+        "header-only",
+        "speed-profile"
       ],
       [
         "중복 제거",
         "타입 안전성",
-        "인터페이스"
+        "컴파일"
       ]
     ]
   },
@@ -351,17 +351,17 @@
       [
         "중복 제거",
         "단일 구현",
-        "하드웨어"
+        "재컴파일"
       ],
       [
-        "speed-profile",
+        "verify",
         "compaction",
-        "gctype"
+        "oatdump"
       ],
       [
-        "SIGUSR1",
-        "DEX",
-        "CDEX"
+        "CDEX",
+        "OAT",
+        "GC"
       ]
     ]
   },
@@ -385,14 +385,14 @@
     "explanation": "dex2oat의 compiler-filter 옵션은 컴파일 수준을 제어합니다. speed-profile은 프로파일에 기록된 hot method만 AOT 컴파일하여 저장 공간과 성능의 균형을 맞춥니다. verify는 바이트코드 검증만 수행하고 컴파일은 하지 않아 저장 공간을 절약하지만 실행 시 인터프리터/JIT에 의존합니다. speed는 모든 메서드를 AOT 컴파일합니다.",
     "blankDistractors": [
       [
+        "VerifyError",
         "oatdump",
-        "hot",
-        "VerifyError"
+        "gctype"
       ],
       [
-        "gctype",
-        "dexopt",
-        "jit"
+        "speed",
+        "jit",
+        "forkAndSpecialize"
       ]
     ]
   },
@@ -416,14 +416,14 @@
     "explanation": "oatdump은 OAT 파일의 내용을 분석할 수 있는 ART 디버깅 도구입니다. --header-only 옵션은 OAT 파일의 헤더(컴파일러 필터, ISA, DEX 파일 목록 등)만 출력하여 빠르게 확인할 수 있습니다. --class-filter로 특정 클래스의 컴파일된 네이티브 코드를 디스어셈블리 형태로 확인할 수 있습니다.",
     "blankDistractors": [
       [
-        "verify",
-        "boot.art",
-        "forkAndSpecialize"
+        "forkAndSpecialize",
+        "heapsize",
+        "verify"
       ],
       [
-        "Zygote",
-        "verify",
-        "dex2oat"
+        "forkAndSpecialize",
+        "heapsize",
+        "jit"
       ]
     ]
   },
@@ -450,14 +450,14 @@
     "explanation": "ART의 GC 로그는 logcat에서 'art' 태그로 확인할 수 있으며, GC 이벤트에는 GC 종류(Concurrent Copying, Young 등), 원인(Alloc, Background, Explicit 등), 해제된 메모리 크기, pause 시간 등의 정보가 포함됩니다. Concurrent Copying은 ART의 기본 GC 알고리즘으로, 객체를 복사하면서 동시에 compaction을 수행합니다.",
     "blankDistractors": [
       [
+        "AOT",
         "SIGUSR1",
-        "VDEX",
-        "OAT"
+        "CDEX"
       ],
       [
+        "Play Store",
         "Cloud Profile",
-        "Method Inlining",
-        "pause time"
+        "Class Loader Context"
       ]
     ]
   },
@@ -533,18 +533,18 @@
     "blankDistractors": [
       [
         "OAT",
-        "GC",
+        "SIGUSR1",
         "DEX"
       ],
       [
-        "단일 구현",
         "타입 안전성",
-        "우선순위"
+        "단일 구현",
+        "무단 변경"
       ],
       [
-        "SIGUSR1",
-        "DEX",
-        "GC"
+        "GC",
+        "AOT",
+        "DEX"
       ]
     ]
   },
@@ -575,24 +575,24 @@
     "explanation": "Baseline Profile은 Jetpack Macrobenchmark 라이브러리로 생성할 수 있으며, APK/AAB에 assets 또는 dex metadata로 포함됩니다. 이를 통해 앱 시작 시간을 30-40% 개선할 수 있습니다. Cloud Profile은 Play Store가 자동으로 관리하지만 신규 앱이나 업데이트 직후에는 사용 불가합니다.",
     "blankDistractors": [
       [
-        "pause time",
         "Class Loader Context",
+        "Method Inlining",
         "Boot Class Path"
       ],
       [
-        "OAT",
-        "GC",
+        "DEX",
+        "SIGUSR1",
         "VDEX"
       ],
       [
-        "Class Loader Context",
+        "Concurrent Copying",
         "pause time",
-        "Concurrent Copying"
+        "Boot Class Path"
       ],
       [
-        "Method Inlining",
         "Class Loader Context",
-        "Concurrent Copying"
+        "Method Inlining",
+        "pause time"
       ]
     ]
   },
@@ -618,13 +618,13 @@
     "explanation": "dalvik.vm.extra-opts에 -verbose:jit를 설정하면 JIT 컴파일 이벤트(컴파일된 메서드, 인라이닝 결정 등)를 로그로 확인할 수 있습니다. SIGUSR1 시그널을 앱 프로세스에 보내면 현재까지 수집된 프로파일 데이터를 즉시 디스크에 기록합니다. profman 도구는 바이너리 프로파일을 분석하여 hot method, hot class 목록 등을 확인할 수 있게 합니다.",
     "blankDistractors": [
       [
-        "heapsize",
-        "speed-profile",
-        "Zygote"
+        "boot.art",
+        "oatdump",
+        "heapsize"
       ],
       [
-        "AOT",
-        "GC",
+        "OAT",
+        "CDEX",
         "DEX"
       ]
     ]
@@ -649,14 +649,14 @@
     "explanation": "dalvik.vm.heapsize는 largeHeap 속성이 있는 앱이 사용할 수 있는 절대 최대 힙 크기를 설정합니다. 일반 앱은 dalvik.vm.heapgrowthlimit까지만 사용 가능합니다. dalvik.vm.gctype은 foreground GC 알고리즘(CC=Concurrent Copying, CMS=Concurrent Mark Sweep 등)을 지정합니다. backgroundgctype은 별도 프로퍼티로 백그라운드 GC를 지정합니다. 이러한 프로퍼티는 일반적으로 디바이스 빌드 시 설정되며, 런타임 변경은 루트 권한이 필요합니다.",
     "blankDistractors": [
       [
-        "boot.art",
-        "speed-profile",
-        "jit"
+        "speed",
+        "verify",
+        "speed-profile"
       ],
       [
-        "header-only",
-        "verify",
-        "Zygote"
+        "forkAndSpecialize",
+        "speed",
+        "boot.oat"
       ]
     ]
   },
@@ -681,13 +681,13 @@
     "blankDistractors": [
       [
         "Method Inlining",
-        "Baseline Profile",
+        "Play Store",
         "Cloud Profile"
       ],
       [
+        "Play Store",
         "Method Inlining",
-        "pause time",
-        "Concurrent Copying"
+        "Cloud Profile"
       ]
     ]
   }

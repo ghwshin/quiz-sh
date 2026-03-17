@@ -183,19 +183,19 @@
     "explanation": "APEX 패키지 내부에는 ext4 또는 erofs 형식의 파일시스템 이미지가 포함되어 있습니다. 부팅 시 apexd 데몬이 이 이미지를 /apex/<name>에 루프 마운트하여 시스템에 활성화하며, 업데이트에 문제가 있을 경우 /data/apex에 저장된 이전 버전으로 자동 롤백이 가능합니다.",
     "blankDistractors": [
       [
-        "modinfo",
-        "lshal",
-        "init"
-      ],
-      [
-        "lsmod",
         "init",
-        "boot"
+        "modprobe",
+        "apexservice"
       ],
       [
-        "시작",
+        "boot",
+        "list",
+        "checkvintf"
+      ],
+      [
         "재컴파일",
-        "하위 호환성"
+        "시작",
+        "시스템 서비스"
       ]
     ]
   },
@@ -227,19 +227,19 @@
     "explanation": "ART 런타임은 com.android.art APEX로 모듈화되어 Google Play 시스템 업데이트를 통해 배포됩니다. 이를 통해 bootclasspath에 포함된 핵심 Java 라이브러리와 런타임 최적화가 OEM의 OTA 없이도 빠르게 업데이트될 수 있으며, 보안 취약점 대응 속도가 크게 향상됩니다.",
     "blankDistractors": [
       [
-        "dmesg",
-        "list",
+        "modprobe",
+        "modinfo",
         "lshal"
       ],
       [
-        "composite disk",
         "--config-file /path/to/vm_config.json",
+        "composite disk",
         "--apex-only"
       ],
       [
-        "com.android",
-        "checkvintf",
-        "list"
+        "apexd",
+        "lsmod",
+        "vm"
       ]
     ]
   },
@@ -266,19 +266,19 @@
     "explanation": "GKI 커널 이미지는 boot 파티션에 포함되어 Google이 직접 관리하며, 벤더 고유의 드라이버와 기능은 vendor_dlkm 파티션에 로더블 커널 모듈(.ko) 형태로 분리됩니다. 부팅 시 modprobe를 통해 필요한 벤더 모듈이 로드되며, 이 분리 구조 덕분에 커널 업데이트와 벤더 모듈 업데이트가 독립적으로 수행됩니다.",
     "blankDistractors": [
       [
-        "bootclasspath",
-        "dumpsys",
-        "com.android"
+        "VirtualizationService",
+        "list",
+        "pm"
       ],
       [
-        "com.android.art",
-        "lshal",
-        "modinfo"
-      ],
-      [
-        "com.android",
+        "apexservice",
         "ext4",
-        "bootclasspath"
+        "lsmod"
+      ],
+      [
+        "VirtualizationService",
+        "apex_manifest.json",
+        "pKVM"
       ]
     ]
   },
@@ -308,19 +308,19 @@
     "explanation": "KMI freeze는 특정 시점 이후 GKI 커널이 노출하는 심볼의 ABI(Application Binary Interface)를 변경하지 않겠다는 보장입니다. 이를 통해 벤더는 KMI freeze 시점에 빌드한 커널 모듈을 이후의 GKI 커널 업데이트에서도 재컴파일 없이 사용할 수 있어 업데이트 비용이 크게 절감됩니다.",
     "blankDistractors": [
       [
-        "apexservice",
-        "init",
-        "boot"
+        "modprobe",
+        "pKVM",
+        "VirtualizationService"
       ],
       [
         "APEX",
-        "X0",
-        "BLOCKED"
+        "NATIVE",
+        "TARGET_KERNEL_CONFIG"
       ],
       [
-        "시작",
         "롤백",
-        "재시작"
+        "시작",
+        "하위 호환성"
       ]
     ]
   },
@@ -350,18 +350,18 @@
     "blankDistractors": [
       [
         "ABI",
-        "PRODUCT_PROPERTY_OVERRIDES",
-        "PRODUCT_PACKAGES"
+        "VDEX",
+        "X0"
       ],
       [
-        "dumpsys",
-        "checkvintf",
-        "vm"
+        "com.android.art",
+        "lsmod",
+        "SELinux"
       ],
       [
         "composite disk",
-        "--config-file /path/to/vm_config.json",
-        "--apex-only"
+        "--apex-only",
+        "--config-file /path/to/vm_config.json"
       ]
     ]
   },
@@ -386,19 +386,19 @@
     "explanation": "AVF 아키텍처에서 VirtualizationService는 Android 시스템 서비스로서 VM의 생명주기(생성, 시작, 중지)를 관리합니다. 실제 하드웨어 에뮬레이션과 VM 실행은 Chrome OS에서 유래한 crosvm이 담당하며, pKVM 하이퍼바이저가 EL2에서 stage-2 페이지 테이블을 관리하여 호스트 커널도 게스트 메모리에 접근할 수 없도록 격리합니다.",
     "blankDistractors": [
       [
-        "com.android.art",
-        "com.android",
-        "SELinux"
-      ],
-      [
-        "lshal",
-        "vendor_dlkm",
-        "init"
-      ],
-      [
         "checkvintf",
+        "SELinux",
+        "vsock"
+      ],
+      [
+        "vendor_dlkm",
+        "init",
+        "freeze"
+      ],
+      [
         "apexd",
-        "init"
+        "init",
+        "ext4"
       ]
     ]
   },
@@ -426,19 +426,19 @@
     "explanation": "Microdroid는 crosvm이 composite disk(APEX에서 추출된 커널, initrd, 디스크 이미지를 조합)에서 커널과 initrd를 로드하여 부팅합니다. Microdroid 커널은 호스트 부트 파티션이 아닌 com.android.virt APEX에 포함된 별도의 VM용 커널입니다. 게스트 내부에서는 최소한의 init 프로세스가 시작되어 필요한 서비스만 초기화합니다. 호스트 Android 앱과 Microdroid 게스트 간의 통신은 vsock(virtio-vsock) 소켓을 통해 이루어지며, 이는 네트워크 스택 없이도 호스트-게스트 간 효율적인 데이터 교환을 가능하게 합니다.",
     "blankDistractors": [
       [
-        "--config-file /path/to/vm_config.json",
+        "Google Play",
         "--apex-only",
-        "Google Play"
+        "--config-file /path/to/vm_config.json"
       ],
       [
-        "bootclasspath",
-        "boot",
-        "lsmod"
+        "apex_manifest.json",
+        "vendor_dlkm",
+        "VirtualizationService"
       ],
       [
         "vm",
-        "checkvintf",
-        "ext4"
+        "crosvm",
+        "freeze"
       ]
     ]
   },
@@ -469,19 +469,19 @@
     "explanation": "VINTF는 매니페스트 수준의 정적 검증만 수행하므로, 실제 런타임 동작은 보장하지 않습니다. SELinux 정책이 HAL 프로세스의 binder 통신이나 파일 접근을 차단하거나, HAL 서비스 바이너리가 크래시로 시작되지 않거나, 벤더 라이브러리의 ABI가 프레임워크 기대와 불일치하면 매니페스트 검사를 통과해도 런타임 실패가 발생할 수 있습니다.",
     "blankDistractors": [
       [
-        "com.android",
-        "list",
-        "pKVM"
+        "init",
+        "vendor_dlkm",
+        "com.android.art"
       ],
       [
         "재컴파일",
         "롤백",
-        "단일 구현"
+        "광범위한 권한"
       ],
       [
         "APEX",
-        "DAC",
-        "BOARD_SYSTEMIMAGE_PARTITION_SIZE"
+        "NATIVE",
+        "DEX"
       ]
     ]
   },
@@ -506,13 +506,13 @@
     "blankDistractors": [
       [
         "apex_manifest.json",
-        "SELinux",
-        "lshal"
+        "apexservice",
+        "dumpsys"
       ],
       [
         "Google Play",
-        "composite disk",
-        "--config-file /path/to/vm_config.json"
+        "--config-file /path/to/vm_config.json",
+        "composite disk"
       ]
     ]
   },
@@ -536,14 +536,14 @@
     "explanation": "dumpsys apexservice 명령어는 apexd 데몬이 관리하는 모든 APEX 패키지의 상태 정보를 출력합니다. 각 APEX의 이름, 버전, 활성화 경로, 설치 상태(factory/updated) 등의 상세 정보를 확인할 수 있어 APEX 관련 문제 디버깅에 유용합니다.",
     "blankDistractors": [
       [
-        "VirtualizationService",
-        "dmesg",
-        "pKVM"
+        "list",
+        "bootclasspath",
+        "VirtualizationService"
       ],
       [
-        "apex_manifest.json",
-        "vsock",
-        "vm"
+        "checkvintf",
+        "dmesg",
+        "list"
       ]
     ]
   },
@@ -567,14 +567,14 @@
     "explanation": "lsmod 명령어는 현재 커널에 로드된 모든 모듈과 크기, 의존성 정보를 출력합니다. modinfo 명령어는 특정 모듈의 상세 정보(버전, 작성자, 라이선스, 파라미터, 의존성 등)를 확인할 수 있어 vendor_dlkm에서 로드된 벤더 모듈의 상태를 진단하는 데 유용합니다.",
     "blankDistractors": [
       [
-        "init",
         "com.android.art",
-        "list"
+        "dmesg",
+        "freeze"
       ],
       [
-        "pm",
-        "vendor_dlkm",
-        "vsock"
+        "VirtualizationService",
+        "boot",
+        "apexservice"
       ]
     ]
   },
@@ -598,14 +598,14 @@
     "explanation": "lshal 명령어는 hwservicemanager와 servicemanager에 등록된 모든 HAL 서비스의 인터페이스, 전송 방식(passthrough/hwbinder), PID 등을 출력합니다. checkvintf는 device manifest와 framework compatibility matrix를 비교하여 호환성 위반 사항을 보고하며, OTA 업데이트 전 사전 검증에 활용됩니다.",
     "blankDistractors": [
       [
-        "list",
-        "SELinux",
-        "apexd"
+        "ext4",
+        "boot",
+        "pKVM"
       ],
       [
+        "dmesg",
         "list",
-        "vm",
-        "com.android"
+        "bootclasspath"
       ]
     ]
   },
@@ -629,14 +629,14 @@
     "explanation": "/apex 디렉터리에는 활성화된 모든 APEX 모듈이 마운트되어 있으며, 각 모듈 디렉터리 내의 apex_manifest.json 파일에서 모듈 이름과 버전 정보를 확인할 수 있습니다. 바이너리 형식인 apex_manifest.pb도 존재하지만 cat으로 읽을 수 없으며, 이를 읽으려면 protoc --decode 등의 도구가 필요합니다. apex_manifest.json은 사람이 읽을 수 있는 JSON 형식이므로 cat으로 직접 확인 가능합니다.",
     "blankDistractors": [
       [
-        ".hal",
-        ".ninja",
-        "/data/anr/traces.txt"
+        "/dev",
+        ".aidl",
+        "/dev/hwbinder"
       ],
       [
-        "dumpsys",
-        "SELinux",
-        "VirtualizationService"
+        "crosvm",
+        "VirtualizationService",
+        "modinfo"
       ]
     ]
   },
@@ -666,18 +666,18 @@
     "blankDistractors": [
       [
         "init",
-        "kallsyms",
+        "pm",
         "modinfo"
       ],
       [
-        "apex_manifest.json",
-        "com.android.art",
+        "boot",
+        "VirtualizationService",
         "pKVM"
       ],
       [
+        "Google Play",
         "composite disk",
-        "--apex-only",
-        "Google Play"
+        "--apex-only"
       ]
     ]
   },
@@ -701,14 +701,14 @@
     "explanation": "벤더 모듈이 KMI 불일치로 로드에 실패하면 dmesg에 'disagrees about version of symbol' 또는 'Unknown symbol' 등의 오류가 기록됩니다. /proc/kallsyms는 현재 커널에 로드된 심볼 목록을 보여주어 벤더 모듈이 요구하는 심볼이 존재하는지 확인하는 데 활용할 수 있습니다. 단, /proc/kallsyms는 공식 KMI 심볼 목록이 아니며, 정확한 KMI 호환성 검증에는 빌드 시 생성되는 abi_symbollist 파일이나 'check_abi' 도구를 사용해야 합니다.",
     "blankDistractors": [
       [
-        "VirtualizationService",
-        "boot",
-        "dumpsys"
+        "SELinux",
+        "list",
+        "freeze"
       ],
       [
-        "vm",
         "modprobe",
-        "checkvintf"
+        "apexd",
+        "modinfo"
       ]
     ]
   }
