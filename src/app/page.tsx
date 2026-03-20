@@ -86,10 +86,10 @@ export default function Home() {
         quiz.sh
       </h1>
       <p className="text-gray-400 mb-10 text-center">
-        Linux Kernel과 Android System의 핵심 개념을 퀴즈로 학습하세요
+        Linux Kernel, Android System, Operating System의 핵심 개념을 퀴즈로 학습하세요
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
         {CATEGORIES.map((cat) => {
           const count = getCategoryQuizCount(cat.id);
           return (

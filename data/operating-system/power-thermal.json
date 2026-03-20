@@ -1,0 +1,640 @@
+[
+  {
+    "id": "pw-001",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Linux CPUfreq 프레임워크에서 CPU를 항상 최대 주파수로 동작시키는 governor는 무엇인가?",
+    "options": [
+      "ondemand",
+      "powersave",
+      "performance",
+      "schedutil"
+    ],
+    "answer": 2,
+    "explanation": "performance governor는 CPU를 항상 최대 주파수로 고정하여 최고 성능을 보장합니다. 반면 powersave는 최저 주파수, ondemand는 부하에 따라 동적으로 조절하며, schedutil은 커널 스케줄러 정보를 활용하여 주파수를 결정합니다."
+  },
+  {
+    "id": "pw-002",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "DVFS(Dynamic Voltage and Frequency Scaling)에서 전압과 주파수를 함께 조절하는 이유로 가장 적합한 것은?",
+    "options": [
+      "주파수를 높이면 전압을 낮춰야 전력 소모가 줄어들기 때문",
+      "주파수를 높이면 안정적인 동작을 위해 전압도 함께 높여야 하기 때문",
+      "전압만 조절해도 주파수가 자동으로 변경되기 때문",
+      "DVFS는 주파수만 조절하고 전압은 고정하기 때문"
+    ],
+    "answer": 1,
+    "explanation": "DVFS에서 주파수를 높이면 CPU가 안정적으로 동작하기 위해 더 높은 전압이 필요합니다. 반대로 주파수를 낮추면 전압도 함께 낮출 수 있어 동적 전력 소비(P = CV²f)를 크게 줄일 수 있습니다."
+  },
+  {
+    "id": "pw-003",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Linux에서 시스템 suspend(절전 모드) 진입 시 커널의 처리 순서로 올바른 것은?",
+    "options": [
+      "resume → suspend → prepare → freeze",
+      "freeze → prepare → suspend → resume",
+      "prepare → freeze → suspend → resume",
+      "suspend → freeze → prepare → resume"
+    ],
+    "answer": 2,
+    "explanation": "Linux 커널의 suspend 과정은 prepare(디바이스 사전 준비) → freeze(사용자 프로세스 동결) → suspend(디바이스 실제 절전) 순으로 진행되며, 깨어날 때는 역순으로 resume 과정이 수행됩니다."
+  },
+  {
+    "id": "pw-004",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "thermal zone에서 trip point의 역할은 무엇인가?",
+    "options": [
+      "CPU 코어의 최대 주파수를 설정하는 값",
+      "특정 온도 임계값에 도달했을 때 수행할 동작을 정의하는 기준점",
+      "냉각 팬의 회전 속도를 고정하는 설정값",
+      "GPU와 CPU 사이의 열 전달 경로를 정의하는 구조"
+    ],
+    "answer": 1,
+    "explanation": "trip point는 thermal zone에서 정의하는 온도 임계값으로, 해당 온도에 도달하면 cooling device(CPU 스로틀링, 팬 속도 조절 등)를 활성화하는 트리거 역할을 합니다. passive, active, critical 등의 유형이 있습니다."
+  },
+  {
+    "id": "pw-005",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Android Power HAL(Hardware Abstraction Layer)의 주요 역할은 무엇인가?",
+    "options": [
+      "배터리 충전 전류를 직접 제어한다",
+      "커널의 CPUfreq governor를 대체한다",
+      "프레임워크와 하드웨어 간의 전력 관리 인터페이스를 제공한다",
+      "앱의 CPU 사용량을 직접 제한한다"
+    ],
+    "answer": 2,
+    "explanation": "Android Power HAL은 Android 프레임워크와 하드웨어 전력 관리 사이의 추상화 계층입니다. 성능 힌트(performance hint), 부스트 요청 등을 표준화된 인터페이스로 제공하며, 벤더별 하드웨어 차이를 숨깁니다."
+  },
+  {
+    "id": "pw-006",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Linux 커널에서 wakelock의 주요 목적은 무엇인가?",
+    "options": [
+      "CPU 주파수를 최대로 유지하기 위한 메커니즘",
+      "시스템이 suspend 상태로 진입하는 것을 방지하기 위한 메커니즘",
+      "디스플레이를 항상 켜진 상태로 유지하기 위한 메커니즘",
+      "네트워크 연결을 유지하기 위한 메커니즘"
+    ],
+    "answer": 1,
+    "explanation": "wakelock(Linux 커널에서는 wakeup_source)은 시스템이 절전 모드(suspend)로 진입하는 것을 방지합니다. 예를 들어 중요한 데이터 처리나 네트워크 수신 중에 wakelock을 잡아 시스템이 깨어있는 상태를 유지할 수 있습니다."
+  },
+  {
+    "id": "pw-007",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "cooling device에서 CPU throttling이 수행하는 동작은 무엇인가?",
+    "options": [
+      "CPU 코어를 물리적으로 차단하여 열 발생을 막는다",
+      "CPU의 최대 주파수를 제한하여 발열을 줄인다",
+      "CPU를 완전히 정지시키고 GPU로 작업을 넘긴다",
+      "CPU의 캐시를 비활성화하여 전력 소비를 줄인다"
+    ],
+    "answer": 1,
+    "explanation": "CPU throttling은 thermal throttling이라고도 하며, CPU의 최대 동작 주파수를 제한하여 발열과 전력 소비를 줄입니다. 이는 cooling device로서 thermal framework에 의해 자동으로 제어되며, 시스템 과열을 방지합니다."
+  },
+  {
+    "id": "pw-008",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Linux regulator 프레임워크에서 consumer와 supplier의 관계를 올바르게 설명한 것은?",
+    "options": [
+      "consumer는 전원을 공급하고 supplier는 전원을 사용한다",
+      "supplier는 전압/전류를 공급하는 레귤레이터이고, consumer는 전원을 사용하는 디바이스이다",
+      "consumer와 supplier는 항상 1:1 관계이다",
+      "regulator 프레임워크는 consumer만 관리한다"
+    ],
+    "answer": 1,
+    "explanation": "regulator 프레임워크에서 supplier(regulator)는 전압/전류를 공급하는 PMIC 등의 하드웨어이고, consumer는 해당 전원을 사용하는 CPU, GPU, 디스플레이 등의 디바이스입니다. 하나의 supplier가 여러 consumer에 전원을 공급할 수 있습니다."
+  },
+  {
+    "id": "pw-009",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "schedutil governor가 기존 ondemand governor에 비해 가지는 주요 장점은 무엇인가?",
+    "options": [
+      "CPU 주파수를 항상 최저로 유지하여 전력을 절약한다",
+      "커널 스케줄러의 부하 정보를 직접 활용하여 더 정확하고 빠른 주파수 결정이 가능하다",
+      "하드웨어 인터럽트를 사용하지 않아 오버헤드가 없다",
+      "사용자 공간에서 주파수를 직접 제어할 수 있다"
+    ],
+    "answer": 1,
+    "explanation": "schedutil은 커널 스케줄러의 utilization 정보(PELT: Per-Entity Load Tracking)를 직접 활용하여 주파수를 결정합니다. ondemand는 타이머 기반으로 CPU 사용률을 샘플링하므로 반응이 느리고 부정확할 수 있지만, schedutil은 스케줄러와 통합되어 더 효율적입니다."
+  },
+  {
+    "id": "pw-010",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "power domain 관리에서 서브시스템 전체의 전원을 끄기 위해 충족해야 하는 조건은?",
+    "options": [
+      "해당 도메인의 모든 디바이스가 active 상태여야 한다",
+      "해당 도메인의 모든 디바이스가 suspend 상태이고 wakeup source가 없어야 한다",
+      "CPU governor가 powersave 모드여야 한다",
+      "thermal zone의 온도가 critical trip point를 넘어야 한다"
+    ],
+    "answer": 1,
+    "explanation": "power domain의 전원을 끄려면 해당 도메인에 속한 모든 디바이스가 저전력 상태(runtime suspended)여야 하며, 활성 wakeup source가 없어야 합니다. 하나라도 활성 디바이스가 있으면 power domain은 켜진 상태를 유지해야 합니다."
+  },
+  {
+    "id": "pw-011",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Linux에서 현재 CPU governor를 확인하려면 ___경로의 sysfs 파일을 읽으면 되고, CPUfreq에서 가장 절전에 초점을 맞춘 governor는 ___이다.",
+    "blankAnswers": [
+      [
+        "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor",
+        "scaling_governor"
+      ],
+      [
+        "powersave"
+      ]
+    ],
+    "explanation": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor 파일을 읽으면 현재 설정된 CPUfreq governor를 확인할 수 있습니다. powersave governor는 CPU를 항상 최저 주파수로 동작시켜 전력 소비를 최소화합니다.",
+    "blankDistractors": [
+      [
+        "/proc/cpuinfo",
+        "/sys/class/thermal",
+        "/proc/stat"
+      ],
+      [
+        "ondemand",
+        "conservative",
+        "userspace"
+      ]
+    ]
+  },
+  {
+    "id": "pw-012",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "시스템 절전 상태를 확인하려면 /sys/power/___파일을 읽으면 지원되는 모드 목록이 나오며, 절전 모드로 진입하려면 해당 파일에 원하는 모드(예: ___)를 쓰면 된다.",
+    "blankAnswers": [
+      [
+        "state"
+      ],
+      [
+        "mem",
+        "suspend"
+      ]
+    ],
+    "explanation": "/sys/power/state 파일에는 시스템이 지원하는 절전 상태(freeze, mem, disk 등)가 나열됩니다. echo mem > /sys/power/state 명령으로 시스템을 suspend-to-RAM 모드로 진입시킬 수 있습니다.",
+    "blankDistractors": [
+      [
+        "wakeup",
+        "governor",
+        "thermal"
+      ],
+      [
+        "halt",
+        "reboot",
+        "poweroff"
+      ]
+    ]
+  },
+  {
+    "id": "pw-013",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "thermal zone의 현재 온도는 /sys/class/thermal/thermal_zone0/___파일에서 밀리 섭씨 단위로 확인할 수 있으며, trip point 정보는 같은 디렉터리의 ___파일에서 확인 가능하다.",
+    "blankAnswers": [
+      [
+        "temp"
+      ],
+      [
+        "trip_point_0_temp",
+        "trip_point_0_type"
+      ]
+    ],
+    "explanation": "thermal zone의 temp 파일에서 현재 온도를 밀리 섭씨(밀리도) 단위로 읽을 수 있습니다(예: 45000 = 45°C). trip_point_0_temp은 첫 번째 trip point의 온도 임계값, trip_point_0_type은 해당 trip point의 유형(passive, active, critical 등)을 나타냅니다.",
+    "blankDistractors": [
+      [
+        "type",
+        "mode",
+        "policy"
+      ],
+      [
+        "cooling_device",
+        "cur_state",
+        "max_state"
+      ]
+    ]
+  },
+  {
+    "id": "pw-014",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Android에서 앱이 화면이 꺼진 상태에서도 작업을 계속하려면 ___를 획득해야 하며, 이를 해제하지 않으면 ___이 과도하게 소모되는 문제가 발생한다.",
+    "blankAnswers": [
+      [
+        "wakelock",
+        "wake lock",
+        "WakeLock"
+      ],
+      [
+        "배터리",
+        "전력",
+        "battery"
+      ]
+    ],
+    "explanation": "Android의 WakeLock은 시스템이 절전 모드(deep sleep)로 진입하는 것을 방지합니다. 앱이 WakeLock을 획득하면 CPU가 계속 동작하므로, 작업 완료 후 반드시 해제해야 합니다. 해제하지 않으면 배터리가 빠르게 소모됩니다.",
+    "blankDistractors": [
+      [
+        "mutex",
+        "semaphore",
+        "spinlock"
+      ],
+      [
+        "메모리",
+        "CPU 캐시",
+        "디스크"
+      ]
+    ]
+  },
+  {
+    "id": "pw-015",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "DVFS에서 동적 전력 소비 공식은 P = ___로 표현되며, 전압을 절반으로 줄이면 동적 전력은 약 ___배로 감소한다.",
+    "blankAnswers": [
+      [
+        "CV²f",
+        "C*V^2*f",
+        "CV2f"
+      ],
+      [
+        "1/4",
+        "0.25",
+        "4분의 1"
+      ]
+    ],
+    "explanation": "동적 전력 소비 공식 P = CV²f에서 C는 커패시턴스, V는 전압, f는 주파수입니다. 전압 V가 절반이 되면 V²은 (1/2)² = 1/4이 되므로, 주파수가 동일하다고 가정하면 동적 전력은 약 1/4로 줄어듭니다.",
+    "blankDistractors": [
+      [
+        "IR",
+        "V/R",
+        "P=VI"
+      ],
+      [
+        "1/2",
+        "1/8",
+        "1/3"
+      ]
+    ]
+  },
+  {
+    "id": "pw-016",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Linux 커널에서 디바이스의 runtime PM을 활성화하려면 ___함수를 호출하고, 디바이스를 사용한 후에는 ___함수로 사용 완료를 알려 자동으로 idle 상태로 전환되게 한다.",
+    "blankAnswers": [
+      [
+        "pm_runtime_enable",
+        "pm_runtime_enable()"
+      ],
+      [
+        "pm_runtime_put",
+        "pm_runtime_put()",
+        "pm_runtime_put_autosuspend"
+      ]
+    ],
+    "explanation": "pm_runtime_enable()로 디바이스의 runtime PM을 활성화합니다. 디바이스 사용 시 pm_runtime_get_sync()로 활성화하고, 사용 완료 후 pm_runtime_put()을 호출하면 참조 카운트가 감소하여 0이 되면 자동으로 suspend callback이 호출됩니다.",
+    "blankDistractors": [
+      [
+        "pm_runtime_suspend",
+        "device_initialize",
+        "platform_driver_register"
+      ],
+      [
+        "pm_runtime_disable",
+        "pm_runtime_barrier",
+        "dev_pm_set_driver_flags"
+      ]
+    ]
+  },
+  {
+    "id": "pw-017",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "배터리 관리에서 충전 프로파일의 CC-CV 방식에서 CC는 ___를 의미하며, CV 단계로 전환되는 시점은 배터리 전압이 ___에 도달했을 때이다.",
+    "blankAnswers": [
+      [
+        "Constant Current",
+        "정전류",
+        "constant current"
+      ],
+      [
+        "만충전 전압",
+        "최대 전압",
+        "full charge voltage",
+        "4.2V"
+      ]
+    ],
+    "explanation": "CC-CV(Constant Current - Constant Voltage) 충전 방식에서 CC 단계는 일정한 전류로 충전하고, 배터리 전압이 최대 전압(리튬이온의 경우 보통 4.2V)에 도달하면 CV 단계로 전환하여 전압을 일정하게 유지하며 전류를 점차 줄입니다.",
+    "blankDistractors": [
+      [
+        "Constant Capacitance",
+        "Continuous Charging",
+        "Controlled Current"
+      ],
+      [
+        "최저 전압",
+        "정격 용량의 50%",
+        "차단 전류값"
+      ]
+    ]
+  },
+  {
+    "id": "pw-018",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Linux의 suspend-to-RAM(S3) 과정에서 디바이스 드라이버의 suspend 콜백은 ___순서로 호출되며, resume 시에는 ___순서로 호출된다.",
+    "blankAnswers": [
+      [
+        "leaf-to-root",
+        "리프에서 루트",
+        "자식에서 부모"
+      ],
+      [
+        "root-to-leaf",
+        "루트에서 리프",
+        "부모에서 자식"
+      ]
+    ],
+    "explanation": "디바이스 트리 구조에서 suspend 시에는 leaf(말단) 디바이스부터 root(버스 컨트롤러)까지 bottom-up으로 콜백이 호출됩니다. resume 시에는 반대로 root에서 leaf까지 top-down으로 호출하여 부모 디바이스가 먼저 활성화된 후 자식 디바이스가 초기화됩니다.",
+    "blankDistractors": [
+      [
+        "상위에서 하위",
+        "알파벳 순서",
+        "등록 순서"
+      ],
+      [
+        "하위에서 상위",
+        "등록 역순",
+        "랜덤"
+      ]
+    ]
+  },
+  {
+    "id": "pw-019",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "CPUfreq governor를 performance로 변경하고 현재 CPU 주파수를 확인하는 셸 명령을 완성하시오.",
+    "codeTemplate": "# governor를 performance로 변경\necho ___ > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor\n\n# 현재 CPU 주파수 확인 (kHz 단위)\ncat /sys/devices/system/cpu/cpu0/cpufreq/___",
+    "codeLanguage": "bash",
+    "blankAnswers": [
+      [
+        "performance"
+      ],
+      [
+        "scaling_cur_freq",
+        "cpuinfo_cur_freq"
+      ]
+    ],
+    "explanation": "scaling_governor 파일에 원하는 governor 이름을 쓰면 CPUfreq governor가 변경됩니다. scaling_cur_freq 파일에서 현재 CPU 동작 주파수를 kHz 단위로 확인할 수 있습니다.",
+    "blankDistractors": [
+      [
+        "powersave",
+        "ondemand",
+        "conservative"
+      ],
+      [
+        "scaling_max_freq",
+        "cpuinfo_max_freq",
+        "scaling_governor"
+      ]
+    ]
+  },
+  {
+    "id": "pw-020",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "시스템을 suspend-to-RAM 모드로 진입시키는 셸 명령을 완성하시오.",
+    "codeTemplate": "# 지원되는 절전 모드 확인\ncat /sys/power/___\n\n# suspend-to-RAM 진입\necho ___ > /sys/power/state",
+    "codeLanguage": "bash",
+    "blankAnswers": [
+      [
+        "state"
+      ],
+      [
+        "mem"
+      ]
+    ],
+    "explanation": "/sys/power/state 파일을 읽으면 시스템이 지원하는 절전 모드(freeze, mem, disk 등)를 확인할 수 있습니다. echo mem > /sys/power/state 명령으로 시스템을 suspend-to-RAM(S3) 모드로 진입시킵니다.",
+    "blankDistractors": [
+      [
+        "wakeup_count",
+        "pm_async",
+        "resume"
+      ],
+      [
+        "disk",
+        "freeze",
+        "standby"
+      ]
+    ]
+  },
+  {
+    "id": "pw-021",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "디바이스 드라이버에서 runtime PM을 구현하는 C 코드를 완성하시오.",
+    "codeTemplate": "static int my_device_probe(struct platform_device *pdev)\n{\n    struct device *dev = &pdev->dev;\n\n    /* runtime PM 활성화 */\n    ___(dev);\n\n    /* 디바이스 사용 시작 (동기적으로 resume) */\n    ___(dev);\n\n    /* ... 디바이스 초기화 ... */\n\n    return 0;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      [
+        "pm_runtime_enable"
+      ],
+      [
+        "pm_runtime_get_sync"
+      ]
+    ],
+    "explanation": "pm_runtime_enable()로 디바이스의 runtime PM을 활성화하고, pm_runtime_get_sync()로 디바이스를 동기적으로 활성화(resume)합니다. get_sync는 참조 카운트를 증가시키고 runtime resume callback을 호출합니다.",
+    "blankDistractors": [
+      [
+        "pm_runtime_suspend",
+        "device_init_wakeup",
+        "pm_runtime_set_active"
+      ],
+      [
+        "pm_runtime_put",
+        "pm_runtime_resume",
+        "pm_runtime_mark_last_busy"
+      ]
+    ]
+  },
+  {
+    "id": "pw-022",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "regulator 프레임워크를 사용하여 디바이스에 전원을 공급하는 C 코드를 완성하시오.",
+    "codeTemplate": "static int sensor_probe(struct platform_device *pdev)\n{\n    struct regulator *vdd;\n\n    /* regulator 획득 */\n    vdd = ___(dev, \"vdd\");\n    if (IS_ERR(vdd))\n        return PTR_ERR(vdd);\n\n    /* 전압 설정: 3.3V */\n    regulator_set_voltage(vdd, 3300000, 3300000);\n\n    /* regulator 활성화 */\n    ___(vdd);\n\n    return 0;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      [
+        "devm_regulator_get",
+        "regulator_get"
+      ],
+      [
+        "regulator_enable"
+      ]
+    ],
+    "explanation": "devm_regulator_get()으로 regulator consumer를 획득하고, regulator_set_voltage()로 전압을 설정한 후, regulator_enable()로 전원을 활성화합니다. devm_ 접두어는 디바이스 관리 버전으로, 드라이버 제거 시 자동으로 정리됩니다.",
+    "blankDistractors": [
+      [
+        "platform_get_resource",
+        "devm_clk_get",
+        "of_regulator_match"
+      ],
+      [
+        "regulator_disable",
+        "regulator_force_disable",
+        "regulator_set_mode"
+      ]
+    ]
+  },
+  {
+    "id": "pw-023",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "커널 thermal framework에서 cooling device를 등록하는 C 코드를 완성하시오.",
+    "codeTemplate": "static struct thermal_cooling_device_ops my_cooling_ops = {\n    .get_max_state = my_get_max_state,\n    .get_cur_state = my_get_cur_state,\n    .set_cur_state = my_set_cur_state,\n};\n\nstatic int my_cooling_probe(struct platform_device *pdev)\n{\n    struct thermal_cooling_device *cdev;\n\n    cdev = ___(\n        &pdev->dev, 0, \"my-fan\",\n        pdev, &my_cooling_ops);\n\n    if (___(cdev))\n        return PTR_ERR(cdev);\n\n    return 0;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      [
+        "thermal_of_cooling_device_register",
+        "thermal_cooling_device_register"
+      ],
+      [
+        "IS_ERR"
+      ]
+    ],
+    "explanation": "thermal_of_cooling_device_register()는 디바이스 트리 기반으로 cooling device를 thermal framework에 등록합니다. ops 구조체의 get_max_state, get_cur_state, set_cur_state 콜백을 통해 냉각 상태를 제어합니다. IS_ERR()로 포인터 에러를 확인합니다.",
+    "blankDistractors": [
+      [
+        "thermal_zone_device_register",
+        "devm_thermal_zone_of_sensor_register",
+        "cpufreq_register_driver"
+      ],
+      [
+        "IS_NULL",
+        "PTR_ERR",
+        "ERR_PTR"
+      ]
+    ]
+  },
+  {
+    "id": "pw-024",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "디바이스 드라이버에서 suspend/resume 콜백을 구현하는 C 코드를 완성하시오.",
+    "codeTemplate": "static int my_driver_suspend(struct device *dev)\n{\n    struct my_data *data = dev_get_drvdata(dev);\n    /* 하드웨어 상태 저장 */\n    data->saved_reg = readl(data->base + REG_CTRL);\n    /* 클럭 비활성화 */\n    clk_disable_unprepare(data->clk);\n    return 0;\n}\n\nstatic int my_driver_resume(struct device *dev)\n{\n    struct my_data *data = dev_get_drvdata(dev);\n    clk_prepare_enable(data->clk);\n    writel(data->saved_reg, data->base + REG_CTRL);\n    return 0;\n}\n\nstatic ___ my_pm_ops = {\n    SET_SYSTEM_SLEEP_PM_OPS(my_driver_suspend, my_driver_resume)\n};\n\nstatic struct platform_driver my_driver = {\n    .driver = {\n        .name = \"my-device\",\n        .pm = &___,\n    },\n};",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      [
+        "SIMPLE_DEV_PM_OPS",
+        "const struct dev_pm_ops"
+      ],
+      [
+        "my_pm_ops"
+      ]
+    ],
+    "explanation": "SIMPLE_DEV_PM_OPS 매크로를 사용하면 suspend/resume 콜백을 간편하게 dev_pm_ops 구조체로 정의할 수 있습니다. platform_driver의 .pm 필드에 이 구조체의 주소를 설정하면 커널이 suspend/resume 시 해당 콜백을 호출합니다.",
+    "blankDistractors": [
+      [
+        "DEFINE_MUTEX",
+        "DEVICE_ATTR_RW",
+        "MODULE_DEVICE_TABLE"
+      ],
+      [
+        "platform_pm_ops",
+        "dev_pm_ops",
+        "suspend_ops"
+      ]
+    ]
+  },
+  {
+    "id": "pw-025",
+    "category": "operating-system",
+    "subcategory": "power-thermal",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "thermal zone 디바이스를 등록하고 trip point를 정의하는 C 코드를 완성하시오.",
+    "codeTemplate": "static int my_tz_get_temp(struct thermal_zone_device *tzd, int *temp)\n{\n    /* 센서에서 온도 읽기 (밀리 섭씨) */\n    *temp = read_sensor_temp() * 1000;\n    return 0;\n}\n\nstatic struct thermal_zone_device_ops my_tz_ops = {\n    .___ = my_tz_get_temp,\n};\n\nstatic int thermal_probe(struct platform_device *pdev)\n{\n    struct thermal_zone_device *tzd;\n    tzd = thermal_zone_device_register(\n        \"my-sensor\", ___, NULL, &my_tz_ops, NULL, 0, 0);\n    return PTR_ERR_OR_ZERO(tzd);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [
+      [
+        "get_temp"
+      ],
+      [
+        "2",
+        "1",
+        "3"
+      ]
+    ],
+    "explanation": "thermal_zone_device_ops 구조체의 get_temp 콜백은 현재 온도를 밀리 섭씨 단위로 반환합니다. thermal_zone_device_register()의 두 번째 인자는 trip point 수를 지정합니다. 등록 후 thermal framework가 주기적으로 온도를 폴링하여 trip point와 비교합니다.",
+    "blankDistractors": [
+      [
+        "set_temp",
+        "get_trip_type",
+        "get_trend"
+      ],
+      [
+        "0",
+        "MAX_TRIPS",
+        "THERMAL_MAX_LIMIT"
+      ]
+    ]
+  }
+]

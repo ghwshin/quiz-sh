@@ -5,6 +5,7 @@ test.describe("Quiz Flow", () => {
     await page.goto("/");
     await expect(page.getByRole("heading", { name: "Linux Kernel" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Android System" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Operating System" })).toBeVisible();
   });
 
   test("navigate from home to subcategory selection", async ({ page }) => {
@@ -37,6 +38,19 @@ test.describe("Quiz Flow", () => {
   test("dynamic route navigation works", async ({ page }) => {
     await page.goto("/quiz/android-system/binder-ipc/beginner");
     await expect(page.getByText(/문제 1/)).toBeVisible();
+  });
+
+  test("navigate to operating-system subcategory selection", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("link", { name: "Operating System" }).click();
+    await expect(page).toHaveURL(/\/quiz\/operating-system/);
+    await expect(page.getByText("프로세스/스레드")).toBeVisible();
+  });
+
+  test("operating-system quiz flow works", async ({ page }) => {
+    await page.goto("/quiz/operating-system/process-thread/beginner");
+    await expect(page.getByText(/문제 1/)).toBeVisible();
+    await expect(page.getByText(/1 \//)).toBeVisible();
   });
 
   test("quiz progress persists after page reload", async ({ page }) => {

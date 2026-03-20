@@ -1,6 +1,6 @@
 export type QuizType = "multiple-choice" | "short-answer" | "code-fill" | "conversation" | "terminal";
 export type Difficulty = "초급" | "중급" | "고급";
-export type Category = "linux-kernel" | "android-system";
+export type Category = "linux-kernel" | "android-system" | "operating-system";
 export type ScenarioType = "bug-report" | "code-review" | "design-discussion";
 
 export interface ConversationMessage {

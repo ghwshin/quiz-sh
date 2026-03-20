@@ -8,9 +8,9 @@ import {
 } from "@/lib/constants";
 
 describe("CATEGORIES", () => {
-  it("has linux-kernel and android-system", () => {
+  it("has linux-kernel, android-system, and operating-system", () => {
     const ids = CATEGORIES.map((c) => c.id);
-    expect(ids).toEqual(["linux-kernel", "android-system"]);
+    expect(ids).toEqual(["linux-kernel", "android-system", "operating-system"]);
   });
 
   it("each category has name and description", () => {
@@ -25,6 +25,7 @@ describe("SUBCATEGORIES", () => {
   it("has correct number of subcategories per category", () => {
     expect(SUBCATEGORIES["linux-kernel"]).toHaveLength(18);
     expect(SUBCATEGORIES["android-system"]).toHaveLength(17);
+    expect(SUBCATEGORIES["operating-system"]).toHaveLength(18);
   });
 
   it("each subcategory has id and name", () => {

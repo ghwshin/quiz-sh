@@ -1,0 +1,336 @@
+[
+  {
+    "id": "sn-001",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "여러 프로세스가 공유 데이터에 동시 접근할 때 실행 순서에 따라 결과가 달라지는 상황을 무엇이라 하는가?",
+    "options": [
+      "Deadlock",
+      "Race Condition",
+      "Starvation",
+      "Thrashing"
+    ],
+    "answer": 1,
+    "explanation": "경쟁 조건(Race Condition)은 여러 프로세스가 공유 데이터에 동시에 접근하여 실행 순서에 따라 결과가 달라지는 상황입니다. 이를 방지하기 위해 동기화 메커니즘이 필요합니다."
+  },
+  {
+    "id": "sn-002",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "임계구역(Critical Section) 문제의 해결 조건이 아닌 것은?",
+    "options": [
+      "상호 배제(Mutual Exclusion)",
+      "진행(Progress)",
+      "한정 대기(Bounded Waiting)",
+      "선점(Preemption)"
+    ],
+    "answer": 3,
+    "explanation": "임계구역 문제의 3가지 해결 조건은 상호 배제(한 번에 하나의 프로세스만 임계구역 진입), 진행(임계구역에 있는 프로세스가 없으면 진입 결정에 참여), 한정 대기(요청 후 무한정 기다리지 않음)입니다. 선점은 스케줄링 개념으로 임계구역 조건이 아닙니다."
+  },
+  {
+    "id": "sn-003",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "뮤텍스(Mutex)와 이진 세마포어(Binary Semaphore)의 가장 큰 차이점은?",
+    "options": [
+      "뮤텍스는 값이 0과 1만 가능하고 세마포어는 음수도 가능하다",
+      "뮤텍스는 소유권 개념이 있어 잠근 스레드만 해제할 수 있다",
+      "이진 세마포어는 하드웨어로만 구현 가능하다",
+      "뮤텍스는 카운팅이 가능하다"
+    ],
+    "answer": 1,
+    "explanation": "뮤텍스는 소유권(ownership) 개념이 있어서 락을 획득한 스레드만이 해제할 수 있습니다. 반면 이진 세마포어는 소유권 개념이 없어서 다른 스레드가 signal(V) 연산을 수행할 수 있습니다."
+  },
+  {
+    "id": "sn-004",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Peterson's Solution이 보장하는 성질로 올바르지 않은 것은?",
+    "options": [
+      "상호 배제(Mutual Exclusion)",
+      "진행(Progress)",
+      "한정 대기(Bounded Waiting)",
+      "다중 프로세서 환경에서의 원자성"
+    ],
+    "answer": 3,
+    "explanation": "Peterson's Solution은 두 프로세스 간의 상호 배제, 진행, 한정 대기를 모두 만족합니다. 그러나 현대 다중 프로세서 환경에서는 명령어 재배치(reordering)로 인해 원자성이 보장되지 않아 실제로는 사용하기 어렵습니다."
+  },
+  {
+    "id": "sn-005",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "카운팅 세마포어(Counting Semaphore)의 초기값이 5인 경우, 동시에 임계구역에 진입할 수 있는 최대 프로세스 수는?",
+    "options": ["1", "4", "5", "무제한"],
+    "answer": 2,
+    "explanation": "카운팅 세마포어의 초기값은 동시에 자원에 접근할 수 있는 프로세스의 최대 수를 나타냅니다. 초기값이 5이면 5개 프로세스가 동시에 임계구역에 진입할 수 있습니다."
+  },
+  {
+    "id": "sn-006",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "식사하는 철학자(Dining Philosophers) 문제에서 교착 상태를 방지하는 방법이 아닌 것은?",
+    "options": [
+      "최대 4명만 동시에 식사 시도 허용",
+      "홀수 번째 철학자는 왼쪽, 짝수 번째는 오른쪽 포크를 먼저 집기",
+      "양쪽 포크가 모두 가용할 때만 집기",
+      "모든 철학자가 동시에 왼쪽 포크를 먼저 집기"
+    ],
+    "answer": 3,
+    "explanation": "모든 철학자가 동시에 왼쪽 포크를 먼저 집으면 순환 대기가 발생하여 교착 상태에 빠집니다. 나머지 방법들은 4대 필요 조건 중 하나 이상을 깨뜨려 교착 상태를 방지합니다."
+  },
+  {
+    "id": "sn-007",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "모니터(Monitor)의 특징으로 올바른 것은?",
+    "options": [
+      "프로그래머가 직접 lock/unlock을 호출해야 한다",
+      "한 시점에 하나의 프로세스만 모니터 내부에서 활성화된다",
+      "세마포어보다 저수준의 동기화 기법이다",
+      "조건 변수를 사용할 수 없다"
+    ],
+    "answer": 1,
+    "explanation": "모니터는 상호 배제를 자동으로 보장하는 고수준 동기화 구조입니다. 한 시점에 하나의 프로세스만 모니터 내부에서 활성화되며, 조건 변수(condition variable)의 wait/signal을 통해 프로세스 간 협력을 구현합니다."
+  },
+  {
+    "id": "sn-008",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "하드웨어 동기화 명령어 test_and_set의 특성으로 올바른 것은?",
+    "options": [
+      "소프트웨어적으로 구현된다",
+      "원자적으로 실행되어 중간에 인터럽트되지 않는다",
+      "다중 프로세서 환경에서 사용할 수 없다",
+      "한정 대기 조건을 자동으로 보장한다"
+    ],
+    "answer": 1,
+    "explanation": "test_and_set은 하드웨어가 지원하는 원자적(atomic) 명령어로, 값을 읽고 설정하는 작업이 중간에 인터럽트되지 않고 하나의 단위로 실행됩니다. 단, 한정 대기 조건은 자동으로 보장되지 않아 추가 구현이 필요합니다."
+  },
+  {
+    "id": "sn-009",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "우선순위 역전(Priority Inversion)이 발생하는 상황은?",
+    "options": [
+      "높은 우선순위 프로세스가 항상 먼저 실행되는 상황",
+      "낮은 우선순위 프로세스가 가진 락을 높은 우선순위 프로세스가 기다리는 동안, 중간 우선순위 프로세스가 실행되는 상황",
+      "모든 프로세스가 동일한 우선순위를 가지는 상황",
+      "데드락이 발생한 상황"
+    ],
+    "answer": 1,
+    "explanation": "우선순위 역전은 저우선순위 프로세스가 자원을 점유한 상태에서, 고우선순위 프로세스가 해당 자원을 기다리고 있을 때, 중간 우선순위 프로세스가 저우선순위 프로세스를 선점하여 간접적으로 고우선순위 프로세스의 실행이 지연되는 현상입니다."
+  },
+  {
+    "id": "sn-010",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "우선순위 역전(Priority Inversion) 문제를 해결하기 위한 기법은?",
+    "options": [
+      "Round Robin 스케줄링",
+      "Priority Inheritance Protocol",
+      "FCFS 스케줄링",
+      "Aging"
+    ],
+    "answer": 1,
+    "explanation": "우선순위 상속 프로토콜(Priority Inheritance Protocol)은 낮은 우선순위 프로세스가 높은 우선순위 프로세스가 필요로 하는 자원을 보유할 때, 일시적으로 높은 우선순위를 상속받아 빨리 실행 완료하고 자원을 반납하게 합니다."
+  },
+  {
+    "id": "sn-011",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "한 번에 하나의 프로세스만 접근해야 하는 코드 영역을 ___이라 한다.",
+    "blankAnswers": [["critical section", "임계구역", "임계 구역", "크리티컬 섹션"]],
+    "explanation": "임계구역(Critical Section)은 공유 자원에 접근하는 코드 영역으로, 동시에 둘 이상의 프로세스가 실행하면 race condition이 발생할 수 있어 상호 배제가 필요합니다.",
+    "blankDistractors": [["mutual exclusion", "semaphore", "monitor"]]
+  },
+  {
+    "id": "sn-012",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "세마포어의 두 가지 원자적 연산은 ___와 ___이다.",
+    "blankAnswers": [["wait", "P", "down"], ["signal", "V", "up"]],
+    "explanation": "세마포어의 wait(P) 연산은 세마포어 값을 감소시키고, 값이 음수이면 프로세스를 블록합니다. signal(V) 연산은 세마포어 값을 증가시키고, 대기 중인 프로세스가 있으면 깨웁니다.",
+    "blankDistractors": [["lock", "acquire"], ["unlock", "release"]]
+  },
+  {
+    "id": "sn-013",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "두 프로세스 간의 상호 배제를 소프트웨어적으로 해결한 알고리즘으로, flag 배열과 turn 변수를 사용하는 것은 ___이다.",
+    "blankAnswers": [["Peterson's solution", "피터슨 알고리즘", "Peterson's algorithm", "Peterson"]],
+    "explanation": "Peterson's Solution은 두 프로세스 간의 임계구역 문제를 소프트웨어적으로 해결합니다. 각 프로세스의 진입 의사를 나타내는 flag 배열과 양보를 위한 turn 변수를 사용하여 상호 배제, 진행, 한정 대기를 모두 만족합니다.",
+    "blankDistractors": [["Dekker's algorithm", "Bakery algorithm", "Lamport"]]
+  },
+  {
+    "id": "sn-014",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "생산자-소비자 문제에서 버퍼가 가득 찬 경우 생산자는 ___ 상태가 되고, 버퍼가 비어있으면 소비자는 ___ 상태가 된다.",
+    "blankAnswers": [["block", "대기", "blocked", "wait"], ["block", "대기", "blocked", "wait"]],
+    "explanation": "유한 버퍼(Bounded Buffer) 생산자-소비자 문제에서, 버퍼가 가득 차면 생산자는 빈 공간이 생길 때까지 대기(block)하고, 버퍼가 비면 소비자는 데이터가 들어올 때까지 대기합니다. 세마포어로 이를 구현합니다.",
+    "blankDistractors": [["running", "terminated"], ["running", "ready"]]
+  },
+  {
+    "id": "sn-015",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "독자-저자(Readers-Writers) 문제에서 여러 ___는 동시에 공유 데이터를 읽을 수 있지만, ___는 배타적으로 접근해야 한다.",
+    "blankAnswers": [["reader", "독자"], ["writer", "저자"]],
+    "explanation": "독자-저자 문제에서 독자(reader)들은 데이터를 수정하지 않으므로 동시 접근이 가능하지만, 저자(writer)는 데이터를 수정하므로 다른 독자나 저자와 동시에 접근할 수 없습니다.",
+    "blankDistractors": [["producer", "consumer"], ["consumer", "producer"]]
+  },
+  {
+    "id": "sn-016",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "모니터에서 프로세스가 특정 조건을 기다릴 때 사용하는 ___의 두 연산은 wait()과 signal()이다.",
+    "blankAnswers": [["condition variable", "조건 변수"]],
+    "explanation": "조건 변수(Condition Variable)는 모니터 내에서 프로세스가 특정 조건이 충족될 때까지 대기하거나, 다른 프로세스에게 조건 충족을 알리기 위해 사용됩니다. wait()으로 대기하고 signal()로 깨웁니다.",
+    "blankDistractors": [["semaphore", "mutex", "spinlock"]]
+  },
+  {
+    "id": "sn-017",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "하드웨어 동기화 명령어 중, 메모리의 값을 읽고 새 값을 원자적으로 저장하는 명령어를 ___이라 하고, 기대값과 같을 때만 새 값으로 교체하는 명령어를 ___이라 한다.",
+    "blankAnswers": [["test_and_set", "TAS"], ["compare_and_swap", "CAS"]],
+    "explanation": "test_and_set(TAS)은 메모리 위치의 값을 읽고 1로 설정하는 원자적 연산입니다. compare_and_swap(CAS)은 메모리 값이 기대값과 같을 때만 새 값으로 교체하는 원자적 연산으로, 더 유연한 동기화가 가능합니다.",
+    "blankDistractors": [["fetch_and_add", "swap", "xchg"], ["spin_lock", "fetch_and_add", "mutex"]]
+  },
+  {
+    "id": "sn-018",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "세마포어를 이용한 동기화에서, wait() 연산 호출 순서를 잘못하면 ___이 발생할 수 있으므로 자원 획득 순서에 주의해야 한다.",
+    "blankAnswers": [["deadlock", "교착 상태", "데드락"]],
+    "explanation": "두 프로세스가 서로 다른 순서로 세마포어의 wait()을 호출하면, 각자 하나의 자원을 점유한 채 상대방의 자원을 기다리는 교착 상태(deadlock)가 발생할 수 있습니다.",
+    "blankDistractors": [["starvation", "race condition", "livelock"]]
+  },
+  {
+    "id": "sn-019",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "뮤텍스를 사용하여 임계구역을 보호하는 기본 패턴을 완성하시오.",
+    "codeTemplate": "#include <pthread.h>\n\npthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;\nint shared_data = 0;\n\nvoid *worker(void *arg) {\n    ___(&mutex);\n    shared_data++;\n    ___(&mutex);\n    return NULL;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["pthread_mutex_lock"], ["pthread_mutex_unlock"]],
+    "explanation": "pthread_mutex_lock()으로 뮤텍스를 획득하여 임계구역에 진입하고, 작업 후 pthread_mutex_unlock()으로 뮤텍스를 해제합니다. 이 사이의 코드가 임계구역이 되어 상호 배제가 보장됩니다.",
+    "blankDistractors": [["pthread_mutex_init", "sem_wait", "pthread_mutex_trylock"], ["pthread_mutex_destroy", "sem_post", "pthread_exit"]]
+  },
+  {
+    "id": "sn-020",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "세마포어를 초기화하고 wait/signal 연산을 수행하는 코드를 완성하시오.",
+    "codeTemplate": "#include <semaphore.h>\n\nsem_t sem;\n\nvoid init() {\n    sem_init(&sem, 0, ___);\n}\n\nvoid enter_critical() {\n    ___(&sem);\n}\n\nvoid exit_critical() {\n    sem_post(&sem);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["1"], ["sem_wait"]],
+    "explanation": "이진 세마포어로 사용하기 위해 초기값을 1로 설정합니다. sem_wait()은 세마포어 값을 감소시키고(0이면 블록), sem_post()는 값을 증가시킵니다.",
+    "blankDistractors": [["0", "2", "-1"], ["sem_post", "sem_trywait", "sem_destroy"]]
+  },
+  {
+    "id": "sn-021",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "유한 버퍼 생산자-소비자 문제에서 세마포어를 사용하는 생산자 코드를 완성하시오.",
+    "codeTemplate": "sem_t empty, full, mutex;\n// empty = N, full = 0, mutex = 1\n\nvoid producer(int item) {\n    sem_wait(&___);\n    sem_wait(&mutex);\n    add_to_buffer(item);\n    sem_post(&mutex);\n    sem_post(&___);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["empty"], ["full"]],
+    "explanation": "생산자는 먼저 empty 세마포어를 대기하여 빈 공간을 확인하고, mutex로 버퍼 접근을 보호합니다. 아이템 추가 후 mutex를 해제하고, full 세마포어를 signal하여 소비자에게 데이터가 있음을 알립니다.",
+    "blankDistractors": [["count", "mutex", "buffer"], ["available", "mutex", "buffer"]]
+  },
+  {
+    "id": "sn-022",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Python에서 조건 변수를 사용하여 생산자-소비자 패턴을 구현하는 코드를 완성하시오.",
+    "codeTemplate": "import threading\n\ncondition = threading.___\nbuffer = []\n\ndef producer(item):\n    with condition:\n        buffer.append(item)\n        condition.___()\n\ndef consumer():\n    with condition:\n        while not buffer:\n            condition.___()\n        return buffer.pop(0)",
+    "codeLanguage": "python",
+    "blankAnswers": [["Condition()"], ["notify"], ["wait"]],
+    "explanation": "threading.Condition()으로 조건 변수를 생성합니다. 생산자는 아이템 추가 후 notify()로 대기 중인 소비자를 깨우고, 소비자는 버퍼가 비어있으면 wait()으로 대기합니다.",
+    "blankDistractors": [["Lock()", "Semaphore()", "Event()"], ["signal", "wake", "resume"], ["sleep", "block", "pause"]]
+  },
+  {
+    "id": "sn-023",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "test_and_set 명령어를 사용하여 스핀락을 구현하는 의사코드를 완성하시오.",
+    "codeTemplate": "bool lock = false;\n\nbool test_and_set(bool *target) {\n    bool rv = *target;\n    *target = ___;\n    return rv;\n}\n\nvoid acquire() {\n    while (test_and_set(&lock) == ___)\n        ; // busy wait\n}\n\nvoid release() {\n    lock = false;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["true"], ["true"]],
+    "explanation": "test_and_set은 target 값을 true로 설정하고 이전 값을 반환합니다. 락이 해제 상태(false)이면 true로 설정하고 false를 반환하여 루프를 빠져나갑니다. 이미 잠긴 상태(true)이면 true를 반환하여 계속 대기합니다.",
+    "blankDistractors": [["false", "1", "0"], ["false", "1", "0"]]
+  },
+  {
+    "id": "sn-024",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "compare_and_swap(CAS) 명령어를 사용하여 뮤텍스를 구현하는 의사코드를 완성하시오.",
+    "codeTemplate": "int lock = 0;\n\nbool compare_and_swap(int *value, int expected, int new_value) {\n    if (*value == ___) {\n        *value = new_value;\n        return true;\n    }\n    return false;\n}\n\nvoid acquire() {\n    while (!compare_and_swap(&lock, ___, 1))\n        ; // busy wait\n}\n\nvoid release() {\n    lock = 0;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["expected"], ["0"]],
+    "explanation": "CAS는 현재 값이 기대값(expected)과 같을 때만 새 값으로 교체합니다. 락 획득 시 lock이 0(해제 상태)인 경우에만 1로 변경합니다. 이미 1이면 CAS가 실패하여 계속 대기합니다.",
+    "blankDistractors": [["new_value", "value", "2"], ["1", "-1", "lock"]]
+  },
+  {
+    "id": "sn-025",
+    "category": "operating-system",
+    "subcategory": "synchronization",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "독자-저자 문제에서 독자의 동기화 코드를 완성하시오.",
+    "codeTemplate": "sem_t rw_mutex, mutex;\nint read_count = 0;\n// rw_mutex = 1, mutex = 1\n\nvoid reader() {\n    sem_wait(&mutex);\n    read_count++;\n    if (read_count == ___)\n        sem_wait(&rw_mutex);\n    sem_post(&mutex);\n\n    /* 읽기 수행 */\n\n    sem_wait(&mutex);\n    read_count--;\n    if (read_count == ___)\n        sem_post(&rw_mutex);\n    sem_post(&mutex);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["1"], ["0"]],
+    "explanation": "첫 번째 독자(read_count==1)가 진입할 때 rw_mutex를 획득하여 저자의 접근을 차단합니다. 마지막 독자(read_count==0)가 나갈 때 rw_mutex를 해제하여 저자가 접근할 수 있게 합니다.",
+    "blankDistractors": [["2", "3", "-1"], ["3", "-1", "2"]]
+  }
+]

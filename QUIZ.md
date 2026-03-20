@@ -25,22 +25,41 @@ data/
 │   ├── arm64-virtualization-power.json
 │   ├── dev-conversation.json
 │   └── terminal-lab.json
-└── android-system/        # 17개 서브카테고리
-    ├── system-architecture.json
-    ├── activity-service.json
-    ├── binder-ipc.json
-    ├── hal.json
-    ├── android-runtime.json
-    ├── build-system.json
-    ├── selinux-security.json
-    ├── init-zygote.json
-    ├── framework-services.json
-    ├── hidl-aidl.json
-    ├── boot-integrity-updates.json
-    ├── platform-debugging-performance.json
-    ├── platform-modularity-virtualization.json
-    ├── arm64-platform.json
-    ├── arm64-development.json
+├── android-system/        # 17개 서브카테고리
+│   ├── system-architecture.json
+│   ├── activity-service.json
+│   ├── binder-ipc.json
+│   ├── hal.json
+│   ├── android-runtime.json
+│   ├── build-system.json
+│   ├── selinux-security.json
+│   ├── init-zygote.json
+│   ├── framework-services.json
+│   ├── hidl-aidl.json
+│   ├── boot-integrity-updates.json
+│   ├── platform-debugging-performance.json
+│   ├── platform-modularity-virtualization.json
+│   ├── arm64-platform.json
+│   ├── arm64-development.json
+│   ├── dev-conversation.json
+│   └── terminal-lab.json
+└── operating-system/      # 18개 서브카테고리
+    ├── process-thread.json
+    ├── cpu-scheduling.json
+    ├── synchronization.json
+    ├── deadlock.json
+    ├── virtual-memory.json
+    ├── memory-management.json
+    ├── file-system-theory.json
+    ├── io-interrupt.json
+    ├── protection-security.json
+    ├── os-architecture.json
+    ├── bsp-bootloader.json
+    ├── device-tree.json
+    ├── cross-build.json
+    ├── board-bringup.json
+    ├── power-thermal.json
+    ├── kernel-porting.json
     ├── dev-conversation.json
     └── terminal-lab.json
 ```
@@ -49,7 +68,7 @@ data/
 
 ## 파일당 구성
 
-### 일반 서브카테고리 (28파일, 25문제/파일)
+### 일반 서브카테고리 (44파일, 25문제/파일)
 
 | 항목 | 값 |
 |------|-----|
@@ -59,7 +78,7 @@ data/
 | 코드 빈칸 채우기 (code-fill) | 7문제 |
 | 난이도 분배 | 초급/중급/고급 균등 |
 
-### 대화형 서브카테고리 (dev-conversation, 2파일)
+### 대화형 서브카테고리 (dev-conversation, 3파일)
 
 | 항목 | 값 |
 |------|-----|
@@ -68,7 +87,7 @@ data/
 | 대화형 빈칸 (conversation/fill-blank) | 10문제 |
 | 난이도 분배 | 초급 8 / 중급 9 / 고급 8 |
 
-### 터미널 실습 서브카테고리 (terminal-lab, 2파일)
+### 터미널 실습 서브카테고리 (terminal-lab, 3파일)
 
 | 항목 | 값 |
 |------|-----|
@@ -83,7 +102,7 @@ data/
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
 | `id` | `string` | O | 고유 식별자. `{서브카테고리 약어}-{번호}` 형식 (예: `mm-001`) |
-| `category` | `"linux-kernel" \| "android-system"` | O | 상위 카테고리 |
+| `category` | `"linux-kernel" \| "android-system" \| "operating-system"` | O | 상위 카테고리 |
 | `subcategory` | `string` | O | 서브카테고리 (파일명과 일치) |
 | `difficulty` | `"초급" \| "중급" \| "고급"` | O | 난이도 |
 | `type` | `"multiple-choice" \| "short-answer" \| "code-fill" \| "conversation" \| "terminal"` | O | 문제 유형 |
@@ -340,6 +359,24 @@ data/
 | android-system | dev-conversation | `ad-` |
 | linux-kernel | terminal-lab | `lk-tl-` |
 | android-system | terminal-lab | `as-tl-` |
+| operating-system | process-thread | `pt-` |
+| operating-system | cpu-scheduling | `cs-` |
+| operating-system | synchronization | `sn-` |
+| operating-system | deadlock | `dl-` |
+| operating-system | virtual-memory | `vm-` |
+| operating-system | memory-management | `mg-` |
+| operating-system | file-system-theory | `ft-` |
+| operating-system | io-interrupt | `ii-` |
+| operating-system | protection-security | `ps-` |
+| operating-system | os-architecture | `oa-` |
+| operating-system | bsp-bootloader | `bl-` |
+| operating-system | device-tree | `dt-` |
+| operating-system | cross-build | `cb-` |
+| operating-system | board-bringup | `bb-` |
+| operating-system | power-thermal | `pw-` |
+| operating-system | kernel-porting | `kp-` |
+| operating-system | dev-conversation | `oc-` |
+| operating-system | terminal-lab | `os-tl-` |
 
 번호는 3자리 zero-padded (예: `mm-001`, `mm-025`, `lk-tl-001`). 파일 내에서 순번이 연속적이어야 합니다.
 
@@ -371,7 +408,7 @@ data/
 ```typescript
 type QuizType = "multiple-choice" | "short-answer" | "code-fill" | "conversation" | "terminal";
 type Difficulty = "초급" | "중급" | "고급";
-type Category = "linux-kernel" | "android-system";
+type Category = "linux-kernel" | "android-system" | "operating-system";
 type ScenarioType = "bug-report" | "code-review" | "design-discussion";
 
 interface ConversationMessage {
@@ -406,3 +443,15 @@ interface Quiz {
   explanation: string;
 }
 ```
+
+## 카테고리 간 경계 가이드라인
+
+| 카테고리 | 범위 | 문제 스타일 |
+|----------|------|------------|
+| `operating-system` | 교과서 수준 OS 이론 + 범용 BSP 워크플로우 (크로스 플랫폼) | "OS 이론에서 ___란?" / "BSP 실무에서 ___하는 과정은?" |
+| `linux-kernel` | Linux 커널 소스 수준 구현 상세 | "Linux 커널의 ___함수/구조체는?" |
+| `android-system` | Android 플랫폼 스택/프레임워크 통합 | "Android의 ___서비스/컴포넌트는?" |
+
+- 개념 수준 중복은 허용하되, 문제 내용/스타일 중복은 금지
+- 예: "페이지 교체 알고리즘" 개념은 OS 이론에서, "Linux의 kswapd 구현"은 linux-kernel에서 다룸
+- 예: "부트로더 체인" 개념은 OS BSP에서, "Android ABL의 dm-verity"는 android-system에서 다룸

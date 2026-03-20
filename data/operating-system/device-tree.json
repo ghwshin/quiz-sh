@@ -1,0 +1,321 @@
+[
+  {
+    "id": "dt-001",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Device Tree Source(DTS) 파일을 바이너리 형태인 DTB로 변환하는 컴파일러는?",
+    "options": ["gcc", "dtc", "make", "as"],
+    "answer": 1,
+    "explanation": "dtc(Device Tree Compiler)는 사람이 읽을 수 있는 DTS 파일을 커널이 파싱하는 바이너리 DTB(Device Tree Blob)로 컴파일합니다. 역방향(DTB→DTS) 디컴파일도 지원합니다."
+  },
+  {
+    "id": "dt-002",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "디바이스 트리에서 장치와 드라이버를 매칭하는 데 사용되는 핵심 속성은?",
+    "options": ["reg", "status", "compatible", "interrupts"],
+    "answer": 2,
+    "explanation": "compatible 속성은 \"vendor,device\" 형식의 문자열 목록으로, 커널이 디바이스 노드에 적합한 드라이버를 찾을 때 이 값을 of_match_table과 비교하여 매칭합니다."
+  },
+  {
+    "id": "dt-003",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "디바이스 트리 노드에서 장치의 MMIO(Memory-Mapped I/O) 주소 범위를 지정하는 속성은?",
+    "options": ["interrupts", "clocks", "reg", "ranges"],
+    "answer": 2,
+    "explanation": "reg 속성은 <address length> 쌍으로 장치의 메모리 매핑 영역을 지정합니다. 부모 노드의 #address-cells와 #size-cells에 의해 각 값의 셀 수가 결정됩니다."
+  },
+  {
+    "id": "dt-004",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "DTBO(Device Tree Overlay)의 주요 용도로 가장 적합한 것은?",
+    "options": [
+      "기본 DTB를 완전히 교체하여 새로운 하드웨어 구성을 적용한다",
+      "런타임에 기본 DTB에 노드를 추가·수정하여 확장 보드나 모듈을 지원한다",
+      "DTB의 크기를 줄여 부팅 속도를 최적화한다",
+      "보안 검증을 위해 DTB에 디지털 서명을 추가한다"
+    ],
+    "answer": 1,
+    "explanation": "DTBO는 기본 DTB에 오버레이를 적용하여 노드를 추가하거나 속성을 변경합니다. HAT/Shield 같은 확장 보드, Android의 ODM 커스터마이징 등에서 기본 SoC DTB를 수정하지 않고 하드웨어 차이를 반영할 수 있습니다."
+  },
+  {
+    "id": "dt-005",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "디바이스 트리에서 phandle의 역할은?",
+    "options": [
+      "노드의 이름을 정의하는 고유 식별자이다",
+      "다른 노드를 참조하기 위한 숫자형 핸들로 노드 간 관계를 표현한다",
+      "디바이스의 인터럽트 번호를 할당하는 속성이다",
+      "메모리 영역의 물리 주소를 지정하는 포인터이다"
+    ],
+    "answer": 1,
+    "explanation": "phandle은 디바이스 트리 내에서 노드 간 참조를 위한 고유 숫자 ID입니다. DTS에서는 &label 문법으로 참조하면 dtc가 자동으로 phandle 값을 할당합니다. clocks, interrupt-parent 등의 속성에서 다른 노드를 가리킬 때 사용됩니다."
+  },
+  {
+    "id": "dt-006",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "리눅스에서 런타임에 디바이스 트리를 확인할 수 있는 경로는?",
+    "options": [
+      "/sys/firmware/devicetree",
+      "/proc/device-tree",
+      "/dev/fdt0",
+      "/etc/devicetree"
+    ],
+    "answer": 1,
+    "explanation": "/proc/device-tree(실제로 /sys/firmware/devicetree/base의 심볼릭 링크)를 통해 커널에 로드된 디바이스 트리를 디렉토리 구조로 탐색할 수 있습니다. 각 노드는 디렉토리, 각 속성은 파일로 표현됩니다."
+  },
+  {
+    "id": "dt-007",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "디바이스 트리의 chosen 노드에 대한 올바른 설명은?",
+    "options": [
+      "실제 하드웨어 장치를 기술하며 드라이버와 매칭된다",
+      "부트로더에서 커널로 전달하는 런타임 파라미터를 저장하며 하드웨어를 기술하지 않는다",
+      "디바이스 트리의 루트 속성을 상속받는 기본 노드이다",
+      "커널 모듈의 로딩 순서를 정의하는 노드이다"
+    ],
+    "answer": 1,
+    "explanation": "chosen 노드는 실제 하드웨어를 기술하지 않으며, bootargs(커널 커맨드 라인), stdout-path(콘솔 장치), linux,initrd-start/end(initrd 위치) 등 부트로더가 커널에 전달하는 런타임 정보를 포함합니다."
+  },
+  {
+    "id": "dt-008",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "디바이스 트리의 #address-cells = <2>와 #size-cells = <2>가 설정된 부모 노드에서, 자식 노드의 reg 속성 하나의 엔트리는 몇 개의 32비트 셀로 구성되는가?",
+    "options": ["2개", "3개", "4개", "6개"],
+    "answer": 2,
+    "explanation": "#address-cells = <2>는 주소가 2개의 32비트 셀(64비트)로, #size-cells = <2>는 크기가 2개의 32비트 셀(64비트)로 표현됨을 의미합니다. 따라서 하나의 reg 엔트리는 총 4개의 32비트 셀(주소 2 + 크기 2)로 구성됩니다."
+  },
+  {
+    "id": "dt-009",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "디바이스 트리에서 pinctrl 바인딩의 pinctrl-names와 pinctrl-0의 관계에 대한 올바른 설명은?",
+    "options": [
+      "pinctrl-names는 GPIO 핀 번호를 나열하고 pinctrl-0은 방향을 설정한다",
+      "pinctrl-names는 상태 이름을 정의하고 pinctrl-0은 'default' 상태의 핀 설정 phandle이다",
+      "pinctrl-names는 핀 그룹명이고 pinctrl-0은 풀업/풀다운 설정이다",
+      "pinctrl-names는 드라이버 이름이고 pinctrl-0은 첫 번째 핀의 물리 주소이다"
+    ],
+    "answer": 1,
+    "explanation": "pinctrl-names = \"default\", \"sleep\" 등으로 상태 이름을 정의하고, pinctrl-0은 인덱스 0(default) 상태의 핀 설정 노드를 phandle로 참조합니다. 드라이버는 상태 이름으로 핀 설정을 전환할 수 있습니다."
+  },
+  {
+    "id": "dt-010",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "디바이스 트리 노드의 status 속성 값이 \"disabled\"일 때의 의미는?",
+    "options": [
+      "장치가 물리적으로 존재하지 않음을 나타낸다",
+      "장치가 존재하지만 커널에서 해당 노드의 드라이버를 프로빙하지 않는다",
+      "장치 드라이버가 아직 로드되지 않았음을 나타낸다",
+      "장치의 전원이 꺼져 있어 접근할 수 없음을 나타낸다"
+    ],
+    "answer": 1,
+    "explanation": "status = \"disabled\"는 장치 노드가 존재하지만 커널이 해당 장치의 드라이버를 프로빙하지 않도록 합니다. SoC DTSI에서 모든 주변장치를 disabled로 선언한 후, 보드 DTS에서 실제 사용하는 장치만 \"okay\"로 활성화하는 패턴이 일반적입니다."
+  },
+  {
+    "id": "dt-011",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "디바이스 트리 노드의 상태를 활성화하려면 status 속성을 ___로 설정한다.",
+    "blankAnswers": [["okay", "\"okay\""]],
+    "explanation": "status = \"okay\"로 설정하면 커널이 해당 노드의 드라이버를 프로빙합니다. SoC DTSI에서 disabled로 선언된 주변장치를 보드 DTS에서 okay로 변경하여 활성화하는 것이 일반적인 패턴입니다.",
+    "blankDistractors": [["enabled", "active", "on"]]
+  },
+  {
+    "id": "dt-012",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "DTS 파일에서 다른 DTS/DTSI 파일을 포함할 때 사용하는 지시문은 ___이다.",
+    "blankAnswers": [["/include/", "#include"]],
+    "explanation": "/include/ 또는 C 전처리기의 #include를 사용하여 DTSI(Device Tree Source Include) 파일을 포함합니다. DTSI는 SoC 공통 정의를 담고, 보드별 DTS에서 이를 포함한 후 보드 고유 설정을 추가/오버라이드합니다.",
+    "blankDistractors": [["import", "require", "source"]]
+  },
+  {
+    "id": "dt-013",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "디바이스 트리에서 aliases 노드는 ___를 짧은 이름으로 매핑하며, 예를 들어 serial0 = &uart0 형태로 정의한다.",
+    "blankAnswers": [["노드 경로", "node path", "디바이스 노드"]],
+    "explanation": "aliases 노드는 긴 노드 경로를 짧은 별칭으로 매핑합니다. 커널은 aliases를 통해 디바이스 번호를 결정하므로, serial0 = &uart0이면 해당 UART가 /dev/ttyS0으로 할당됩니다.",
+    "blankDistractors": [["인터럽트", "클록 소스", "메모리 주소"]]
+  },
+  {
+    "id": "dt-014",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "디바이스 트리 바이너리(DTB)의 내용을 사람이 읽을 수 있는 형태로 덤프하는 명령어는 ___이다.",
+    "blankAnswers": [["fdtdump", "dtc -I dtb -O dts"]],
+    "explanation": "fdtdump는 DTB 파일을 사람이 읽을 수 있는 DTS 형태로 출력합니다. 'dtc -I dtb -O dts board.dtb'로도 동일한 결과를 얻을 수 있습니다. 런타임에는 /proc/device-tree를 탐색할 수 있습니다.",
+    "blankDistractors": [["hexdump", "objdump", "readelf"]]
+  },
+  {
+    "id": "dt-015",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "디바이스 트리에서 인터럽트 컨트롤러 노드에 반드시 선언해야 하는, 자신이 인터럽트 컨트롤러임을 나타내는 속성은 ___이다.",
+    "blankAnswers": [["interrupt-controller"]],
+    "explanation": "interrupt-controller 속성(값 없는 빈 속성)은 해당 노드가 인터럽트 컨트롤러임을 선언합니다. 함께 #interrupt-cells 속성으로 인터럽트 지정자의 셀 수를 정의합니다(GIC의 경우 보통 3).",
+    "blankDistractors": [["interrupt-parent", "#interrupt-cells", "interrupts"]]
+  },
+  {
+    "id": "dt-016",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "디바이스 트리 오버레이에서 기존 노드의 속성을 수정하거나 자식 노드를 추가할 때 사용하는 타겟 지정 속성은 ___이다.",
+    "blankAnswers": [["target", "target-path"]],
+    "explanation": "DTBO의 fragment에서 target = <&label> 또는 target-path = \"/path\"로 수정할 기존 DTB 노드를 지정합니다. __overlay__ 하위에 변경 사항을 기술하면 기본 DTB에 병합됩니다.",
+    "blankDistractors": [["compatible", "phandle", "ref"]]
+  },
+  {
+    "id": "dt-017",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "커널의 디바이스 트리 바인딩 문서에서, compatible 속성의 패턴은 ___,___  형식으로 벤더와 디바이스를 구분한다.",
+    "blankAnswers": [["vendor", "벤더"], ["device", "디바이스"]],
+    "explanation": "compatible = \"samsung,exynos4210-uart\" 처럼 벤더명과 디바이스명을 콤마로 구분합니다. 바인딩 문서(Documentation/devicetree/bindings/)에서 각 디바이스의 필수/선택 속성을 정의합니다.",
+    "blankDistractors": [["soc", "chip", "manufacturer"], ["model", "variant", "peripheral"]]
+  },
+  {
+    "id": "dt-018",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "DTS 파일을 DTB로 컴파일하는 기본 명령어는 dtc -I dts -O dtb -o output.dtb ___이다.",
+    "blankAnswers": [["input.dts", "source.dts"]],
+    "explanation": "dtc 명령에서 -I dts는 입력 형식(DTS), -O dtb는 출력 형식(DTB), -o는 출력 파일명을 지정하고, 마지막에 입력 DTS 파일명을 전달합니다.",
+    "blankDistractors": [["input.dtb", "source.dtbo", "config.dts"]]
+  },
+  {
+    "id": "dt-019",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "I2C 버스에 연결된 온도 센서의 디바이스 트리 노드를 완성하시오.",
+    "codeTemplate": "&i2c1 {\n    status = \"___\";\n\n    temp_sensor: sensor@48 {\n        ___ = \"ti,tmp102\";\n        reg = <0x48>;\n    };\n};",
+    "codeLanguage": "dts",
+    "blankAnswers": [["okay"], ["compatible"]],
+    "explanation": "status = \"okay\"로 I2C 버스를 활성화하고, compatible = \"ti,tmp102\"로 TI TMP102 온도 센서 드라이버와 매칭합니다. reg = <0x48>은 I2C 슬레이브 주소입니다.",
+    "blankDistractors": [["enabled", "active", "on"], ["device", "driver", "model"]]
+  },
+  {
+    "id": "dt-020",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "디바이스 트리의 chosen 노드에서 커널 부트 파라미터와 콘솔 장치를 설정하는 코드를 완성하시오.",
+    "codeTemplate": "/ {\n    ___ {\n        bootargs = \"console=ttyS0,115200 root=/dev/mmcblk0p2 rootwait\";\n        ___  = \"/serial@12340000\";\n    };\n};",
+    "codeLanguage": "dts",
+    "blankAnswers": [["chosen"], ["stdout-path"]],
+    "explanation": "chosen 노드에 bootargs로 커널 커맨드 라인을, stdout-path로 콘솔 출력 장치를 지정합니다. 부트로더는 이 정보를 읽어 커널에 전달합니다.",
+    "blankDistractors": [["config", "boot", "options"], ["console-path", "serial-out", "tty-path"]]
+  },
+  {
+    "id": "dt-021",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "SPI 버스에 연결된 플래시 메모리의 디바이스 트리 노드를 완성하시오.",
+    "codeTemplate": "&spi0 {\n    status = \"okay\";\n\n    flash@0 {\n        compatible = \"jedec,spi-nor\";\n        reg = <___>;\n        spi-max-frequency = <___>;\n    };\n};",
+    "codeLanguage": "dts",
+    "blankAnswers": [["0"], ["50000000", "25000000", "10000000"]],
+    "explanation": "SPI 디바이스에서 reg은 칩 셀렉트(CS) 번호를 나타냅니다(0은 CS0). spi-max-frequency는 SPI 클록의 최대 주파수(Hz)를 지정합니다.",
+    "blankDistractors": [["1", "2", "0x0"], ["115200", "9600", "1000000"]]
+  },
+  {
+    "id": "dt-022",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "GPIO를 사용하는 LED 디바이스의 디바이스 트리 노드에서 핀 설정을 완성하시오.",
+    "codeTemplate": "leds {\n    compatible = \"gpio-leds\";\n\n    led0 {\n        label = \"status\";\n        gpios = <&___ 5 GPIO_ACTIVE_HIGH>;\n        default-state = \"___\";\n    };\n};",
+    "codeLanguage": "dts",
+    "blankAnswers": [["gpio0", "gpio1", "gpioa"], ["on", "off", "keep"]],
+    "explanation": "gpios 속성에서 &gpio0은 GPIO 컨트롤러 phandle, 5는 핀 번호, GPIO_ACTIVE_HIGH는 활성 극성입니다. default-state는 부팅 시 LED 초기 상태(on/off/keep)를 지정합니다.",
+    "blankDistractors": [["pinctrl", "pmic", "clk"], ["high", "low", "toggle"]]
+  },
+  {
+    "id": "dt-023",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "DTBO(Device Tree Overlay)로 기존 I2C 버스에 새 센서 노드를 추가하는 오버레이를 완성하시오.",
+    "codeTemplate": "/dts-v1/;\n/plugin/;\n\n&i2c2 {\n    #address-cells = <___>;\n    #size-cells = <___>;\n\n    accel@1d {\n        compatible = \"st,lis3dh\";\n        reg = <0x1d>;\n        interrupt-parent = <&gpio1>;\n        interrupts = <7 IRQ_TYPE_EDGE_RISING>;\n    };\n};",
+    "codeLanguage": "dts",
+    "blankAnswers": [["1"], ["0"]],
+    "explanation": "I2C 버스에서 #address-cells = <1>은 I2C 슬레이브 주소가 1셀(7비트)임을, #size-cells = <0>은 크기 속성이 없음을 의미합니다. /plugin/ 지시문은 이 파일이 오버레이임을 선언합니다.",
+    "blankDistractors": [["2", "4", "8"], ["2", "3", "4"]]
+  },
+  {
+    "id": "dt-024",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "UART 디바이스 노드에서 핀 컨트롤 설정을 포함한 디바이스 트리를 완성하시오.",
+    "codeTemplate": "uart2: serial@12360000 {\n    compatible = \"samsung,exynos4210-uart\";\n    reg = <0x12360000 0x100>;\n    interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;\n    ___-names = \"default\";\n    ___-0 = <&uart2_pins>;\n    status = \"okay\";\n};",
+    "codeLanguage": "dts",
+    "blankAnswers": [["pinctrl"], ["pinctrl"]],
+    "explanation": "pinctrl-names는 핀 설정 상태의 이름을 정의하고, pinctrl-0은 인덱스 0(default) 상태에서 사용할 핀 설정 노드를 참조합니다. 드라이버가 활성화될 때 해당 핀먹스 설정이 자동으로 적용됩니다.",
+    "blankDistractors": [["gpio", "clock", "pin"], ["gpio", "clock", "pin"]]
+  },
+  {
+    "id": "dt-025",
+    "category": "operating-system",
+    "subcategory": "device-tree",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "커널 드라이버에서 디바이스 트리의 compatible 속성을 이용해 of_match_table을 정의하는 코드를 완성하시오.",
+    "codeTemplate": "static const struct of_device_id my_sensor_of_match[] = {\n    { .___ = \"vendor,my-sensor\" },\n    { /* sentinel */ }\n};\n___(my_sensor_of_match);",
+    "codeLanguage": "c",
+    "blankAnswers": [["compatible"], ["MODULE_DEVICE_TABLE(of, my_sensor_of_match)", "MODULE_DEVICE_TABLE"]],
+    "explanation": "of_device_id 구조체의 .compatible 필드에 매칭할 문자열을 지정합니다. MODULE_DEVICE_TABLE(of, ...)은 모듈 로딩 시 자동 매칭을 위해 디바이스 테이블을 등록하는 매크로입니다.",
+    "blankDistractors": [["device", "name", "driver"], ["EXPORT_SYMBOL", "module_init", "DECLARE_DRIVER"]]
+  }
+]

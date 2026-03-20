@@ -13,7 +13,7 @@ export interface QuizFile {
 
 export function loadAllQuizFiles(): QuizFile[] {
   const results: QuizFile[] = [];
-  const categories: Category[] = ["linux-kernel", "android-system"];
+  const categories: Category[] = ["linux-kernel", "android-system", "operating-system"];
 
   for (const category of categories) {
     const categoryDir = path.join(DATA_DIR, category);
@@ -73,6 +73,24 @@ export const ID_PREFIX_MAP: Record<string, string> = {
   ad: "dev-conversation",
   "lk-tl": "terminal-lab",
   "as-tl": "terminal-lab",
+  pt: "process-thread",
+  cs: "cpu-scheduling",
+  sn: "synchronization",
+  dl: "deadlock",
+  vm: "virtual-memory",
+  mg: "memory-management",
+  ft: "file-system-theory",
+  ii: "io-interrupt",
+  ps: "protection-security",
+  oa: "os-architecture",
+  bl: "bsp-bootloader",
+  dt: "device-tree",
+  cb: "cross-build",
+  bb: "board-bringup",
+  pw: "power-thermal",
+  kp: "kernel-porting",
+  oc: "dev-conversation",
+  "os-tl": "terminal-lab",
 };
 
 // Reverse map: subcategory -> prefix (for subcategories with multiple prefixes, use category-aware lookup)
@@ -82,8 +100,9 @@ export const SUBCATEGORY_PREFIX_MAP: Record<string, string> = Object.fromEntries
 
 // Category-aware prefix map for subcategories shared across categories
 export const CATEGORY_PREFIX_MAP: Record<string, Record<string, string>> = {
-  "linux-kernel": { "dev-conversation": "dc", "terminal-lab": "lk-tl" },
+  "linux-kernel": { "dev-conversation": "dc", "terminal-lab": "lk-tl", "memory-management": "mm" },
   "android-system": { "dev-conversation": "ad", "terminal-lab": "as-tl" },
+  "operating-system": { "dev-conversation": "oc", "terminal-lab": "os-tl", "memory-management": "mg" },
 };
 
 /** Get expected ID prefix for a subcategory, optionally with category context */

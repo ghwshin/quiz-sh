@@ -1,0 +1,1236 @@
+[
+  {
+    "id": "oc-001",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "임베디드 보드에서 부팅 중 커널이 멈춰요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "시리얼 로그입니다.",
+        "code": "Starting kernel ...\n\n\n(nothing after this)",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "커널 이미지가 깨진 것 같아요. 다시 빌드해봐야 하지 않을까요?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "커널 패닉이 발생한 것입니다. crashdump를 분석하세요."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "'Starting kernel...' 이후 아무 출력이 없다는 건 커널이 시리얼 콘솔을 초기화하지 못했다는 뜻이에요. 디바이스 트리의 chosen 노드에서 stdout-path를 확인해보세요."
+      }
+    ],
+    "question": "'Starting kernel...' 이후 출력이 없는 원인으로 가장 가능성이 높은 것은?",
+    "options": [
+      "커널 이미지 손상",
+      "디바이스 트리의 콘솔 설정 오류",
+      "커널 패닉 발생",
+      "eMMC 읽기 실패"
+    ],
+    "answer": 1,
+    "explanation": "커널이 시작되었지만 시리얼 출력이 없는 경우, 대부분 디바이스 트리의 chosen 노드에서 stdout-path가 올바른 UART를 가리키지 않거나, 해당 UART 드라이버가 커널에 포함되지 않은 것이 원인입니다."
+  },
+  {
+    "id": "oc-002",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "멀티스레드 프로그램이 가끔 응답을 멈추는데, CPU 사용률은 0%에요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "strace로 확인했더니 두 스레드가 모두 futex에서 대기 중이에요.",
+        "code": "Thread 1: futex(0x7f...100, FUTEX_WAIT, ...)\nThread 2: futex(0x7f...200, FUTEX_WAIT, ...)",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "메모리 부족이 아닐까요? free 명령어로 확인해볼게요."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "스레드가 멈추면 그냥 kill하고 재시작해. 빨리빨리."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "두 스레드가 서로 다른 잠금을 잡고 상대방의 잠금을 기다리는 상황이에요. 이런 교착 상태를 해결하려면 잠금 획득 순서를 일관되게 맞춰야 해요."
+      }
+    ],
+    "question": "두 스레드가 모두 futex에서 대기하며 프로그램이 멈추는 현상의 원인은?",
+    "options": [
+      "메모리 부족으로 인한 스왑 대기",
+      "데드락(교착 상태)으로 인한 상호 대기",
+      "CPU 스케줄링 우선순위가 너무 낮음",
+      "네트워크 소켓의 타임아웃 대기"
+    ],
+    "answer": 1,
+    "explanation": "두 스레드가 서로 다른 뮤텍스를 잡고 상대방의 뮤텍스를 기다리면 데드락이 발생합니다. CPU 사용률이 0%인 것은 스레드가 spin이 아닌 sleep 대기(futex) 상태이기 때문입니다. 잠금 획득 순서를 일관되게 통일하면 예방할 수 있습니다."
+  },
+  {
+    "id": "oc-003",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "임베디드 보드에서 특정 앱을 실행하면 segfault가 나요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "dmesg 로그입니다.",
+        "code": "myapp[1234]: segfault at 0 ip 00007f...3a4 sp 00007ff...e90 error 4 in libc.so.6",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "libc.so.6 라이브러리가 손상된 것 같습니다. 패키지를 재설치하세요."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "크로스 빌드 환경 문제가 아닐까?"
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "'segfault at 0'을 주목해봐요. 주소 0에서 폴트가 발생했다는 건 NULL 포인터를 역참조했다는 뜻이에요. 어디서 NULL이 되는지 gdb로 backtrace를 확인해보세요."
+      }
+    ],
+    "question": "'segfault at 0' 메시지에서 주소 0은 무엇을 의미하는가?",
+    "options": [
+      "스택 오버플로우가 발생한 메모리 주소",
+      "NULL 포인터 역참조(dereference)가 발생함",
+      "프로그램의 시작 주소",
+      "공유 라이브러리의 베이스 주소"
+    ],
+    "answer": 1,
+    "explanation": "segfault at 0은 프로그램이 주소 0(NULL)에 접근하려 했다는 뜻입니다. 이는 초기화되지 않은 포인터나 함수 반환값 체크 누락으로 인한 NULL 포인터 역참조가 원인입니다. gdb에서 backtrace를 통해 정확한 위치를 찾을 수 있습니다."
+  },
+  {
+    "id": "oc-004",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "design-discussion",
+    "conversation": [
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "신규 BSP 프로젝트에서 페이지 크기를 4KB로 할지 64KB로 할지 결정해야 해요."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "큰 게 좋지 않나? 64KB로 하자."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "페이지가 크면 메모리를 더 많이 쓸 수 있어서 좋은 거 아닌가요?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "64KB 페이지는 항상 성능이 더 좋습니다. 더 큰 TLB 커버리지를 제공합니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "페이지 크기가 크면 TLB 커버리지가 넓어지지만, 작은 파일이나 데이터 구조에서 내부 단편화(internal fragmentation)가 심해져요. 워크로드 특성에 따라 결정해야 해요."
+      }
+    ],
+    "question": "큰 페이지 크기(64KB)를 사용할 때 발생하는 주요 단점은?",
+    "options": [
+      "TLB miss 증가",
+      "내부 단편화로 인한 메모리 낭비 증가",
+      "컨텍스트 스위칭 오버헤드 증가",
+      "파일시스템 호환성 문제"
+    ],
+    "answer": 1,
+    "explanation": "페이지 크기가 크면 실제 사용량보다 많은 메모리가 할당되어 내부 단편화(internal fragmentation)가 증가합니다. 특히 작은 파일, 작은 힙 할당이 많은 워크로드에서 메모리 낭비가 심해집니다. 반면 TLB 커버리지는 넓어져 TLB miss는 줄어들 수 있습니다."
+  },
+  {
+    "id": "oc-005",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "보드에서 커널 빌드 후 부팅이 안 돼요. U-Boot에서 멈춥니다."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "U-Boot 로그입니다.",
+        "code": "=> bootm 0x80008000\n## Booting kernel from Legacy Image at 80008000 ...\n   Image Type:   ARM Linux Kernel Image (uncompressed)\n   Data Size:    0 Bytes = 0 Bytes\n   Wrong Image Format for bootm command\nERROR: can't get kernel image!",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "메모리 주소가 잘못된 것 같아요. 0x80000000으로 바꿔볼까요?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "U-Boot 버전이 오래되어 새 커널 포맷을 지원하지 않습니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "Data Size가 0 Bytes라는 게 핵심이에요. bootm은 uImage 포맷을 기대하는데, zImage나 Image를 직접 넣은 건 아닌지 확인해보세요. mkimage로 uImage를 만들어야 해요."
+      }
+    ],
+    "question": "U-Boot에서 'Wrong Image Format' 에러가 발생하는 가장 일반적인 원인은?",
+    "options": [
+      "메모리 주소가 1바이트 차이로 잘못 지정됨",
+      "커널 이미지가 U-Boot이 기대하는 포맷(uImage)이 아님",
+      "U-Boot 버전이 커널 버전과 호환되지 않음",
+      "eMMC 파티션 테이블이 손상됨"
+    ],
+    "answer": 1,
+    "explanation": "U-Boot의 bootm 명령은 uImage(mkimage로 생성한 U-Boot 헤더가 포함된 이미지) 포맷을 기대합니다. zImage나 Image를 직접 로드하면 헤더를 파싱할 수 없어 에러가 발생합니다. bootz(zImage)나 booti(Image)를 사용하거나 mkimage로 uImage를 생성해야 합니다."
+  },
+  {
+    "id": "oc-006",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "페이지 폴트가 자주 발생하면서 시스템이 느려져요. 물리 메모리는 4GB인데 8GB짜리 프로세스를 실행하고 있습니다."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "vmstat 결과입니다.",
+        "code": "procs -----------memory---------- ---swap--\n r  b   swpd   free   buff  cache   si   so\n 2  5 4100000  12000  1200  45000 12500 13200",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "RAM을 더 추가하면 되지 않나요?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "페이지 폴트는 정상적인 동작입니다. 모든 프로세스는 페이지 폴트를 통해 메모리를 할당받습니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "vmstat에서 si(swap in)와 so(swap out) 값이 매우 높아요. 이건 물리 메모리가 부족해서 페이지가 디스크와 메모리 사이를 계속 오가는 thrashing 현상이에요."
+      }
+    ],
+    "question": "vmstat에서 si/so 값이 높고 시스템이 느려지는 현상을 무엇이라 하는가?",
+    "options": [
+      "메모리 리크(memory leak)",
+      "쓰래싱(thrashing)",
+      "페이지 테이블 워크(page table walk)",
+      "TLB 미스(TLB miss)"
+    ],
+    "answer": 1,
+    "explanation": "쓰래싱(thrashing)은 물리 메모리가 부족하여 페이지가 swap-in과 swap-out을 반복하면서 대부분의 시간을 I/O에 소비하는 현상입니다. 프로세스의 working set이 물리 메모리보다 크면 발생하며, 메모리 증설이나 프로세스 워크로드 감소가 해결책입니다."
+  },
+  {
+    "id": "oc-007",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "code-review",
+    "conversation": [
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "이 디바이스 트리 코드 리뷰 좀 봐주세요. UART 설정인데 이상한 점이 있어요.",
+        "code": "uart0: serial@10000000 {\n    compatible = \"vendor,uart\";\n    reg = <0x10000000 0x100>;\n    interrupt = <0 30 4>;\n    clock-frequency = <48000000>;\n    status = \"okay\";\n};",
+        "codeLanguage": "dts"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "clock-frequency 값이 잘못된 것 같아요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "reg 속성의 주소가 올바른지 확인해야 합니다. 데이터시트와 비교하세요."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "속성 이름을 자세히 봐요. 인터럽트를 정의하는 표준 속성 이름이 맞는지 디바이스 트리 바인딩 문서를 확인해보세요."
+      }
+    ],
+    "question": "이 디바이스 트리 코드에서 문제가 있는 속성은?",
+    "options": [
+      "compatible 값이 잘못됨",
+      "reg 속성의 크기가 부족함",
+      "interrupt 속성 이름이 잘못됨 (올바른 이름: interrupts)",
+      "clock-frequency가 표준 속성이 아님"
+    ],
+    "answer": 2,
+    "explanation": "디바이스 트리에서 인터럽트를 정의하는 표준 속성 이름은 'interrupts'(복수형)입니다. 'interrupt'는 유효한 속성이 아니므로 커널 드라이버가 인터럽트 정보를 찾지 못합니다. 이런 오타는 디바이스 트리 컴파일 시 경고 없이 무시되어 디버깅이 어렵습니다."
+  },
+  {
+    "id": "oc-008",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "BSP 보드에서 커스텀 디바이스 드라이버의 probe가 호출되지 않아요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "디바이스 트리에 노드를 추가했고, 드라이버 코드도 작성했습니다.",
+        "code": "// Device Tree\nmy_sensor: sensor@20000000 {\n    compatible = \"vendor,my-sensor-v2\";\n    reg = <0x20000000 0x1000>;\n    status = \"okay\";\n};\n\n// Driver\nstatic const struct of_device_id my_ids[] = {\n    { .compatible = \"vendor,my-sensor\" },\n    { }\n};",
+        "codeLanguage": "c"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "모듈이 로드는 된 거야? lsmod로 확인해봐."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "reg 속성의 주소 영역이 이미 다른 디바이스에 할당되어 충돌이 발생했을 수 있습니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "디바이스 트리의 compatible 문자열과 드라이버의 of_device_id 테이블을 한 글자씩 비교해봐요. 매칭이 안 되면 probe는 절대 호출되지 않아요."
+      }
+    ],
+    "question": "probe가 호출되지 않는 원인은 무엇인가?",
+    "options": [
+      "reg 속성의 메모리 주소 충돌",
+      "디바이스 트리의 compatible과 드라이버의 compatible 문자열 불일치",
+      "status가 disabled로 설정됨",
+      "커널 모듈이 로드되지 않음"
+    ],
+    "answer": 1,
+    "explanation": "디바이스 트리에는 'vendor,my-sensor-v2'이고 드라이버에는 'vendor,my-sensor'로 compatible 문자열이 다릅니다. 커널의 디바이스 모델은 이 문자열이 정확히 일치해야 드라이버와 디바이스를 매칭하고 probe를 호출합니다."
+  },
+  {
+    "id": "oc-009",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "design-discussion",
+    "conversation": [
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "실시간 센서 데이터 처리 태스크에서 지터(jitter)가 너무 커서 고객이 불만이에요. 스케줄링 정책을 바꿔야 한다는데 어떤 게 좋을까요?"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "nice 값을 -20으로 하면 제일 높은 우선순위 아닌가?"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "SCHED_BATCH로 하면 되나요? 배치 처리니까 실시간 같은 거 아닌가요?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "SCHED_IDLE을 사용하면 유휴 시간에 실행되므로 지터가 최소화됩니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "CFS 계열(SCHED_NORMAL, SCHED_BATCH, SCHED_IDLE)은 실시간 보장을 하지 않아요. 실시간 스케줄링 정책은 SCHED_FIFO와 SCHED_RR 두 가지예요. chrt 명령어로 설정할 수 있어요."
+      }
+    ],
+    "question": "지터를 최소화하기 위해 사용해야 하는 스케줄링 정책은?",
+    "options": [
+      "SCHED_NORMAL (nice -20)",
+      "SCHED_BATCH",
+      "SCHED_FIFO 또는 SCHED_RR",
+      "SCHED_IDLE"
+    ],
+    "answer": 2,
+    "explanation": "SCHED_FIFO와 SCHED_RR은 실시간 스케줄링 정책으로, CFS 계열 정책보다 항상 높은 우선순위를 가집니다. SCHED_FIFO는 같은 우선순위 내에서 선점 없이 실행되고, SCHED_RR은 타임 슬라이스 기반으로 라운드 로빈합니다. 이를 통해 예측 가능한 응답 시간과 낮은 지터를 보장합니다."
+  },
+  {
+    "id": "oc-010",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "크로스 빌드가 실패해요. 호스트에서는 빌드 되는데 타겟용으로 빌드하면 에러가 납니다."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "빌드 로그입니다.",
+        "code": "aarch64-linux-gnu-gcc: error: unrecognized command-line option '-m32'\nmake[2]: *** [Makefile:125: main.o] Error 1",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "크로스 컴파일러가 설치 안 된 것 같아요. apt-get으로 설치해볼게요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "GCC 버전이 맞지 않아서 -m32 옵션을 인식하지 못합니다. 최신 버전으로 업데이트하세요."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "-m32는 x86의 32비트 모드 컴파일 옵션이에요. ARM64 크로스 컴파일러에는 해당 옵션이 없어요. Makefile에서 호스트 빌드용 플래그가 크로스 빌드에도 적용되고 있는 거예요."
+      }
+    ],
+    "question": "크로스 빌드 시 '-m32' 옵션 에러의 원인은?",
+    "options": [
+      "크로스 컴파일러가 설치되지 않음",
+      "GCC 버전이 너무 오래됨",
+      "x86 전용 컴파일 옵션이 ARM64 크로스 빌드에 잘못 적용됨",
+      "커널 헤더 버전 불일치"
+    ],
+    "answer": 2,
+    "explanation": "-m32는 x86/x86_64 GCC에서 32비트 코드를 생성하는 옵션으로, ARM64 GCC에는 존재하지 않습니다. Makefile에서 CFLAGS나 빌드 스크립트가 호스트 아키텍처 전용 옵션을 크로스 빌드에도 전달하고 있어 발생하는 문제입니다."
+  },
+  {
+    "id": "oc-011",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "BSP 보드에서 thermal throttling이 너무 자주 걸려서 성능이 떨어져요. 온도 센서 값이 실제보다 높게 나오는 것 같습니다."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "thermal zone 확인 결과입니다.",
+        "code": "$ cat /sys/class/thermal/thermal_zone0/temp\n85000\n$ cat /sys/class/thermal/thermal_zone0/trip_point_0_temp\n75000",
+        "codeLanguage": "shell"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "trip point를 100도로 올리면 되지 않나요?"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "방열판을 더 큰 걸로 바꿔. 하드웨어 문제야."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "먼저 온도 센서 값이 정말 정확한지 확인해봐야 해요. 디바이스 트리에서 thermal 센서의 캘리브레이션 오프셋이 잘못 설정되었을 수 있어요. 실제 온도를 적외선 온도계로 비교 측정해보세요."
+      }
+    ],
+    "question": "thermal throttling이 과도하게 발생할 때 우선적으로 확인해야 할 사항은?",
+    "options": [
+      "trip point를 무조건 높여서 throttling을 방지",
+      "온도 센서의 캘리브레이션이 올바른지 실측 비교",
+      "cooling device를 비활성화",
+      "커널에서 thermal framework를 제거"
+    ],
+    "answer": 1,
+    "explanation": "trip point를 무턱대고 올리거나 cooling device를 비활성화하면 하드웨어 손상 위험이 있습니다. 먼저 온도 센서의 캘리브레이션 값(디바이스 트리 또는 PMIC 레지스터)이 올바른지 확인하고, 적외선 온도계 등으로 실제 온도와 비교하여 센서 정확도를 검증해야 합니다."
+  },
+  {
+    "id": "oc-012",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "design-discussion",
+    "conversation": [
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "임베디드 디바이스에서 부팅 시간을 5초 이내로 줄여야 한다는 요구사항이 있어요."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "커널 설정에서 불필요한 드라이버를 다 빼면 되지 않을까?"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "SSD로 바꾸면 빨라지지 않나요?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "커널을 XIP(Execute in Place)로 설정하면 부팅 시간이 0에 가까워집니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "부팅 시간 최적화는 단계별로 접근해야 해요. 부트로더, 커널, 유저스페이스 각각의 소요 시간을 먼저 측정하고, 가장 오래 걸리는 단계부터 최적화하세요. grabserial이나 bootchart를 활용해보세요."
+      }
+    ],
+    "question": "부팅 시간 최적화에서 가장 먼저 해야 하는 작업은?",
+    "options": [
+      "모든 커널 드라이버를 모듈로 변경",
+      "XIP(Execute in Place) 적용",
+      "부트 단계별 소요 시간 측정 및 프로파일링",
+      "스토리지를 SSD로 교체"
+    ],
+    "answer": 2,
+    "explanation": "부팅 시간 최적화의 첫 단계는 부트로더, 커널 초기화, 유저스페이스 초기화 각 단계의 소요 시간을 정확히 측정하는 것입니다. grabserial, printk timestamps, bootchart 등의 도구로 병목 지점을 파악한 후, 가장 효과적인 최적화 방향을 결정합니다."
+  },
+  {
+    "id": "oc-013",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "프로세스 A와 B가 공유 메모리를 통해 데이터를 교환하는데, 가끔 B가 잘못된 데이터를 읽어요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "코드를 확인해보니 mutex나 세마포어 같은 동기화는 사용 중입니다.",
+        "code": "// Process A (writer)\npthread_mutex_lock(&mtx);\nshared->data = new_value;\nshared->flag = 1;\npthread_mutex_unlock(&mtx);\n\n// Process B (reader) - separate code path\nif (shared->flag == 1) {\n    value = shared->data;  // sometimes stale!\n    shared->flag = 0;\n}",
+        "codeLanguage": "c"
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "mutex 쓰고 있잖아. 동기화 문제는 아닌 것 같은데?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "volatile 키워드를 shared 변수에 추가하면 컴파일러 최적화를 방지할 수 있습니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "프로세스 A는 mutex를 잠그고 있지만, 프로세스 B의 reader 코드는 mutex 없이 shared 메모리를 읽고 있어요. 읽는 쪽도 동일한 잠금을 사용해야 데이터 일관성이 보장돼요."
+      }
+    ],
+    "question": "프로세스 B가 가끔 잘못된 데이터를 읽는 원인은?",
+    "options": [
+      "volatile 키워드가 없어서 컴파일러가 최적화함",
+      "reader(프로세스 B)가 mutex 없이 공유 메모리에 접근하고 있음",
+      "공유 메모리 영역이 캐시되지 않아 지연이 발생함",
+      "flag 변수의 타입이 int가 아닌 경우 원자적 접근이 보장되지 않음"
+    ],
+    "answer": 1,
+    "explanation": "프로세스 A는 mutex 보호 하에 쓰기를 수행하지만, 프로세스 B는 mutex 없이 flag와 data를 읽습니다. 이 경우 CPU의 메모리 재정렬이나 캐시 일관성 문제로 B가 일관되지 않은 상태의 데이터를 읽을 수 있습니다. reader도 같은 mutex를 잠가야 합니다."
+  },
+  {
+    "id": "oc-014",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "design-discussion",
+    "conversation": [
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "임베디드 보드에서 watchdog 타이머를 적용해야 하는데, 어떻게 동작하는 건가요?"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "그냥 하드웨어 타이머 인터럽트 쓰면 되는 거 아니야?"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "소프트웨어 watchdog이면 충분하지 않나요? cron으로 주기적으로 체크하면 될 것 같아요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "watchdog은 시스템 성능을 모니터링하여 CPU 사용률이 높으면 알림을 보내는 기능입니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "watchdog의 핵심은 주기적인 'kick'(리셋)이에요. 소프트웨어가 정해진 시간 안에 watchdog을 kick하지 못하면, 하드웨어 watchdog이 시스템을 강제 리셋합니다. 소프트웨어가 행(hang)된 상황에서도 복구할 수 있는 것이 핵심이에요."
+      }
+    ],
+    "question": "하드웨어 watchdog 타이머의 핵심 동작 원리는?",
+    "options": [
+      "CPU 사용률을 모니터링하여 과부하 시 알림",
+      "정해진 시간 내에 kick되지 않으면 시스템을 강제 리셋",
+      "메모리 사용량을 추적하여 OOM 상황을 방지",
+      "네트워크 연결 상태를 주기적으로 확인"
+    ],
+    "answer": 1,
+    "explanation": "하드웨어 watchdog 타이머는 카운터가 만료(timeout)되기 전에 소프트웨어가 주기적으로 kick(= 카운터 리셋)해야 합니다. 시스템이 hang되어 kick을 하지 못하면 watchdog이 하드웨어 리셋을 트리거하여 시스템을 복구합니다. 이는 소프트웨어만으로는 감지할 수 없는 hang을 복구할 수 있는 메커니즘입니다."
+  },
+  {
+    "id": "oc-015",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "objective",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "커널에서 스핀락 구간 안에서 sleep 함수를 호출하는 코드가 발견됐어요."
+      },
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "해당 코드입니다.",
+        "code": "spin_lock(&my_lock);\nbuf = kmalloc(4096, GFP_KERNEL);\nif (!buf) {\n    spin_unlock(&my_lock);\n    return -ENOMEM;\n}\nmemcpy(buf, data, len);\nspin_unlock(&my_lock);",
+        "codeLanguage": "c"
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "kmalloc이 실패하면 메모리 부족 문제니까, 메모리를 늘리면 되지 않나요?"
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "spin_lock 대신 mutex를 사용하면 문제가 해결됩니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "spin_lock은 선점(preemption)을 비활성화해요. 이 상태에서 GFP_KERNEL으로 kmalloc하면 메모리 부족 시 sleep할 수 있고, 이건 BUG입니다. 어떤 GFP 플래그를 써야 할까요?"
+      }
+    ],
+    "question": "spin_lock 보호 구간에서 kmalloc(GFP_KERNEL)을 사용할 때의 문제점은?",
+    "options": [
+      "kmalloc이 항상 NULL을 반환함",
+      "GFP_KERNEL은 메모리 부족 시 sleep할 수 있어 스핀락 컨텍스트에서 사용 불가",
+      "spin_lock이 자동으로 해제됨",
+      "메모리 할당이 다른 CPU에 의해 취소될 수 있음"
+    ],
+    "answer": 1,
+    "explanation": "spin_lock은 선점을 비활성화하므로, sleep 가능한 함수를 호출하면 안 됩니다. GFP_KERNEL은 메모리 부족 시 페이지 회수를 위해 sleep할 수 있습니다. 스핀락 구간에서는 GFP_ATOMIC을 사용하여 sleep 없이 할당을 시도해야 합니다."
+  },
+  {
+    "id": "oc-016",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "code-review",
+    "conversation": [
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "이 코드에서 두 스레드가 같은 변수에 동시 접근하는데, ___ 없이 사용하고 있어요. ___ condition이 발생할 수 있습니다."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "맞아, 동기화 처리가 빠져있네."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "공유 변수 접근 시 상호배제가 필요해요. 어떤 동기화 메커니즘이 적합할지 생각해보세요."
+      }
+    ],
+    "question": "코드 리뷰에서 지적된 동기화 문제를 파악하시오.",
+    "blankAnswers": [
+      ["mutex", "뮤텍스", "lock"],
+      ["race", "경쟁"]
+    ],
+    "explanation": "공유 변수에 대한 동시 접근 시 mutex 등의 동기화 메커니즘 없이 사용하면 race condition이 발생할 수 있습니다.",
+    "blankDistractors": [
+      ["semaphore", "barrier", "spinlock"],
+      ["deadlock", "starvation", "livelock"]
+    ]
+  },
+  {
+    "id": "oc-017",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "보드가 부팅 중에 멈추는데, 부트로더에서 커널까지 잘 넘어가다가 루트 파일시스템 마운트에서 실패해요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "커널 커맨드라인에서 ___=<디바이스> 옵션으로 루트 파일시스템 경로를 지정해야 해요. 그리고 해당 파일시스템의 드라이버가 커널에 ___ 형태로 포함되어 있어야 합니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "커널이 루트 파일시스템을 마운트하려면 해당 스토리지 드라이버와 파일시스템 드라이버가 커널에 내장되어 있거나 initramfs에 포함되어 있어야 해요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      ["root"],
+      ["built-in", "빌트인", "y", "내장"]
+    ],
+    "explanation": "커널 커맨드라인에서 root= 옵션으로 루트 파일시스템 위치를 지정합니다. 해당 스토리지와 파일시스템 드라이버는 모듈(m)이 아닌 built-in(y)으로 커널에 포함되어야 부팅 시 바로 사용할 수 있습니다.",
+    "blankDistractors": [
+      ["boot", "init", "mount"],
+      ["module", "외장", "loadable"]
+    ]
+  },
+  {
+    "id": "oc-018",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "초급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "design-discussion",
+    "conversation": [
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "OS 기초 교육 자료를 만들어야 해요. 프로세스와 스레드 차이를 간단히 정리해주세요."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "프로세스는 독립적인 ___을 가지지만, 같은 프로세스 내의 스레드들은 ___을 공유해요."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "프로세스는 운영체제의 자원 할당 단위이고, 스레드는 CPU 스케줄링의 실행 단위라는 점을 기억하세요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      ["주소 공간", "메모리 공간", "address space", "가상 메모리"],
+      ["메모리", "주소 공간", "힙", "코드와 데이터"]
+    ],
+    "explanation": "프로세스는 각각 독립적인 가상 주소 공간을 가지므로 서로 격리됩니다. 반면 같은 프로세스 내의 스레드들은 코드, 데이터, 힙 영역을 공유하며 각각 고유한 스택만 가집니다.",
+    "blankDistractors": [
+      ["스택", "레지스터", "CPU 코어"],
+      ["스택", "PID", "파일 디스크립터"]
+    ]
+  },
+  {
+    "id": "oc-019",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "code-review",
+    "conversation": [
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "이 BSP 디바이스 트리 코드 리뷰인데, 새 SoC에 맞게 메모리 영역을 수정해야 해요."
+      },
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "디바이스 트리에서 주변장치의 레지스터 주소와 크기를 정의하는 속성은 ___이고, 인터럽트 정보를 정의하는 속성은 ___입니다.",
+        "code": "my_device@40000000 {\n    compatible = \"vendor,my-device\";\n    ___ = <0x40000000 0x1000>;\n    ___ = <0 45 4>;\n};",
+        "codeLanguage": "dts"
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "디바이스 트리의 표준 속성 이름을 기억하세요. 주소는 register의 약어, 인터럽트는 복수형을 사용해요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      ["reg"],
+      ["interrupts"]
+    ],
+    "explanation": "디바이스 트리에서 reg 속성은 디바이스의 레지스터 베이스 주소와 크기를 정의하고, interrupts 속성은 디바이스가 사용하는 인터럽트 정보(GIC SPI/PPI, 번호, 트리거 타입)를 정의합니다.",
+    "blankDistractors": [
+      ["address", "base", "memory"],
+      ["interrupt", "irq", "irqs"]
+    ]
+  },
+  {
+    "id": "oc-020",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "프로세스가 점점 메모리를 많이 쓰다가 결국 OOM으로 죽어요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "단순히 메모리가 부족한 거예요. RAM을 추가하세요."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "이건 ___현상이야. 할당한 메모리를 ___하지 않아서 누적되는 거지. valgrind 같은 도구로 어디서 메모리가 새는지 확인해봐."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "메모리 할당 후 해제하지 않으면 사용 가능한 메모리가 점점 줄어들어요. 특히 장시간 실행되는 데몬 프로세스에서 자주 발생하는 문제예요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      ["memory leak", "메모리 누수", "메모리 릭"],
+      ["free", "해제", "반환", "deallocate"]
+    ],
+    "explanation": "memory leak(메모리 누수)은 동적으로 할당한 메모리를 더 이상 사용하지 않는데도 free()로 해제하지 않아 메모리가 계속 누적되는 현상입니다. valgrind, AddressSanitizer 등으로 누수 지점을 찾을 수 있습니다.",
+    "blankDistractors": [
+      ["buffer overflow", "stack overflow", "segfault"],
+      ["allocate", "initialize", "copy"]
+    ]
+  },
+  {
+    "id": "oc-021",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "중급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "design-discussion",
+    "conversation": [
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "IPC 방식 비교 자료가 필요해요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "프로세스 간 통신에서 가장 빠른 방식은 ___인데, 동기화를 직접 구현해야 해요. 반면 ___는 커널이 데이터를 복사해서 전달하므로 동기화가 간단하지만 복사 오버헤드가 있습니다."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "IPC 방식마다 트레이드오프가 있어요. 복사 없이 같은 메모리를 공유하는 방식과, 커널을 통해 데이터를 전달하는 방식의 차이를 생각해보세요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      ["shared memory", "공유 메모리"],
+      ["pipe", "파이프", "message queue", "메시지 큐"]
+    ],
+    "explanation": "공유 메모리(shared memory)는 프로세스 간 데이터 복사 없이 같은 물리 메모리를 공유하므로 가장 빠르지만, mutex나 세마포어로 동기화를 직접 구현해야 합니다. 파이프나 메시지 큐는 커널이 데이터를 복사하여 전달하므로 동기화가 내장되어 있지만 복사 오버헤드가 발생합니다.",
+    "blankDistractors": [
+      ["socket", "signal", "file"],
+      ["thread", "signal", "socket"]
+    ]
+  },
+  {
+    "id": "oc-022",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "code-review",
+    "conversation": [
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "커널 드라이버에서 인터럽트 핸들러를 등록하는 코드인데, 플래그 설정이 궁금해요."
+      },
+      {
+        "speaker": "민수",
+        "role": "리뷰어",
+        "avatar": "👀",
+        "text": "여러 디바이스가 같은 인터럽트 라인을 공유할 때는 ___ 플래그를 사용해야 하고, 핸들러에서 시간이 오래 걸리는 작업은 ___ IRQ를 사용하여 프로세스 컨텍스트에서 처리합니다.",
+        "code": "request_irq(irq, my_handler, ___, \"my-device\", dev);\n// 또는\nrequest_threaded_irq(irq, my_handler, my_thread_fn, flags, \"my-device\", dev);",
+        "codeLanguage": "c"
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "공유 인터럽트와 threaded 인터럽트 처리는 임베디드 드라이버 개발에서 매우 중요한 개념이에요. 각각의 사용 시나리오를 이해하세요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      ["IRQF_SHARED"],
+      ["threaded", "스레드"]
+    ],
+    "explanation": "IRQF_SHARED 플래그는 여러 디바이스가 하나의 인터럽트 라인을 공유할 때 사용합니다. 핸들러는 자신의 디바이스에서 발생한 인터럽트인지 확인해야 합니다. threaded IRQ(request_threaded_irq)는 하위 반쪽(bottom half)을 커널 스레드에서 실행하여 sleep 가능한 함수를 호출할 수 있습니다.",
+    "blankDistractors": [
+      ["IRQF_TRIGGER_RISING", "IRQF_ONESHOT", "IRQF_NO_SUSPEND"],
+      ["deferred", "tasklet", "softirq"]
+    ]
+  },
+  {
+    "id": "oc-023",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "BSP 보드에서 리얼타임 태스크의 응답 시간이 불규칙해요."
+      },
+      {
+        "speaker": "최팀장",
+        "role": "팀장",
+        "avatar": "🧑‍💼",
+        "text": "CPU 성능이 부족한 거 아냐?"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "아니야, SCHED_FIFO로 설정했는데도 그래. 리얼타임 커널 패치인 ___를 적용해야 할 것 같아. 이 패치는 커널 내부의 spin_lock을 ___로 변환해서 선점 가능하게 만들어줘."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "표준 리눅스 커널은 non-preemptible 구간이 존재해서 실시간 보장이 어려워요. 이를 해결하는 커널 패치가 있는데, 잠금 메커니즘을 변환하는 것이 핵심 아이디어예요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      ["PREEMPT_RT", "RT 패치", "CONFIG_PREEMPT_RT"],
+      ["rt_mutex", "mutex", "sleeping lock"]
+    ],
+    "explanation": "PREEMPT_RT 패치는 커널의 대부분의 spin_lock을 rt_mutex(sleeping lock)로 변환하여 거의 모든 커널 코드 경로를 선점 가능하게 만듭니다. 이를 통해 최악의 경우(worst-case) 지연 시간을 크게 줄여 하드 리얼타임 요구사항을 충족할 수 있습니다.",
+    "blankDistractors": [
+      ["CFS", "BFS", "SCHED_DEADLINE"],
+      ["semaphore", "rwlock", "futex"]
+    ]
+  },
+  {
+    "id": "oc-024",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "design-discussion",
+    "conversation": [
+      {
+        "speaker": "수진",
+        "role": "PM",
+        "avatar": "📋",
+        "text": "가상 메모리 관리에 대한 기술 문서 작성을 부탁드려요."
+      },
+      {
+        "speaker": "Copilot",
+        "role": "AI",
+        "avatar": "🤖",
+        "text": "가상 메모리는 디스크를 RAM처럼 사용하는 기술입니다."
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "CPU가 가상 주소를 물리 주소로 변환할 때 ___를 사용하는데, 이 변환을 빠르게 하기 위한 캐시가 ___야. TLB miss가 발생하면 페이지 테이블을 워크하는 비용이 크지."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "가상 메모리의 핵심 하드웨어 구성요소를 생각해보세요. 주소 변환 테이블과 그것의 캐시 역할을 하는 버퍼가 있어요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      ["page table", "페이지 테이블"],
+      ["TLB", "Translation Lookaside Buffer"]
+    ],
+    "explanation": "CPU의 MMU(Memory Management Unit)는 페이지 테이블을 참조하여 가상 주소를 물리 주소로 변환합니다. TLB(Translation Lookaside Buffer)는 최근 사용된 변환 정보를 캐시하여 빠른 주소 변환을 가능하게 합니다. TLB miss 시 페이지 테이블 워크가 필요하여 성능 비용이 발생합니다.",
+    "blankDistractors": [
+      ["segment table", "descriptor table", "interrupt vector"],
+      ["L1 cache", "MMU", "prefetch buffer"]
+    ]
+  },
+  {
+    "id": "oc-025",
+    "category": "operating-system",
+    "subcategory": "dev-conversation",
+    "difficulty": "고급",
+    "type": "conversation",
+    "conversationMode": "fill-blank",
+    "scenarioType": "bug-report",
+    "conversation": [
+      {
+        "speaker": "환영",
+        "role": "QA",
+        "avatar": "🔍",
+        "text": "멀티코어 ARM64 보드에서 한 CPU 코어가 메모리에 쓴 값이 다른 코어에서 바로 보이지 않는 문제가 있어요."
+      },
+      {
+        "speaker": "박신입",
+        "role": "신입",
+        "avatar": "🧑‍💻",
+        "text": "캐시를 비활성화하면 해결되지 않나요?"
+      },
+      {
+        "speaker": "지훈",
+        "role": "동료",
+        "avatar": "💬",
+        "text": "캐시를 끄면 성능이 심각하게 저하돼. 이건 ___문제야. 커널에서는 ___함수를 사용해서 다른 코어에도 변경 사항이 보이도록 보장해야 해."
+      }
+    ],
+    "seniorHint": [
+      {
+        "speaker": "이시니어",
+        "role": "시니어",
+        "avatar": "👩‍💻",
+        "text": "멀티코어 시스템에서 각 코어의 캐시 간 데이터가 일관되게 유지되는 것이 핵심이에요. 프로토콜(예: MESI)과 배리어 명령어를 알아보세요."
+      }
+    ],
+    "question": "대화의 빈칸을 채우시오.",
+    "blankAnswers": [
+      ["cache coherency", "캐시 일관성", "캐시 코히런시", "memory ordering"],
+      ["memory barrier", "메모리 배리어", "mb", "smp_mb", "dmb"]
+    ],
+    "explanation": "멀티코어 시스템에서 각 코어의 캐시 간 데이터 일관성(cache coherency) 문제는 하드웨어 캐시 프로토콜(MESI 등)과 소프트웨어 메모리 배리어(memory barrier)로 해결합니다. Linux 커널에서는 smp_mb(), smp_rmb(), smp_wmb() 등의 배리어 함수를 제공합니다.",
+    "blankDistractors": [
+      ["memory leak", "buffer overflow", "race condition"],
+      ["cache_flush", "memcpy", "dma_sync"]
+    ]
+  }
+]

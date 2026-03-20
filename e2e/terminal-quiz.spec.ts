@@ -188,6 +188,23 @@ test.describe("Terminal Quiz — Android System", () => {
   });
 });
 
+test.describe("Terminal Quiz — Operating System", () => {
+  test("os-tl-001: OS 터미널 실습 로드", async ({ page }) => {
+    await page.goto("/quiz/operating-system/terminal-lab/beginner");
+    await expect(page.getByText("터미널", { exact: true })).toBeVisible();
+    await expect(page.getByText("미션 완료 확인")).toBeVisible();
+  });
+
+  test("os-tl-001: fails without correct commands", async ({ page }) => {
+    await page.goto("/quiz/operating-system/terminal-lab/beginner");
+    await expect(page.getByText("터미널", { exact: true })).toBeVisible();
+
+    // Verify without doing anything
+    await page.getByText("미션 완료 확인").click();
+    await expect(page.getByText("미션 실패")).toBeVisible();
+  });
+});
+
 test.describe("Terminal Quiz — UI Interaction", () => {
   test("hint reveal works progressively", async ({ page }) => {
     await page.goto("/quiz/linux-kernel/terminal-lab/beginner");

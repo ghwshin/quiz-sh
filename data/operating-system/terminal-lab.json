@@ -1,0 +1,377 @@
+[
+  {
+    "id": "os-tl-001",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "/etc/os-config.conf 파일의 권한을 600으로 변경하고, APP_MODE 환경변수를 'production'으로 설정하세요.",
+    "explanation": "chmod 600은 소유자에게만 읽기/쓰기 권한을 부여합니다. export 명령어로 환경변수를 설정하면 현재 셸과 하위 프로세스에서 사용할 수 있습니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "bsp-dev",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/etc": { "type": "dir" },
+        "/etc/os-config.conf": { "type": "file", "content": "# OS Configuration\nBOOT_MODE=normal\nDEBUG=false\n", "permissions": "644" }
+      },
+      "goalChecks": [
+        { "description": "파일 권한이 600", "type": "file-permissions", "path": "/etc/os-config.conf", "permissions": "600" },
+        { "description": "APP_MODE 환경변수가 production", "type": "env-equals", "envKey": "APP_MODE", "envValue": "production" }
+      ],
+      "hints": [
+        "chmod 명령어로 파일 권한을 변경합니다",
+        "export 변수명=값 형식으로 환경변수를 설정합니다"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-bsp"
+      }
+    }
+  },
+  {
+    "id": "os-tl-002",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "/etc/network.conf 파일에 'DNS_SERVER=8.8.8.8' 설정을 추가하고, ps 명령어로 실행 중인 프로세스를 확인하세요.",
+    "explanation": "echo와 >> 리다이렉션으로 파일에 내용을 추가합니다. ps 명령어는 현재 실행 중인 프로세스 목록을 표시합니다. 설정 파일 편집과 프로세스 확인은 시스템 관리의 기본 작업입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "net-config",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/etc": { "type": "dir" },
+        "/etc/network.conf": { "type": "file", "content": "# Network Configuration\nIP_ADDR=192.168.1.100\nNETMASK=255.255.255.0\n" }
+      },
+      "processes": [
+        { "pid": 1, "name": "init", "user": "root", "cpu": "0.0", "mem": "0.5", "command": "/sbin/init" },
+        { "pid": 150, "name": "sshd", "user": "root", "cpu": "0.1", "mem": "0.2", "command": "/usr/sbin/sshd" },
+        { "pid": 200, "name": "networkd", "user": "root", "cpu": "0.3", "mem": "0.4", "command": "/usr/sbin/networkd" }
+      ],
+      "goalChecks": [
+        { "description": "DNS_SERVER=8.8.8.8 설정이 추가됨", "type": "file-contains", "path": "/etc/network.conf", "pattern": "DNS_SERVER=8\\.8\\.8\\.8" }
+      ],
+      "hints": [
+        "echo 'DNS_SERVER=8.8.8.8' >> /etc/network.conf 형식으로 추가합니다",
+        "ps aux로 실행 중인 프로세스를 확인합니다"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-generic"
+      }
+    }
+  },
+  {
+    "id": "os-tl-003",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "/var/log/boot.log 파일에서 'error' 키워드가 포함된 줄을 찾아 /tmp/boot-errors.txt에 저장하세요.",
+    "explanation": "grep 명령어로 파일에서 특정 패턴을 검색하고, > 리다이렉션으로 결과를 파일에 저장합니다. 부팅 로그 분석은 시스템 문제 진단의 첫 단계입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "diag-box",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/var": { "type": "dir" },
+        "/var/log": { "type": "dir" },
+        "/var/log/boot.log": { "type": "file", "content": "[    0.100] Starting kernel...\n[    0.200] error: failed to initialize GPIO controller\n[    0.300] Mounting root filesystem\n[    0.400] error: thermal sensor calibration failed\n[    0.500] Network interfaces configured\n[    0.600] System ready\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "부팅 에러 파일이 생성됨", "type": "file-exists", "path": "/tmp/boot-errors.txt" },
+        { "description": "에러 로그가 포함됨", "type": "file-contains", "path": "/tmp/boot-errors.txt", "pattern": "error" }
+      ],
+      "hints": [
+        "grep 'error' 파일경로 > 출력파일 형식으로 사용합니다",
+        "grep -i를 사용하면 대소문자를 구분하지 않고 검색합니다"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "os-tl-004",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "초급",
+    "type": "terminal",
+    "question": "/sys/devices 디렉터리 구조를 탐색하여 platform 버스에 등록된 디바이스 목록을 확인하고, /sys/devices/platform/sensor0/status 파일의 내용을 /tmp/sensor-status.txt에 복사하세요.",
+    "explanation": "ls 명령어로 디렉터리 내용을 확인하고, cat으로 파일 내용을 읽어 리다이렉션으로 다른 파일에 저장합니다. sysfs는 커널 디바이스 정보를 사용자 공간에 노출하는 가상 파일시스템입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "bsp-board",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/sys": { "type": "dir" },
+        "/sys/devices": { "type": "dir" },
+        "/sys/devices/platform": { "type": "dir" },
+        "/sys/devices/platform/sensor0": { "type": "dir" },
+        "/sys/devices/platform/sensor0/status": { "type": "file", "content": "active\n" },
+        "/sys/devices/platform/sensor0/driver": { "type": "file", "content": "my-sensor-driver\n" },
+        "/sys/devices/platform/uart0": { "type": "dir" },
+        "/sys/devices/platform/uart0/status": { "type": "file", "content": "active\n" },
+        "/sys/devices/platform/gpio0": { "type": "dir" },
+        "/sys/devices/platform/gpio0/status": { "type": "file", "content": "inactive\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "센서 상태 파일이 생성됨", "type": "file-exists", "path": "/tmp/sensor-status.txt" },
+        { "description": "센서 상태가 active", "type": "file-contains", "path": "/tmp/sensor-status.txt", "pattern": "active" }
+      ],
+      "hints": [
+        "ls 명령어로 디렉터리 내용을 확인하세요",
+        "cat 파일경로 > 출력파일로 내용을 복사합니다"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "os-tl-005",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "I2C 센서 드라이버 모듈(i2c_temp.ko)을 로드하고, 모듈이 정상적으로 로드되었는지 확인한 후, 더 이상 필요 없는 spi_flash 모듈을 언로드하세요.",
+    "explanation": "insmod로 커널 모듈을 로드하고 lsmod로 확인합니다. rmmod로 불필요한 모듈을 언로드합니다. 모듈 관리는 BSP 개발에서 드라이버를 테스트하는 기본 작업입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "sensor-board",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/lib/modules": { "type": "dir" },
+        "/lib/modules/i2c_temp.ko": { "type": "file", "content": "(binary)", "permissions": "644" },
+        "/proc": { "type": "dir" },
+        "/proc/modules": { "type": "file", "content": "spi_flash 28672 0 - Live 0xffffffffa0200000\nusbcore 307200 3 - Live 0xffffffffa0100000\n" },
+        "/sys": { "type": "dir" },
+        "/sys/bus": { "type": "dir" },
+        "/sys/bus/i2c": { "type": "dir" },
+        "/sys/bus/i2c/devices": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "i2c_temp 모듈이 로드됨", "type": "module-loaded", "moduleName": "i2c_temp" },
+        { "description": "spi_flash 모듈이 언로드됨", "type": "module-not-loaded", "moduleName": "spi_flash" }
+      ],
+      "hints": [
+        "insmod /lib/modules/i2c_temp.ko로 모듈을 로드합니다",
+        "rmmod spi_flash로 모듈을 언로드합니다",
+        "lsmod로 현재 로드된 모듈을 확인합니다"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-sensor"
+      }
+    }
+  },
+  {
+    "id": "os-tl-006",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "네트워크 인터페이스 eth0의 상태를 확인하고, 현재 열린 네트워크 소켓 정보를 /tmp/network-report.txt에 저장하세요.",
+    "explanation": "ip 명령어로 네트워크 인터페이스 상태를 확인하고, ss 명령어로 소켓 정보를 조회합니다. 네트워크 진단은 임베디드 시스템의 연결 문제 해결에 필수적입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "net-diag",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/sys": { "type": "dir" },
+        "/sys/class": { "type": "dir" },
+        "/sys/class/net": { "type": "dir" },
+        "/sys/class/net/eth0": { "type": "dir" },
+        "/sys/class/net/lo": { "type": "dir" },
+        "/proc": { "type": "dir" },
+        "/proc/net": { "type": "dir" },
+        "/tmp": { "type": "dir" }
+      },
+      "network": {
+        "interfaces": [
+          { "name": "lo", "ip": "127.0.0.1", "mask": "255.0.0.0", "state": "UP" },
+          { "name": "eth0", "ip": "192.168.1.50", "mask": "255.255.255.0", "mac": "aa:bb:cc:dd:ee:01", "state": "UP" }
+        ]
+      },
+      "goalChecks": [
+        { "description": "네트워크 보고서 파일이 생성됨", "type": "file-exists", "path": "/tmp/network-report.txt" },
+        { "description": "보고서에 소켓 정보 포함", "type": "file-contains", "path": "/tmp/network-report.txt", "pattern": "tcp|udp|LISTEN|ESTAB" }
+      ],
+      "hints": [
+        "ip addr show 또는 ip link show로 인터페이스 정보를 확인합니다",
+        "ss -tuln으로 열린 소켓을 확인하고 결과를 파일에 저장하세요"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-net",
+        "ping -c 1 192.168.1.1": "PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.\n64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.3 ms"
+      }
+    }
+  },
+  {
+    "id": "os-tl-007",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "/etc/sysctl.conf 파일에 'kernel.printk=4 4 1 7' 설정을 추가하고, /etc/security/limits.conf에 '* soft nofile 65536' 설정을 추가하세요. 각 파일에 올바른 설정이 포함되어 있는지 cat으로 확인하세요.",
+    "explanation": "sysctl.conf는 커널 파라미터를 설정하는 파일이고, limits.conf는 사용자별 리소스 제한을 설정합니다. printk 레벨은 콘솔에 출력할 메시지의 최소 긴급도를 제어하고, nofile은 프로세스당 열 수 있는 최대 파일 수를 제한합니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "sys-config",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/etc": { "type": "dir" },
+        "/etc/sysctl.conf": { "type": "file", "content": "# Kernel parameters\nnet.ipv4.ip_forward=0\n" },
+        "/etc/security": { "type": "dir" },
+        "/etc/security/limits.conf": { "type": "file", "content": "# Resource limits\n* soft core 0\n" }
+      },
+      "goalChecks": [
+        { "description": "printk 설정이 추가됨", "type": "file-contains", "path": "/etc/sysctl.conf", "pattern": "kernel\\.printk\\s*=\\s*4\\s+4\\s+1\\s+7" },
+        { "description": "nofile 제한이 추가됨", "type": "file-contains", "path": "/etc/security/limits.conf", "pattern": "\\*\\s+soft\\s+nofile\\s+65536" }
+      ],
+      "hints": [
+        "echo 명령어와 >> 리다이렉션으로 파일에 내용을 추가합니다",
+        "cat 명령어로 파일 내용을 확인합니다"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-generic"
+      }
+    }
+  },
+  {
+    "id": "os-tl-008",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "중급",
+    "type": "terminal",
+    "question": "/var/log/syslog 파일에서 'panic' 또는 'oops' 패턴이 포함된 줄을 찾아 /tmp/critical-errors.txt에 저장하고, 발견된 에러 줄 수를 /tmp/error-count.txt에 기록하세요.",
+    "explanation": "grep -iE 옵션으로 대소문자 무시(-i)와 확장 정규식(-E)을 사용하여 여러 패턴을 OR로 검색합니다. grep -c 또는 wc -l로 매칭 줄 수를 셀 수 있습니다. 커널 패닉과 oops 로그 분석은 시스템 안정성 디버깅에 필수적입니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "log-analyzer",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/var": { "type": "dir" },
+        "/var/log": { "type": "dir" },
+        "/var/log/syslog": { "type": "file", "content": "[  1.000] kernel: Booting Linux kernel 5.15.0\n[  1.500] kernel: Oops: 0000 [#1] SMP ARM64\n[  2.000] kernel: Network subsystem initialized\n[  2.500] kernel: panic: Fatal exception in interrupt\n[  3.000] kernel: USB subsystem initialized\n[  3.500] kernel: Oops: 0002 [#2] PREEMPT SMP\n[  4.000] systemd: Reached target Basic System\n" },
+        "/tmp": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "크리티컬 에러 파일이 생성됨", "type": "file-exists", "path": "/tmp/critical-errors.txt" },
+        { "description": "panic 또는 oops 패턴이 포함됨", "type": "file-contains", "path": "/tmp/critical-errors.txt", "pattern": "[Oo]ops|panic" },
+        { "description": "에러 카운트 파일이 생성됨", "type": "file-exists", "path": "/tmp/error-count.txt" },
+        { "description": "에러 카운트가 3", "type": "file-contains", "path": "/tmp/error-count.txt", "pattern": "3" }
+      ],
+      "hints": [
+        "grep -iE 'panic|oops' 파일명 으로 여러 패턴을 동시에 검색합니다",
+        "grep -c 옵션으로 매칭 줄 수를 출력합니다"
+      ],
+      "scriptedOutputs": {}
+    }
+  },
+  {
+    "id": "os-tl-009",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "고급",
+    "type": "terminal",
+    "question": "GPIO LED 드라이버 모듈(gpio_led.ko)을 로드하고, /etc/modules-load.d/gpio.conf에 모듈 자동 로드 설정을 추가하세요. 그리고 DRIVER_MODE 환경변수를 'active'로 설정하세요.",
+    "explanation": "커널 모듈 로드와 영구 설정, 환경변수 설정을 조합한 복합 미션입니다. /etc/modules-load.d/에 모듈 이름을 기록하면 부팅 시 자동으로 로드됩니다. 실제 BSP 개발에서 이런 작업들을 함께 수행하는 경우가 많습니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "gpio-board",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/lib/modules": { "type": "dir" },
+        "/lib/modules/gpio_led.ko": { "type": "file", "content": "(binary)", "permissions": "644" },
+        "/etc": { "type": "dir" },
+        "/etc/modules-load.d": { "type": "dir" },
+        "/proc": { "type": "dir" },
+        "/proc/modules": { "type": "file", "content": "usbcore 307200 3 - Live 0xffffffffa0100000\n" },
+        "/sys": { "type": "dir" },
+        "/sys/class": { "type": "dir" },
+        "/sys/class/leds": { "type": "dir" }
+      },
+      "goalChecks": [
+        { "description": "gpio_led 모듈이 로드됨", "type": "module-loaded", "moduleName": "gpio_led" },
+        { "description": "자동 로드 설정 파일이 생성됨", "type": "file-exists", "path": "/etc/modules-load.d/gpio.conf" },
+        { "description": "자동 로드 설정에 gpio_led 포함", "type": "file-contains", "path": "/etc/modules-load.d/gpio.conf", "pattern": "gpio_led" },
+        { "description": "DRIVER_MODE 환경변수가 active", "type": "env-equals", "envKey": "DRIVER_MODE", "envValue": "active" }
+      ],
+      "hints": [
+        "insmod /lib/modules/gpio_led.ko로 모듈을 로드합니다",
+        "echo gpio_led > /etc/modules-load.d/gpio.conf로 자동 로드 설정을 추가합니다",
+        "export DRIVER_MODE=active로 환경변수를 설정합니다"
+      ],
+      "scriptedOutputs": {
+        "uname -r": "5.15.0-gpio"
+      }
+    }
+  },
+  {
+    "id": "os-tl-010",
+    "category": "operating-system",
+    "subcategory": "terminal-lab",
+    "difficulty": "고급",
+    "type": "terminal",
+    "question": "악성 프로세스 'rogue_daemon'(PID 6789)을 강제 종료하고, /var/log/security.log에 조치 내용을 기록하세요. 그리고 해당 프로세스의 실행 파일(/tmp/.cache/rogue_daemon)을 삭제하고, /tmp/.cache 디렉터리의 권한을 700으로 변경하세요.",
+    "explanation": "kill -9로 프로세스를 강제 종료하고, rm으로 실행 파일을 삭제하며, chmod로 디렉터리 권한을 제한합니다. 보안 사고 대응 시 악성 프로세스 제거, 실행 파일 삭제, 권한 강화, 로그 기록을 함께 수행해야 합니다.",
+    "terminalConfig": {
+      "environment": {
+        "hostname": "secure-srv",
+        "user": "root",
+        "cwd": "/root"
+      },
+      "filesystem": {
+        "/root": { "type": "dir" },
+        "/var": { "type": "dir" },
+        "/var/log": { "type": "dir" },
+        "/tmp": { "type": "dir" },
+        "/tmp/.cache": { "type": "dir", "permissions": "777" },
+        "/tmp/.cache/rogue_daemon": { "type": "file", "content": "(binary)", "permissions": "755" }
+      },
+      "processes": [
+        { "pid": 1, "name": "init", "user": "root", "cpu": "0.0", "mem": "0.5", "command": "/sbin/init" },
+        { "pid": 500, "name": "sshd", "user": "root", "cpu": "0.1", "mem": "0.3", "command": "/usr/sbin/sshd" },
+        { "pid": 6789, "name": "rogue_daemon", "user": "nobody", "cpu": "45.2", "mem": "8.5", "command": "/tmp/.cache/rogue_daemon --stealth" }
+      ],
+      "goalChecks": [
+        { "description": "rogue_daemon 프로세스가 종료됨", "type": "process-stopped", "processName": "rogue_daemon" },
+        { "description": "보안 로그가 기록됨", "type": "file-exists", "path": "/var/log/security.log" },
+        { "description": "로그에 조치 내용 포함", "type": "file-contains", "path": "/var/log/security.log", "pattern": "kill|종료|rogue|제거" },
+        { "description": "실행 파일이 삭제됨", "type": "file-not-exists", "path": "/tmp/.cache/rogue_daemon" },
+        { "description": ".cache 디렉터리 권한이 700", "type": "file-permissions", "path": "/tmp/.cache", "permissions": "700" }
+      ],
+      "hints": [
+        "kill -9 PID로 프로세스를 강제 종료합니다",
+        "rm 명령어로 파일을 삭제합니다",
+        "chmod 700으로 디렉터리 권한을 소유자 전용으로 변경합니다"
+      ],
+      "scriptedOutputs": {}
+    }
+  }
+]

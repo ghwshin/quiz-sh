@@ -1,0 +1,341 @@
+[
+  {
+    "id": "dl-001",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "데드락(Deadlock)의 4대 필요 조건에 해당하지 않는 것은?",
+    "options": [
+      "상호 배제(Mutual Exclusion)",
+      "점유 대기(Hold and Wait)",
+      "선점(Preemption)",
+      "순환 대기(Circular Wait)"
+    ],
+    "answer": 2,
+    "explanation": "데드락의 4대 필요 조건은 상호 배제, 점유 대기, 비선점(No Preemption), 순환 대기입니다. 선점(Preemption)이 아니라 비선점(No Preemption)이 조건이므로, '선점'은 데드락 조건이 아닙니다."
+  },
+  {
+    "id": "dl-002",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "자원 할당 그래프(Resource Allocation Graph)에서 프로세스 Pi가 자원 Rj를 요청하는 것을 나타내는 간선의 방향은?",
+    "options": [
+      "Pi → Rj (요청 간선)",
+      "Rj → Pi (할당 간선)",
+      "Pi ↔ Rj (양방향 간선)",
+      "Rj → Rj (자기 간선)"
+    ],
+    "answer": 0,
+    "explanation": "자원 할당 그래프에서 요청 간선(request edge)은 프로세스에서 자원으로 향하고(Pi → Rj), 할당 간선(assignment edge)은 자원에서 프로세스로 향합니다(Rj → Pi)."
+  },
+  {
+    "id": "dl-003",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "데드락 처리 방법 중, 데드락이 발생하지 않도록 4대 필요 조건 중 하나 이상을 사전에 제거하는 방법은?",
+    "options": [
+      "데드락 회피(Avoidance)",
+      "데드락 예방(Prevention)",
+      "데드락 탐지(Detection)",
+      "데드락 무시(Ostrich Algorithm)"
+    ],
+    "answer": 1,
+    "explanation": "데드락 예방(Prevention)은 데드락의 4대 필요 조건 중 하나 이상을 시스템 설계 단계에서 원천적으로 제거하여 데드락이 절대 발생하지 않도록 하는 방법입니다."
+  },
+  {
+    "id": "dl-004",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Banker's Algorithm은 어떤 데드락 처리 방법에 해당하는가?",
+    "options": [
+      "데드락 예방(Prevention)",
+      "데드락 회피(Avoidance)",
+      "데드락 탐지(Detection)",
+      "데드락 회복(Recovery)"
+    ],
+    "answer": 1,
+    "explanation": "Banker's Algorithm은 데드락 회피(Avoidance) 방법으로, 자원 할당 전에 시스템이 안전 상태(safe state)를 유지하는지 확인하여 안전한 경우에만 자원을 할당합니다."
+  },
+  {
+    "id": "dl-005",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "데드락 예방에서 '점유 대기' 조건을 제거하는 방법은?",
+    "options": [
+      "모든 자원을 공유 가능하게 만든다",
+      "프로세스가 실행 전에 필요한 모든 자원을 한 번에 요청한다",
+      "자원에 번호를 부여하고 오름차순으로만 요청한다",
+      "프로세스가 자원을 보유한 상태에서 다른 자원을 요청할 수 있다"
+    ],
+    "answer": 1,
+    "explanation": "점유 대기 조건을 제거하려면 프로세스가 자원을 하나도 보유하지 않은 상태에서 필요한 모든 자원을 한 번에 요청하거나, 새 자원이 필요하면 현재 보유한 자원을 모두 반납한 후 다시 요청해야 합니다."
+  },
+  {
+    "id": "dl-006",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Banker's Algorithm에서 'safe state'의 의미는?",
+    "options": [
+      "데드락이 현재 발생하지 않은 상태",
+      "모든 프로세스가 최대 자원 요구를 만족하며 종료할 수 있는 순서가 존재하는 상태",
+      "모든 자원이 할당되지 않은 상태",
+      "프로세스가 하나도 실행되지 않는 상태"
+    ],
+    "answer": 1,
+    "explanation": "안전 상태(Safe State)는 모든 프로세스가 최대 자원 요구를 만족하고 정상 종료할 수 있는 안전 순서(safe sequence)가 존재하는 상태입니다. 안전 상태이면 데드락이 발생하지 않지만, 불안전 상태라고 해서 반드시 데드락이 발생하는 것은 아닙니다."
+  },
+  {
+    "id": "dl-007",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "데드락 예방에서 '순환 대기' 조건을 제거하는 방법은?",
+    "options": [
+      "모든 자원을 공유 가능하게 한다",
+      "자원에 고유 번호를 부여하고 오름차순으로만 요청하도록 강제한다",
+      "프로세스가 자원을 요청하면 즉시 할당한다",
+      "타임아웃을 설정하여 일정 시간 후 자원을 강제 해제한다"
+    ],
+    "answer": 1,
+    "explanation": "모든 자원에 고유 번호를 부여하고, 프로세스가 자원을 요청할 때 반드시 번호의 오름차순으로만 요청하도록 강제하면 순환 대기 조건이 깨지므로 데드락이 발생하지 않습니다."
+  },
+  {
+    "id": "dl-008",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "데드락 탐지 후 회복(Recovery) 방법으로 올바르지 않은 것은?",
+    "options": [
+      "데드락에 관련된 프로세스를 하나씩 종료한다",
+      "데드락에 관련된 모든 프로세스를 한꺼번에 종료한다",
+      "자원을 선점하여 다른 프로세스에 할당한다",
+      "시스템을 재부팅하지 않고 자동으로 치유한다"
+    ],
+    "answer": 3,
+    "explanation": "데드락 회복 방법으로는 프로세스 종료(전체 또는 하나씩), 자원 선점(일부 프로세스의 자원을 강제로 회수하여 다른 프로세스에 할당)이 있습니다. 시스템이 자동으로 치유되지는 않으며, 능동적인 조치가 필요합니다."
+  },
+  {
+    "id": "dl-009",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Livelock과 Deadlock의 차이점으로 올바른 것은?",
+    "options": [
+      "Livelock은 자원 부족으로 발생하고, Deadlock은 그렇지 않다",
+      "Livelock에서 프로세스는 상태가 계속 변하지만 진전이 없고, Deadlock에서는 프로세스가 완전히 멈춘다",
+      "Deadlock은 항상 해결 가능하지만, Livelock은 해결 불가능하다",
+      "Livelock은 단일 프로세스에서만 발생한다"
+    ],
+    "answer": 1,
+    "explanation": "Deadlock에서는 프로세스가 완전히 블록되어 상태 변화가 없습니다. 반면 Livelock에서는 프로세스들이 서로 양보하느라 상태는 계속 변하지만, 실제로는 아무 진전도 이루지 못하는 상태입니다."
+  },
+  {
+    "id": "dl-010",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Ostrich Algorithm(타조 알고리즘)이란?",
+    "options": [
+      "데드락을 적극적으로 탐지하고 회복하는 알고리즘",
+      "데드락 문제를 무시하고 발생 시 시스템을 재시작하는 접근법",
+      "자원 할당 그래프를 분석하는 알고리즘",
+      "Banker's Algorithm의 다른 이름"
+    ],
+    "answer": 1,
+    "explanation": "타조 알고리즘은 데드락 문제를 의도적으로 무시하는 접근법입니다. 데드락 발생 빈도가 매우 낮고, 예방/회피/탐지 비용이 더 큰 경우에 사용됩니다. 대부분의 범용 운영체제(Windows, Linux)가 이 방식을 채택합니다."
+  },
+  {
+    "id": "dl-011",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "데드락이 발생하려면 상호 배제, 점유 대기, ___, 순환 대기의 4가지 조건이 동시에 성립해야 한다.",
+    "blankAnswers": [["비선점", "no preemption", "비선점 조건"]],
+    "explanation": "비선점(No Preemption) 조건은 프로세스가 보유한 자원을 강제로 빼앗을 수 없다는 것입니다. 이 4가지 조건이 모두 동시에 성립해야 데드락이 발생합니다.",
+    "blankDistractors": [["선점", "순서 대기", "기아"]]
+  },
+  {
+    "id": "dl-012",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "자원 할당 그래프에서 사이클이 존재하고, 각 자원 유형의 인스턴스가 ___개일 때 데드락이 반드시 존재한다.",
+    "blankAnswers": [["1", "하나"]],
+    "explanation": "자원 할당 그래프에 사이클이 있을 때, 각 자원 유형의 인스턴스가 1개이면 데드락이 반드시 존재합니다. 인스턴스가 여러 개이면 사이클이 있어도 데드락이 아닐 수 있습니다.",
+    "blankDistractors": [["2", "0", "무한"]]
+  },
+  {
+    "id": "dl-013",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Banker's Algorithm에서 시스템이 데드락 없이 모든 프로세스를 완료할 수 있는 프로세스 실행 순서를 ___라 한다.",
+    "blankAnswers": [["safe sequence", "안전 순서", "안전 순서열"]],
+    "explanation": "안전 순서(Safe Sequence)는 각 프로세스의 최대 자원 요구를 충족시킬 수 있는 순서입니다. 안전 순서가 존재하면 시스템은 안전 상태(safe state)에 있으며 데드락이 발생하지 않습니다.",
+    "blankDistractors": [["safe state", "deadlock free", "optimal sequence"]]
+  },
+  {
+    "id": "dl-014",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Banker's Algorithm에서 프로세스 Pi가 추가로 필요로 하는 자원의 양을 구하는 공식은 Need[i] = ___[i] - ___[i] 이다.",
+    "blankAnswers": [["Max"], ["Allocation"]],
+    "explanation": "Need[i] = Max[i] - Allocation[i]로 계산합니다. Max[i]는 프로세스 Pi가 최대로 필요한 자원의 양이고, Allocation[i]는 현재 할당된 자원의 양이므로, 그 차이가 추가로 필요한 자원의 양입니다.",
+    "blankDistractors": [["Request", "Available", "Need"], ["Total", "Available", "Need"]]
+  },
+  {
+    "id": "dl-015",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "데드락 예방에서 '상호 배제' 조건은 ___자원에 대해서만 성립하며, 공유 가능한 자원(예: 읽기 전용 파일)에는 적용되지 않는다.",
+    "blankAnswers": [["비공유", "non-sharable", "배타적"]],
+    "explanation": "상호 배제 조건은 비공유(non-sharable) 자원, 즉 한 번에 하나의 프로세스만 사용할 수 있는 자원에만 적용됩니다. 읽기 전용 파일과 같이 공유 가능한 자원은 상호 배제가 필요 없습니다.",
+    "blankDistractors": [["공유", "물리적", "가상"]]
+  },
+  {
+    "id": "dl-016",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Banker's Algorithm에서 현재 시스템에서 사용 가능한 각 자원 유형의 인스턴스 수를 나타내는 벡터를 ___라 한다.",
+    "blankAnswers": [["Available"]],
+    "explanation": "Available 벡터는 현재 시스템에서 할당되지 않은 각 자원 유형의 가용 인스턴스 수를 나타냅니다. 자원 요청 시 Available 벡터와 Need 벡터를 비교하여 안전성을 판단합니다.",
+    "blankDistractors": [["Max", "Allocation", "Need"]]
+  },
+  {
+    "id": "dl-017",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "데드락 탐지 알고리즘에서 자원 할당 그래프를 단순화하여 ___그래프(wait-for graph)로 변환하면 사이클 존재 여부로 데드락을 판단할 수 있다.",
+    "blankAnswers": [["대기", "wait-for"]],
+    "explanation": "대기 그래프(Wait-for Graph)는 자원 할당 그래프에서 자원 노드를 제거하고 프로세스 간의 대기 관계만 표현한 것입니다. 이 그래프에 사이클이 있으면 데드락이 존재합니다.",
+    "blankDistractors": [["자원 할당", "요청", "의존"]]
+  },
+  {
+    "id": "dl-018",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "데드락 회복에서 자원을 선점하여 다른 프로세스에 할당할 때, 선점된 프로세스를 이전 상태로 되돌리는 것을 ___이라 한다.",
+    "blankAnswers": [["rollback", "롤백"]],
+    "explanation": "롤백(Rollback)은 자원 선점된 프로세스를 안전한 이전 상태로 되돌리는 것입니다. 체크포인트(checkpoint)를 주기적으로 저장해두면 해당 지점으로 롤백하여 재실행할 수 있습니다.",
+    "blankDistractors": [["checkpoint", "restart", "abort"]]
+  },
+  {
+    "id": "dl-019",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "두 스레드가 자원을 서로 다른 순서로 요청하여 데드락이 발생하는 코드에서 문제 원인을 파악하시오.",
+    "codeTemplate": "pthread_mutex_t lockA, lockB;\n\nvoid *thread1(void *arg) {\n    pthread_mutex_lock(&lockA);\n    pthread_mutex_lock(&___);  // 데드락 위험\n    /* 작업 수행 */\n    pthread_mutex_unlock(&lockB);\n    pthread_mutex_unlock(&lockA);\n}\n\nvoid *thread2(void *arg) {\n    pthread_mutex_lock(&___);\n    pthread_mutex_lock(&lockA);  // 데드락 위험\n    /* 작업 수행 */\n    pthread_mutex_unlock(&lockA);\n    pthread_mutex_unlock(&lockB);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["lockB"], ["lockB"]],
+    "explanation": "thread1은 lockA → lockB 순서로, thread2는 lockB → lockA 순서로 락을 요청합니다. 서로 다른 순서로 자원을 요청하면 순환 대기가 발생하여 데드락이 생깁니다. 해결법은 모든 스레드가 같은 순서로 락을 요청하는 것입니다.",
+    "blankDistractors": [["lockA", "mutex", "lock"], ["lockA", "mutex", "lock"]]
+  },
+  {
+    "id": "dl-020",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Banker's Algorithm에서 안전 상태를 검사하는 핵심 로직을 완성하시오.",
+    "codeTemplate": "bool is_safe(int available[], int max[][M], int alloc[][M], int n) {\n    int need[n][M], work[M];\n    bool finish[n];\n\n    for (int i = 0; i < n; i++) {\n        finish[i] = false;\n        for (int j = 0; j < M; j++)\n            need[i][j] = ___[i][j] - alloc[i][j];\n    }\n    for (int j = 0; j < M; j++)\n        work[j] = available[j];\n\n    int count = 0;\n    while (count < n) {\n        bool found = false;\n        for (int i = 0; i < n; i++) {\n            if (!finish[i] && can_satisfy(need[i], work)) {\n                for (int j = 0; j < M; j++)\n                    work[j] += ___[i][j];\n                finish[i] = true;\n                found = true;\n                count++;\n            }\n        }\n        if (!found) return false;\n    }\n    return ___;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["max"], ["alloc"], ["true"]],
+    "explanation": "Need = Max - Allocation으로 계산합니다. 프로세스가 완료되면 할당된 자원(alloc)을 work에 반환합니다. 모든 프로세스가 완료 가능하면 안전 상태(true)입니다.",
+    "blankDistractors": [["request", "need", "work"], ["total", "need", "work"], ["false", "0", "1"]]
+  },
+  {
+    "id": "dl-021",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "자원 순서 규약을 적용하여 데드락을 예방하는 코드를 완성하시오.",
+    "codeTemplate": "pthread_mutex_t locks[N];\n// 자원 번호가 작은 것부터 요청하는 규약\n\nvoid safe_lock(int res1, int res2) {\n    int first = (res1 < res2) ? res1 : ___;\n    int second = (res1 < res2) ? res2 : ___;\n    pthread_mutex_lock(&locks[first]);\n    pthread_mutex_lock(&locks[second]);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["res2"], ["res1"]],
+    "explanation": "순환 대기 조건을 방지하기 위해 항상 번호가 작은 자원부터 먼저 잠급니다. res1 < res2이면 res1 → res2 순서, 아니면 res2 → res1 순서로 잠가서 일관된 순서를 유지합니다.",
+    "blankDistractors": [["proc1", "first", "0"], ["proc2", "second", "N"]]
+  },
+  {
+    "id": "dl-022",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "데드락 탐지 알고리즘에서 대기 그래프의 사이클을 탐지하는 DFS 기반 코드를 완성하시오.",
+    "codeTemplate": "bool visited[MAX], rec_stack[MAX];\nbool adj[MAX][MAX];\n\nbool has_cycle_dfs(int node, int n) {\n    visited[node] = true;\n    ___[node] = true;\n\n    for (int i = 0; i < n; i++) {\n        if (adj[node][i]) {\n            if (!visited[i] && has_cycle_dfs(i, n))\n                return true;\n            if (___[i])\n                return true;\n        }\n    }\n    rec_stack[node] = false;\n    return false;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["rec_stack"], ["rec_stack"]],
+    "explanation": "rec_stack(재귀 스택)은 현재 DFS 경로에 있는 노드를 추적합니다. 방문 중인 노드를 다시 만나면(rec_stack[i]가 true) 사이클이 존재하므로 데드락이 탐지됩니다.",
+    "blankDistractors": [["visited", "adj", "stack"], ["visited", "adj", "stack"]]
+  },
+  {
+    "id": "dl-023",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "Banker's Algorithm에서 자원 요청을 처리하는 코드를 완성하시오.",
+    "codeTemplate": "bool request_resources(int pid, int request[]) {\n    for (int j = 0; j < M; j++) {\n        if (request[j] > need[pid][j])\n            return false;  // 최대 요구 초과\n        if (request[j] > ___[j])\n            return false;  // 가용 자원 부족\n    }\n    // 임시 할당\n    for (int j = 0; j < M; j++) {\n        available[j] -= request[j];\n        allocation[pid][j] += request[j];\n        ___[pid][j] -= request[j];\n    }\n    if (is_safe())\n        return true;\n    // 안전하지 않으면 롤백\n    // ...\n    return false;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["available"], ["need"]],
+    "explanation": "먼저 요청이 가용 자원(available)을 초과하지 않는지 확인합니다. 임시 할당 후 need를 감소시키고 안전성 검사를 수행합니다. 안전하지 않으면 할당을 롤백합니다.",
+    "blankDistractors": [["request", "total", "allocation"], ["demand", "remaining", "allocation"]]
+  },
+  {
+    "id": "dl-024",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "데드락 예방을 위해 타임아웃 기반으로 락 획득을 시도하는 코드를 완성하시오.",
+    "codeTemplate": "#include <pthread.h>\n#include <time.h>\n\nbool try_lock_with_timeout(pthread_mutex_t *mutex, int timeout_ms) {\n    struct timespec ts;\n    clock_gettime(CLOCK_REALTIME, &ts);\n    ts.tv_sec += timeout_ms / 1000;\n    ts.tv_nsec += (timeout_ms % 1000) * 1000000;\n\n    int result = ___(&(*mutex), &ts);\n    return (result == ___);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["pthread_mutex_timedlock"], ["0"]],
+    "explanation": "pthread_mutex_timedlock()은 지정된 시간까지 락 획득을 시도하고, 타임아웃 시 ETIMEDOUT을 반환합니다. 성공 시 0을 반환합니다. 이를 통해 무한 대기를 방지하여 데드락을 예방할 수 있습니다.",
+    "blankDistractors": [["pthread_mutex_lock", "pthread_mutex_trylock", "sem_timedwait"], ["1", "-1", "ETIMEDOUT"]]
+  },
+  {
+    "id": "dl-025",
+    "category": "operating-system",
+    "subcategory": "deadlock",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Python으로 데드락 예방을 위해 락 순서를 강제하는 컨텍스트 매니저를 완성하시오.",
+    "codeTemplate": "import threading\n\ndef ordered_lock(*locks):\n    sorted_locks = sorted(locks, key=___)\n    for lock in sorted_locks:\n        lock.acquire()\n    return sorted_locks\n\ndef ordered_unlock(sorted_locks):\n    for lock in ___:\n        lock.release()",
+    "codeLanguage": "python",
+    "blankAnswers": [["id"], ["reversed(sorted_locks)"]],
+    "explanation": "id() 함수로 락 객체의 고유 식별자를 기준으로 정렬하면 항상 일관된 순서로 락을 획득합니다. 해제 시에는 reversed()로 역순으로 해제하여 올바른 LIFO 순서를 유지합니다.",
+    "blankDistractors": [["hash", "str", "type"], ["sorted_locks", "locks", "sorted_locks[::-1]"]]
+  }
+]

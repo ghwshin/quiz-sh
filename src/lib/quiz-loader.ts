@@ -40,6 +40,26 @@ import arm64Development from "../../data/android-system/arm64-development.json";
 import androidDevConversation from "../../data/android-system/dev-conversation.json";
 import androidTerminalLab from "../../data/android-system/terminal-lab.json";
 
+// Operating System quiz data
+import osProcessThread from "../../data/operating-system/process-thread.json";
+import osCpuScheduling from "../../data/operating-system/cpu-scheduling.json";
+import osSynchronization from "../../data/operating-system/synchronization.json";
+import osDeadlock from "../../data/operating-system/deadlock.json";
+import osVirtualMemory from "../../data/operating-system/virtual-memory.json";
+import osMemoryManagement from "../../data/operating-system/memory-management.json";
+import osFileSystemTheory from "../../data/operating-system/file-system-theory.json";
+import osIoInterrupt from "../../data/operating-system/io-interrupt.json";
+import osProtectionSecurity from "../../data/operating-system/protection-security.json";
+import osArchitecture from "../../data/operating-system/os-architecture.json";
+import osBspBootloader from "../../data/operating-system/bsp-bootloader.json";
+import osDeviceTree from "../../data/operating-system/device-tree.json";
+import osCrossBuild from "../../data/operating-system/cross-build.json";
+import osBoardBringup from "../../data/operating-system/board-bringup.json";
+import osPowerThermal from "../../data/operating-system/power-thermal.json";
+import osKernelPorting from "../../data/operating-system/kernel-porting.json";
+import osDevConversation from "../../data/operating-system/dev-conversation.json";
+import osTerminalLab from "../../data/operating-system/terminal-lab.json";
+
 const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
   "linux-kernel": {
     "process-management": processManagement as Quiz[],
@@ -79,6 +99,26 @@ const quizDataMap: Record<Category, Record<string, Quiz[]>> = {
     "arm64-development": arm64Development as Quiz[],
     "dev-conversation": androidDevConversation as Quiz[],
     "terminal-lab": androidTerminalLab as unknown as Quiz[],
+  },
+  "operating-system": {
+    "process-thread": osProcessThread as Quiz[],
+    "cpu-scheduling": osCpuScheduling as Quiz[],
+    synchronization: osSynchronization as Quiz[],
+    deadlock: osDeadlock as Quiz[],
+    "virtual-memory": osVirtualMemory as Quiz[],
+    "memory-management": osMemoryManagement as Quiz[],
+    "file-system-theory": osFileSystemTheory as Quiz[],
+    "io-interrupt": osIoInterrupt as Quiz[],
+    "protection-security": osProtectionSecurity as Quiz[],
+    "os-architecture": osArchitecture as Quiz[],
+    "bsp-bootloader": osBspBootloader as Quiz[],
+    "device-tree": osDeviceTree as Quiz[],
+    "cross-build": osCrossBuild as Quiz[],
+    "board-bringup": osBoardBringup as Quiz[],
+    "power-thermal": osPowerThermal as Quiz[],
+    "kernel-porting": osKernelPorting as Quiz[],
+    "dev-conversation": osDevConversation as Quiz[],
+    "terminal-lab": osTerminalLab as unknown as Quiz[],
   },
 };
 

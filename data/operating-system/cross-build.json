@@ -1,0 +1,321 @@
+[
+  {
+    "id": "cb-001",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "AOSP 빌드에서 타겟 디바이스와 빌드 변형을 선택하는 명령어는?",
+    "options": ["make", "lunch", "m", "repo"],
+    "answer": 1,
+    "explanation": "lunch 명령어는 TARGET_PRODUCT와 TARGET_BUILD_VARIANT를 설정합니다. 예: lunch aosp_arm64-userdebug에서 aosp_arm64는 타겟 제품, userdebug는 빌드 변형(user/userdebug/eng)입니다."
+  },
+  {
+    "id": "cb-002",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "AOSP에서 Android.bp 파일을 처리하는 빌드 시스템은?",
+    "options": ["Make", "Ninja", "Soong", "Gradle"],
+    "answer": 2,
+    "explanation": "Soong은 Android.bp(Blueprint) 파일을 읽어 Ninja 빌드 파일을 생성하는 AOSP의 빌드 시스템입니다. 기존 Android.mk(Make 기반)를 대체하며, Go로 작성되어 빌드 정의의 정확성과 속도가 향상되었습니다."
+  },
+  {
+    "id": "cb-003",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Yocto Project에서 패키지 빌드를 실행하는 핵심 명령어는?",
+    "options": ["make", "cmake", "bitbake", "meson"],
+    "answer": 2,
+    "explanation": "bitbake는 Yocto/OpenEmbedded의 빌드 엔진으로, 레시피(.bb) 파일을 파싱하여 소스 다운로드, 패치, 컴파일, 패키징 등의 태스크를 실행합니다. 'bitbake core-image-minimal'처럼 이미지 레시피를 빌드할 수 있습니다."
+  },
+  {
+    "id": "cb-004",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "크로스 컴파일에서 sysroot의 역할은?",
+    "options": [
+      "호스트 시스템의 라이브러리를 타겟용으로 변환한다",
+      "타겟 시스템의 헤더 파일과 라이브러리를 포함하여 크로스 컴파일러가 참조하는 루트 디렉토리이다",
+      "크로스 컴파일러의 실행 파일을 저장하는 디렉토리이다",
+      "빌드 결과물을 타겟 시스템에 배포하는 스테이징 영역이다"
+    ],
+    "answer": 1,
+    "explanation": "sysroot는 타겟 아키텍처의 헤더(/usr/include), 라이브러리(/usr/lib) 등을 포함하는 디렉토리입니다. --sysroot 옵션으로 지정하면 크로스 컴파일러가 호스트 시스템 대신 타겟의 헤더와 라이브러리를 참조합니다."
+  },
+  {
+    "id": "cb-005",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Buildroot에서 타겟 보드의 빌드 설정을 선택하는 명령어는?",
+    "options": [
+      "buildroot configure",
+      "make menuconfig 또는 make <board>_defconfig",
+      "bitbake <target>",
+      "cmake -DTARGET=<board>"
+    ],
+    "answer": 1,
+    "explanation": "Buildroot는 make menuconfig로 대화형 설정 인터페이스를 제공하거나, make <board>_defconfig로 사전 정의된 보드 설정을 로드합니다. Kconfig 기반으로 Linux 커널과 유사한 설정 방식을 사용합니다."
+  },
+  {
+    "id": "cb-006",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "AOSP 빌드에서 m, mm, mmm 명령의 차이점은?",
+    "options": [
+      "m은 전체 빌드, mm은 현재 디렉토리, mmm은 지정 디렉토리의 모듈을 빌드한다",
+      "m은 make, mm은 make modules, mmm은 make menuconfig의 별칭이다",
+      "m은 user, mm은 userdebug, mmm은 eng 빌드를 수행한다",
+      "m은 메인 모듈, mm은 미디어 모듈, mmm은 멀티미디어 모듈을 빌드한다"
+    ],
+    "answer": 0,
+    "explanation": "m은 소스 트리 루트에서 전체 빌드를 수행합니다. mm은 현재 디렉토리의 Android.bp/Android.mk 모듈만 빌드하고, mmm은 인자로 지정된 디렉토리의 모듈을 빌드합니다. 개발 중 부분 빌드에 유용합니다."
+  },
+  {
+    "id": "cb-007",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Yocto Project에서 layer의 역할은?",
+    "options": [
+      "빌드 캐시를 계층적으로 관리하여 빌드 속도를 높인다",
+      "메타데이터(레시피, 설정, 클래스)를 모듈화하여 재사용 가능한 단위로 구성한다",
+      "타겟 이미지의 파일시스템 계층 구조를 정의한다",
+      "크로스 컴파일러의 검색 경로를 계층적으로 설정한다"
+    ],
+    "answer": 1,
+    "explanation": "Yocto layer는 레시피(.bb), 설정(.conf), 클래스(.bbclass)를 모듈화한 디렉토리 구조입니다. meta-*, meta-openembedded 등의 레이어를 조합하여 프로젝트를 구성하며, bblayers.conf에서 사용할 레이어를 지정합니다."
+  },
+  {
+    "id": "cb-008",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "AOSP에서 Android.mk를 Android.bp로 전환할 때 사용하는 자동 변환 도구는?",
+    "options": ["bp2build", "androidmk", "soong_ui", "blueprint"],
+    "answer": 1,
+    "explanation": "androidmk 도구(build/soong/androidmk/)는 Android.mk 파일을 Android.bp 형식으로 자동 변환합니다. 단, 조건부 빌드(ifeq 등) 같은 복잡한 Make 구문은 수동 수정이 필요할 수 있습니다."
+  },
+  {
+    "id": "cb-009",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "CMake 크로스 컴파일에서 toolchain file에 반드시 설정해야 하는 변수가 아닌 것은?",
+    "options": [
+      "CMAKE_SYSTEM_NAME",
+      "CMAKE_C_COMPILER",
+      "CMAKE_FIND_ROOT_PATH",
+      "CMAKE_BUILD_TYPE"
+    ],
+    "answer": 3,
+    "explanation": "CMAKE_BUILD_TYPE은 빌드 유형(Debug/Release)으로 크로스 컴파일과 무관합니다. toolchain file에는 CMAKE_SYSTEM_NAME(타겟 OS), CMAKE_C/CXX_COMPILER(크로스 컴파일러), CMAKE_FIND_ROOT_PATH(sysroot)를 설정해야 합니다."
+  },
+  {
+    "id": "cb-010",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "ccache를 AOSP 빌드에 적용할 때의 올바른 설명은?",
+    "options": [
+      "ccache는 오브젝트 파일을 캐싱하여 재빌드 시간을 단축하며 USE_CCACHE=1로 활성화한다",
+      "ccache는 링커 출력을 캐싱하여 최종 바이너리 생성 속도를 높인다",
+      "ccache는 소스 코드 변경을 감지하여 변경된 파일만 빌드하는 증분 빌드 도구이다",
+      "ccache는 빌드 로그를 캐싱하여 에러 분석 속도를 높인다"
+    ],
+    "answer": 0,
+    "explanation": "ccache는 컴파일러 출력(오브젝트 파일)을 해시 기반으로 캐싱합니다. export USE_CCACHE=1과 ccache -M 50G(캐시 크기 설정)로 AOSP 빌드에 적용하면, 소스 변경이 없는 파일의 재컴파일을 건너뛰어 빌드 시간을 대폭 단축합니다."
+  },
+  {
+    "id": "cb-011",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "ARM64 리눅스 타겟용 GCC 크로스 컴파일러의 일반적인 접두어(prefix)는 ___이다.",
+    "blankAnswers": [["aarch64-linux-gnu-"]],
+    "explanation": "aarch64-linux-gnu-는 ARM64 Linux 타겟용 GNU 툴체인 접두어입니다. aarch64-linux-gnu-gcc, aarch64-linux-gnu-ld 등으로 사용하며, ARM 32비트는 arm-linux-gnueabihf-를 사용합니다.",
+    "blankDistractors": [["arm-linux-gnueabihf-", "x86_64-linux-gnu-", "aarch64-none-elf-"]]
+  },
+  {
+    "id": "cb-012",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "AOSP 빌드 변형(variant) 중 디버깅이 가능하면서 root 접근이 제한된 변형은 ___이다.",
+    "blankAnswers": [["userdebug"]],
+    "explanation": "userdebug는 user 빌드의 보안 정책을 유지하면서 ADB root, 디버깅 도구 접근이 가능한 변형입니다. user는 프로덕션용(디버깅 불가), eng는 개발용(모든 디버깅 활성화)입니다.",
+    "blankDistractors": [["user", "eng", "debug"]]
+  },
+  {
+    "id": "cb-013",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "AOSP 빌드 환경을 초기화하기 위해 소스 트리에서 실행하는 스크립트는 source ___이다.",
+    "blankAnswers": [["build/envsetup.sh", "envsetup.sh"]],
+    "explanation": "source build/envsetup.sh는 lunch, m, mm, mmm, croot 등의 빌드 도우미 함수를 현재 셸에 로드합니다. 이 스크립트를 실행해야 AOSP 빌드 명령어를 사용할 수 있습니다.",
+    "blankDistractors": [["build/config.sh", "setup.sh", "init.sh"]]
+  },
+  {
+    "id": "cb-014",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Yocto Project에서 빌드에 사용할 레이어 목록을 정의하는 설정 파일은 ___이다.",
+    "blankAnswers": [["bblayers.conf", "conf/bblayers.conf"]],
+    "explanation": "bblayers.conf는 build/conf/ 디렉토리에 위치하며, BBLAYERS 변수에 사용할 레이어의 절대 경로를 나열합니다. bitbake는 이 파일을 읽어 레시피 검색 경로를 결정합니다.",
+    "blankDistractors": [["local.conf", "layer.conf", "bitbake.conf"]]
+  },
+  {
+    "id": "cb-015",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Yocto에서 개별 레시피의 빌드 태스크를 실행할 때, busybox 패키지의 compile 태스크만 실행하려면 bitbake -c ___ busybox 명령을 사용한다.",
+    "blankAnswers": [["compile"]],
+    "explanation": "bitbake -c <task> <recipe>로 특정 태스크만 실행할 수 있습니다. 주요 태스크: fetch(소스 다운로드), unpack(압축 해제), patch(패치 적용), configure(설정), compile(컴파일), install(설치), package(패키징).",
+    "blankDistractors": [["build", "make", "run"]]
+  },
+  {
+    "id": "cb-016",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Buildroot에서 빌드 결과물(커널 이미지, rootfs, DTB 등)이 저장되는 디렉토리는 ___이다.",
+    "blankAnswers": [["output/images", "output/images/"]],
+    "explanation": "Buildroot 빌드 완료 후 output/images/ 디렉토리에 zImage(커널), rootfs.ext4(루트 파일시스템), *.dtb(디바이스 트리) 등의 최종 결과물이 저장됩니다.",
+    "blankDistractors": [["output/build", "output/target", "output/host"]]
+  },
+  {
+    "id": "cb-017",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "AOSP에서 특정 모듈의 빌드 타겟과 의존성을 확인할 때, Soong이 생성하는 중간 빌드 파일 형식은 ___이다.",
+    "blankAnswers": [["Ninja", ".ninja"]],
+    "explanation": "Soong은 Android.bp를 파싱하여 .ninja 파일(out/soong/build.ninja 등)을 생성하고, Ninja 빌드 시스템이 이를 실행합니다. Ninja는 Make보다 빠른 빌드 실행을 위해 설계된 저수준 빌드 시스템입니다.",
+    "blankDistractors": [["Makefile", "CMakeLists", "BUILD"]]
+  },
+  {
+    "id": "cb-018",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "Yocto에서 기존 레시피를 수정하지 않고 패치나 설정을 추가할 때 사용하는 파일 확장자는 ___이다.",
+    "blankAnswers": [[".bbappend", "bbappend"]],
+    "explanation": ".bbappend 파일은 동일한 이름의 .bb 레시피에 내용을 추가(append)합니다. 별도의 레이어에서 원본 레시피를 수정하지 않고 패치 추가, 설정 변경 등을 할 수 있어 레이어 관리에 필수적입니다.",
+    "blankDistractors": [[".bb", ".conf", ".inc"]]
+  },
+  {
+    "id": "cb-019",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "AOSP 빌드 환경을 설정하고 타겟을 선택하여 빌드하는 명령 시퀀스를 완성하시오.",
+    "codeTemplate": "$ source ___\n$ ___ aosp_arm64-userdebug\n$ m -j$(nproc)",
+    "codeLanguage": "shell",
+    "blankAnswers": [["build/envsetup.sh"], ["lunch"]],
+    "explanation": "source build/envsetup.sh로 빌드 환경을 초기화하고, lunch로 타겟(aosp_arm64)과 변형(userdebug)을 선택한 후, m -j$(nproc)으로 전체 빌드를 수행합니다.",
+    "blankDistractors": [["setup.sh", "configure.sh", "build/setup.sh"], ["make", "build", "select"]]
+  },
+  {
+    "id": "cb-020",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "리눅스 커널을 ARM64 타겟으로 크로스 컴파일하는 명령을 완성하시오.",
+    "codeTemplate": "$ make ARCH=___ CROSS_COMPILE=___ defconfig\n$ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)",
+    "codeLanguage": "shell",
+    "blankAnswers": [["arm64"], ["aarch64-linux-gnu-"]],
+    "explanation": "ARCH=arm64로 타겟 아키텍처를 지정하고, CROSS_COMPILE=aarch64-linux-gnu-로 크로스 컴파일러 접두어를 설정합니다. defconfig으로 기본 설정을 로드한 후 -j 옵션으로 병렬 빌드합니다.",
+    "blankDistractors": [["aarch64", "MIPS", "arm"], ["arm-linux-gnueabihf-", "aarch64-none-elf-", "gcc-aarch64-"]]
+  },
+  {
+    "id": "cb-021",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "CMake 크로스 컴파일을 위한 toolchain file의 핵심 변수를 완성하시오.",
+    "codeTemplate": "set(CMAKE_SYSTEM_NAME ___)\nset(CMAKE_C_COMPILER aarch64-linux-gnu-gcc)\nset(CMAKE_CXX_COMPILER aarch64-linux-gnu-g++)\nset(CMAKE_FIND_ROOT_PATH ___)",
+    "codeLanguage": "shell",
+    "blankAnswers": [["Linux"], ["/opt/sysroot", "${SYSROOT}"]],
+    "explanation": "CMAKE_SYSTEM_NAME=Linux로 타겟 OS를 지정하면 CMake가 크로스 컴파일 모드로 전환됩니다. CMAKE_FIND_ROOT_PATH에 sysroot 경로를 설정하여 타겟용 헤더와 라이브러리를 검색합니다.",
+    "blankDistractors": [["ARM64", "Android", "Embedded"], ["/usr/lib", "/usr/local", "/opt/toolchain"]]
+  },
+  {
+    "id": "cb-022",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "AOSP의 Android.bp에서 공유 라이브러리를 정의하는 빌드 규칙을 완성하시오.",
+    "codeTemplate": "___ {\n    name: \"libmyhal\",\n    srcs: [\"my_hal.cpp\"],\n    shared_libs: [\"liblog\", \"libutils\"],\n    vendor: ___,\n}",
+    "codeLanguage": "shell",
+    "blankAnswers": [["cc_library_shared"], ["true"]],
+    "explanation": "cc_library_shared는 C/C++ 공유 라이브러리(.so) 빌드 규칙입니다. vendor: true는 이 라이브러리가 벤더 파티션에 설치됨을 의미하며, VNDK(Vendor Native Development Kit) 정책에 따라 시스템 라이브러리 접근이 제한됩니다.",
+    "blankDistractors": [["cc_library_static", "cc_binary", "android_library"], ["false", "\"vendor\"", "1"]]
+  },
+  {
+    "id": "cb-023",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "Yocto 레시피(.bb)에서 소스 위치와 빌드 태스크를 정의하는 핵심 변수를 완성하시오.",
+    "codeTemplate": "SUMMARY = \"My custom driver\"\nLICENSE = \"GPLv2\"\nLIC_FILES_CHKSUM = \"file://COPYING;md5=...\"\n\n___ = \"git://github.com/vendor/driver.git;branch=main;protocol=https\"\n___ = \"${AUTOREV}\"",
+    "codeLanguage": "shell",
+    "blankAnswers": [["SRC_URI"], ["SRCREV"]],
+    "explanation": "SRC_URI는 소스 코드의 위치(git, http, file 등)를 지정합니다. SRCREV는 Git 커밋 해시를 지정하며, ${AUTOREV}는 최신 커밋을 자동으로 추적합니다(개발용, 프로덕션에서는 고정 해시 권장).",
+    "blankDistractors": [["SRC_URL", "SOURCE", "FETCH_URI"], ["GIT_REV", "REVISION", "COMMIT_ID"]]
+  },
+  {
+    "id": "cb-024",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "Buildroot에서 커스텀 패키지의 Config.in과 .mk 파일의 핵심 정의를 완성하시오.",
+    "codeTemplate": "# Config.in\nconfig BR2_PACKAGE_MYAPP\n    bool \"myapp\"\n    help\n      My custom application\n\n# myapp.mk\n___ = 1.0\nMYAPP_SITE = https://example.com/myapp\nMYAPP_SITE_METHOD = ___",
+    "codeLanguage": "shell",
+    "blankAnswers": [["MYAPP_VERSION"], ["wget", "git"]],
+    "explanation": "Buildroot 패키지에서 <PKG>_VERSION은 버전 번호를, <PKG>_SITE는 소스 위치를, <PKG>_SITE_METHOD는 다운로드 방식(wget, git, svn 등)을 정의합니다. Config.in의 bool 옵션으로 menuconfig에서 패키지를 선택할 수 있습니다.",
+    "blankDistractors": [["MYAPP_VER", "VERSION", "PKG_VERSION"], ["http", "curl", "fetch"]]
+  },
+  {
+    "id": "cb-025",
+    "category": "operating-system",
+    "subcategory": "cross-build",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "Yocto에서 커스텀 레시피의 do_install 태스크에서 바이너리를 설치하는 코드를 완성하시오.",
+    "codeTemplate": "do_install() {\n    install -d ${D}${___}\n    install -m 0755 ${WORKDIR}/build/myapp ${D}${___}/myapp\n}",
+    "codeLanguage": "shell",
+    "blankAnswers": [["bindir"], ["bindir"]],
+    "explanation": "Yocto 레시피에서 do_install()은 빌드 결과물을 이미지에 설치하는 태스크입니다. ${D}는 설치 루트 디렉터리, ${bindir}는 /usr/bin을 가리킵니다. install -d로 디렉터리를 생성하고, install -m 0755로 실행 파일을 설치합니다.",
+    "blankDistractors": [["libdir", "sbindir", "sysconfdir"], ["libdir", "datadir", "includedir"]]
+  }
+]

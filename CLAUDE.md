@@ -69,7 +69,8 @@ src/
     └── setup.ts                 # Vitest setup (jest-dom matchers, RTL cleanup)
 data/
 ├── linux-kernel/*.json          # 18 subcategory quiz files (25 questions each, terminal-lab: 10)
-└── android-system/*.json        # 17 subcategory quiz files (25 questions each, terminal-lab: 10)
+├── android-system/*.json        # 17 subcategory quiz files (25 questions each, terminal-lab: 10)
+└── operating-system/*.json      # 18 subcategory quiz files (25 questions each, terminal-lab: 10)
 e2e/
 └── quiz-flow.spec.ts            # Playwright E2E tests
 scripts/
@@ -83,10 +84,10 @@ scripts/
 
 ## Quiz Data
 
-- 845 questions total: 35 files (33 x 25 + 2 x 10)
-  - 31 standard files: 10 multiple-choice + 8 fill-in-the-blank + 7 code-fill per file
-  - 2 conversation files (dev-conversation): 15 objective + 10 fill-blank per file
-  - 2 terminal-lab files: 10 terminal questions per file
+- 1,280 questions total: 53 files (47 x 25 + 3 x 25 + 3 x 10)
+  - 47 standard files: 10 multiple-choice + 8 fill-in-the-blank + 7 code-fill per file
+  - 3 conversation files (dev-conversation): 15 objective + 10 fill-blank per file
+  - 3 terminal-lab files: 10 terminal questions per file
 - See `QUIZ.md` for quiz data format rules
 - 5 quiz types: multiple-choice, short-answer, code-fill, conversation, terminal
 - Both `short-answer` and `code-fill` use `blankAnswers` field for blank grading (shared `checkBlank()`)
@@ -108,7 +109,7 @@ npm run quiz:distractors # Generate/regenerate blankDistractors for word bank
 ```
 
 When working with quiz data:
-- Read `data/quiz-manifest.json` first for overview (instead of reading all 35 JSON files)
+- Read `data/quiz-manifest.json` first for overview (instead of reading all 53 JSON files)
 - Run `npm run quiz:validate` after any quiz data changes
 - Use `npm run quiz:search -- --keyword "..."` to find existing questions before adding new ones
 
@@ -141,7 +142,7 @@ npm run lint         # Lint rules
 For E2E (after UI/routing changes):
 
 ```bash
-npm run build && npx playwright test   # 27 E2E tests
+npm run build && npx playwright test   # 31 E2E tests
 ```
 
 ## Maintenance Rules

@@ -11,6 +11,11 @@ export const CATEGORIES: { id: Category; name: string; description: string }[] =
     name: "Android System",
     description: "안드로이드 시스템의 아키텍처와 핵심 컴포넌트를 학습합니다.",
   },
+  {
+    id: "operating-system",
+    name: "Operating System",
+    description: "운영체제의 핵심 이론과 BSP 실무를 학습합니다.",
+  },
 ];
 
 export const SUBCATEGORIES: Record<Category, { id: string; name: string }[]> = {
@@ -50,6 +55,26 @@ export const SUBCATEGORIES: Record<Category, { id: string; name: string }[]> = {
     { id: "platform-modularity-virtualization", name: "플랫폼 모듈화/가상화" },
     { id: "arm64-platform", name: "ARM64 플랫폼" },
     { id: "arm64-development", name: "ARM64 개발환경" },
+    { id: "dev-conversation", name: "개발자 대화 상황" },
+    { id: "terminal-lab", name: "터미널 실습" },
+  ],
+  "operating-system": [
+    { id: "process-thread", name: "프로세스/스레드" },
+    { id: "cpu-scheduling", name: "CPU 스케줄링" },
+    { id: "synchronization", name: "동기화" },
+    { id: "deadlock", name: "데드락" },
+    { id: "virtual-memory", name: "가상 메모리" },
+    { id: "memory-management", name: "메모리 관리" },
+    { id: "file-system-theory", name: "파일시스템 이론" },
+    { id: "io-interrupt", name: "입출력/인터럽트" },
+    { id: "protection-security", name: "보호/보안" },
+    { id: "os-architecture", name: "OS 아키텍처 비교" },
+    { id: "bsp-bootloader", name: "BSP 부트로더" },
+    { id: "device-tree", name: "디바이스 트리" },
+    { id: "cross-build", name: "크로스 빌드 환경" },
+    { id: "board-bringup", name: "보드 브링업" },
+    { id: "power-thermal", name: "전력/열 관리" },
+    { id: "kernel-porting", name: "커널 포팅/설정" },
     { id: "dev-conversation", name: "개발자 대화 상황" },
     { id: "terminal-lab", name: "터미널 실습" },
   ],

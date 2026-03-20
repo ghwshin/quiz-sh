@@ -1,0 +1,326 @@
+[
+  {
+    "id": "cs-001",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "CPU 스케줄링의 목적이 아닌 것은?",
+    "options": [
+      "CPU 이용률 최대화",
+      "처리량(throughput) 최대화",
+      "메모리 용량 증가",
+      "응답 시간(response time) 최소화"
+    ],
+    "answer": 2,
+    "explanation": "CPU 스케줄링의 목적은 CPU 이용률 최대화, 처리량 최대화, 반환 시간 최소화, 대기 시간 최소화, 응답 시간 최소화 등입니다. 메모리 용량 증가는 하드웨어 문제로 CPU 스케줄링과 관계없습니다."
+  },
+  {
+    "id": "cs-002",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "FCFS(First-Come, First-Served) 스케줄링의 특징으로 올바른 것은?",
+    "options": [
+      "선점형 스케줄링이다",
+      "가장 짧은 작업을 먼저 실행한다",
+      "비선점형이며 도착 순서대로 처리한다",
+      "시간 할당량(time quantum)을 사용한다"
+    ],
+    "answer": 2,
+    "explanation": "FCFS는 가장 단순한 스케줄링 알고리즘으로, 준비 큐에 먼저 도착한 프로세스가 먼저 CPU를 할당받습니다. 비선점형(non-preemptive)이므로 실행 중인 프로세스가 끝날 때까지 CPU를 점유합니다."
+  },
+  {
+    "id": "cs-003",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "Round Robin 스케줄링에서 시간 할당량(time quantum)이 매우 클 경우 어떤 스케줄링과 유사해지는가?",
+    "options": ["SJF", "FCFS", "Priority", "MLFQ"],
+    "answer": 1,
+    "explanation": "시간 할당량이 매우 크면 모든 프로세스가 할당량 내에 실행을 완료하게 되므로 사실상 도착 순서대로 처리하는 FCFS와 동일하게 동작합니다."
+  },
+  {
+    "id": "cs-004",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "비선점형(Non-preemptive) 스케줄링에 해당하는 것은?",
+    "options": [
+      "Round Robin",
+      "SRTF(Shortest Remaining Time First)",
+      "SJF(Shortest Job First, 비선점형)",
+      "선점형 Priority Scheduling"
+    ],
+    "answer": 2,
+    "explanation": "비선점형 SJF는 CPU를 할당받은 프로세스가 자발적으로 CPU를 반환할 때까지 실행을 계속합니다. Round Robin과 SRTF는 선점형 알고리즘이며, 선점형 Priority도 마찬가지입니다."
+  },
+  {
+    "id": "cs-005",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "FCFS 스케줄링에서 짧은 프로세스가 긴 프로세스 뒤에서 오래 대기하는 현상을 무엇이라 하는가?",
+    "options": [
+      "Starvation",
+      "Convoy Effect",
+      "Priority Inversion",
+      "Thrashing"
+    ],
+    "answer": 1,
+    "explanation": "Convoy Effect(호위 효과)는 FCFS 스케줄링에서 CPU 버스트가 긴 프로세스 뒤에 짧은 프로세스들이 줄지어 대기하면서 전체 평균 대기 시간이 증가하는 현상입니다."
+  },
+  {
+    "id": "cs-006",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "프로세스 P1(burst=10), P2(burst=3), P3(burst=7), P4(burst=1)이 동시에 도착했을 때, SJF(비선점형) 스케줄링의 평균 대기 시간은?",
+    "options": ["4.0", "4.5", "5.25", "3.5"],
+    "answer": 0,
+    "explanation": "SJF 순서: P4(1) → P2(3) → P3(7) → P1(10). 대기 시간: P4=0, P2=1, P3=1+3=4, P1=1+3+7=11. 평균 = (0+1+4+11)/4 = 16/4 = 4.0."
+  },
+  {
+    "id": "cs-007",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Priority Scheduling에서 낮은 우선순위의 프로세스가 무한히 대기하는 문제를 해결하기 위한 기법은?",
+    "options": [
+      "Convoy Effect",
+      "Aging",
+      "Thrashing",
+      "Swapping"
+    ],
+    "answer": 1,
+    "explanation": "Aging(에이징)은 대기 시간이 길어질수록 프로세스의 우선순위를 점진적으로 높여주는 기법입니다. 이를 통해 낮은 우선순위 프로세스가 기아(starvation) 상태에 빠지는 것을 방지합니다."
+  },
+  {
+    "id": "cs-008",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "MLFQ(Multi-Level Feedback Queue) 스케줄링의 특징으로 올바르지 않은 것은?",
+    "options": [
+      "여러 레벨의 큐를 사용한다",
+      "프로세스가 큐 사이를 이동할 수 있다",
+      "CPU 버스트가 긴 프로세스는 상위 큐로 이동한다",
+      "상위 큐가 하위 큐보다 높은 우선순위를 가진다"
+    ],
+    "answer": 2,
+    "explanation": "MLFQ에서 CPU 버스트가 긴(CPU-bound) 프로세스는 시간 할당량을 모두 소진하면 하위(낮은 우선순위) 큐로 이동합니다. I/O-bound 프로세스는 상위 큐에 머물러 빠른 응답을 받습니다."
+  },
+  {
+    "id": "cs-009",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "SJF(Shortest Job First) 스케줄링이 이론적으로 최적인 이유는?",
+    "options": [
+      "구현이 가장 간단하기 때문이다",
+      "주어진 프로세스 집합에 대해 평균 대기 시간이 최소이기 때문이다",
+      "응답 시간이 항상 가장 짧기 때문이다",
+      "기아(starvation)가 발생하지 않기 때문이다"
+    ],
+    "answer": 1,
+    "explanation": "SJF는 주어진 프로세스 집합에 대해 평균 대기 시간을 최소화하는 것이 수학적으로 증명된 최적 알고리즘입니다. 다만 실제로는 다음 CPU 버스트 길이를 정확히 알 수 없어 예측을 사용해야 하며, 기아 문제가 발생할 수 있습니다."
+  },
+  {
+    "id": "cs-010",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "SRTF(Shortest Remaining Time First) 스케줄링에서 프로세스 P1(도착=0, burst=8), P2(도착=1, burst=4), P3(도착=2, burst=2)일 때, P1의 완료 시간은?",
+    "options": ["8", "10", "14", "12"],
+    "answer": 2,
+    "explanation": "t=0: P1 시작(남은=8). t=1: P2 도착(남은=4<P1의7) → P2 선점. t=2: P3 도착(남은=2<P2의3) → P3 선점. t=4: P3완료 → P2재개(남은=3). t=7: P2완료 → P1재개(남은=7). t=14: P1완료. 따라서 P1의 완료 시간은 14입니다."
+  },
+  {
+    "id": "cs-011",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "프로세스가 준비 큐에서 대기한 시간의 합을 ___이라 하고, 프로세스 제출 시각부터 완료 시각까지의 시간을 ___이라 한다.",
+    "blankAnswers": [["대기 시간", "waiting time"], ["반환 시간", "turnaround time"]],
+    "explanation": "대기 시간(Waiting Time)은 프로세스가 준비 큐에서 CPU를 기다린 총 시간이고, 반환 시간(Turnaround Time)은 프로세스 제출부터 완료까지의 전체 경과 시간입니다. 반환 시간 = 대기 시간 + 실행 시간 + I/O 시간입니다.",
+    "blankDistractors": [["응답 시간", "처리량"], ["응답 시간", "실행 시간"]]
+  },
+  {
+    "id": "cs-012",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "Round Robin 스케줄링에서 각 프로세스에 할당되는 고정된 CPU 사용 시간 단위를 ___라 한다.",
+    "blankAnswers": [["time quantum", "타임 퀀텀", "시간 할당량", "time slice"]],
+    "explanation": "타임 퀀텀(Time Quantum)은 Round Robin 스케줄링에서 각 프로세스가 한 번에 CPU를 사용할 수 있는 최대 시간입니다. 이 시간이 만료되면 프로세스는 선점되어 준비 큐의 맨 뒤로 이동합니다.",
+    "blankDistractors": [["time slot", "burst time", "cycle"]]
+  },
+  {
+    "id": "cs-013",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "단위 시간당 완료되는 프로세스의 수를 나타내는 CPU 스케줄링 성능 척도를 ___라 한다.",
+    "blankAnswers": [["throughput", "처리량", "처리율"]],
+    "explanation": "처리량(Throughput)은 단위 시간당 완료된 프로세스의 수입니다. CPU 스케줄링의 주요 성능 지표 중 하나로, 높을수록 시스템 효율이 좋은 것입니다.",
+    "blankDistractors": [["utilization", "latency", "bandwidth"]]
+  },
+  {
+    "id": "cs-014",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "선점형 SJF 스케줄링은 새 프로세스 도착 시 남은 실행 시간이 가장 짧은 프로세스를 선택하므로 ___라고도 불린다.",
+    "blankAnswers": [["SRTF", "Shortest Remaining Time First"]],
+    "explanation": "SRTF(Shortest Remaining Time First)는 선점형 SJF입니다. 새 프로세스가 도착할 때마다 현재 실행 중인 프로세스의 남은 시간과 새 프로세스의 실행 시간을 비교하여 더 짧은 것을 선택합니다.",
+    "blankDistractors": [["SPN", "FCFS", "HRRN"]]
+  },
+  {
+    "id": "cs-015",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "Priority Scheduling에서 낮은 우선순위 프로세스가 CPU를 영원히 받지 못하는 현상을 ___이라 하며, 이를 해결하기 위해 대기 시간에 따라 우선순위를 높여주는 기법을 ___이라 한다.",
+    "blankAnswers": [["starvation", "기아", "기근", "무한 대기"], ["aging", "에이징"]],
+    "explanation": "기아(Starvation)는 낮은 우선순위 프로세스가 높은 우선순위 프로세스에 밀려 무한히 대기하는 현상입니다. 에이징(Aging)은 대기 시간이 길어질수록 우선순위를 점진적으로 높여 기아를 방지합니다.",
+    "blankDistractors": [["deadlock", "livelock", "thrashing"], ["priority boost", "preemption", "feedback"]]
+  },
+  {
+    "id": "cs-016",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "MLFQ에서 CPU 버스트를 모두 소진한 프로세스는 ___ 우선순위 큐로 이동하고, I/O 작업을 자주 하는 프로세스는 ___ 우선순위 큐에 머문다.",
+    "blankAnswers": [["낮은", "하위", "lower"], ["높은", "상위", "higher"]],
+    "explanation": "MLFQ는 CPU-bound 프로세스를 하위 큐로 이동시키고, I/O-bound 프로세스는 상위 큐에 유지합니다. 이를 통해 대화형 프로세스에게 빠른 응답을 제공하면서 CPU-bound 프로세스에게도 공정한 처리를 보장합니다.",
+    "blankDistractors": [["중간", "최상위"], ["중간", "최하위"]]
+  },
+  {
+    "id": "cs-017",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "SJF 스케줄링에서 다음 CPU 버스트 길이를 정확히 알 수 없으므로, 과거 실행 시간을 바탕으로 다음 버스트를 예측하는 기법인 ___를 사용한다.",
+    "blankAnswers": [["exponential averaging", "지수 평균", "지수적 평균"]],
+    "explanation": "지수 평균(Exponential Averaging)은 τ(n+1) = α·t(n) + (1-α)·τ(n) 공식을 사용하여 과거 실제 버스트 시간과 이전 예측값의 가중 평균으로 다음 버스트 길이를 예측합니다. α는 0~1 사이의 가중치입니다.",
+    "blankDistractors": [["linear regression", "moving average", "least squares"]]
+  },
+  {
+    "id": "cs-018",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "CPU 스케줄링에서 프로세스가 처음 요청한 시점부터 첫 번째 응답이 생성되기까지의 시간을 ___이라 한다.",
+    "blankAnswers": [["response time", "응답 시간"]],
+    "explanation": "응답 시간(Response Time)은 요청이 제출된 후 첫 번째 응답이 나올 때까지의 시간입니다. 대화형 시스템에서 특히 중요한 성능 척도이며, 반환 시간이나 대기 시간과는 구별됩니다.",
+    "blankDistractors": [["turnaround time", "waiting time", "latency"]]
+  },
+  {
+    "id": "cs-019",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "프로세스 구조체와 FCFS 스케줄링에서 대기 시간을 계산하는 의사코드를 완성하시오.",
+    "codeTemplate": "struct Process {\n    int pid;\n    int burst_time;\n    int waiting_time;\n};\n\nvoid fcfs_waiting_time(Process p[], int n) {\n    p[0].waiting_time = ___;\n    for (int i = 1; i < n; i++) {\n        p[i].waiting_time = p[i-1].waiting_time + p[i-1].___;\n    }\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["0"], ["burst_time"]],
+    "explanation": "FCFS에서 첫 번째 프로세스의 대기 시간은 0입니다. 이후 프로세스의 대기 시간은 이전 프로세스의 대기 시간 + 이전 프로세스의 실행 시간(burst_time)의 누적입니다.",
+    "blankDistractors": [["1", "-1", "n"], ["waiting_time", "pid", "priority"]]
+  },
+  {
+    "id": "cs-020",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Round Robin 스케줄링에서 프로세스의 남은 시간을 갱신하는 핵심 로직을 완성하시오.",
+    "codeTemplate": "int time_quantum = 4;\n\nvoid round_robin_step(Process *p, int *current_time) {\n    if (p->remaining_time > time_quantum) {\n        *current_time += ___;\n        p->remaining_time -= time_quantum;\n    } else {\n        *current_time += p->___;\n        p->remaining_time = 0;\n    }\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["time_quantum"], ["remaining_time"]],
+    "explanation": "남은 시간이 타임 퀀텀보다 크면 타임 퀀텀만큼 실행하고 남은 시간을 줄입니다. 남은 시간이 타임 퀀텀 이하이면 남은 시간만큼만 실행하고 프로세스를 완료합니다.",
+    "blankDistractors": [["burst_time", "priority", "1"], ["burst_time", "priority", "pid"]]
+  },
+  {
+    "id": "cs-021",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "우선순위 스케줄링에서 에이징(Aging)을 구현하는 코드를 완성하시오.",
+    "codeTemplate": "void apply_aging(Process queue[], int n, int age_increment) {\n    for (int i = 0; i < n; i++) {\n        if (queue[i].state == WAITING) {\n            queue[i].wait_count++;\n            if (queue[i].wait_count >= AGING_THRESHOLD) {\n                queue[i].___ -= age_increment;\n                queue[i].wait_count = ___;\n            }\n        }\n    }\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["priority"], ["0"]],
+    "explanation": "에이징은 대기 횟수가 임계값에 도달하면 우선순위 값을 감소(= 우선순위 상승)시키고 대기 카운터를 초기화합니다. 이를 통해 오래 대기한 프로세스도 결국 CPU를 할당받을 수 있습니다.",
+    "blankDistractors": [["burst_time", "pid", "state"], ["1", "-1", "age_increment"]]
+  },
+  {
+    "id": "cs-022",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "SJF 스케줄링에서 다음 CPU 버스트를 지수 평균으로 예측하는 코드를 완성하시오.",
+    "codeTemplate": "double alpha = 0.5;\n\ndouble predict_next_burst(double actual_burst, double prev_prediction) {\n    return ___ * actual_burst + (1 - ___) * prev_prediction;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["alpha"], ["alpha"]],
+    "explanation": "지수 평균 공식 τ(n+1) = α * t(n) + (1 - α) * τ(n)에서 α는 최근 실제 버스트에 대한 가중치입니다. α가 크면 최근 값을 더 반영하고, 작으면 과거 예측값을 더 반영합니다.",
+    "blankDistractors": [["beta", "0.5", "1"], ["beta", "0.5", "0"]]
+  },
+  {
+    "id": "cs-023",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "평균 반환 시간(Average Turnaround Time)을 계산하는 코드를 완성하시오.",
+    "codeTemplate": "double avg_turnaround(Process p[], int n) {\n    double total = 0;\n    for (int i = 0; i < n; i++) {\n        total += p[i].___ - p[i].arrival_time;\n    }\n    return total / ___;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["completion_time", "finish_time"], ["n"]],
+    "explanation": "반환 시간(Turnaround Time)은 완료 시간 - 도착 시간입니다. 모든 프로세스의 반환 시간을 합산한 후 프로세스 수 n으로 나누면 평균 반환 시간을 구할 수 있습니다.",
+    "blankDistractors": [["burst_time", "waiting_time", "arrival_time"], ["2", "total", "i"]]
+  },
+  {
+    "id": "cs-024",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "MLFQ에서 프로세스가 타임 퀀텀을 초과하면 하위 큐로 이동시키는 로직을 완성하시오.",
+    "codeTemplate": "void mlfq_feedback(Process *p, int num_queues) {\n    if (p->used_time >= p->current_quantum) {\n        if (p->queue_level < num_queues - 1) {\n            p->___++;\n            p->current_quantum *= ___;\n        }\n        p->used_time = 0;\n    }\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["queue_level"], ["2"]],
+    "explanation": "프로세스가 현재 큐의 타임 퀀텀을 소진하면 queue_level을 증가시켜 하위 큐로 이동합니다. 일반적으로 하위 큐는 타임 퀀텀이 2배씩 커져서 CPU-bound 프로세스에게 더 긴 실행 시간을 부여합니다.",
+    "blankDistractors": [["priority", "pid", "burst_time"], ["3", "1", "4"]]
+  },
+  {
+    "id": "cs-025",
+    "category": "operating-system",
+    "subcategory": "cpu-scheduling",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Python으로 FCFS 스케줄링의 평균 대기 시간을 계산하는 함수를 완성하시오.",
+    "codeTemplate": "def fcfs_avg_waiting(burst_times):\n    waiting = [0] * len(burst_times)\n    for i in range(1, len(burst_times)):\n        waiting[i] = waiting[i-1] + burst_times[___]\n    return ___(waiting) / len(waiting)",
+    "codeLanguage": "python",
+    "blankAnswers": [["i-1", "i - 1"], ["sum"]],
+    "explanation": "FCFS에서 i번째 프로세스의 대기 시간은 이전 프로세스의 대기 시간 + 이전 프로세스의 burst time입니다. sum()으로 전체 대기 시간을 합산하고 프로세스 수로 나누면 평균 대기 시간을 구할 수 있습니다.",
+    "blankDistractors": [["i", "i+1", "0"], ["max", "min", "len"]]
+  }
+]

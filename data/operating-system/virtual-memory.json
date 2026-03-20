@@ -1,0 +1,336 @@
+[
+  {
+    "id": "vm-001",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "요구 페이징(Demand Paging)에서 필요한 페이지가 메모리에 없을 때 발생하는 이벤트는?",
+    "options": [
+      "Segmentation Fault",
+      "Page Fault",
+      "Bus Error",
+      "Stack Overflow"
+    ],
+    "answer": 1,
+    "explanation": "요구 페이징에서 프로세스가 접근하려는 페이지가 메모리에 적재되어 있지 않으면 페이지 폴트(Page Fault)가 발생합니다. 운영체제는 해당 페이지를 디스크에서 메모리로 가져옵니다."
+  },
+  {
+    "id": "vm-002",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "가상 주소를 물리 주소로 변환할 때, 최근 변환 정보를 캐싱하여 변환 속도를 높이는 하드웨어는?",
+    "options": [
+      "MMU",
+      "TLB",
+      "Cache",
+      "DMA"
+    ],
+    "answer": 1,
+    "explanation": "TLB(Translation Lookaside Buffer)는 MMU 내부의 고속 연관 캐시로, 최근에 사용된 페이지 테이블 항목을 저장합니다. TLB 히트 시 메모리 접근 없이 바로 주소 변환이 가능합니다."
+  },
+  {
+    "id": "vm-003",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "페이지 교체 알고리즘 중, 가장 오랫동안 사용되지 않은 페이지를 교체하는 것은?",
+    "options": [
+      "FIFO",
+      "OPT",
+      "LRU",
+      "LFU"
+    ],
+    "answer": 2,
+    "explanation": "LRU(Least Recently Used)는 가장 오랫동안 사용되지 않은 페이지를 교체합니다. 과거의 참조 기록을 기반으로 미래의 참조를 예측하는 지역성(locality) 원리를 활용합니다."
+  },
+  {
+    "id": "vm-004",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "FIFO 페이지 교체에서 프레임 수를 늘렸음에도 페이지 폴트가 증가할 수 있는 현상을 무엇이라 하는가?",
+    "options": [
+      "Thrashing",
+      "Belady's Anomaly",
+      "Fragmentation",
+      "Starvation"
+    ],
+    "answer": 1,
+    "explanation": "Belady's Anomaly(벨레이디의 모순)는 FIFO 알고리즘에서 페이지 프레임 수를 늘렸는데도 오히려 페이지 폴트가 증가하는 현상입니다. LRU와 OPT 알고리즘에서는 이 현상이 발생하지 않습니다."
+  },
+  {
+    "id": "vm-005",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "OPT(Optimal) 페이지 교체 알고리즘의 특징으로 올바른 것은?",
+    "options": [
+      "가장 오래전에 적재된 페이지를 교체한다",
+      "가장 오랫동안 사용되지 않은 페이지를 교체한다",
+      "가장 오래 사용되지 않을 페이지를 교체한다",
+      "가장 자주 사용된 페이지를 교체한다"
+    ],
+    "answer": 2,
+    "explanation": "OPT(Optimal) 알고리즘은 앞으로 가장 오랫동안 사용되지 않을 페이지를 교체합니다. 이론적으로 최적이지만, 미래의 참조를 알아야 하므로 실제 구현은 불가능하며 다른 알고리즘의 성능 비교 기준으로 사용됩니다."
+  },
+  {
+    "id": "vm-006",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "참조 문자열 1, 2, 3, 4, 1, 2, 5, 1, 2, 3에 대해 3개의 프레임으로 FIFO를 적용했을 때 페이지 폴트 횟수는?",
+    "options": ["6", "7", "8", "9"],
+    "answer": 3,
+    "explanation": "FIFO 적용: [1],[1,2],[1,2,3],[4,2,3](F),[4,1,3](F),[4,1,2](F),[5,1,2](F),[5,1,2],[5,1,2],[5,3,2](F). 초기 적재 포함 총 9번 페이지 폴트 발생. 1→F, 2→F, 3→F, 4→F(1교체), 1→F(2교체), 2→F(3교체), 5→F(4교체), 1→hit, 2→hit, 3→F(1교체). 총 9회."
+  },
+  {
+    "id": "vm-007",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Thrashing(스래싱)이 발생하는 원인은?",
+    "options": [
+      "CPU 이용률이 너무 높을 때",
+      "프로세스에 할당된 프레임 수가 너무 적어 지속적으로 페이지 폴트가 발생할 때",
+      "디스크 공간이 부족할 때",
+      "TLB 크기가 너무 클 때"
+    ],
+    "answer": 1,
+    "explanation": "스래싱은 프로세스의 실제 작업보다 페이징(페이지 교체)에 더 많은 시간을 소비하는 현상입니다. 프로세스에 할당된 프레임이 부족하면 빈번한 페이지 폴트가 발생하여 시스템 성능이 급격히 저하됩니다."
+  },
+  {
+    "id": "vm-008",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "Working Set Model에서 작업 세트(Working Set)의 정의는?",
+    "options": [
+      "프로세스가 사용하는 모든 페이지의 집합",
+      "최근 일정 시간 간격(window) 동안 참조된 페이지의 집합",
+      "물리 메모리에 적재된 모든 페이지의 집합",
+      "디스크에 저장된 페이지의 집합"
+    ],
+    "answer": 1,
+    "explanation": "작업 세트(Working Set)는 최근 시간 간격(Δ, window size) 동안 프로세스가 참조한 페이지의 집합입니다. 프로세스에 작업 세트 크기만큼의 프레임을 할당하면 스래싱을 방지할 수 있습니다."
+  },
+  {
+    "id": "vm-009",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Clock(Second-Chance) 알고리즘에서 참조 비트(reference bit)가 1인 페이지를 만나면 어떻게 처리하는가?",
+    "options": [
+      "즉시 교체한다",
+      "참조 비트를 0으로 바꾸고 다음 페이지로 넘어간다",
+      "참조 비트를 1로 유지하고 다음 페이지로 넘어간다",
+      "해당 페이지를 디스크에 기록한다"
+    ],
+    "answer": 1,
+    "explanation": "Clock 알고리즘은 참조 비트가 1인 페이지를 만나면 두 번째 기회(second chance)를 주어 참조 비트를 0으로 바꾸고 다음 페이지를 검사합니다. 참조 비트가 0인 페이지를 만나면 해당 페이지를 교체합니다."
+  },
+  {
+    "id": "vm-010",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "Copy-on-Write(COW) 기법의 설명으로 올바른 것은?",
+    "options": [
+      "fork() 시 자식 프로세스의 주소 공간을 즉시 전부 복사한다",
+      "fork() 시 부모와 자식이 같은 페이지를 공유하다가, 어느 한쪽이 수정할 때 해당 페이지만 복사한다",
+      "프로세스 종료 시 메모리를 디스크에 기록한다",
+      "읽기 전용 페이지를 쓰기 가능으로 변경한다"
+    ],
+    "answer": 1,
+    "explanation": "COW는 fork() 시 부모와 자식이 동일한 물리 페이지를 공유하다가, 어느 한쪽이 페이지를 수정(write)하려 할 때 비로소 해당 페이지의 복사본을 만듭니다. 불필요한 복사를 줄여 fork()의 효율을 높입니다."
+  },
+  {
+    "id": "vm-011",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "가상 주소를 물리 주소로 변환하는 하드웨어 장치를 ___라 한다.",
+    "blankAnswers": [["MMU", "Memory Management Unit"]],
+    "explanation": "MMU(Memory Management Unit)는 CPU와 메모리 사이에 위치하여 가상 주소를 물리 주소로 변환하는 하드웨어 장치입니다. 페이지 테이블을 참조하여 주소 변환을 수행합니다.",
+    "blankDistractors": [["TLB", "CPU", "DMA"]]
+  },
+  {
+    "id": "vm-012",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "요구 페이징에서 프로세스 시작 시 어떤 페이지도 미리 적재하지 않고, 실제로 필요할 때만 메모리에 올리는 방식을 ___ 페이징이라 한다.",
+    "blankAnswers": [["pure demand", "순수 요구", "pure"]],
+    "explanation": "순수 요구 페이징(Pure Demand Paging)은 프로세스 시작 시 어떤 페이지도 미리 적재하지 않고, 첫 번째 명령어부터 페이지 폴트가 발생하여 필요한 페이지만 적재합니다.",
+    "blankDistractors": [["pre", "anticipatory", "prepaging"]]
+  },
+  {
+    "id": "vm-013",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "페이지 테이블에서 해당 페이지가 물리 메모리에 존재하는지를 나타내는 비트를 ___ 비트라 한다.",
+    "blankAnswers": [["valid", "유효", "valid-invalid", "present"]],
+    "explanation": "유효(valid) 비트가 1이면 해당 페이지가 물리 메모리에 존재하고, 0이면 존재하지 않습니다. 유효 비트가 0인 페이지에 접근하면 페이지 폴트가 발생합니다.",
+    "blankDistractors": [["dirty", "reference", "access"]]
+  },
+  {
+    "id": "vm-014",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "페이지 교체 시 해당 페이지가 수정되었는지를 나타내는 비트를 ___ 비트라 하며, 이 비트가 설정된 페이지는 디스크에 기록해야 한다.",
+    "blankAnswers": [["dirty", "변경", "modified", "수정"]],
+    "explanation": "더티(dirty/modified) 비트는 페이지가 메모리에 적재된 후 수정되었는지를 나타냅니다. 더티 비트가 1인 페이지를 교체할 때는 수정된 내용을 디스크에 기록(write-back)해야 합니다.",
+    "blankDistractors": [["valid", "reference", "access"]]
+  },
+  {
+    "id": "vm-015",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "프로세스에 프레임을 할당하는 방법 중, 모든 프로세스에 동일한 수의 프레임을 할당하는 방식을 ___할당이라 하고, 프로세스 크기에 비례하여 할당하는 방식을 ___할당이라 한다.",
+    "blankAnswers": [["균등", "equal", "동등"], ["비례", "proportional"]],
+    "explanation": "균등 할당은 모든 프로세스에 동일한 수의 프레임을 배분하고, 비례 할당은 프로세스의 크기(또는 우선순위)에 비례하여 프레임을 배분합니다. 비례 할당이 일반적으로 더 효율적입니다.",
+    "blankDistractors": [["우선순위", "가변"], ["가변", "고정"]]
+  },
+  {
+    "id": "vm-016",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "LRU 근사 알고리즘인 Second-Chance 알고리즘은 FIFO를 기반으로 ___ 비트를 확인하여 교체 여부를 결정한다.",
+    "blankAnswers": [["reference", "참조", "참조 비트"]],
+    "explanation": "Second-Chance 알고리즘은 FIFO 순서로 페이지를 검사하되, 참조 비트(reference bit)가 1인 페이지에게는 두 번째 기회를 줍니다. 참조 비트를 0으로 바꾸고 넘어가며, 참조 비트가 0인 페이지를 교체합니다.",
+    "blankDistractors": [["dirty", "valid", "access"]]
+  },
+  {
+    "id": "vm-017",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "참조 문자열 7, 0, 1, 2, 0, 3, 0, 4에 대해 3개의 프레임으로 LRU를 적용하면 페이지 폴트 횟수는 ___이다.",
+    "blankAnswers": [["6"]],
+    "explanation": "LRU 적용: 7→F[7], 0→F[7,0], 1→F[7,0,1], 2→F[2,0,1](7교체), 0→hit[2,0,1], 3→F[2,0,3](1교체), 0→hit[2,0,3], 4→F[4,0,3](2교체). 총 6회 페이지 폴트 발생.",
+    "blankDistractors": [["5", "7", "8"]]
+  },
+  {
+    "id": "vm-018",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "파일의 내용을 프로세스의 가상 주소 공간에 직접 매핑하여 파일 I/O를 메모리 접근처럼 처리하는 기법을 ___라 한다.",
+    "blankAnswers": [["memory-mapped file", "메모리 매핑 파일", "mmap"]],
+    "explanation": "메모리 매핑 파일(Memory-Mapped File)은 파일을 프로세스의 가상 주소 공간에 매핑하여, 파일 내용에 대한 접근을 일반 메모리 접근처럼 처리합니다. read/write 시스템 콜 대신 포인터 연산으로 파일에 접근할 수 있습니다.",
+    "blankDistractors": [["DMA", "virtual memory", "page cache"]]
+  },
+  {
+    "id": "vm-019",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "가상 주소에서 페이지 번호와 오프셋을 추출하는 코드를 완성하시오.",
+    "codeTemplate": "#define PAGE_SIZE 4096\n\nint get_page_number(int virtual_addr) {\n    return virtual_addr / ___;\n}\n\nint get_offset(int virtual_addr) {\n    return virtual_addr % ___;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["PAGE_SIZE"], ["PAGE_SIZE"]],
+    "explanation": "가상 주소를 페이지 크기로 나눈 몫이 페이지 번호이고, 나머지가 페이지 내 오프셋입니다. 예를 들어 페이지 크기가 4096이고 가상 주소가 8200이면, 페이지 번호는 2이고 오프셋은 8입니다.",
+    "blankDistractors": [["FRAME_SIZE", "1024", "256"], ["FRAME_SIZE", "1024", "256"]]
+  },
+  {
+    "id": "vm-020",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "FIFO 페이지 교체 알고리즘의 핵심 로직을 완성하시오.",
+    "codeTemplate": "int frames[MAX_FRAMES];\nint frame_count = 0;\nint oldest = 0;  // 가장 오래된 프레임 인덱스\n\nvoid fifo_replace(int page, int num_frames) {\n    if (!is_in_frames(page)) {\n        if (frame_count < num_frames) {\n            frames[frame_count++] = page;\n        } else {\n            frames[___] = page;\n            oldest = (oldest + 1) % ___;\n        }\n        page_faults++;\n    }\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["oldest"], ["num_frames"]],
+    "explanation": "FIFO는 가장 먼저 적재된 페이지를 교체합니다. oldest 인덱스가 가장 오래된 프레임을 가리키며, 교체 후 (oldest + 1) % num_frames로 다음 위치로 순환합니다.",
+    "blankDistractors": [["frame_count", "0", "page"], ["frame_count", "MAX_FRAMES", "page"]]
+  },
+  {
+    "id": "vm-021",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "LRU 페이지 교체에서 가장 오래 사용되지 않은 페이지를 찾는 코드를 완성하시오.",
+    "codeTemplate": "int frames[MAX_FRAMES];\nint last_used[MAX_FRAMES];\nint current_time = 0;\n\nint find_lru_victim(int num_frames) {\n    int victim = 0;\n    int min_time = last_used[0];\n    for (int i = 1; i < num_frames; i++) {\n        if (last_used[i] < ___) {\n            min_time = last_used[i];\n            victim = ___;\n        }\n    }\n    return victim;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["min_time"], ["i"]],
+    "explanation": "LRU는 last_used 배열에서 가장 작은 시간값(가장 오래전에 사용됨)을 가진 프레임을 교체 대상(victim)으로 선택합니다. 모든 프레임을 순회하며 최솟값을 찾습니다.",
+    "blankDistractors": [["current_time", "last_used[i]", "max_time"], ["0", "victim", "num_frames"]]
+  },
+  {
+    "id": "vm-022",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "Second-Chance(Clock) 알고리즘의 페이지 교체 로직을 완성하시오.",
+    "codeTemplate": "int frames[MAX_FRAMES];\nbool ref_bit[MAX_FRAMES];\nint clock_hand = 0;\n\nint clock_replace(int num_frames) {\n    while (true) {\n        if (ref_bit[clock_hand] == false) {\n            int victim = clock_hand;\n            clock_hand = (clock_hand + 1) % num_frames;\n            return victim;\n        }\n        ref_bit[clock_hand] = ___;\n        clock_hand = (clock_hand + 1) % ___;\n    }\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["false"], ["num_frames"]],
+    "explanation": "Clock 알고리즘은 참조 비트가 true인 페이지에 두 번째 기회를 주어 참조 비트를 false로 바꾸고, 시계 바늘(clock_hand)을 다음 위치로 이동합니다. 참조 비트가 false인 페이지를 찾으면 교체합니다.",
+    "blankDistractors": [["true", "0", "1"], ["frame_count", "MAX_FRAMES", "clock_hand"]]
+  },
+  {
+    "id": "vm-023",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "TLB를 사용한 주소 변환 과정을 시뮬레이션하는 코드를 완성하시오.",
+    "codeTemplate": "typedef struct {\n    int page_num;\n    int frame_num;\n    bool valid;\n} TLBEntry;\n\nTLBEntry tlb[TLB_SIZE];\nint page_table[MAX_PAGES];\n\nint translate(int virtual_addr, int page_size) {\n    int page = virtual_addr / page_size;\n    int offset = virtual_addr % page_size;\n\n    // TLB 검색\n    for (int i = 0; i < TLB_SIZE; i++) {\n        if (tlb[i].valid && tlb[i].page_num == page) {\n            return tlb[i].___ * page_size + offset;\n        }\n    }\n    // TLB miss: 페이지 테이블 참조\n    int frame = ___[page];\n    update_tlb(page, frame);\n    return frame * page_size + offset;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["frame_num"], ["page_table"]],
+    "explanation": "TLB 히트 시 TLB 항목의 frame_num을 사용하여 물리 주소를 계산합니다. TLB 미스 시에는 페이지 테이블(page_table)을 참조하여 프레임 번호를 얻고 TLB를 갱신합니다.",
+    "blankDistractors": [["page_num", "valid", "offset"], ["tlb", "frames", "memory"]]
+  },
+  {
+    "id": "vm-024",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "OPT(Optimal) 페이지 교체에서 가장 나중에 사용될 페이지를 찾는 코드를 완성하시오.",
+    "codeTemplate": "int find_optimal_victim(int frames[], int num_frames,\n                        int ref_string[], int current, int ref_len) {\n    int victim = 0;\n    int farthest = -1;\n\n    for (int i = 0; i < num_frames; i++) {\n        int next_use = ref_len;  // 사용되지 않으면 최대값\n        for (int j = current + 1; j < ref_len; j++) {\n            if (ref_string[j] == ___[i]) {\n                next_use = j;\n                break;\n            }\n        }\n        if (next_use > ___) {\n            farthest = next_use;\n            victim = i;\n        }\n    }\n    return victim;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["frames"], ["farthest"]],
+    "explanation": "OPT 알고리즘은 미래의 참조 문자열을 분석하여 각 프레임의 페이지가 다음에 사용될 시점을 찾습니다. 가장 나중에(farthest) 사용되거나 전혀 사용되지 않을 페이지를 교체 대상으로 선택합니다.",
+    "blankDistractors": [["ref_string", "page_table", "victim"], ["next_use", "current", "ref_len"]]
+  },
+  {
+    "id": "vm-025",
+    "category": "operating-system",
+    "subcategory": "virtual-memory",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "C에서 mmap()을 사용하여 파일을 메모리에 매핑하는 코드를 완성하시오.",
+    "codeTemplate": "#include <sys/mman.h>\n#include <fcntl.h>\n#include <unistd.h>\n\nint main() {\n    int fd = open(\"data.bin\", O_RDONLY);\n    off_t size = lseek(fd, 0, SEEK_END);\n\n    char *mapped = ___(\n        NULL, size, PROT_READ, MAP_PRIVATE, fd, 0\n    );\n\n    /* 매핑된 메모리 사용 */\n    printf(\"%c\\n\", mapped[0]);\n\n    ___(mapped, size);\n    close(fd);\n    return 0;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["mmap"], ["munmap"]],
+    "explanation": "mmap()은 파일을 프로세스의 가상 주소 공간에 매핑하여 포인터로 직접 접근할 수 있게 합니다. 사용이 끝나면 munmap()으로 매핑을 해제합니다.",
+    "blankDistractors": [["malloc", "sbrk", "shm_open"], ["free", "close", "unmap"]]
+  }
+]

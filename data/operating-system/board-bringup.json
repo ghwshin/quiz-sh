@@ -1,0 +1,331 @@
+[
+  {
+    "id": "bb-001",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "보드 브링업에서 가장 먼저 확인해야 하는 디버깅 인터페이스는?",
+    "options": ["USB", "이더넷", "UART 시리얼 콘솔", "HDMI"],
+    "answer": 2,
+    "explanation": "UART 시리얼 콘솔은 부트로더부터 커널 부팅까지의 모든 로그를 출력하는 가장 기본적인 디버깅 인터페이스입니다. 다른 인터페이스(USB, 이더넷 등)가 동작하지 않는 초기 브링업 단계에서도 사용할 수 있습니다."
+  },
+  {
+    "id": "bb-002",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "시리얼 콘솔 연결 시 가장 일반적으로 사용되는 baud rate는?",
+    "options": ["9600", "38400", "115200", "921600"],
+    "answer": 2,
+    "explanation": "115200 bps는 임베디드 시스템의 시리얼 콘솔에서 사실상 표준으로 사용되는 전송 속도입니다. 대부분의 SoC 벤더가 기본값으로 115200을 사용하며, U-Boot와 커널 콘솔도 이 속도를 기본으로 설정합니다."
+  },
+  {
+    "id": "bb-003",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "초급",
+    "type": "multiple-choice",
+    "question": "JTAG 디버거를 이용한 보드 디버깅에서 OpenOCD의 역할은?",
+    "options": [
+      "JTAG 하드웨어를 직접 구동하는 하드웨어 디버거이다",
+      "JTAG 어댑터와 GDB 사이를 중계하는 오픈소스 디버그 서버이다",
+      "JTAG 포트를 통해 펌웨어를 자동으로 업데이트하는 도구이다",
+      "JTAG 신호를 분석하는 로직 분석기 소프트웨어이다"
+    ],
+    "answer": 1,
+    "explanation": "OpenOCD(Open On-Chip Debugger)는 JTAG/SWD 어댑터(J-Link, ST-Link 등)를 통해 타겟 CPU와 통신하고, GDB 서버 인터페이스를 제공합니다. GDB에서 target remote로 연결하여 레지스터 확인, 메모리 읽기/쓰기, 브레이크포인트 설정이 가능합니다."
+  },
+  {
+    "id": "bb-004",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "보드 브링업에서 주변장치 검증의 올바른 순서는?",
+    "options": [
+      "드라이버 → 디바이스 노드 → 핀먹스 → 클록",
+      "핀먹스 → 드라이버 → 클록 → 디바이스 노드",
+      "클록 → 핀먹스 → 드라이버 → 디바이스 노드",
+      "디바이스 노드 → 클록 → 드라이버 → 핀먹스"
+    ],
+    "answer": 2,
+    "explanation": "주변장치 검증은 하드웨어 의존 순서를 따릅니다: 1) 클록 활성화(IP 블록에 클록 공급), 2) 핀먹스 설정(GPIO를 해당 기능으로 라우팅), 3) 드라이버 로드(커널 드라이버 프로빙), 4) 디바이스 노드 확인(/dev/ 생성). 하위 단계가 실패하면 상위 단계도 동작하지 않습니다."
+  },
+  {
+    "id": "bb-005",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "i2cdetect 명령어의 출력에서 '--'로 표시된 주소의 의미는?",
+    "options": [
+      "해당 주소에 장치가 존재하지만 응답하지 않는다",
+      "해당 주소에 장치가 응답하지 않았다(비어있음)",
+      "해당 주소의 장치가 busy 상태이다",
+      "해당 주소는 예약된 I2C 주소이다"
+    ],
+    "answer": 1,
+    "explanation": "i2cdetect의 '--'는 해당 7비트 주소에 ACK 응답이 없음을 나타냅니다. 장치가 연결되면 해당 주소 위치에 16진수 주소값이 표시됩니다. 'UU'는 커널 드라이버가 이미 사용 중인 주소를 의미합니다."
+  },
+  {
+    "id": "bb-006",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "보드 브링업에서 전원 시퀀스(power-on sequence) 검증이 중요한 이유는?",
+    "options": [
+      "소비 전력을 최소화하기 위해 불필요한 전원을 차단해야 한다",
+      "SoC와 주변장치의 전원 레일이 정해진 순서와 타이밍으로 인가되어야 안정적으로 동작한다",
+      "전원 공급 순서에 따라 부팅 모드(eMMC/SD/USB)가 결정된다",
+      "PMIC의 출력 전압을 순차적으로 높여 돌입 전류를 줄인다"
+    ],
+    "answer": 1,
+    "explanation": "SoC 데이터시트는 코어, I/O, 메모리 등의 전원 레일 인가 순서와 타이밍을 명시합니다. 순서가 잘못되면 래치업(latch-up)으로 칩이 손상되거나, I/O 레벨 불일치로 연결된 장치가 오동작할 수 있습니다."
+  },
+  {
+    "id": "bb-007",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "리눅스에서 GPIO를 sysfs를 통해 제어할 때, GPIO 핀의 방향을 출력으로 설정하는 방법은?",
+    "options": [
+      "echo 1 > /sys/class/gpio/gpio<N>/value",
+      "echo out > /sys/class/gpio/gpio<N>/direction",
+      "echo output > /sys/class/gpio/gpio<N>/mode",
+      "echo 1 > /sys/class/gpio/gpio<N>/export"
+    ],
+    "answer": 1,
+    "explanation": "GPIO sysfs 인터페이스에서 direction 파일에 'out'을 쓰면 출력 모드, 'in'을 쓰면 입력 모드로 설정됩니다. 먼저 echo <N> > /sys/class/gpio/export로 핀을 내보낸 후 방향을 설정해야 합니다."
+  },
+  {
+    "id": "bb-008",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "eMMC 초기화 검증에서 HS400 모드의 특징은?",
+    "options": [
+      "SDR 모드로 최대 52MHz 클록에서 동작한다",
+      "DDR 모드로 클록의 양쪽 에지에서 데이터를 전송하며 8비트 버스에서 최대 400MB/s를 지원한다",
+      "데이터와 명령을 동시에 전송하는 전이중(full-duplex) 모드이다",
+      "1.2V I/O 전압에서만 동작하는 초절전 모드이다"
+    ],
+    "answer": 1,
+    "explanation": "HS400은 eMMC 5.1 규격의 최고 속도 모드로, DDR(Double Data Rate)에서 200MHz 클록으로 동작하여 8비트 버스 기준 400MB/s(200MHz × 2 × 8비트 / 8)의 최대 전송률을 제공합니다. 1.8V I/O 전압과 데이터 스트로브 신호가 필요합니다."
+  },
+  {
+    "id": "bb-009",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "고급",
+    "type": "multiple-choice",
+    "question": "PMIC(Power Management IC) 레지스터를 I2C로 읽을 때, i2cget 명령어 'i2cget -f -y 0 0x08 0x10'에서 각 인자의 의미는?",
+    "options": [
+      "0=I2C 버스, 0x08=슬레이브 주소, 0x10=데이터 값",
+      "0=I2C 버스, 0x08=슬레이브 주소, 0x10=레지스터 주소",
+      "0=속도 설정, 0x08=클록 분주비, 0x10=타임아웃",
+      "0=채널 번호, 0x08=전압 설정, 0x10=전류 제한"
+    ],
+    "answer": 1,
+    "explanation": "i2cget -f -y 0 0x08 0x10에서: -f는 강제 접근(드라이버 사용 중이어도), -y는 확인 프롬프트 생략, 0은 I2C 버스 번호(/dev/i2c-0), 0x08은 PMIC의 7비트 I2C 슬레이브 주소, 0x10은 읽을 레지스터 주소입니다."
+  },
+  {
+    "id": "bb-010",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "multiple-choice",
+    "question": "SWD(Serial Wire Debug)와 JTAG의 차이점으로 올바른 것은?",
+    "options": [
+      "SWD는 4핀(TMS, TCK, TDI, TDO)을 사용하고 JTAG은 2핀을 사용한다",
+      "SWD는 2핀(SWDIO, SWCLK)으로 JTAG의 디버깅 기능을 제공하며 핀 수가 적다",
+      "SWD는 ARM 전용이 아니며 RISC-V에서도 표준으로 사용된다",
+      "SWD는 JTAG보다 속도가 느리지만 전력 소모가 적다"
+    ],
+    "answer": 1,
+    "explanation": "SWD는 ARM이 정의한 디버그 프로토콜로, SWDIO(데이터)와 SWCLK(클록) 2핀만 사용합니다. JTAG의 TMS, TCK, TDI, TDO 4핀 대비 핀 수가 적어 PCB 레이아웃이 유리하면서도 동등한 디버깅 기능을 제공합니다."
+  },
+  {
+    "id": "bb-011",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "리눅스에서 시리얼 콘솔에 접속할 때 사용하는 터미널 프로그램으로, ___또는 ___가 대표적이다.",
+    "blankAnswers": [["minicom"], ["picocom", "screen"]],
+    "explanation": "minicom은 설정 파일 기반의 시리얼 터미널이고, picocom은 명령줄 옵션 기반의 경량 시리얼 터미널입니다. picocom -b 115200 /dev/ttyUSB0 형태로 간단히 접속할 수 있습니다.",
+    "blankDistractors": [["putty", "teraterm", "cu"], ["telnet", "ssh", "nc"]]
+  },
+  {
+    "id": "bb-012",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "리눅스에서 I2C 버스 0에 연결된 모든 장치의 주소를 스캔하는 명령어는 ___ -y 0이다.",
+    "blankAnswers": [["i2cdetect"]],
+    "explanation": "i2cdetect -y 0은 /dev/i2c-0 버스의 모든 7비트 주소(0x03~0x77)를 스캔하여 ACK를 응답하는 장치 주소를 표시합니다. -y 옵션은 확인 프롬프트를 건너뜁니다.",
+    "blankDistractors": [["i2cscan", "i2cfind", "i2clist"]]
+  },
+  {
+    "id": "bb-013",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "초급",
+    "type": "short-answer",
+    "question": "리눅스에서 GPIO 핀을 사용자 공간에서 제어하기 위해 export하는 sysfs 경로는 /sys/class/___이다.",
+    "blankAnswers": [["gpio", "gpio/"]],
+    "explanation": "/sys/class/gpio/export에 핀 번호를 쓰면 해당 GPIO가 사용자 공간에 노출됩니다. /sys/class/gpio/gpio<N>/direction, value 파일을 통해 입출력 방향과 값을 제어할 수 있습니다.",
+    "blankDistractors": [["gpiolib", "pin", "pinctrl"]]
+  },
+  {
+    "id": "bb-014",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "커널 부팅 로그에서 특정 드라이버의 프로빙 실패 원인을 확인할 때, 드라이버가 의존하는 리소스가 아직 준비되지 않아 나중에 재시도하는 에러 코드는 ___이다.",
+    "blankAnswers": [["-EPROBE_DEFER", "EPROBE_DEFER"]],
+    "explanation": "-EPROBE_DEFER는 드라이버의 probe 함수에서 의존하는 리소스(클록, 레귤레이터, GPIO 등)가 아직 초기화되지 않았을 때 반환합니다. 커널의 deferred probe 메커니즘이 의존 리소스가 준비된 후 자동으로 재시도합니다.",
+    "blankDistractors": [["-ENODEV", "-EINVAL", "-EAGAIN"]]
+  },
+  {
+    "id": "bb-015",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "I2C 장치의 특정 레지스터에 값을 쓸 때 사용하는 명령어는 ___이며, 읽을 때는 ___를 사용한다.",
+    "blankAnswers": [["i2cset"], ["i2cget"]],
+    "explanation": "i2cset -f -y <bus> <addr> <reg> <value>로 레지스터에 값을 쓰고, i2cget -f -y <bus> <addr> <reg>로 읽습니다. PMIC, 센서 등 I2C 장치의 레지스터를 직접 조작하여 하드웨어 동작을 검증할 수 있습니다.",
+    "blankDistractors": [["i2cwrite", "i2cput", "i2csend"], ["i2cread", "i2cdump", "i2crecv"]]
+  },
+  {
+    "id": "bb-016",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "short-answer",
+    "question": "UFS(Universal Flash Storage) 장치의 상태를 확인할 때, 커널에서 UFS 호스트 컨트롤러 정보를 제공하는 sysfs 경로의 디렉토리명은 ___이다.",
+    "blankAnswers": [["ufshcd", "/sys/bus/platform/drivers/ufshcd"]],
+    "explanation": "ufshcd(UFS Host Controller Driver)는 UFS 호스트 컨트롤러를 관리하는 커널 드라이버입니다. /sys/bus/platform/drivers/ufshcd/ 또는 /sys/class/scsi_host/ 경로에서 UFS 장치 상태, 속도 모드, 에러 카운터 등을 확인할 수 있습니다.",
+    "blankDistractors": [["ufs", "scsi_host", "block"]]
+  },
+  {
+    "id": "bb-017",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "OpenOCD에서 GDB를 연결하기 위해 기본으로 리스닝하는 포트 번호는 ___이다.",
+    "blankAnswers": [["3333"]],
+    "explanation": "OpenOCD는 기본적으로 포트 3333에서 GDB 서버를, 포트 4444에서 텔넷 인터페이스를 리스닝합니다. GDB에서 'target remote :3333'으로 연결하여 타겟 CPU를 디버깅합니다.",
+    "blankDistractors": [["4444", "2331", "1234"]]
+  },
+  {
+    "id": "bb-018",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "고급",
+    "type": "short-answer",
+    "question": "SPI 통신에서 CPOL=0, CPHA=0인 모드를 SPI Mode ___라 하며, 이 모드에서 클록은 idle 시 Low이고 데이터는 클록의 첫 번째 에지(상승)에서 샘플링된다.",
+    "blankAnswers": [["0", "Mode 0"]],
+    "explanation": "SPI Mode 0(CPOL=0, CPHA=0)은 가장 일반적인 모드로, 클록이 유휴 상태에서 Low이고 상승 에지에서 데이터를 샘플링합니다. 총 4가지 모드(0~3)가 있으며, 마스터와 슬레이브의 모드가 일치해야 통신이 가능합니다.",
+    "blankDistractors": [["1", "2", "3"]]
+  },
+  {
+    "id": "bb-019",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "시리얼 콘솔에 picocom으로 접속하는 명령을 완성하시오.",
+    "codeTemplate": "$ ___ -b ___ /dev/ttyUSB0",
+    "codeLanguage": "shell",
+    "blankAnswers": [["picocom"], ["115200"]],
+    "explanation": "picocom -b 115200 /dev/ttyUSB0은 115200 baud rate로 USB-시리얼 장치에 접속합니다. -b 옵션은 baud rate를 지정하며, /dev/ttyUSB0은 USB-시리얼 컨버터의 디바이스 노드입니다.",
+    "blankDistractors": [["minicom", "screen", "cu"], ["9600", "38400", "921600"]]
+  },
+  {
+    "id": "bb-020",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "초급",
+    "type": "code-fill",
+    "question": "sysfs를 통해 GPIO 핀 17을 출력으로 설정하고 High로 만드는 명령을 완성하시오.",
+    "codeTemplate": "# GPIO 17 내보내기\n$ echo 17 > /sys/class/gpio/___\n# 출력으로 설정\n$ echo ___ > /sys/class/gpio/gpio17/direction\n# High 출력\n$ echo 1 > /sys/class/gpio/gpio17/value",
+    "codeLanguage": "shell",
+    "blankAnswers": [["export"], ["out"]],
+    "explanation": "echo 17 > /sys/class/gpio/export로 GPIO 17을 사용자 공간에 노출하고, direction 파일에 'out'을 써서 출력 모드로 설정합니다. value 파일에 1을 쓰면 핀이 High가 됩니다.",
+    "blankDistractors": [["init", "enable", "activate"], ["output", "write", "high"]]
+  },
+  {
+    "id": "bb-021",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "I2C 버스 1에서 슬레이브 주소 0x50의 레지스터 0x00을 읽고, 레지스터 0x01에 0xFF를 쓰는 명령을 완성하시오.",
+    "codeTemplate": "# 레지스터 읽기\n$ ___ -f -y 1 0x50 0x00\n# 레지스터 쓰기\n$ ___ -f -y 1 0x50 0x01 0xFF",
+    "codeLanguage": "shell",
+    "blankAnswers": [["i2cget"], ["i2cset"]],
+    "explanation": "i2cget으로 I2C 장치의 특정 레지스터를 읽고, i2cset으로 값을 씁니다. -f는 해당 주소가 커널 드라이버에 의해 사용 중이어도 강제로 접근하는 옵션이며, -y는 확인 프롬프트를 생략합니다.",
+    "blankDistractors": [["i2cread", "i2cdump", "i2cdetect"], ["i2cwrite", "i2cput", "i2ctransfer"]]
+  },
+  {
+    "id": "bb-022",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "중급",
+    "type": "code-fill",
+    "question": "OpenOCD로 JTAG 디버거를 시작하고 GDB에서 연결하는 명령을 완성하시오.",
+    "codeTemplate": "# OpenOCD 시작 (J-Link 어댑터, Cortex-A53 타겟)\n$ openocd -f interface/___  -f target/___\n\n# 별도 터미널에서 GDB 연결\n$ aarch64-linux-gnu-gdb vmlinux\n(gdb) target remote :3333",
+    "codeLanguage": "shell",
+    "blankAnswers": [["jlink.cfg"], ["cortex_a.cfg", "imx8mq.cfg"]],
+    "explanation": "OpenOCD는 -f 옵션으로 인터페이스(JTAG 어댑터) 설정 파일과 타겟(CPU) 설정 파일을 지정합니다. jlink.cfg는 Segger J-Link 어댑터, cortex_a.cfg는 ARM Cortex-A 시리즈 타겟 설정입니다.",
+    "blankDistractors": [["stlink.cfg", "ftdi.cfg", "cmsis-dap.cfg"], ["arm.cfg", "aarch64.cfg", "jtag.cfg"]]
+  },
+  {
+    "id": "bb-023",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "커널 드라이버에서 I2C 장치의 레지스터를 읽는 코드를 완성하시오.",
+    "codeTemplate": "static int my_sensor_read_reg(struct i2c_client *client, u8 reg)\n{\n    int ret;\n    ret = ___(___, reg);\n    if (ret < 0)\n        dev_err(&client->dev, \"Failed to read reg 0x%02x\\n\", reg);\n    return ret;\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["i2c_smbus_read_byte_data"], ["client"]],
+    "explanation": "i2c_smbus_read_byte_data()는 I2C SMBus 프로토콜로 지정된 레지스터에서 1바이트를 읽는 커널 API입니다. 첫 번째 인자는 i2c_client 포인터, 두 번째 인자는 레지스터 주소입니다. 성공 시 읽은 값을, 실패 시 음수 에러 코드를 반환합니다.",
+    "blankDistractors": [["i2c_read_byte", "i2c_transfer", "i2c_master_recv"], ["dev", "adapter", "bus"]]
+  },
+  {
+    "id": "bb-024",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "eMMC 파티션 정보를 확인하고 특정 파티션을 마운트하는 디버깅 명령을 완성하시오.",
+    "codeTemplate": "# eMMC 파티션 테이블 확인\n$ ___ /dev/mmcblk0\n\n# rootfs 파티션 마운트\n$ mount -t ___ /dev/mmcblk0p2 /mnt/rootfs",
+    "codeLanguage": "shell",
+    "blankAnswers": [["fdisk -l", "parted", "gdisk"], ["ext4"]],
+    "explanation": "fdisk -l(또는 parted/gdisk)로 eMMC 디바이스의 파티션 테이블(GPT/MBR)을 확인합니다. mount -t ext4로 파일시스템 타입을 지정하여 rootfs 파티션을 마운트하면 파일시스템 내용을 검증할 수 있습니다.",
+    "blankDistractors": [["blkid", "lsblk", "df"], ["xfs", "btrfs", "vfat"]]
+  },
+  {
+    "id": "bb-025",
+    "category": "operating-system",
+    "subcategory": "board-bringup",
+    "difficulty": "고급",
+    "type": "code-fill",
+    "question": "커널 드라이버에서 devm_* 관리 API를 사용하여 GPIO를 요청하고 출력으로 설정하는 코드를 완성하시오.",
+    "codeTemplate": "struct gpio_desc *reset_gpio;\n\nreset_gpio = ___(&pdev->dev, \"reset\", GPIOD_OUT_HIGH);\nif (IS_ERR(reset_gpio)) {\n    return ___((long)reset_gpio);\n}",
+    "codeLanguage": "c",
+    "blankAnswers": [["devm_gpiod_get"], ["PTR_ERR"]],
+    "explanation": "devm_gpiod_get()은 디바이스 관리(devres) GPIO 디스크립터 API로, 드라이버 해제 시 자동으로 GPIO를 반환합니다. GPIOD_OUT_HIGH는 출력 모드로 초기값 High를 설정합니다. IS_ERR/PTR_ERR 매크로로 에러 포인터를 검사합니다.",
+    "blankDistractors": [["gpio_request", "gpiod_get", "devm_gpio_request"], ["ERR_PTR", "IS_ERR", "ERR_CAST"]]
+  }
+]

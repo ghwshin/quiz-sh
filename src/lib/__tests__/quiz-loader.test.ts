@@ -21,6 +21,12 @@ describe("getQuizzesByCategory", () => {
     expect(quizzes.length).toBeGreaterThan(0);
     expect(quizzes.every((q) => q.category === "android-system")).toBe(true);
   });
+
+  it("returns quizzes for operating-system", () => {
+    const quizzes = getQuizzesByCategory("operating-system");
+    expect(quizzes.length).toBeGreaterThan(0);
+    expect(quizzes.every((q) => q.category === "operating-system")).toBe(true);
+  });
 });
 
 describe("getQuizzesBySubcategory", () => {
